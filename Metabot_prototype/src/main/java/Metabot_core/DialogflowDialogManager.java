@@ -13,15 +13,18 @@ import java.io.IOException;
 import java.util.*;
 
 
+// It's a class used to talk to Dialogflow Agents
 public class DialogflowDialogManager {
     private String _languageCode;
     private String _sessionId;
 
+    // Initialiser
     public DialogflowDialogManager(String languageCode, String sessionId) {
         this._languageCode = languageCode;
         this._sessionId = sessionId;
     }
 
+    // Setters
     public void set_languageCode(String _languageCode) {
         this._languageCode = _languageCode;
     }
@@ -30,7 +33,11 @@ public class DialogflowDialogManager {
         this._sessionId = _sessionId;
     }
 
-    public List<ResponseDataStructure> getResponsesFromAgentsFromText(String textPassed, Map<String, String> listOfAgentsByProjectIdAndAuthenticationKeyFile) throws IOException {
+
+    // getResponsesFromAgentsFromText gets responses from agents passed in the list of Agents istOfAgentsByProjectIdAndAuthenticationKeyFile
+    // for a given text textPassed and TODO.
+    public List<ResponseDataStructure> getResponsesFromAgentsFromText(String textPassed,
+                                                                      Map<String, String> listOfAgentsByProjectIdAndAuthenticationKeyFile) throws IOException {
         List<ResponseDataStructure> listOfResponses = new ArrayList<>();
 
         // Get the response from each agent

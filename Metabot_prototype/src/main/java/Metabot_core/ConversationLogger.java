@@ -1,5 +1,7 @@
 package Metabot_core;
 
+// Class responsible for logging and reading logs.
+
 public class ConversationLogger {
     private String _logFileDirectory;
 
@@ -8,6 +10,7 @@ public class ConversationLogger {
         this._logFileDirectory = logFileDirectory;
     }
 
+    // Stores a single response ResponseDataStructure from Dialogflow in a specified directory _logFileDirectory.
     public void storeDialogflowResponse(ResponseDataStructure responseDataStructure) {
         //TODO storing the DialogflowRepsonse: maybe using some data from responseDataStructure class to create a unique name of the log?
         System.out.println("This function would store the responseDataStructure in the log at " + _logFileDirectory +
