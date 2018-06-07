@@ -9,19 +9,22 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+// Class for testing the functionality
+
 public class TestingClass {
     public static String _languageCode = "en-US";
     public static String _logFileDirectory = "/Users/Adam/Documents/Internship/";
-    public static String _testedTextFileDirectory = "/Users/Adam/Documents/Internship/" +
-            "Metabot_prototype/src/main/java/Metabot_core/TestTextFiles/";
+    public static String _testedTextFileDirectory = "/Users/Adam/Documents/Internship/GitHub/agent-dialogue/" +
+            "Metabot_prototype/src/main/java/Metabot_core/TestTextFile";
     public static String _nameOfTestedFile = "SampleConversation.txt";
     public static String _nameOfFileWithProjectIdAndKeysLocations = "ProjectIdAndJsonKeyFileLocations.txt";
     public static Map<String, String> _listOfDialogflowAgentsByProjectIdAndKeyFile = new HashMap<String, String>() {
     };
 
-
-    public static void readProjectIdAndKeyFileToHashMap(String fileLocation) throws IOException {
-        Path path = Paths.get(fileLocation);
+    // Adds projectId and the directory of key files, stored in a text file with directory
+    // fileDirectory to the main HashMap of all Dialogflow Agents _nameOfFileWithProjectIdAndKeysLocations.
+    public static void readProjectIdAndKeyFileToHashMap(String fileDirectory) throws IOException {
+        Path path = Paths.get(fileDirectory);
         List<String> lines = Files.readAllLines(path, StandardCharsets.UTF_8);
         for (String line : lines) {
             String[] projectIdAndJsonKey = line.split(", ");
@@ -29,6 +32,8 @@ public class TestingClass {
         }
     }
 
+
+    // Runs the test class.
     public static void main(String[] args) throws IOException {
         DialogManager dialogManager = new DialogManager();
         dialogManager.initialiseDialogflowDialogManagerInstanceAndLogger(_languageCode, _logFileDirectory);
