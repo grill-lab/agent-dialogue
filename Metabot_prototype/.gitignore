@@ -1,0 +1,7 @@
+
+# User-specific stuff
+.idea
+src/main/resources/
+src/test/
+target/
+*.iml/
