@@ -1,7 +1,4 @@
-package Metabot_core;
-
-
-//TODO delete the wildcard imports
+package edu.gla.kail.ad;
 
 import com.google.api.gax.core.CredentialsProvider;
 import com.google.api.gax.core.FixedCredentialsProvider;
@@ -10,7 +7,9 @@ import com.google.cloud.dialogflow.v2beta1.*;
 
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 
 // It's a class used to talk to Dialogflow Agents

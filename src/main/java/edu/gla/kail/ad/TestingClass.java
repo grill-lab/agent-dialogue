@@ -1,4 +1,4 @@
-package Metabot_core;
+package edu.gla.kail.ad;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
