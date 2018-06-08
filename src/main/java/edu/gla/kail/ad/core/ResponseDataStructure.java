@@ -1,4 +1,4 @@
-package edu.gla.kail.ad;
+package edu.gla.kail.ad.core;
 
 import java.util.Date;
 

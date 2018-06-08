@@ -1,4 +1,4 @@
-package edu.gla.kail.ad;
+package edu.gla.kail.ad.core;
 
 // Class responsible for logging and reading logs.
 

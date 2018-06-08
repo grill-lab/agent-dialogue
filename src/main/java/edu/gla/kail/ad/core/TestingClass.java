@@ -1,4 +1,4 @@
-package edu.gla.kail.ad;
+package edu.gla.kail.ad.core;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
