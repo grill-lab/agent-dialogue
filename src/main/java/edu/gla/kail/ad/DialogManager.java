@@ -1,7 +1,10 @@
-package Metabot_core;
+package edu.gla.kail.ad;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 /*  This class Manages the conversation with different platforms - such as Dialogflow.
  *  1) Add the list of Dialogflow Agents by project Id and Key File directory

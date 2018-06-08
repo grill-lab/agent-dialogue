@@ -1,4 +1,4 @@
-package Metabot_core;
+package edu.gla.kail.ad;
 
 import java.util.Date;
 
