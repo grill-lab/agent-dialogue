@@ -34,7 +34,7 @@ public class DialogflowDialogManager {
 
 
     // getResponsesFromAgentsFromText gets responses from agents passed in the list of Agents istOfAgentsByProjectIdAndAuthenticationKeyFile
-    // for a given text textPassed and TODO.
+    // for a given text textPassed and TODO(Adam).
     public List<ResponseDataStructure> getResponsesFromAgentsFromText(String textPassed,
                                                                       Map<String, String> listOfAgentsByProjectIdAndAuthenticationKeyFile) throws IOException {
         List<ResponseDataStructure> listOfResponses = new ArrayList<>();
@@ -61,7 +61,7 @@ public class DialogflowDialogManager {
 
 
             System.out.println(response.toString());
-            //TODO save all the output as an instance of the ResponseDataStructure class
+            //TODO(Adam) save all the output as an instance of the ResponseDataStructure class
             ResponseDataStructure responseDataStructure = new ResponseDataStructure();
 
 

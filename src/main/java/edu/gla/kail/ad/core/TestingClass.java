@@ -48,7 +48,7 @@ public class TestingClass {
         Path path = Paths.get(_testedTextFileDirectory + _nameOfTestedFile);
         List<String> lines = Files.readAllLines(path, StandardCharsets.UTF_8);
         for (String line : lines) {
-            //TODO delete print statements - however, this is testing class
+            //TODO(Adam) delete print statements - however, this is testing class
             System.out.println("TESTING CLASS OUTPUT: CURRENTLY HANDLING THE REQUEST FOR: " + line);
             dialogManager.getResponsesFromDialogflowAgentsForTextInput(line);
             System.out.println("TESTING CLASS OUTPUT: FINISHED HANDLING THE REQUEST FOR: " + line + "\n");
