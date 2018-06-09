@@ -2,7 +2,7 @@ package edu.gla.kail.ad.core;
 
 import java.util.Date;
 
-// Class stores all the data about one response.
+/* Class stores all the data about one response.*/
 
 public class ResponseDataStructure {
     //TODO(Adam) everything in the RepsonseDataStructure class

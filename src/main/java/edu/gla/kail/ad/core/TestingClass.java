@@ -9,7 +9,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-// Class for testing the functionality
+/* Class for testing the functionality */
 
 public class TestingClass {
     public static String _languageCode = "en-US";
@@ -21,8 +21,8 @@ public class TestingClass {
     public static Map<String, String> _listOfDialogflowAgentsByProjectIdAndKeyFile = new HashMap<String, String>() {
     };
 
-    // Adds projectId and the directory of key files, stored in a text file with directory
-    // fileDirectory to the main HashMap of all Dialogflow Agents _nameOfFileWithProjectIdAndKeysLocations.
+/*     Adds projectId and the directory of key files, stored in a text file with directory
+     fileDirectory to the main HashMap of all Dialogflow Agents _nameOfFileWithProjectIdAndKeysLocations.*/
     public static void readProjectIdAndKeyFileToHashMap(String fileDirectory) throws IOException {
         Path path = Paths.get(fileDirectory);
         List<String> lines = Files.readAllLines(path, StandardCharsets.UTF_8);
@@ -33,18 +33,18 @@ public class TestingClass {
     }
 
 
-    // Runs the test class.
+/*     Runs the test class.*/
     public static void main(String[] args) throws IOException {
         DialogManager dialogManager = new DialogManager();
         dialogManager.initialiseDialogflowDialogManagerInstanceAndLogger(_languageCode, _logFileDirectory);
 
-        // Add the Agents we want to test from text file:
+        /* Add the Agents we want to test from text file: */
         readProjectIdAndKeyFileToHashMap(_testedTextFileDirectory + _nameOfFileWithProjectIdAndKeysLocations);
         for (Map.Entry<String, String> agentInformation : _listOfDialogflowAgentsByProjectIdAndKeyFile.entrySet()) {
             dialogManager.addDialogflowAgentByProjectId(agentInformation.getKey(), agentInformation.getValue());
         }
 
-        // Call the DialogflowManager on all sentences/lines stored in a text file.
+        /* Call the DialogflowManager on all sentences/lines stored in a text file */
         Path path = Paths.get(_testedTextFileDirectory + _nameOfTestedFile);
         List<String> lines = Files.readAllLines(path, StandardCharsets.UTF_8);
         for (String line : lines) {
