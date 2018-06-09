@@ -2,6 +2,7 @@ package edu.gla.kail.ad.core;
 
 import java.util.Date;
 
+// TODO proto class!
 /* Class stores all the data about one response.*/
 
 public class ResponseDataStructure {

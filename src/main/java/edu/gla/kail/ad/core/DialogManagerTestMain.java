@@ -12,22 +12,16 @@ import java.util.UUID;
 
 /* Class for testing the functionality. */
 
-public class TestingClass {
-    public static String _languageCode = "en-US";
-    public static String _logFileDirectory = "/Users/Adam/Documents/Internship/";
-    public static String _testedTextFileDirectory = "/Users/Adam/Documents/Internship/GitHub/agent-dialogue/" +
-            "Metabot_prototype/src/main/java/Metabot_core/TestTextFile";
-    public static String _nameOfTestedFile = "SampleConversation.txt";
-    public static String _nameOfFileWithProjectIdAndKeysLocations = "ProjectIdAndJsonKeyFileLocations.txt";
+public class DialogManagerTestMain {
     public static Map<String, String> _agentsByProjectIdAndKeyMap = new HashMap<String, String>();
 
     /*     Return random sessionId used to initialise the DialogflowDialogManager. */
-    private static String getRandomSessionIdAsString() {
+    public static String getRandomSessionIdAsString() {
         return UUID.randomUUID().toString();
     }
 
     /*   Add projectId and the directory of key files, stored in a text file with directory
-         fileDirectory to the main HashMap of all Dialogflow Agents _nameOfFileWithProjectIdAndKeysLocations. */
+       fileDirectory to the main HashMap of all Dialogflow Agents _nameOfFileWithProjectIdAndKeysLocations. */
     public static void readProjectIdAndKeyFileToHashMap(String fileDirectory) throws IOException {
         Path path = Paths.get(fileDirectory);
         List<String> lines = Files.readAllLines(path, StandardCharsets.UTF_8);
@@ -37,16 +31,22 @@ public class TestingClass {
         }
     }
 
-    /*     Run the test class. */
     public static void main(String[] args) throws Exception {
+        String languageCode = "en-US";
+        String logFileDirectory = "/Users/Adam/Documents/Internship/";
+        String testedTextFileDirectory = "/Users/Adam/Documents/Internship/GitHub/agent-dialogue/" +
+                "Metabot_prototype/src/main/java/Metabot_core/TestTextFile";
+        String nameOfTestedFile = "SampleConversation.txt";
+        String nameOfFileWithProjectIdAndKeysLocations = "ProjectIdAndJsonKeyFileLocations.txt";
+
         DialogManager dialogManager = new DialogManager();
-        dialogManager.initialiseDialogflowDialogManagerInstanceAndLogger(_languageCode, _logFileDirectory, getRandomSessionIdAsString());
+        dialogManager.initialiseDialogflowDialogManagerInstanceAndLogger(languageCode, logFileDirectory, getRandomSessionIdAsString());
 
         /* Add the Agents we want to test from text file: */
-        readProjectIdAndKeyFileToHashMap(_testedTextFileDirectory + _nameOfFileWithProjectIdAndKeysLocations);
+        readProjectIdAndKeyFileToHashMap(testedTextFileDirectory + nameOfFileWithProjectIdAndKeysLocations);
 
         /* Call the DialogflowManager on all sentences/lines stored in a text file. */
-        Path path = Paths.get(_testedTextFileDirectory + _nameOfTestedFile);
+        Path path = Paths.get(testedTextFileDirectory + nameOfTestedFile);
         List<String> lines = Files.readAllLines(path, StandardCharsets.UTF_8);
         for (String line : lines) {
             //TODO(Adam) delete print statements - however, this is testing class
