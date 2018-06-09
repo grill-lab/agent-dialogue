@@ -12,18 +12,17 @@ import java.util.List;
 import java.util.Map;
 
 
-// It's a class used to talk to Dialogflow Agents
+/* It's a class used to talk to Dialogflow Agents*/
 public class DialogflowDialogManager {
     private String _languageCode;
     private String _sessionId;
 
-    // Initialiser
+    // TODO(Adam) write a comment etc.
     public DialogflowDialogManager(String languageCode, String sessionId) {
         this._languageCode = languageCode;
         this._sessionId = sessionId;
     }
 
-    // Setters
     public void set_languageCode(String _languageCode) {
         this._languageCode = _languageCode;
     }
@@ -33,8 +32,8 @@ public class DialogflowDialogManager {
     }
 
 
-    // getResponsesFromAgentsFromText gets responses from agents passed in the list of Agents istOfAgentsByProjectIdAndAuthenticationKeyFile
-    // for a given text textPassed and TODO(Adam).
+    /* getResponsesFromAgentsFromText gets responses from agents passed in the list of Agents istOfAgentsByProjectIdAndAuthenticationKeyFile
+     for a given text textPassed and TODO(Adam).*/
     public List<ResponseDataStructure> getResponsesFromAgentsFromText(String textPassed,
                                                                       Map<String, String> listOfAgentsByProjectIdAndAuthenticationKeyFile) throws IOException {
         List<ResponseDataStructure> listOfResponses = new ArrayList<>();
