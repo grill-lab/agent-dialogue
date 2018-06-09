@@ -5,7 +5,7 @@ import java.util.Date;
 // Class stores all the data about one response.
 
 public class ResponseDataStructure {
-    //TODO everything in the RepsonseDataStructure class
+    //TODO(Adam) everything in the RepsonseDataStructure class
     private Date _currentTime = new java.util.Date();
     private String _projectId;
     private String _jsonKeyFileLocation;

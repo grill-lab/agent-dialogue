@@ -52,7 +52,7 @@ public class DialogManager {
     // Calls the function of ConversationLogger to store the log for each response passed in the list listOfDialogFlowRespons.
     public void storeResponsesInLogs(List<ResponseDataStructure> listOfDialogFlowRespons) {
         for (ResponseDataStructure responseDataStructure : listOfDialogFlowRespons) {
-            _conversationLogger.storeDialogflowResponse(responseDataStructure);
+            _conversationLogger.writeConversationResponse(responseDataStructure);
         }
     }
 
