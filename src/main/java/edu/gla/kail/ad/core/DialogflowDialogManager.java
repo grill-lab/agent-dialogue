@@ -11,16 +11,44 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import static com.google.common.base.Preconditions.checkNotNull;
 
-/* It's a class used to talk to Dialogflow Agents*/
+
+/* It's a class used to talk to Dialogflow Agents. */
 public class DialogflowDialogManager {
     private String _languageCode;
     private String _sessionId;
+    private Map<SessionsClient, SessionName> _mapOfSessionClientsAndSessionNames;
 
     // TODO(Adam) write a comment etc.
-    public DialogflowDialogManager(String languageCode, String sessionId) {
-        this._languageCode = languageCode;
-        this._sessionId = sessionId;
+    public DialogflowDialogManager(String languageCode, String sessionId, Map<String, String> listOfAgentsByProjectIdAndAuthenticationKeyFile) throws Exception {
+        this._languageCode = checkNotNull(languageCode, "en-US");
+
+        if (sessionId.isEmpty()) {
+            throw new Exception("The session id needs to be defined!");
+        } else {
+            this._sessionId = sessionId;
+        }
+
+        if (listOfAgentsByProjectIdAndAuthenticationKeyFile.isEmpty()) {
+            throw new Exception("List of agents is empty!");
+        } else {
+            for (Map.Entry<String, String> agentInformation : listOfAgentsByProjectIdAndAuthenticationKeyFile.entrySet()) {
+                String projectId = agentInformation.getKey();
+                String jsonKeyFileLocation = agentInformation.getValue();
+
+                // Authorize access to the agent currently tested.
+                CredentialsProvider credentialsProvider = FixedCredentialsProvider.create((ServiceAccountCredentials
+                        .fromStream(new FileInputStream(jsonKeyFileLocation))));
+                SessionsSettings sessionsSettings = SessionsSettings.newBuilder().setCredentialsProvider(credentialsProvider).build();
+
+                // Create SessionClient.
+                SessionsClient sessionsClient = SessionsClient.create(sessionsSettings);
+                SessionName session = SessionName.of(projectId, _sessionId);
+                _mapOfSessionClientsAndSessionNames.put(sessionsClient, session);
+            }
+        }
+
     }
 
     public void set_languageCode(String _languageCode) {
@@ -32,27 +60,16 @@ public class DialogflowDialogManager {
     }
 
 
-    /* getResponsesFromAgentsFromText gets responses from agents passed in the list of Agents istOfAgentsByProjectIdAndAuthenticationKeyFile
-     for a given text textPassed and TODO(Adam).*/
-    public List<ResponseDataStructure> getResponsesFromAgentsFromText(String textPassed,
-                                                                      Map<String, String> listOfAgentsByProjectIdAndAuthenticationKeyFile) throws IOException {
-        List<ResponseDataStructure> listOfResponses = new ArrayList<>();
+    /* Get the response from Agent in response to a request.
+    TODO(Adam).*/
+    public List<ResponseDataStructure> getResponsesFromAgentsFromText(String textPassed) {
+        List<ResponseDataStructure> listOfResponses = new ArrayList();
 
-        // Get the response from each agent
-        for (Map.Entry<String, String> agentInformation : listOfAgentsByProjectIdAndAuthenticationKeyFile.entrySet()) {
-            String projectId = agentInformation.getKey();
-            String jsonKeyFileLocation = agentInformation.getValue();
-
-            // Authorization part
-            CredentialsProvider credentialsProvider = FixedCredentialsProvider.create((ServiceAccountCredentials
-                    .fromStream(new FileInputStream(jsonKeyFileLocation))));
-            SessionsSettings sessionsSettings = SessionsSettings.newBuilder().setCredentialsProvider(credentialsProvider).build();
-
-            // Creating SessionClient
-            SessionsClient sessionsClient = SessionsClient.create(sessionsSettings);
-            SessionName session = SessionName.of(projectId, _sessionId);
-
-            // Setting text input, sending to the server and getting response
+        // Append the response from each agent to the list of responses.
+        for (Map.Entry<SessionsClient, SessionName> mapOfSessionClientsAndSessionNames : _mapOfSessionClientsAndSessionNames.entrySet()) {
+            SessionsClient sessionsClient = mapOfSessionClientsAndSessionNames.getKey();
+            SessionName session = mapOfSessionClientsAndSessionNames.getValue();
+            // Set text input, sending to the server and getting response.
             TextInput.Builder textInput = TextInput.newBuilder().setText(textPassed).setLanguageCode(_languageCode);
             QueryInput queryInput = QueryInput.newBuilder().setText(textInput).build();
             DetectIntentResponse response = sessionsClient.detectIntent(session, queryInput);

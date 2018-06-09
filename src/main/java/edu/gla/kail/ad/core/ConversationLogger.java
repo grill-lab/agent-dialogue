@@ -2,6 +2,7 @@ package edu.gla.kail.ad.core;
 
 /*
  Class responsible for logging and reading logs.
+ TODO(Adam) make the class thread safe
 */
 
 public class ConversationLogger {
