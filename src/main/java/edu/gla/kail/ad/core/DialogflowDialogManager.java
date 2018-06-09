@@ -69,20 +69,20 @@ public class DialogflowDialogManager {
         for (Map.Entry<SessionsClient, SessionName> mapOfSessionClientsAndSessionNames : _mapOfSessionClientsAndSessionNames.entrySet()) {
             SessionsClient sessionsClient = mapOfSessionClientsAndSessionNames.getKey();
             SessionName session = mapOfSessionClientsAndSessionNames.getValue();
-            // Set text input, sending to the server and getting response.
+            // The core code that creates a DialogFlow request from the input text and sends it to Assistant Server.
+            // The result is the response result.
             TextInput.Builder textInput = TextInput.newBuilder().setText(textPassed).setLanguageCode(_languageCode);
             QueryInput queryInput = QueryInput.newBuilder().setText(textInput).build();
             DetectIntentResponse response = sessionsClient.detectIntent(session, queryInput);
             QueryResult queryResult = response.getQueryResult();
 
-
+            //TODO(Adam) remove or make a debug log.
             System.out.println(response.toString());
             //TODO(Adam) save all the output as an instance of the ResponseDataStructure class
             ResponseDataStructure responseDataStructure = new ResponseDataStructure();
 
-
-
-            /* queryResult.getAction()
+            /* TODO(ADAM) implementation of the logging part. Useful functions:
+            queryResult.getAction()
                 .getQueryText()
                 .getIntent().getDisplayName()
                 .getIntentDetectionConfidence()
