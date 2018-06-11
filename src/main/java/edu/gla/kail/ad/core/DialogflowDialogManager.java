@@ -3,20 +3,19 @@ package edu.gla.kail.ad.core;
 import com.google.cloud.dialogflow.v2beta1.*;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.google.common.base.Preconditions.checkNotNull;
-
-
-/* It's a class used to talk to Dialogflow Agents. */
+/**
+ * It's a class used to talk to Dialogflow Agents.
+ */
 public class DialogflowDialogManager {
     private String _languageCode;
     private String _sessionId;
-    private Map<SessionsClient, SessionName> _mapOfSessionClientsAndSessionNames = new HashMap();
+    private Map<SessionsClient, SessionName> _mapOfSessionClientsAndSessionNames;
 
-    /** Constructor which initializes a ready to work DIalogflowDialogManager.
+    /**
+     * Constructor which initializes a ready to work DialogflowDialogManager.
      *
      * @param dialogflowDialogManagerSetup
      * @throws Exception
@@ -26,15 +25,6 @@ public class DialogflowDialogManager {
         _sessionId = dialogflowDialogManagerSetup.get_sessionId();
         _mapOfSessionClientsAndSessionNames = dialogflowDialogManagerSetup.get_mapOfSessionClientsAndSessionNames();
     }
-
-    public void set_languageCode(String _languageCode) {
-        this._languageCode = _languageCode;
-    }
-
-    public void set_sessionId(String _sessionId) {
-        this._sessionId = _sessionId;
-    }
-
 
     /* Get the response from Agent in response to a request.
     TODO(Adam).*/
@@ -52,6 +42,10 @@ public class DialogflowDialogManager {
             DetectIntentResponse response = sessionsClient.detectIntent(session, queryInput);
             QueryResult queryResult = response.getQueryResult();
 
+
+            /**
+             * Storing the output in the log file
+             */
             //TODO(Adam) remove or make a debug log.
             System.out.println(response.toString());
             //TODO(Adam) save all the output as an instance of the ResponseDataStructure class

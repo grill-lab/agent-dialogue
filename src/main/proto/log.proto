@@ -21,8 +21,8 @@ message Turn {
 message RequestLog {
     string request_id = 1;
     google.protobuf.Timestamp time = 2;
-    string client_id = 3; //we have it in interactionRequest
-    InteractionRequest interactionRequest = 4;
+    string client_id = 3;
+    Interaction interaction = 4;
 }
 
 message ResponseLog {
