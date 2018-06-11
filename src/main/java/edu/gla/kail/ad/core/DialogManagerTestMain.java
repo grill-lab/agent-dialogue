@@ -1,5 +1,6 @@
 package edu.gla.kail.ad.core;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -33,17 +34,20 @@ public class DialogManagerTestMain {
 
     public static void main(String[] args) throws Exception {
         String languageCode = "en-US";
-        String logFileDirectory = "/Users/Adam/Documents/Internship/";
-        String testedTextFileDirectory = "/Users/Adam/Documents/Internship/GitHub/agent-dialogue/" +
-                "Metabot_prototype/src/main/java/Metabot_core/TestTextFile";
+        File currentClassPathFile = new File(DialogManagerTestMain.class.getProtectionDomain().getCodeSource().getLocation().getPath()).getParentFile();
+        String testedTextFileDirectory = currentClassPathFile.getParent() + "/src/main/resources/TestTextFiles/";
+        String logFileDirectory = currentClassPathFile.getParent() + "/src/main/resources/LogFiles/";
+
         String nameOfTestedFile = "SampleConversation.txt";
         String nameOfFileWithProjectIdAndKeysLocations = "ProjectIdAndJsonKeyFileLocations.txt";
+
+        /* Add the Agents we want to test from text file: */
+        readProjectIdAndKeyFileToHashMap(testedTextFileDirectory + nameOfFileWithProjectIdAndKeysLocations);
 
         DialogManager dialogManager = new DialogManager();
         dialogManager.initialiseDialogflowDialogManagerInstanceAndLogger(languageCode, logFileDirectory, getRandomSessionIdAsString(), _agentsByProjectIdAndKeyMap);
 
-        /* Add the Agents we want to test from text file: */
-        readProjectIdAndKeyFileToHashMap(testedTextFileDirectory + nameOfFileWithProjectIdAndKeysLocations);
+
 
         /* Call the DialogflowManager on all sentences/lines stored in a text file. */
         Path path = Paths.get(testedTextFileDirectory + nameOfTestedFile);
