@@ -4,12 +4,15 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import edu.gla.kail.ad.core.Log.LogEntry;
 
+/**
+ * Constructor of this class creates LogEntry.Builder which is used for loggin of the entire conversation.
+ */
 public class DialogManagerSetup {
     private String _languageCode;
     private String _sessionId;
-    private Log.LogEntry _logEntry;
+    private LogEntry.Builder _logEntryBuilder;
 
-    public DialogManagerSetup(String languageCode, String sessionId, LogEntry logEntry) throws Exception {
+    public DialogManagerSetup(String languageCode, String sessionId) throws Exception {
         this._languageCode = checkNotNull(languageCode,
                 "Language code not specified! Example of a language code \"en-US\"");
         if (sessionId.isEmpty()) {
@@ -17,9 +20,7 @@ public class DialogManagerSetup {
         } else {
             this._sessionId = sessionId;
         }
-        this._logEntry = checkNotNull(logEntry, "You must provide Log.Builder for the initialization" +
-                " of the class! Current log is null!");
-
+        this._logEntryBuilder = LogEntry.newBuilder();
     }
 
     public String get_languageCode() {
@@ -30,7 +31,7 @@ public class DialogManagerSetup {
         return _sessionId;
     }
 
-    public Log.LogEntry get_logEntry() {
-        return _logEntry;
+    public LogEntry.Builder get_logEntry() {
+        return _logEntryBuilder;
     }
 }

@@ -11,15 +11,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-import edu.gla.kail.ad.core.Log.LogEntry;
-
 /* Class for testing the functionality. */
 
 public class DialogManagerTestMain {
+
+    // map of agents?
     private static Map<String, String> _mapOfSessionClientsAndSessionNames = new HashMap();
 
     /*     Return random sessionId used to initialise the DialogflowDialogManager. */
-    private static String getRandomSessionIdAsString() {
+    private static String getRandomNumber() {
         return UUID.randomUUID().toString();
     }
 
@@ -35,33 +35,28 @@ public class DialogManagerTestMain {
     }
 
     public static void main(String[] args) throws Exception {
-        LogEntry.Builder _logEntry = LogEntry.newBuilder();
-
         String languageCode = "en-US";
         File currentClassPathFile = new File(DialogManagerTestMain.class.getProtectionDomain().getCodeSource().getLocation().getPath()).getParentFile();
-        String testedTextFileDirectory = currentClassPathFile.getParent() + "/src/main/resources/TestTextFiles/";
-        String logFileDirectory = currentClassPathFile.getParent() + "/src/main/resources/LogFiles/";
+        String testTextFileDirectory = currentClassPathFile.getParent() + "/src/main/resources/TestTextFiles/";
+        String logFileDirectory = currentClassPathFile.getParent() + "/src/main/resources/LogFiles/"; //TODO (Adam) Is this line needed?
 
         String nameOfTestedFile = "SampleConversation.txt";
         String nameOfFileWithProjectIdAndKeysLocations = "ProjectIdAndJsonKeyFileLocations.txt";
 
         /* Add the Agents we want to test from text file: */
-        readProjectIdAndKeyFileToHashMap(testedTextFileDirectory + nameOfFileWithProjectIdAndKeysLocations);
+        readProjectIdAndKeyFileToHashMap(testTextFileDirectory + nameOfFileWithProjectIdAndKeysLocations);
 
-        DialogManager dialogManager = new DialogManager();
-        DialogflowDialogManagerSetup dialogflowDialogManagerSetup =
-                new DialogflowDialogManagerSetup(languageCode, getRandomSessionIdAsString(), _mapOfSessionClientsAndSessionNames, _logEntry);
-        dialogManager.setUpDialogflowDialogManager(dialogflowDialogManagerSetup);
-
-
+        DialogManagerSetup dialogManagerSetup = new DialogManagerSetup(languageCode, getRandomNumber());
+        DialogManager dialogManager = new DialogManager(dialogManagerSetup);
+        dialogManager.setUpDialogflowDialogManager(_mapOfSessionClientsAndSessionNames);
 
         /* Call the DialogflowManager on all sentences/lines stored in a text file. */
-        Path path = Paths.get(testedTextFileDirectory + nameOfTestedFile);
+        Path path = Paths.get(testTextFileDirectory + nameOfTestedFile);
         List<String> lines = Files.readAllLines(path, StandardCharsets.UTF_8);
         for (String line : lines) {
             //TODO(Adam) delete print statements - however, this is testing class
             System.out.println("TESTING CLASS OUTPUT: CURRENTLY HANDLING THE REQUEST FOR: " + line);
-            dialogManager.getResponsesFromDialogflowAgentsForTextInput(line);
+            dialogManager.getResponsesFromDialogflowAgentsForTextInput(line, getRandomNumber());
             System.out.println("TESTING CLASS OUTPUT: FINISHED HANDLING THE REQUEST FOR: " + line + "\n");
         }
 

@@ -10,12 +10,12 @@ import edu.gla.kail.ad.core.Log.LogEntry;
 
 /**
  * It's a class used to talk to Dialogflow Agents.
+ * The responses from Agents are added to the log, but not saved.
  */
 public class DialogflowDialogManager {
     private String _languageCode;
-    private String _sessionId;
     private Map<SessionsClient, SessionName> _mapOfSessionClientsAndSessionNames;
-    private LogEntry _logEntry;
+    private LogEntry.Builder _logEntry;
 
     /**
      * Constructor which initializes a ready to work DialogflowDialogManager.
@@ -25,16 +25,14 @@ public class DialogflowDialogManager {
      */
     public DialogflowDialogManager(DialogflowDialogManagerSetup dialogflowDialogManagerSetup) {
         _languageCode = dialogflowDialogManagerSetup.get_languageCode();
-        _sessionId = dialogflowDialogManagerSetup.get_sessionId();
         _mapOfSessionClientsAndSessionNames = dialogflowDialogManagerSetup.get_mapOfSessionClientsAndSessionNames();
-        _logEntry = dialogflowDialogManagerSetup.get_logEntry();
+        _logEntry = dialogflowDialogManagerSetup.get_logEntryBuilder();
     }
+
 
     /* Get the response from Agent in response to a request.
     TODO(Adam).*/
-    public List<ResponseDataStructure> getResponsesFromAgentsFromText(String textPassed) {
-        List<ResponseDataStructure> listOfResponses = new ArrayList();
-
+    public void getResponsesFromAgentsFromText(String textPassed) {
         // Append the response from each agent to the list of responses.
         for (Map.Entry<SessionsClient, SessionName> mapOfSessionClientsAndSessionNames : _mapOfSessionClientsAndSessionNames.entrySet()) {
             SessionsClient sessionsClient = mapOfSessionClientsAndSessionNames.getKey();
@@ -47,28 +45,20 @@ public class DialogflowDialogManager {
             QueryResult queryResult = response.getQueryResult();
 
 
-            Log log = new Log.;
+
             /**
              * Storing the output in the log file
              */
-            //TODO(Adam) remove or make a debug log.
+            //TODO(Adam) remove
             System.out.println(response.toString());
-            //TODO(Adam) save all the output as an instance of the ResponseDataStructure class
-            ResponseDataStructure responseDataStructure = new ResponseDataStructure();
-
             /* TODO(ADAM) implementation of the logging part. Useful functions:
             queryResult.getAction()
                 .getQueryText()
                 .getIntent().getDisplayName()
                 .getIntentDetectionConfidence()
                 .getFulfillmentText()*/
-
-
-            listOfResponses.add(responseDataStructure);
         }
 
-
-        return listOfResponses;
     }
 
 
