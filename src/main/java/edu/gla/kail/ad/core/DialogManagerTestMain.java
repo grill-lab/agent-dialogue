@@ -40,7 +40,7 @@ public class DialogManagerTestMain {
         String nameOfFileWithProjectIdAndKeysLocations = "ProjectIdAndJsonKeyFileLocations.txt";
 
         DialogManager dialogManager = new DialogManager();
-        dialogManager.initialiseDialogflowDialogManagerInstanceAndLogger(languageCode, logFileDirectory, getRandomSessionIdAsString());
+        dialogManager.initialiseDialogflowDialogManagerInstanceAndLogger(languageCode, logFileDirectory, getRandomSessionIdAsString(), _agentsByProjectIdAndKeyMap);
 
         /* Add the Agents we want to test from text file: */
         readProjectIdAndKeyFileToHashMap(testedTextFileDirectory + nameOfFileWithProjectIdAndKeysLocations);
@@ -51,7 +51,7 @@ public class DialogManagerTestMain {
         for (String line : lines) {
             //TODO(Adam) delete print statements - however, this is testing class
             System.out.println("TESTING CLASS OUTPUT: CURRENTLY HANDLING THE REQUEST FOR: " + line);
-            dialogManager.getResponsesFromDialogflowAgentsForTextInput(line, _agentsByProjectIdAndKeyMap);
+            dialogManager.getResponsesFromDialogflowAgentsForTextInput(line);
             System.out.println("TESTING CLASS OUTPUT: FINISHED HANDLING THE REQUEST FOR: " + line + "\n");
         }
 
