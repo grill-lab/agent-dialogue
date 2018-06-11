@@ -1,12 +1,7 @@
 package edu.gla.kail.ad.core;
 
-import com.google.api.gax.core.CredentialsProvider;
-import com.google.api.gax.core.FixedCredentialsProvider;
-import com.google.auth.oauth2.ServiceAccountCredentials;
 import com.google.cloud.dialogflow.v2beta1.*;
 
-import java.io.FileInputStream;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -21,35 +16,15 @@ public class DialogflowDialogManager {
     private String _sessionId;
     private Map<SessionsClient, SessionName> _mapOfSessionClientsAndSessionNames = new HashMap();
 
-    // TODO(Adam) write a comment etc.
-    public DialogflowDialogManager(String languageCode, String sessionId, Map<String, String> listOfAgentsByProjectIdAndAuthenticationKeyFile) throws Exception {
-        this._languageCode = checkNotNull(languageCode, "en-US");
-
-        if (sessionId.isEmpty()) {
-            throw new Exception("The session id needs to be defined!");
-        } else {
-            this._sessionId = sessionId;
-        }
-
-        if (listOfAgentsByProjectIdAndAuthenticationKeyFile.isEmpty()) {
-            throw new Exception("List of agents is empty!");
-        } else {
-            for (Map.Entry<String, String> agentInformation : listOfAgentsByProjectIdAndAuthenticationKeyFile.entrySet()) {
-                String projectId = agentInformation.getKey();
-                String jsonKeyFileLocation = agentInformation.getValue();
-
-                // Authorize access to the agent currently tested.
-                CredentialsProvider credentialsProvider = FixedCredentialsProvider.create((ServiceAccountCredentials
-                        .fromStream(new FileInputStream(jsonKeyFileLocation))));
-                SessionsSettings sessionsSettings = SessionsSettings.newBuilder().setCredentialsProvider(credentialsProvider).build();
-
-                // Create SessionClient.
-                SessionsClient sessionsClient = SessionsClient.create(sessionsSettings);
-                SessionName session = SessionName.of(projectId, _sessionId);
-                _mapOfSessionClientsAndSessionNames.put(sessionsClient, session);
-            }
-        }
-
+    /** Constructor which initializes a ready to work DIalogflowDialogManager.
+     *
+     * @param dialogflowDialogManagerSetup
+     * @throws Exception
+     */
+    public DialogflowDialogManager(DialogflowDialogManagerSetup dialogflowDialogManagerSetup) throws Exception {
+        _languageCode = dialogflowDialogManagerSetup.get_languageCode();
+        _sessionId = dialogflowDialogManagerSetup.get_sessionId();
+        _mapOfSessionClientsAndSessionNames = dialogflowDialogManagerSetup.get_mapOfSessionClientsAndSessionNames();
     }
 
     public void set_languageCode(String _languageCode) {

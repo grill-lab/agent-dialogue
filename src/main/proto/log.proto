@@ -4,7 +4,8 @@ package edu.gla.kail.ad.core;
 
 option java_package = "edu.gla.kail.ad.core";
 
-
+import "google/protobuf/timestamp.proto";
+import "client.proto";
 
 message LogEntry {
     string session_id = 1;
@@ -19,14 +20,14 @@ message Turn {
 
 message RequestLog {
     string request_id = 1;
-    int64 time = 2;
-    string client_id = 3;
-    Interaction interaction = 4;
+    google.protobuf.Timestamp time = 2;
+    string client_id = 3; //we have it in interactionRequest
+    InteractionRequest interactionRequest = 4;
 }
 
 message ResponseLog {
     string response_id = 1;
-    int64 time = 2;
+    google.protobuf.Timestamp time = 2;
     string client_id = 3;
     string raw_response = 5;
     repeated SystemAct action = 7;
@@ -45,4 +46,4 @@ message Slot {
 }
 
 
-//make some documentations
+//TODO(Adam) write documentations
