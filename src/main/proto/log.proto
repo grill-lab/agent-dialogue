@@ -19,7 +19,7 @@ message Turn {
 }
 
 message RequestLog {
-    string request_id = 1;
+    string request_id = 1; // The id we get from the interface/service
     google.protobuf.Timestamp time = 2;
     string client_id = 3;
     string serviceProvider = 4;
@@ -27,21 +27,22 @@ message RequestLog {
 }
 
 message ResponseLog {
-    string response_id = 1;
+    string response_id = 1; //the response id we get from the API
     google.protobuf.Timestamp time = 2;
-    string client_id = 3;
-    string serviceProvider = 4;
+    string client_id = 3; // identification of the device - e.g. "Adam's Iphone no 000001"
+    string serviceProvider = 4; // e.g. "Dialogflow" "Alexa" etc
     string raw_response = 5;
-    repeated SystemAct action = 7;
+    repeated SystemAct action = 6;
     // Context?
 }
 
 message SystemAct {
-    string action = 1;
+    string action = 1; //name of the action we get from API
     repeated Slot slot = 2;
     Interaction interaction = 3;
 }
 
+// e.g. name = "author", value = "Ada Lovelace"
 message Slot {
     string name = 1;
     string value = 2;
