@@ -4,4 +4,6 @@
 src/main/resources/
 src/test/
 target/
-Metabot_prototype.iml/
+dependency-reduced-pom.xml
+agent-dialogue.iml
+.iml
