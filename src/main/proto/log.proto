@@ -22,13 +22,15 @@ message RequestLog {
     string request_id = 1;
     google.protobuf.Timestamp time = 2;
     string client_id = 3;
-    Interaction interaction = 4;
+    string serviceProvider = 4;
+    Interaction interaction = 5;
 }
 
 message ResponseLog {
     string response_id = 1;
     google.protobuf.Timestamp time = 2;
     string client_id = 3;
+    string serviceProvider = 4;
     string raw_response = 5;
     repeated SystemAct action = 7;
     // Context?
@@ -37,7 +39,7 @@ message ResponseLog {
 message SystemAct {
     string action = 1;
     repeated Slot slot = 2;
-    Interaction interaction = 6;
+    Interaction interaction = 3;
 }
 
 message Slot {

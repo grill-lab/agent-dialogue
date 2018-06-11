@@ -3,6 +3,8 @@ package edu.gla.kail.ad.core;
 import java.util.List;
 import static com.google.common.base.Preconditions.checkNotNull;
 
+import edu.gla.kail.ad.core.Log.LogEntry;
+
 /**
  * This class manages the conversation with different platforms - such as Dialogflow.
  * 1) Add the list of Dialogflow Agents by project Id and Key File directory
@@ -15,11 +17,18 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 public class DialogManager {
     private DialogflowDialogManager _dialogflowDialogManagerInstance;
+    private String _languageCode;
+    private String _sessionId;
+    private Log.LogEntry _logEntry;
 
     // Initializer
-    public DialogManager() {
+    public DialogManager(DialogManagerSetup dialogManagerSetup) {
+        this._languageCode = dialogManagerSetup.get_languageCode();
+        this._sessionId = dialogManagerSetup.get_sessionId();
+        this._logEntry = dialogManagerSetup.get_logEntry();
     }
 
+    // TODO(adam) passing the log function ot the dialogflow initialiser, so that we can use one log class per session
     /* Creating an instance of DialogflowDialogManager and ConversationLogger used for the purpose of one session.
      Takes used languageCode and logFileLocation which is the directory to store log files into.*/
     public void setUpDialogflowDialogManager(DialogflowDialogManagerSetup dialogflowDialogManager) throws Exception {
@@ -34,13 +43,8 @@ public class DialogManager {
                 "DialogflowDialogManager not set up! Use the function setUpDialogflowDialogManager(DialogflowDialogManagerSetup) first.");
         List<ResponseDataStructure> listOfResponses = _dialogflowDialogManagerInstance.
                 getResponsesFromAgentsFromText(textInput);
-        storeResponsesInLogs(listOfResponses);
+        //TODO(Adam)storeResponsesInLogs(listOfResponses);
         return listOfResponses;
-    }
-
-    /* Call the function of ConversationLogger to store the log for each response passed in the list listOfDialogFlowRespons.*/
-    public void storeResponsesInLogs(List<ResponseDataStructure> listOfDialogFlowRespons) throws Exception {
-        //TODO(Adam) implementation
     }
 
 }

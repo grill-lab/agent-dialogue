@@ -11,6 +11,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import edu.gla.kail.ad.core.Log.LogEntry;
+
 /* Class for testing the functionality. */
 
 public class DialogManagerTestMain {
@@ -33,6 +35,8 @@ public class DialogManagerTestMain {
     }
 
     public static void main(String[] args) throws Exception {
+        LogEntry.Builder _logEntry = LogEntry.newBuilder();
+
         String languageCode = "en-US";
         File currentClassPathFile = new File(DialogManagerTestMain.class.getProtectionDomain().getCodeSource().getLocation().getPath()).getParentFile();
         String testedTextFileDirectory = currentClassPathFile.getParent() + "/src/main/resources/TestTextFiles/";
@@ -46,7 +50,7 @@ public class DialogManagerTestMain {
 
         DialogManager dialogManager = new DialogManager();
         DialogflowDialogManagerSetup dialogflowDialogManagerSetup =
-                new DialogflowDialogManagerSetup(languageCode, getRandomSessionIdAsString(), _mapOfSessionClientsAndSessionNames);
+                new DialogflowDialogManagerSetup(languageCode, getRandomSessionIdAsString(), _mapOfSessionClientsAndSessionNames, _logEntry);
         dialogManager.setUpDialogflowDialogManager(dialogflowDialogManagerSetup);
 
 

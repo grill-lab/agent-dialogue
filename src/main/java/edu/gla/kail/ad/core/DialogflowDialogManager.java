@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import edu.gla.kail.ad.core.Log.LogEntry;
+
 /**
  * It's a class used to talk to Dialogflow Agents.
  */
@@ -13,6 +15,7 @@ public class DialogflowDialogManager {
     private String _languageCode;
     private String _sessionId;
     private Map<SessionsClient, SessionName> _mapOfSessionClientsAndSessionNames;
+    private LogEntry _logEntry;
 
     /**
      * Constructor which initializes a ready to work DialogflowDialogManager.
@@ -20,10 +23,11 @@ public class DialogflowDialogManager {
      * @param dialogflowDialogManagerSetup
      * @throws Exception
      */
-    public DialogflowDialogManager(DialogflowDialogManagerSetup dialogflowDialogManagerSetup) throws Exception {
+    public DialogflowDialogManager(DialogflowDialogManagerSetup dialogflowDialogManagerSetup) {
         _languageCode = dialogflowDialogManagerSetup.get_languageCode();
         _sessionId = dialogflowDialogManagerSetup.get_sessionId();
         _mapOfSessionClientsAndSessionNames = dialogflowDialogManagerSetup.get_mapOfSessionClientsAndSessionNames();
+        _logEntry = dialogflowDialogManagerSetup.get_logEntry();
     }
 
     /* Get the response from Agent in response to a request.
@@ -43,6 +47,7 @@ public class DialogflowDialogManager {
             QueryResult queryResult = response.getQueryResult();
 
 
+            Log log = new Log.;
             /**
              * Storing the output in the log file
              */
