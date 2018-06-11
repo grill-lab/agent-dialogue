@@ -1,3 +1,10 @@
+syntax = "proto3";
+
+package edu.gla.kail.ad.core;
+
+option java_package = "edu.gla.kail.ad.core";
+
+
 
 message LogEntry {
     string session_id = 1;

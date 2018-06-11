@@ -8,6 +8,7 @@ import com.google.cloud.dialogflow.v2beta1.*;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -18,7 +19,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 public class DialogflowDialogManager {
     private String _languageCode;
     private String _sessionId;
-    private Map<SessionsClient, SessionName> _mapOfSessionClientsAndSessionNames;
+    private Map<SessionsClient, SessionName> _mapOfSessionClientsAndSessionNames = new HashMap();
 
     // TODO(Adam) write a comment etc.
     public DialogflowDialogManager(String languageCode, String sessionId, Map<String, String> listOfAgentsByProjectIdAndAuthenticationKeyFile) throws Exception {
