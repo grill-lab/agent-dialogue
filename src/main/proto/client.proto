@@ -4,15 +4,17 @@ package edu.gla.kail.ad.core;
 
 option java_package = "edu.gla.kail.ad.core";
 
+import "google/protobuf/timestamp.proto";
+
 message InteractionRequest {
-    int64 start_time = 1;
+    google.protobuf.Timestamp time = 1;
     string client_id = 2;
     Interaction interaction = 3;
 }
 
 message InteractionResponse {
     string response_id = 1;
-    int64 time = 2;
+    google.protobuf.Timestamp time = 2;
     string client_id = 3;
     repeated Interaction interaction = 4;
 }
@@ -31,3 +33,8 @@ message Interaction {
     InteractionType type = 4;
     string device_type = 5;
 }
+
+
+
+
+//TODO(Adam) write documentations
