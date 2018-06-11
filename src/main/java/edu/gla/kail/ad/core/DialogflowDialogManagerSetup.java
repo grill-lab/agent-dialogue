@@ -11,12 +11,13 @@ import java.io.FileInputStream;
 import java.util.HashMap;
 import java.util.Map;
 
+import edu.gla.kail.ad.core.Log.LogEntry;
+
 import static com.google.common.base.Preconditions.checkNotNull;
 
 public class DialogflowDialogManagerSetup {
-    private String _languageCode;
-    private String _sessionId;
     private Map<SessionsClient, SessionName> _mapOfSessionClientsAndSessionNames = new HashMap();
+    private DialogManagerSetup dialogManagerSetup;
 
     /**
      * @param languageCode
@@ -24,16 +25,9 @@ public class DialogflowDialogManagerSetup {
      * @param mapOfProjectIdAndAuthorizationFile
      * @throws Exception
      */
-    public DialogflowDialogManagerSetup(String languageCode, String sessionId,
-                                        Map<String, String> mapOfProjectIdAndAuthorizationFile) throws Exception {
-        this._languageCode = checkNotNull(languageCode,
-                "Language code not specified! Example of a language code \"en-US\"");
-        if (sessionId.isEmpty()) {
-            throw new Exception("The session id needs to be defined!");
-        } else {
-            this._sessionId = sessionId;
-        }
-
+    public DialogflowDialogManagerSetup(Map<String, String> mapOfProjectIdAndAuthorizationFile, DialogManagerSetup dialogManagerSetup) throws Exception {
+        this._languageCode = languageCode;
+        this._sessionId = sessionId;
         if (mapOfProjectIdAndAuthorizationFile.isEmpty()) {
             throw new Exception("List of agents is empty!");
         } else {
@@ -52,17 +46,25 @@ public class DialogflowDialogManagerSetup {
                 _mapOfSessionClientsAndSessionNames.put(sessionsClient, session);
             }
         }
+        this.get_logEntry() = get_logEntry()
     }
 
     public String get_languageCode() {
+
         return _languageCode;
     }
 
     public String get_sessionId() {
+
         return _sessionId;
     }
 
     public Map<SessionsClient, SessionName> get_mapOfSessionClientsAndSessionNames() {
         return _mapOfSessionClientsAndSessionNames;
     }
+
+    public LogEntry get_logEntry() {
+        return _logEntry;
+    }
+
 }
