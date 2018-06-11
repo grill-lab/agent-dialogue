@@ -14,10 +14,10 @@ import java.util.UUID;
 /* Class for testing the functionality. */
 
 public class DialogManagerTestMain {
-    public static Map<String, String> _agentsByProjectIdAndKeyMap = new HashMap<String, String>();
+    private static Map<String, String> _mapOfSessionClientsAndSessionNames = new HashMap();
 
     /*     Return random sessionId used to initialise the DialogflowDialogManager. */
-    public static String getRandomSessionIdAsString() {
+    private static String getRandomSessionIdAsString() {
         return UUID.randomUUID().toString();
     }
 
@@ -28,7 +28,7 @@ public class DialogManagerTestMain {
         List<String> lines = Files.readAllLines(path, StandardCharsets.UTF_8);
         for (String line : lines) {
             String[] projectIdAndJsonKey = line.split(", ");
-            _agentsByProjectIdAndKeyMap.put(projectIdAndJsonKey[0], projectIdAndJsonKey[1]);
+            _mapOfSessionClientsAndSessionNames.put(projectIdAndJsonKey[0], projectIdAndJsonKey[1]);
         }
     }
 
@@ -45,7 +45,9 @@ public class DialogManagerTestMain {
         readProjectIdAndKeyFileToHashMap(testedTextFileDirectory + nameOfFileWithProjectIdAndKeysLocations);
 
         DialogManager dialogManager = new DialogManager();
-        dialogManager.initialiseDialogflowDialogManagerInstanceAndLogger(languageCode, logFileDirectory, getRandomSessionIdAsString(), _agentsByProjectIdAndKeyMap);
+        DialogflowDialogManagerSetup dialogflowDialogManagerSetup =
+                new DialogflowDialogManagerSetup(languageCode, getRandomSessionIdAsString(), _mapOfSessionClientsAndSessionNames);
+        dialogManager.setUpDialogflowDialogManager(dialogflowDialogManagerSetup);
 
 
 
