@@ -1,49 +1,90 @@
 package edu.gla.kail.ad.core;
 
-import com.google.cloud.dialogflow.v2beta1.*;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
+import com.google.api.gax.core.CredentialsProvider;
+import com.google.api.gax.core.FixedCredentialsProvider;
+import com.google.auth.oauth2.ServiceAccountCredentials;
+import com.google.cloud.Tuple;
+import com.google.cloud.dialogflow.v2beta1.DetectIntentResponse;
+import com.google.cloud.dialogflow.v2beta1.QueryInput;
+import com.google.cloud.dialogflow.v2beta1.QueryResult;
+import com.google.cloud.dialogflow.v2beta1.SessionName;
+import com.google.cloud.dialogflow.v2beta1.SessionsClient;
+import com.google.cloud.dialogflow.v2beta1.SessionsSettings;
+import com.google.cloud.dialogflow.v2beta1.TextInput;
 import edu.gla.kail.ad.core.Log.LogEntry;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.List;
+
+import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * It's a class used to talk to Dialogflow Agents.
  * The responses from Agents are added to the log, but not saved.
  */
 public class DialogflowDialogManager {
-    private String _languageCode;
-    private Map<SessionsClient, SessionName> _mapOfSessionClientsAndSessionNames;
-    private LogEntry.Builder _logEntry;
+    private List<Tuple<SessionsClient, SessionName>> _listOfSessionsClientsAndSessionsNames;
+    private String _sessionId;
+    private LogEntry.Builder _logEntryBuilder;
 
     /**
      * Constructor which initializes a ready to work DialogflowDialogManager.
-     *
-     * @param dialogflowDialogManagerSetup
-     * @throws Exception
+     * Creates new LogEntry instance!
      */
-    public DialogflowDialogManager(DialogflowDialogManagerSetup dialogflowDialogManagerSetup) {
-        _languageCode = dialogflowDialogManagerSetup.get_languageCode();
-        _mapOfSessionClientsAndSessionNames = dialogflowDialogManagerSetup.get_mapOfSessionClientsAndSessionNames();
-        _logEntry = dialogflowDialogManagerSetup.get_logEntryBuilder();
+    public DialogflowDialogManager(String sessionId,
+                                   List<Tuple<String, String>> listOfProjectIdAndAuthorizationFile) throws FileNotFoundException, IOException {
+        _logEntryBuilder = LogEntry.newBuilder();
+        _sessionId = sessionId;
+        createListOfSessionClientsAndSessionNames(listOfProjectIdAndAuthorizationFile);
+    }
+
+    /**
+     * Puts the SessionClients and SessionNames of corresponding project ids' and the localisation of their files into the map.
+     * @param listOfProjectIdAndAuthorizationFile
+     */
+    public void createListOfSessionClientsAndSessionNames(List<Tuple<String, String>> listOfProjectIdAndAuthorizationFile) throws FileNotFoundException, IOException {
+        if (listOfProjectIdAndAuthorizationFile.isEmpty()) {
+            throw new IllegalArgumentException("List of agents is empty!");
+        } else {
+            for (Tuple<String, String> tupleOfProjectIdAndAuthorizationFileDirectory : listOfProjectIdAndAuthorizationFile) {
+                String projectId = tupleOfProjectIdAndAuthorizationFileDirectory.x();
+                String jsonKeyFileLocation = tupleOfProjectIdAndAuthorizationFileDirectory.y();
+
+                // Authorize access to the agent currently tested.
+                if (!new File(jsonKeyFileLocation).isFile()) {
+                    throw new FileNotFoundException("The location of the JSON key file provided does not exist: " + jsonKeyFileLocation);
+                }
+                CredentialsProvider credentialsProvider = FixedCredentialsProvider.create((ServiceAccountCredentials
+                        .fromStream(new FileInputStream(jsonKeyFileLocation))));
+                SessionsSettings sessionsSettings = SessionsSettings.newBuilder().setCredentialsProvider(credentialsProvider).build();
+
+                // Create SessionClient.
+                SessionsClient sessionsClient = SessionsClient.create(sessionsSettings);
+                SessionName session = SessionName.of(projectId, _sessionId);
+                _listOfSessionsClientsAndSessionsNames.add(Tuple.of(sessionsClient, session));
+            }
+        }
     }
 
 
+
     /* Get the response from Agent in response to a request.
-    TODO(Adam).*/
-    public void getResponsesFromAgentsFromText(String textPassed) {
+    TODO(Adam) input as a request object - probably from the log.*/
+    public void getResponsesFromAgentsFromText(String textPassed, String languageCode) {
         // Append the response from each agent to the list of responses.
-        for (Map.Entry<SessionsClient, SessionName> mapOfSessionClientsAndSessionNames : _mapOfSessionClientsAndSessionNames.entrySet()) {
-            SessionsClient sessionsClient = mapOfSessionClientsAndSessionNames.getKey();
-            SessionName session = mapOfSessionClientsAndSessionNames.getValue();
+        for (Tuple<SessionsClient, SessionName> tupleOfSessionClientsAndSessionNames : _listOfSessionsClientsAndSessionsNames) {
+            SessionsClient sessionsClient = tupleOfSessionClientsAndSessionNames.x();
+            SessionName session = tupleOfSessionClientsAndSessionNames.y();
             // The core code that creates a DialogFlow request from the input text and sends it to Assistant Server.
             // The result is the response result.
-            TextInput.Builder textInput = TextInput.newBuilder().setText(textPassed).setLanguageCode(_languageCode);
+            TextInput.Builder textInput = TextInput.newBuilder().setText(textPassed).setLanguageCode(checkNotNull(languageCode,
+                    "Language code not specified! Example of a language code \"en-US\""));
             QueryInput queryInput = QueryInput.newBuilder().setText(textInput).build();
             DetectIntentResponse response = sessionsClient.detectIntent(session, queryInput);
             QueryResult queryResult = response.getQueryResult();
-
 
 
             /**

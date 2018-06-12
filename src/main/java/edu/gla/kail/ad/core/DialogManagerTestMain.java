@@ -46,8 +46,8 @@ public class DialogManagerTestMain {
         /* Add the Agents we want to test from text file: */
         readProjectIdAndKeyFileToHashMap(testTextFileDirectory + nameOfFileWithProjectIdAndKeysLocations);
 
-        DialogManagerSetup dialogManagerSetup = new DialogManagerSetup(languageCode, getRandomNumber());
-        DialogManager dialogManager = new DialogManager(dialogManagerSetup);
+
+        DialogManager dialogManager = new DialogManager();
         dialogManager.setUpDialogflowDialogManager(_mapOfSessionClientsAndSessionNames);
 
         /* Call the DialogflowManager on all sentences/lines stored in a text file. */
@@ -56,7 +56,7 @@ public class DialogManagerTestMain {
         for (String line : lines) {
             //TODO(Adam) delete print statements - however, this is testing class
             System.out.println("TESTING CLASS OUTPUT: CURRENTLY HANDLING THE REQUEST FOR: " + line);
-            dialogManager.getResponsesFromDialogflowAgentsForTextInput(line, getRandomNumber());
+            dialogManager.getResponsesFromDialogflowAgentsForTextInput(line, getRandomNumber(), languageCode);
             System.out.println("TESTING CLASS OUTPUT: FINISHED HANDLING THE REQUEST FOR: " + line + "\n");
         }
 
