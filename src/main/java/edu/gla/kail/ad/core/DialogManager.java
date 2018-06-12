@@ -1,6 +1,7 @@
 package edu.gla.kail.ad.core;
 
 import com.google.protobuf.Timestamp;
+import edu.gla.kail.ad.core.Client.Interaction;
 import edu.gla.kail.ad.core.Client.InteractionRequest;
 import edu.gla.kail.ad.core.Log.LogEntry;
 import edu.gla.kail.ad.core.Log.RequestLog;
@@ -120,9 +121,10 @@ public class DialogManager {
         }
 
         List<ResponseLog> listOfResponseLogs = new ArrayList();
+        Interaction interaction = requestLog.getInteraction();
         for (DialogManagerInterface dialogManagerInterfaceInstance : _listOfDialogManagers) {
             listOfResponseLogs.addAll(dialogManagerInterfaceInstance.getResponsesFromAgents
-                    (requestLog));
+                    (interaction));
         }
 
 
@@ -130,7 +132,6 @@ public class DialogManager {
         return listOfResponseLogs;
     }
 
-
-    //raking function;
+    // TODO(Adam): Raking function;
 
 }
