@@ -1,0 +1,50 @@
+syntax = "proto3";
+
+package edu.gla.kail.ad.core;
+
+option java_package = "edu.gla.kail.ad.core";
+
+import "google/protobuf/timestamp.proto";
+import "client.proto";
+
+message LogEntry {
+    string session_id = 1;
+    repeated Turn turn = 2;
+}
+
+message Turn {
+    ResponseLog response_log = 1;
+    RequestLog request_log = 2;
+    repeated ResponseLog candidate_response = 3;
+}
+
+message RequestLog {
+    string request_id = 1; // The id we assign
+    google.protobuf.Timestamp time = 2;
+    string client_id = 3;
+    Interaction interaction = 4;
+}
+
+message ResponseLog {
+    string response_id = 1; //the response id we get from the API
+    google.protobuf.Timestamp time = 2;
+    string client_id = 3; // identification of the device - e.g. "Adam's Iphone no 000001"
+    string serviceProvider = 4; // e.g. "Dialogflow" "Alexa" etc
+    string raw_response = 5; // Raw response in e.g. JSON format that we obtain from API
+    repeated SystemAct action = 6;
+    // Context?
+}
+
+message SystemAct {
+    string action = 1; //name of the action we get from API
+    repeated Slot slot = 2;
+    Interaction interaction = 3;
+}
+
+// e.g. name = "author", value = "Ada Lovelace"
+message Slot {
+    string name = 1;
+    string value = 2;
+}
+
+//TODO(Adam) write documentations
