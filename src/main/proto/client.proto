@@ -35,4 +35,4 @@ message Interaction {
     string language_code = 6;
 }
 
-//TODO(Adam) write documentations
+//TODO(Adam) write documentation
