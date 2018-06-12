@@ -11,6 +11,7 @@ import com.google.cloud.dialogflow.v2beta1.SessionName;
 import com.google.cloud.dialogflow.v2beta1.SessionsClient;
 import com.google.cloud.dialogflow.v2beta1.SessionsSettings;
 import com.google.cloud.dialogflow.v2beta1.TextInput;
+import edu.gla.kail.ad.core.Client.InteractionRequest;
 import edu.gla.kail.ad.core.Log.LogEntry;
 
 import java.io.File;
@@ -25,7 +26,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * It's a class used to talk to Dialogflow Agents.
  * The responses from Agents are added to the log, but not saved.
  */
-public class DialogflowDialogManager {
+public class DialogflowDialogManager implements DialogManagerInterface {
     private List<Tuple<SessionsClient, SessionName>> _listOfSessionsClientsAndSessionsNames;
     private String _sessionId;
     private LogEntry.Builder _logEntryBuilder;
@@ -40,7 +41,7 @@ public class DialogflowDialogManager {
             FileNotFoundException, IOException {
         _logEntryBuilder = LogEntry.newBuilder();
         _sessionId = sessionId;
-        createListOfSessionClientsAndSessionNames(listOfProjectIdAndAuthorizationFile);
+        setUpAgents(listOfProjectIdAndAuthorizationFile);
     }
 
     /**
@@ -49,8 +50,9 @@ public class DialogflowDialogManager {
      *
      * @param listOfProjectIdAndAuthorizationFile
      */
-    public void createListOfSessionClientsAndSessionNames(List<Tuple<String, String>>
-                                                                  listOfProjectIdAndAuthorizationFile) throws FileNotFoundException, IOException {
+    public void setUpAgents(List<Tuple<String, String>>
+                                    listOfProjectIdAndAuthorizationFile) throws
+            FileNotFoundException, IOException {
         if (listOfProjectIdAndAuthorizationFile.isEmpty()) {
             throw new IllegalArgumentException("List of agents is empty!");
         } else {
@@ -66,7 +68,7 @@ public class DialogflowDialogManager {
                 }
                 CredentialsProvider credentialsProvider = FixedCredentialsProvider.create(
                         (ServiceAccountCredentials
-                        .fromStream(new FileInputStream(jsonKeyFileLocation))));
+                                .fromStream(new FileInputStream(jsonKeyFileLocation))));
                 SessionsSettings sessionsSettings = SessionsSettings.newBuilder()
                         .setCredentialsProvider(credentialsProvider).build();
 
@@ -81,7 +83,8 @@ public class DialogflowDialogManager {
 
     /* Get the response from Agent in response to a request.
     TODO(Adam) input as a request object - probably from the log.*/
-    public void getResponsesFromAgentsFromText(String textPassed, String languageCode) {
+    public void getResponsesFromAgents(InteractionRequest request) { //TODO String textPassed,
+        // String languageCode
         // Append the response from each agent to the list of responses.
         for (Tuple<SessionsClient, SessionName> tupleOfSessionClientsAndSessionNames :
                 _listOfSessionsClientsAndSessionsNames) {
@@ -92,7 +95,7 @@ public class DialogflowDialogManager {
             // The result is the response result.
             TextInput.Builder textInput = TextInput.newBuilder().setText(textPassed)
                     .setLanguageCode(checkNotNull(languageCode,
-                    "Language code not specified! Example of a language code \"en-US\""));
+                            "Language code not specified! Example of a language code \"en-US\""));
             QueryInput queryInput = QueryInput.newBuilder().setText(textInput).build();
             DetectIntentResponse response = sessionsClient.detectIntent(session, queryInput);
             QueryResult queryResult = response.getQueryResult();
