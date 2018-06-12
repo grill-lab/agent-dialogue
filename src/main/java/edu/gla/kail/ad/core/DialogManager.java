@@ -28,7 +28,8 @@ public class DialogManager {
     private List<DialogManagerInterface> _listOfDialogManagers; // List of instances of used
     // Dialog Managers.
     private String _sessionId;
-    private String _logsDirectory;
+    private String _logsDirectory; //TODO(Adam): Implementation of writing to the file and
+    // performing checks on the file.
 
     /**
      * Constructor of this class creates LogEntry.Builder which is used for login of the entire
