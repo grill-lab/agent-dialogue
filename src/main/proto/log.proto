@@ -30,7 +30,7 @@ message ResponseLog {
     google.protobuf.Timestamp time = 2;
     string client_id = 3; // identification of the device - e.g. "Adam's Iphone no 000001"
     string serviceProvider = 4; // e.g. "Dialogflow" "Alexa" etc
-    string raw_response = 5;
+    string raw_response = 5; // Raw response in e.g. JSON format that we obtain from API
     repeated SystemAct action = 6;
     // Context?
 }
