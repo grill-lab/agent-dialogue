@@ -1,11 +1,12 @@
 package edu.gla.kail.ad.core;
 
+import com.google.protobuf.Timestamp;
 import edu.gla.kail.ad.core.Client.InteractionRequest;
 import edu.gla.kail.ad.core.Log.LogEntry;
 import edu.gla.kail.ad.core.Log.RequestLog;
 import edu.gla.kail.ad.core.Log.ResponseLog;
-import sun.misc.Request;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -43,7 +44,7 @@ public class DialogManager {
      * done later TODO(Adam)
      */
     public void startSession() {
-        _sessionId = UUID.randomUUID().toString();
+        _sessionId = getRandomNumberAsString();
     }
 
     /**
@@ -53,6 +54,14 @@ public class DialogManager {
         //TODO(Adam): Creation of configuration file - to be done later on.
     }
 
+    private String getRandomNumberAsString() {
+        return UUID.randomUUID().toString();
+    }
+
+    //TODO (Adam) needs to be implemented
+    private String generateRequestId() {
+        return getRandomNumberAsString();
+    }
 
     /**
      * Set up Dialog Managers, such as Dialogflow.
@@ -83,7 +92,7 @@ public class DialogManager {
      * Get Request from Client: and convert it to the RequestLog.
      * Store the logs after each conversation.
      *
-     * @param requestLog which is an instance passed from the client?
+     * @param interactionRequest
      * @return the list of ReponseLog instances with saved responses within them
      * @throws Exception
      */
@@ -95,9 +104,14 @@ public class DialogManager {
         /**
          * Convert InteractionRequest to RequestLog.
          */
+        long millis = System.currentTimeMillis();
+        Timestamp timestamp = Timestamp.newBuilder().setSeconds(millis / 1000)
+                .setNanos((int) ((millis % 1000) * 1000000)).build();
         RequestLog requestLog = RequestLog.newBuilder()
-                .
-
+                .setRequestId(generateRequestId()) //Assigning the request id function needs to be implemented
+                .setTime(timestamp)
+                .setClientId(interactionRequest.getClientId())
+                .setInteraction(interactionRequest.getInteraction()).build();
 
         if (checkNotNull(_listOfDialogManagers, "Dialog Managers are not set up! Use the function" +
                 " setUpDialogManagers() first.").isEmpty()) {
@@ -106,8 +120,7 @@ public class DialogManager {
 
         List<ResponseLog> listOfResponseLogs = new ArrayList();
         for (DialogManagerInterface dialogManagerInterfaceInstance : _listOfDialogManagers) {
-            listOfResponseLogs.
-                    listOfResponseLogs.add(dialogManagerInterfaceInstance.getResponsesFromAgents
+            listOfResponseLogs.add(dialogManagerInterfaceInstance.getResponsesFromAgents
                     (requestLog));
         }
 
