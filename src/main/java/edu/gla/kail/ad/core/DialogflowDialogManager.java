@@ -13,6 +13,7 @@ import com.google.cloud.dialogflow.v2beta1.SessionsSettings;
 import com.google.cloud.dialogflow.v2beta1.TextInput;
 import edu.gla.kail.ad.core.Client.InteractionRequest;
 import edu.gla.kail.ad.core.Log.LogEntry;
+import edu.gla.kail.ad.core.Log.ResponseLog;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -38,7 +39,7 @@ public class DialogflowDialogManager implements DialogManagerInterface {
     public DialogflowDialogManager(String sessionId,
                                    List<Tuple<String, String>>
                                            listOfProjectIdAndAuthorizationFile) throws
-            FileNotFoundException, IOException {
+            FileNotFoundException, IOException, Exception {
         _logEntryBuilder = LogEntry.newBuilder();
         _sessionId = sessionId;
         setUpAgents(listOfProjectIdAndAuthorizationFile);
@@ -50,22 +51,28 @@ public class DialogflowDialogManager implements DialogManagerInterface {
      *
      * @param listOfProjectIdAndAuthorizationFile
      */
-    public void setUpAgents(List<Tuple<String, String>>
-                                    listOfProjectIdAndAuthorizationFile) throws
-            FileNotFoundException, IOException {
+    private void setUpAgents(List<Tuple<String, String>>
+                                     listOfProjectIdAndAuthorizationFile) throws
+            FileNotFoundException, IOException, Exception {
         if (listOfProjectIdAndAuthorizationFile.isEmpty()) {
             throw new IllegalArgumentException("List of agents is empty!");
         } else {
             for (Tuple<String, String> tupleOfProjectIdAndAuthorizationFileDirectory :
                     listOfProjectIdAndAuthorizationFile) {
-                String projectId = tupleOfProjectIdAndAuthorizationFileDirectory.x();
-                String jsonKeyFileLocation = tupleOfProjectIdAndAuthorizationFileDirectory.y();
-
-                // Authorize access to the agent currently tested.
+                String projectId = checkNotNull(tupleOfProjectIdAndAuthorizationFileDirectory.x()
+                        , "The project ID is null!");
+                String jsonKeyFileLocation = checkNotNull
+                        (tupleOfProjectIdAndAuthorizationFileDirectory.y(), "The JSON file " +
+                                "location is null!");
+                if (projectId.isEmpty()) {
+                    throw new Exception("The provided project ID of the service is empty!");
+                }
                 if (!new File(jsonKeyFileLocation).isFile()) {
                     throw new FileNotFoundException("The location of the JSON key file provided " +
                             "does not exist: " + jsonKeyFileLocation);
                 }
+
+                // Authorize access to the agent currently tested.
                 CredentialsProvider credentialsProvider = FixedCredentialsProvider.create(
                         (ServiceAccountCredentials
                                 .fromStream(new FileInputStream(jsonKeyFileLocation))));
@@ -81,9 +88,14 @@ public class DialogflowDialogManager implements DialogManagerInterface {
     }
 
 
+
+
+
+
     /* Get the response from Agent in response to a request.
     TODO(Adam) input as a request object - probably from the log.*/
-    public void getResponsesFromAgents(InteractionRequest request) { //TODO String textPassed,
+    public List<ResponseLog> getResponsesFromAgents(InteractionRequest request) { //TODO String
+        // textPassed,
         // String languageCode
         // Append the response from each agent to the list of responses.
         for (Tuple<SessionsClient, SessionName> tupleOfSessionClientsAndSessionNames :

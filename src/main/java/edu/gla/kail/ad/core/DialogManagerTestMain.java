@@ -61,7 +61,7 @@ public class DialogManagerTestMain {
         for (String line : lines) {
             //TODO(Adam) delete print statements - however, this is testing class
             System.out.println("TESTING CLASS OUTPUT: CURRENTLY HANDLING THE REQUEST FOR: " + line);
-            dialogManager.getResponsesFromDialogflowAgentsForTextInput(line, getRandomNumber(),
+            dialogManager.getResponsesFromAgents(line, getRandomNumber(),
                     languageCode);
             System.out.println("TESTING CLASS OUTPUT: FINISHED HANDLING THE REQUEST FOR: " + line
                     + "\n");

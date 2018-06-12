@@ -1,7 +1,10 @@
 package edu.gla.kail.ad.core;
 
 import edu.gla.kail.ad.core.Log.LogEntry;
+import edu.gla.kail.ad.core.Log.RequestLog;
+import edu.gla.kail.ad.core.Log.ResponseLog;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -31,6 +34,7 @@ public class DialogManager {
     public DialogManager() {
         startSession();
         _logEntryBuilder = LogEntry.newBuilder();
+        listOfServiceInstances = new ArrayList();
     }
 
     /**
@@ -46,21 +50,27 @@ public class DialogManager {
     }
 
 
-    public void setUpDialogManagers(List<ServicesConfigurationTriplet>
-                                            servicesConfigurationTripletList) throws Exception {
+    public void setUpDialogManagers(List<ConfigurationTuple>
+                                            configurationTuples) throws Exception {
+        for (ConfigurationTuple configurationTuple :
+                configurationTuples) {
+            switch (configurationTuple.get_nameOfTheAgent()) {
+                case "Dialogflow":
+                    listOfServiceInstances.add(new DialogflowDialogManager(_sessionId,
+                            configurationTuple.get_parametersRequiredByTheAgent()));
+                    break;
+                default:
+                    throw new Exception("The type of the Agent Provided \"" + configurationTuple
+                            .get_nameOfTheAgent() + "\" is not currently supported!"); //TODO
+                    // (Adam) Ask Jeff if needed, as we already have the ckeck in ConfigurationTuple
+            }
 
-        for (ServicesConfigurationTriplet servicesConfigurationTriplet :
-                servicesConfigurationTripletList) {
-            //TODO (adam) check if the provided service exists before setting it up.
-            //TODO configure the whatever
         }
-        _dialogflowDialogManagerInstance = new DialogflowDialogManager(_sessionId,
-                listOfProjectIdAndAuthorizationFile);
     }
 
     /**
      * Return the list of responses for a passed text textInput from all the agents
-     * stored in the _mapOfSessionClientsAndSessionNames and calles storing all the responses in
+     * stored in the _mapOfSessionClientsAndSessionNames and calls storing all the responses in
      * the log file.
      * This function is also responsible for calling the logging function.
      * This function is responsible for storing the logs after each conversation.
@@ -69,7 +79,7 @@ public class DialogManager {
      * @return
      */
     //TODO passing input as requestLog probably
-    public List<Log.ResponseLog.Builder> getResponsesFromDialogflowAgentsForTextInput(String textInput, String requestId, String langugeCode) throws Exception {
+    public List<ResponseLog> getResponsesFromAgents(RequestLog requestLog) throws Exception {
         //TODO(Adam) store/create request log
 
         _dialogflowDialogManagerInstance = checkNotNull(_dialogflowDialogManagerInstance,
@@ -80,7 +90,8 @@ public class DialogManager {
 
         //TODO(Adam) store the conversation in the log files.
 
-        //TODO(Adam) return them in the form of log? think about the type of the function - void,
+        //TODO(Adam) return them in the form of log? think about the type of the function -
+        // void,
         // list - of logs, what?
         throw new Exception("Doesn't return anything yet!");
         return null;

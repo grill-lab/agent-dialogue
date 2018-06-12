@@ -7,10 +7,9 @@ import java.util.List;
 
 
 /**
+ * Interface implemented by different Agent Managers.
  * @interface
  */
-public interface DialogManagerInterface {
-    // TODO(adam) do we want this kind of function?: void setUpAgents();
-
+public interface DialogManagerInterface<E> {
     List<ResponseLog> getResponsesFromAgents(InteractionRequest request);
 }
