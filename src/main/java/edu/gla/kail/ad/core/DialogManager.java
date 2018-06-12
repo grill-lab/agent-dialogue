@@ -2,9 +2,11 @@ package edu.gla.kail.ad.core;
 
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
+import com.google.cloud.Tuple;
 import edu.gla.kail.ad.core.Log.LogEntry;
 
 /**
@@ -19,25 +21,32 @@ import edu.gla.kail.ad.core.Log.LogEntry;
 //TODO(Adam) - add description of all the variables, functions, classes etc.
 
 public class DialogManager {
-    private DialogflowDialogManager _dialogflowDialogManagerInstance;
-    private String _languageCode;
+    private List<Object> listOfServicesInstances;
+    private DialogflowDialogManager _dialogflowDialogManagerInstance; //TODO to be deleted and added in the list?
     private String _sessionId;
     final private LogEntry.Builder _logEntryBuilder;
 
-    // Initializer
-    public DialogManager(DialogManagerSetup dialogManagerSetup) {
-        _languageCode = dialogManagerSetup.get_languageCode();
-        _sessionId = dialogManagerSetup.get_sessionId();
-        _logEntryBuilder = dialogManagerSetup.get_logEntry();
+    /**
+     * Constructor of this class creates LogEntry.Builder which is used for login of the entire conversation.
+     */
+    public DialogManager() {
+        startSession();
+        _logEntryBuilder = LogEntry.newBuilder();
     }
 
-    // TODO(adam) passing the log function ot the dialogflow initialiser, so that we can use one log class per session
-    /* Creating an instance of DialogflowDialogManager and ConversationLogger used for the purpose of one session.
-     Takes used languageCode and logFileLocation which is the directory to store log files into.*/
-    public void setUpDialogflowDialogManager(Map<String, String> mapOfProjectIdAndAuthorizationFile) throws Exception {
-        DialogflowDialogManagerSetup dialogflowDialogManagerSetup = new DialogflowDialogManagerSetup(
-                _languageCode, _sessionId, mapOfProjectIdAndAuthorizationFile, _logEntryBuilder);
-        _dialogflowDialogManagerInstance = new DialogflowDialogManager(dialogflowDialogManagerSetup);
+    /**
+     * This function creates a unique sessionId. The choice of the sessionId creator is to be done later TODO(Adam)
+     */
+    public void startSession() {
+        _sessionId = UUID.randomUUID().toString();
+    }
+    public void endSession() {
+        //TODO(Adam) - creation of configuration file?
+    }
+
+
+    public void setUpDialogManagers(List<Triplet<String, String>> listOfProjectIdAndAuthorizationFile) throws Exception {
+        _dialogflowDialogManagerInstance = new DialogflowDialogManager(_sessionId, listOfProjectIdAndAuthorizationFile);
     }
 
     /**
@@ -48,12 +57,13 @@ public class DialogManager {
      * @param textInput
      * @return
      */
-    public List<Log.ResponseLog.Builder> getResponsesFromDialogflowAgentsForTextInput(String textInput, String requestId) throws Exception {
+    //TODO passing input as requestLog probably
+    public List<Log.ResponseLog.Builder> getResponsesFromDialogflowAgentsForTextInput(String textInput, String requestId, String langugeCode) throws Exception {
         //TODO(Adam) store/create request log
 
-        this._dialogflowDialogManagerInstance = checkNotNull(_dialogflowDialogManagerInstance,
+        _dialogflowDialogManagerInstance = checkNotNull(_dialogflowDialogManagerInstance,
                 "DialogflowDialogManager not set up! Use the function setUpDialogflowDialogManager(DialogflowDialogManagerSetup) first.");
-        _dialogflowDialogManagerInstance.getResponsesFromAgentsFromText(textInput);
+        _dialogflowDialogManagerInstance.getResponsesFromAgentsFromText(textInput, langugeCode);
 
 
         //TODO(Adam) store the conversation in the log files.
