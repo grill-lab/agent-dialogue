@@ -6,7 +6,6 @@ import edu.gla.kail.ad.core.Log.LogEntry;
 import edu.gla.kail.ad.core.Log.RequestLog;
 import edu.gla.kail.ad.core.Log.ResponseLog;
 
-import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -29,6 +28,7 @@ public class DialogManager {
     private List<DialogManagerInterface> _listOfDialogManagers; // List of instances of used
     // Dialog Managers.
     private String _sessionId;
+    private String _logsDirectory;
 
     /**
      * Constructor of this class creates LogEntry.Builder which is used for login of the entire
@@ -40,8 +40,7 @@ public class DialogManager {
     }
 
     /**
-     * Create a unique sessionId. The choice of the sessionId creator is to be
-     * done later TODO(Adam)
+     * Create a unique sessionId. TODO(Adam) the choice of Session ID generator function.
      */
     public void startSession() {
         _sessionId = getRandomNumberAsString();
@@ -52,13 +51,14 @@ public class DialogManager {
      */
     public void endSession() {
         //TODO(Adam): Creation of configuration file - to be done later on.
+        //TODO(Adam): Updating/Saving to the log file?
     }
 
     private String getRandomNumberAsString() {
         return UUID.randomUUID().toString();
     }
 
-    //TODO (Adam) needs to be implemented
+    //TODO(Adam): generateRequestId needs to be implemented
     private String generateRequestId() {
         return getRandomNumberAsString();
     }
@@ -96,11 +96,8 @@ public class DialogManager {
      * @return the list of ReponseLog instances with saved responses within them
      * @throws Exception
      */
-
-    //TODO passing input as requestLog probably
     public List<ResponseLog> getResponsesFromAgents(InteractionRequest interactionRequest) throws
             Exception {
-        //TODO(Adam) store request log
         /**
          * Convert InteractionRequest to RequestLog.
          */
@@ -108,10 +105,13 @@ public class DialogManager {
         Timestamp timestamp = Timestamp.newBuilder().setSeconds(millis / 1000)
                 .setNanos((int) ((millis % 1000) * 1000000)).build();
         RequestLog requestLog = RequestLog.newBuilder()
-                .setRequestId(generateRequestId()) //Assigning the request id function needs to be implemented
+                .setRequestId(generateRequestId()) //Assigning the request id function needs to
+                // be implemented
                 .setTime(timestamp)
                 .setClientId(interactionRequest.getClientId())
                 .setInteraction(interactionRequest.getInteraction()).build();
+        //TODO(Adam) store request log
+
 
         if (checkNotNull(_listOfDialogManagers, "Dialog Managers are not set up! Use the function" +
                 " setUpDialogManagers() first.").isEmpty()) {
@@ -120,17 +120,16 @@ public class DialogManager {
 
         List<ResponseLog> listOfResponseLogs = new ArrayList();
         for (DialogManagerInterface dialogManagerInterfaceInstance : _listOfDialogManagers) {
-            listOfResponseLogs.add(dialogManagerInterfaceInstance.getResponsesFromAgents
+            listOfResponseLogs.addAll(dialogManagerInterfaceInstance.getResponsesFromAgents
                     (requestLog));
         }
 
-        //TODO(Adam) store the conversation in the log files.
 
-        //TODO(Adam) return them in the form of log? think about the type of the function -
-        // void,
-        // list - of logs, what?
+        //TODO(Adam) store the conversation in the log files????.
         return listOfResponseLogs;
     }
-    //raking function: take repeated ResponseLog candidate_response = 3;
+
+
+    //raking function;
 
 }
