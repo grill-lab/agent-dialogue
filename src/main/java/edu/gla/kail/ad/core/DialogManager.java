@@ -76,14 +76,14 @@ public class DialogManager {
         _listOfDialogManagers = new ArrayList();
         for (ConfigurationTuple configurationTuple :
                 configurationTuples) {
-            switch (configurationTuple.get_nameOfTheAgent()) {
-                case "Dialogflow":
+            switch (configurationTuple.get_dialogManagerType()) {
+                case DIALOGFLOW:
                     _listOfDialogManagers.add(new DialogflowDialogManager(_sessionId,
                             configurationTuple.get_parametersRequiredByTheAgent()));
                     break;
                 default:
                     throw new Exception("The type of the Agent Provided \"" + configurationTuple
-                            .get_nameOfTheAgent() + "\" is not currently supported!");
+                            .get_dialogManagerType() + "\" is not currently supported!");
             }
         }
     }
