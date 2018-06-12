@@ -2,20 +2,26 @@ package edu.gla.kail.ad.core;
 
 
 import javax.annotation.Nullable;
-
 import java.util.Objects;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
- * Class for storing the data of a used service and its agent/projectID and the authentication File if needed.
+ * Class for storing the data of a used service and its agent/projectID and the authentication
+ * File if needed.
  */
 public class ServicesConfigurationTriplet {
+    /**
+     * The name of the Service must be provided in the exact form as it is presented in the
+     * functions of DialogManager calling particular agents. e.g. for Dialogflow the
+     * _nameOfTheService = "Dialogflow", as the name of the manager is DialogflowDialogManager.
+     */
     private String _nameOfTheService;
     private String _projectId;
     private String _directoryOfAuthenticationFile;
 
-    public ServicesConfigurationTriplet(String nameOfTheService, String projectId, @Nullable String directoryOfAuthenticationFile) throws Exception{
+    public ServicesConfigurationTriplet(String nameOfTheService, String projectId, @Nullable
+            String directoryOfAuthenticationFile) throws Exception {
         if (nameOfTheService.isEmpty()) {
             throw new Exception("The provided name of the service is empty!");
         } else {
@@ -30,6 +36,7 @@ public class ServicesConfigurationTriplet {
             _directoryOfAuthenticationFile = directoryOfAuthenticationFile;
         }
     }
+
     public String getNameOfTheService() {
         return _nameOfTheService;
     }

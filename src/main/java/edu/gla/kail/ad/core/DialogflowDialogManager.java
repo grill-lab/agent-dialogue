@@ -35,31 +35,40 @@ public class DialogflowDialogManager {
      * Creates new LogEntry instance!
      */
     public DialogflowDialogManager(String sessionId,
-                                   List<Tuple<String, String>> listOfProjectIdAndAuthorizationFile) throws FileNotFoundException, IOException {
+                                   List<Tuple<String, String>>
+                                           listOfProjectIdAndAuthorizationFile) throws
+            FileNotFoundException, IOException {
         _logEntryBuilder = LogEntry.newBuilder();
         _sessionId = sessionId;
         createListOfSessionClientsAndSessionNames(listOfProjectIdAndAuthorizationFile);
     }
 
     /**
-     * Puts the SessionClients and SessionNames of corresponding project ids' and the localisation of their files into the map.
+     * Puts the SessionClients and SessionNames of corresponding project ids' and the
+     * localisation of their files into the map.
+     *
      * @param listOfProjectIdAndAuthorizationFile
      */
-    public void createListOfSessionClientsAndSessionNames(List<Tuple<String, String>> listOfProjectIdAndAuthorizationFile) throws FileNotFoundException, IOException {
+    public void createListOfSessionClientsAndSessionNames(List<Tuple<String, String>>
+                                                                  listOfProjectIdAndAuthorizationFile) throws FileNotFoundException, IOException {
         if (listOfProjectIdAndAuthorizationFile.isEmpty()) {
             throw new IllegalArgumentException("List of agents is empty!");
         } else {
-            for (Tuple<String, String> tupleOfProjectIdAndAuthorizationFileDirectory : listOfProjectIdAndAuthorizationFile) {
+            for (Tuple<String, String> tupleOfProjectIdAndAuthorizationFileDirectory :
+                    listOfProjectIdAndAuthorizationFile) {
                 String projectId = tupleOfProjectIdAndAuthorizationFileDirectory.x();
                 String jsonKeyFileLocation = tupleOfProjectIdAndAuthorizationFileDirectory.y();
 
                 // Authorize access to the agent currently tested.
                 if (!new File(jsonKeyFileLocation).isFile()) {
-                    throw new FileNotFoundException("The location of the JSON key file provided does not exist: " + jsonKeyFileLocation);
+                    throw new FileNotFoundException("The location of the JSON key file provided " +
+                            "does not exist: " + jsonKeyFileLocation);
                 }
-                CredentialsProvider credentialsProvider = FixedCredentialsProvider.create((ServiceAccountCredentials
+                CredentialsProvider credentialsProvider = FixedCredentialsProvider.create(
+                        (ServiceAccountCredentials
                         .fromStream(new FileInputStream(jsonKeyFileLocation))));
-                SessionsSettings sessionsSettings = SessionsSettings.newBuilder().setCredentialsProvider(credentialsProvider).build();
+                SessionsSettings sessionsSettings = SessionsSettings.newBuilder()
+                        .setCredentialsProvider(credentialsProvider).build();
 
                 // Create SessionClient.
                 SessionsClient sessionsClient = SessionsClient.create(sessionsSettings);
@@ -70,17 +79,19 @@ public class DialogflowDialogManager {
     }
 
 
-
     /* Get the response from Agent in response to a request.
     TODO(Adam) input as a request object - probably from the log.*/
     public void getResponsesFromAgentsFromText(String textPassed, String languageCode) {
         // Append the response from each agent to the list of responses.
-        for (Tuple<SessionsClient, SessionName> tupleOfSessionClientsAndSessionNames : _listOfSessionsClientsAndSessionsNames) {
+        for (Tuple<SessionsClient, SessionName> tupleOfSessionClientsAndSessionNames :
+                _listOfSessionsClientsAndSessionsNames) {
             SessionsClient sessionsClient = tupleOfSessionClientsAndSessionNames.x();
             SessionName session = tupleOfSessionClientsAndSessionNames.y();
-            // The core code that creates a DialogFlow request from the input text and sends it to Assistant Server.
+            // The core code that creates a DialogFlow request from the input text and sends it
+            // to Assistant Server.
             // The result is the response result.
-            TextInput.Builder textInput = TextInput.newBuilder().setText(textPassed).setLanguageCode(checkNotNull(languageCode,
+            TextInput.Builder textInput = TextInput.newBuilder().setText(textPassed)
+                    .setLanguageCode(checkNotNull(languageCode,
                     "Language code not specified! Example of a language code \"en-US\""));
             QueryInput queryInput = QueryInput.newBuilder().setText(textInput).build();
             DetectIntentResponse response = sessionsClient.detectIntent(session, queryInput);
