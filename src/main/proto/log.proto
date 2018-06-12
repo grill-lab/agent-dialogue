@@ -19,11 +19,10 @@ message Turn {
 }
 
 message RequestLog {
-    string request_id = 1; // The id we get from the interface/service
+    string request_id = 1; // The id we assign
     google.protobuf.Timestamp time = 2;
     string client_id = 3;
-    string serviceProvider = 4;
-    Interaction interaction = 5;
+    Interaction interaction = 4;
 }
 
 message ResponseLog {
