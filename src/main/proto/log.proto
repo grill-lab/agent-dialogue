@@ -7,44 +7,47 @@ option java_package = "edu.gla.kail.ad.core";
 import "google/protobuf/timestamp.proto";
 import "client.proto";
 
+// This protobuffer is used for storing the data created by the agent-dialogue-core, that is used
+// across the platform.
+
 message LogEntry {
-    string session_id = 1;
-    repeated Turn turn = 2;
+    string session_id = 1; // The unique session ID.
+    repeated Turn turn = 2; // The list of turns in the conversation.
 }
 
 message Turn {
-    ResponseLog response_log = 1;
-    RequestLog request_log = 2;
-    repeated ResponseLog candidate_response = 3;
+    ResponseLog response_log = 1; // The choosen response that the client receives.
+    RequestLog request_log = 2; // The request sent by the client.
+    repeated ResponseLog candidate_response = 3; // The list of all possible responses received from the Agents.
 }
 
 message RequestLog {
-    string request_id = 1; // The id which is being assigned by DialogManager.
-    google.protobuf.Timestamp time = 2;
-    string client_id = 3;
-    InputInteraction interaction = 4;
+    string request_id = 1; // The ID which is being assigned by DialogManager.
+    google.protobuf.Timestamp time = 2; // The time the request was created.
+    string client_id = 3; // The ID of the client the request is sent from.
+    InputInteraction interaction = 4; // The request we get from the client.
 }
 
 message ResponseLog {
-    string response_id = 1; // The response id we get from the API.
+    enum ServiceProvider {
+        DIALOGFLOW = 0;
+    }
+    string response_id = 1; // The response ID obtained from the Agent.
     google.protobuf.Timestamp time = 2; // The time the response was created.
-    string client_id = 3; // Identification of the device - e.g. "Adam's Iphone no 000001".
-    string serviceProvider = 4; // e.g. "Dialogflow" "Alexa" etc.
-    string raw_response = 5; // Raw response in e.g. JSON format that we obtain from API
-    repeated SystemAct action = 6;
-    // Context?
+    string client_id = 3; // The ID of the client the request is sent from.
+    ServiceProvider service_provider = 4;
+    string raw_response = 5; // The raw response in e.g. JSON format obtained from the Agent.
+    repeated SystemAct action = 6; // The actions sent in the response from the Agent.
 }
 
 message SystemAct {
-    string action = 1; // The name of the action we get from API.
-    repeated Slot slot = 2;
-    OutputInteraction interaction = 3;
+    string action = 1; // The name of the action we get from the Agent's API.
+    repeated Slot slot = 2; // The parameters that are passed by the Agent.
+    OutputInteraction interaction = 3; // Contains the response from the Agent.
 }
 
-// e.g. name = "author", value = "Ada Lovelace"
+
 message Slot {
-    string name = 1;
-    string value = 2;
+    string name = 1; // E.g. name = "author",
+    string value = 2; // E.g. value = "Ada Lovelace"
 }
-
-//TODO(Adam) write documentation
