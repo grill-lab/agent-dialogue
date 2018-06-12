@@ -32,6 +32,7 @@ message Interaction {
     repeated string action = 3;
     InteractionType type = 4;
     string device_type = 5;
+    string language_code = 6;
 }
 
 //TODO(Adam) write documentations
