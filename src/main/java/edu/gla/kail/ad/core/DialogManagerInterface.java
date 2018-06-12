@@ -11,5 +11,5 @@ import java.util.List;
  * @interface
  */
 public interface DialogManagerInterface<E> {
-    List<ResponseLog> getResponsesFromAgents(Interaction interaction);
+    List<ResponseLog> getResponsesFromAgents(Interaction interaction) throws Exception;
 }
