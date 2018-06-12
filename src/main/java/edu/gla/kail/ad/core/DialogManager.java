@@ -1,9 +1,8 @@
 package edu.gla.kail.ad.core;
 
 import com.google.protobuf.Timestamp;
-import edu.gla.kail.ad.core.Client.Interaction;
+import edu.gla.kail.ad.core.Client.InputInteraction;
 import edu.gla.kail.ad.core.Client.InteractionRequest;
-import edu.gla.kail.ad.core.Log.LogEntry;
 import edu.gla.kail.ad.core.Log.RequestLog;
 import edu.gla.kail.ad.core.Log.ResponseLog;
 
@@ -18,19 +17,16 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * Instruction of using:
  * 1) Set up the Dialog Managers using setUpDialogManagers function
  * 2) Call the getResponsesFromAgents for required inputs
- * 3) Dont't know yet, Rank?
+ * 3) Don't know yet, Rank?
  * <p>
  * This class is responsible for storing the logs.
  **/
 //TODO(Adam) - add description of all the variables, functions, classes etc.
 
 public class DialogManager {
-    final private LogEntry.Builder _logEntryBuilder;
     private List<DialogManagerInterface> _listOfDialogManagers; // List of instances of used
     // Dialog Managers.
     private String _sessionId;
-    private String _logsDirectory; //TODO(Adam): Implementation of writing to the file and
-    // performing checks on the file.
 
     /**
      * Constructor of this class creates LogEntry.Builder which is used for login of the entire
@@ -38,7 +34,6 @@ public class DialogManager {
      */
     public DialogManager() {
         startSession();
-        _logEntryBuilder = LogEntry.newBuilder();
     }
 
     /**
@@ -82,8 +77,9 @@ public class DialogManager {
                             configurationTuple.get_parametersRequiredByTheAgent()));
                     break;
                 default:
-                    throw new Exception("The type of the Agent Provided \"" + configurationTuple
-                            .get_dialogManagerType() + "\" is not currently supported!");
+                    throw new IllegalArgumentException("The type of the Agent Provided \"" +
+                            configurationTuple
+                                    .get_dialogManagerType() + "\" is not currently supported!");
             }
         }
     }
@@ -100,38 +96,31 @@ public class DialogManager {
      */
     public List<ResponseLog> getResponsesFromAgents(InteractionRequest interactionRequest) throws
             Exception {
-        /**
-         * Convert InteractionRequest to RequestLog.
-         */
+        // Convert InteractionRequest to RequestLog.
         long millis = System.currentTimeMillis();
         Timestamp timestamp = Timestamp.newBuilder().setSeconds(millis / 1000)
                 .setNanos((int) ((millis % 1000) * 1000000)).build();
         RequestLog requestLog = RequestLog.newBuilder()
-                .setRequestId(generateRequestId()) //Assigning the request id function needs to
-                // be implemented
+                .setRequestId(generateRequestId())
                 .setTime(timestamp)
                 .setClientId(interactionRequest.getClientId())
                 .setInteraction(interactionRequest.getInteraction()).build();
-        //TODO(Adam) store request log
-
-
         if (checkNotNull(_listOfDialogManagers, "Dialog Managers are not set up! Use the function" +
                 " setUpDialogManagers() first.").isEmpty()) {
             throw new Exception("The list of Dialog Managers is empty!");
         }
 
+        // Call the Agents and store the responses in a list.
         List<ResponseLog> listOfResponseLogs = new ArrayList();
-        Interaction interaction = requestLog.getInteraction();
+        InputInteraction inputInteraction = requestLog.getInteraction();
         for (DialogManagerInterface dialogManagerInterfaceInstance : _listOfDialogManagers) {
             listOfResponseLogs.addAll(dialogManagerInterfaceInstance.getResponsesFromAgents
-                    (interaction));
+                    (inputInteraction));
         }
-
-
-        //TODO(Adam) store the conversation in the log files????.
         return listOfResponseLogs;
     }
 
     // TODO(Adam): Raking function;
 
+    //TODO(Adam) store the conversation in the log as a single Turn
 }

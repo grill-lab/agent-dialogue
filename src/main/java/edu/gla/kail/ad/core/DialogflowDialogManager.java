@@ -14,15 +14,16 @@ import com.google.cloud.dialogflow.v2beta1.SessionsSettings;
 import com.google.cloud.dialogflow.v2beta1.TextInput;
 import com.google.protobuf.Timestamp;
 import com.google.protobuf.Value;
-import edu.gla.kail.ad.core.Client.Interaction;
+import edu.gla.kail.ad.core.Client.InputInteraction;
+import edu.gla.kail.ad.core.Client.OutputInteraction;
 import edu.gla.kail.ad.core.Log.ResponseLog;
+import edu.gla.kail.ad.core.Log.ResponseLog.ServiceProvider;
 import edu.gla.kail.ad.core.Log.Slot;
 import edu.gla.kail.ad.core.Log.SystemAct;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -31,7 +32,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 
 /**
- * It's a class used to talk to Dialogflow Agents.
+ * A class used to talk to Dialogflow Agents.
  * The responses from Agents are added to the log, but not saved.
  */
 public class DialogflowDialogManager implements DialogManagerInterface {
@@ -39,34 +40,32 @@ public class DialogflowDialogManager implements DialogManagerInterface {
     private String _sessionId;
 
     /**
-     * Constructor which initializes a ready to work DialogflowDialogManager.
+     * Initialize a ready-to-work DialogflowDialogManager.
      *
      * @param sessionId
      * @param listOfProjectIdAndAuthorizationFile
-     * @throws FileNotFoundException
-     * @throws IOException
      * @throws Exception
      */
     public DialogflowDialogManager(String sessionId,
                                    List<Tuple<String, String>>
-                                           listOfProjectIdAndAuthorizationFile) throws
-            FileNotFoundException, IOException, Exception {
+                                           listOfProjectIdAndAuthorizationFile) throws Exception {
         _sessionId = sessionId;
         setUpAgents(listOfProjectIdAndAuthorizationFile);
     }
 
     /**
-     * Put the SessionClients and SessionNames of corresponding project ids' and the
+     * Put the SessionClients and SessionNames of corresponding project IDs' and the
      * directory of their authorisation files into the list.
      *
      * @param listOfProjectIdAndAuthorizationFile
+     * @throws Exception
      */
     private void setUpAgents(List<Tuple<String, String>>
-                                     listOfProjectIdAndAuthorizationFile) throws
-            FileNotFoundException, IOException, Exception {
+                                     listOfProjectIdAndAuthorizationFile) throws Exception {
         if (listOfProjectIdAndAuthorizationFile.isEmpty()) {
             throw new IllegalArgumentException("List of agents is empty!");
         } else {
+            _listOfSessionsClientsAndSessionsNames = new ArrayList();
             for (Tuple<String, String> tupleOfProjectIdAndAuthorizationFileDirectory :
                     listOfProjectIdAndAuthorizationFile) {
                 String projectId = checkNotNull(tupleOfProjectIdAndAuthorizationFileDirectory.x()
@@ -102,28 +101,46 @@ public class DialogflowDialogManager implements DialogManagerInterface {
      *
      * @return
      */
-    public List<ResponseLog> getResponsesFromAgents(Interaction interaction) {
+    public List<ResponseLog> getResponsesFromAgents(InputInteraction inputInteraction) throws
+            IllegalArgumentException {
         // Append the response from each agent to the list of responses.
         List<ResponseLog> responseLogList = new ArrayList();
         for (Tuple<SessionsClient, SessionName> tupleOfSessionClientsAndSessionNames :
                 _listOfSessionsClientsAndSessionsNames) {
-            /**
-             * Get a response from an Dialogflow Agent for a particular request
-             */
-            QueryInput queryInput;
-            switch (interaction.getType()) {
+
+            // Get a response from an Dialogflow Agent for a particular request.
+            QueryInput queryInput = null;
+            switch (inputInteraction.getType()) {
                 case TEXT:
-                    TextInput.Builder textInput = TextInput.newBuilder().setText(interaction
+                    TextInput.Builder textInput = TextInput.newBuilder().setText(inputInteraction
                             .getText())
-                            .setLanguageCode(interaction.getLanguageCode());
+                            .setLanguageCode(inputInteraction.getLanguageCode());
                     queryInput = QueryInput.newBuilder().setText(textInput).build();
                     break;
-                case AUDIO: //TODO(Adam): implement;
-                    break;
-                case ACTION: //TODO(Adam): implement;
-                    break;
+                case AUDIO:
+//                    InputAudioConfig inputAudioConfig = InputAudioConfig.newBuilder()
+//                            .setLanguageCode(inputInteraction.getLanguageCode())
+//                            .setAudioEncoding() // Needs an argument AudioEncoding
+//                            .setSampleRateHertz() // Needs an argument int32
+//                            .build();
+//                    queryInput = QueryInput.newBuilder().setAudioConfig(inputAudioConfig).build();
+                    throw new IllegalArgumentException("The AUDIO function for DialogFlow is not " +
+                            "yet supported" +
+                            "."); //TODO(Adam): implement;
+                    // break;
+                case ACTION:
+//                    EventInput eventInput = EventInput.newBuilder()
+//                            .setLanguageCode(inputInteraction.getLanguageCode())
+//                            .setName() // Needs an argument String
+//                            .setParameters() // Optional, needs a Struct
+//                            .build();
+//                    queryInput = QueryInput.newBuilder().setEvent(eventInput).build();
+                    throw new IllegalArgumentException("The ACTION function for DialogFlow is not" +
+                            " yet supported" +
+                            "."); //TODO(Adam): implement;
+                    // break;
                 case UNRECOGNIZED:
-                    throw new Exception("Unrecognised interaction type.");
+                    throw new IllegalArgumentException("Unrecognised interaction type.");
             }
 
             SessionsClient sessionsClient = tupleOfSessionClientsAndSessionNames.x();
@@ -135,38 +152,19 @@ public class DialogflowDialogManager implements DialogManagerInterface {
             Timestamp timestamp = Timestamp.newBuilder().setSeconds(millis / 1000)
                     .setNanos((int) ((millis % 1000) * 1000000)).build();
 
-
-            //TODO(Adam): Setting client ID in the log.
-            /**
-             * Put values to response log builder.
-             */
+            // Put values to response log builder.
             ResponseLog.Builder responseLogBuilder = ResponseLog.newBuilder()
                     .setResponseId(response.getResponseId())
                     .setTime(timestamp)
-                    .setServiceProvider("Dialogflow")
+                    .setServiceProvider(ServiceProvider.DIALOGFLOW)
                     .setRawResponse(response.toString());
 
-            /**
-             * As we get only one action back from the Dialogflow, we don't have repeated
-             * SystemAct action entries.
-             */
-            Interaction responseInteraction = Interaction.newBuilder()
-                    .addAction(queryResult.getAction()) //TODO(Adam) what do we mean by action?
-                    // Dialogflow doesn't specify what action the client would have to take?
-                    .setLanguageCode(queryResult.getLanguageCode())
-                    .build();
-
-
-            /**
-             * Put values to SystemAct
-             */
+            // Put values to SystemAct
             SystemAct.Builder systemActBuilder = SystemAct.newBuilder()
                     .setAction(queryResult.getAction())
-                    .setInteraction(responseInteraction);
+                    .setInteraction(OutputInteraction.newBuilder().build());
             for (Context context : queryResult.getOutputContextsList()) {
-                /**
-                 * Set the slot's name and value for every Slot
-                 */
+                // Set the slot's name and value for every Slot
                 for (Map.Entry<String, Value> parameterEntry : context.getParameters()
                         .getFieldsMap().entrySet()) {
                     systemActBuilder.addSlot(Slot.newBuilder()
@@ -176,14 +174,10 @@ public class DialogflowDialogManager implements DialogManagerInterface {
                 }
             }
             responseLogBuilder.addAction(systemActBuilder.build());
-
-            /**
-             * Storing the output in the log file
-             */
             responseLogList.add(responseLogBuilder.build());
 
-
-            //TODO(Adam) remove
+            //TODO(Adam) Remove after the log writing to files is implemented; now we can see
+            // the output.
             System.out.println(response.toString());
         }
         return responseLogList;
