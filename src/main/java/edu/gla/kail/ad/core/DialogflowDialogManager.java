@@ -88,10 +88,6 @@ public class DialogflowDialogManager implements DialogManagerInterface {
     }
 
 
-
-
-
-
     /* Get the response from Agent in response to a request.
     TODO(Adam) input as a request object - probably from the log.*/
     public List<ResponseLog> getResponsesFromAgents(InteractionRequest request) { //TODO String
