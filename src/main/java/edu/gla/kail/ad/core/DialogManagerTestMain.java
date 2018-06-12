@@ -24,7 +24,8 @@ public class DialogManagerTestMain {
     }
 
     /*   Add projectId and the directory of key files, stored in a text file with directory
-       fileDirectory to the main HashMap of all Dialogflow Agents _nameOfFileWithProjectIdAndKeysLocations. */
+       fileDirectory to the main HashMap of all Dialogflow Agents
+       _nameOfFileWithProjectIdAndKeysLocations. */
     public static void readProjectIdAndKeyFileToHashMap(String fileDirectory) throws IOException {
         Path path = Paths.get(fileDirectory);
         List<String> lines = Files.readAllLines(path, StandardCharsets.UTF_8);
@@ -36,15 +37,19 @@ public class DialogManagerTestMain {
 
     public static void main(String[] args) throws Exception {
         String languageCode = "en-US";
-        File currentClassPathFile = new File(DialogManagerTestMain.class.getProtectionDomain().getCodeSource().getLocation().getPath()).getParentFile();
-        String testTextFileDirectory = currentClassPathFile.getParent() + "/src/main/resources/TestTextFiles/";
-        String logFileDirectory = currentClassPathFile.getParent() + "/src/main/resources/LogFiles/"; //TODO (Adam) Is this line needed?
+        File currentClassPathFile = new File(DialogManagerTestMain.class.getProtectionDomain()
+                .getCodeSource().getLocation().getPath()).getParentFile();
+        String testTextFileDirectory = currentClassPathFile.getParent() +
+                "/src/main/resources/TestTextFiles/";
+        String logFileDirectory = currentClassPathFile.getParent() +
+                "/src/main/resources/LogFiles/"; //TODO (Adam) Is this line needed?
 
         String nameOfTestedFile = "SampleConversation.txt";
         String nameOfFileWithProjectIdAndKeysLocations = "ProjectIdAndJsonKeyFileLocations.txt";
 
         /* Add the Agents we want to test from text file: */
-        readProjectIdAndKeyFileToHashMap(testTextFileDirectory + nameOfFileWithProjectIdAndKeysLocations);
+        readProjectIdAndKeyFileToHashMap(testTextFileDirectory +
+                nameOfFileWithProjectIdAndKeysLocations);
 
 
         DialogManager dialogManager = new DialogManager();
@@ -56,8 +61,10 @@ public class DialogManagerTestMain {
         for (String line : lines) {
             //TODO(Adam) delete print statements - however, this is testing class
             System.out.println("TESTING CLASS OUTPUT: CURRENTLY HANDLING THE REQUEST FOR: " + line);
-            dialogManager.getResponsesFromDialogflowAgentsForTextInput(line, getRandomNumber(), languageCode);
-            System.out.println("TESTING CLASS OUTPUT: FINISHED HANDLING THE REQUEST FOR: " + line + "\n");
+            dialogManager.getResponsesFromDialogflowAgentsForTextInput(line, getRandomNumber(),
+                    languageCode);
+            System.out.println("TESTING CLASS OUTPUT: FINISHED HANDLING THE REQUEST FOR: " + line
+                    + "\n");
         }
 
     }
