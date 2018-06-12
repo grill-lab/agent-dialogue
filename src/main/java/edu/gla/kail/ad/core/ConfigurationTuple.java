@@ -8,25 +8,20 @@ import java.util.Objects;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
- * stores the name of the Agent manager and additional parameters required by the Agent manager.
+ * Store the name of the Agent manager and additional parameters required by the Agent manager.
  */
 public class ConfigurationTuple<T> {
-    private String _nameOfTheAgent;
+    private SupportedDialogManagers _dialogManagerType;
     private List<T> _parametersRequiredByTheAgent;
 
-    public ConfigurationTuple(String nameOfTheAgent, @Nullable List<T>
+    public ConfigurationTuple(SupportedDialogManagers dialogManagerType, @Nullable List<T>
             parametersRequiredByTheAgent) throws Exception {
-        if (nameOfTheAgent.isEmpty()) {
-            throw new Exception("The provided name of the service is empty!");
-        } else {
-            _nameOfTheAgent = checkNotNull(nameOfTheAgent, "The name of the service is null");
-        }
-
+        _dialogManagerType = checkNotNull(dialogManagerType, "The name of the service is null");
         _parametersRequiredByTheAgent = parametersRequiredByTheAgent;
     }
 
-    public String get_nameOfTheAgent() {
-        return _nameOfTheAgent;
+    public SupportedDialogManagers get_dialogManagerType() {
+        return _dialogManagerType;
     }
 
     public List<T> get_parametersRequiredByTheAgent() {
@@ -38,20 +33,19 @@ public class ConfigurationTuple<T> {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ConfigurationTuple<?> that = (ConfigurationTuple<?>) o;
-        return Objects.equals(_nameOfTheAgent, that._nameOfTheAgent) &&
+        return Objects.equals(_dialogManagerType, that._dialogManagerType) &&
                 Objects.equals(_parametersRequiredByTheAgent, that._parametersRequiredByTheAgent);
     }
 
     @Override
     public int hashCode() {
-
-        return Objects.hash(_nameOfTheAgent, _parametersRequiredByTheAgent);
+        return Objects.hash(_dialogManagerType, _parametersRequiredByTheAgent);
     }
 
     @Override
     public String toString() {
         return "ConfigurationTuple{" +
-                "_nameOfTheAgent='" + _nameOfTheAgent + '\'' +
+                "_dialogManagerType='" + _dialogManagerType + '\'' +
                 ", _parametersRequiredByTheAgent=" + _parametersRequiredByTheAgent +
                 '}';
     }
