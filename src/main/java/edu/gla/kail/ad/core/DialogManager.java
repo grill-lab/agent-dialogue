@@ -21,9 +21,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 public class DialogManager {
     final private LogEntry.Builder _logEntryBuilder;
-    private List<Object> listOfServicesInstances;
-    private DialogflowDialogManager _dialogflowDialogManagerInstance; //TODO to be deleted and
-    // added in the list?
+    private List<DialogManagerInterface> listOfServiceInstances;
     private String _sessionId;
 
     /**
