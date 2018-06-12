@@ -9,22 +9,23 @@ import "google/protobuf/timestamp.proto";
 message InteractionRequest {
     google.protobuf.Timestamp time = 1;
     string client_id = 2;
-    Interaction interaction = 3;
+    InputInteraction interaction = 3;
 }
 
 message InteractionResponse {
     string response_id = 1;
     google.protobuf.Timestamp time = 2;
     string client_id = 3;
-    repeated Interaction interaction = 4;
+    repeated OutputInteraction interaction = 4;
 }
 
-message Interaction {
-    enum InteractionType {
-        TEXT = 0;
-        AUDIO = 1;
-        ACTION = 2;
-    }
+enum InteractionType {
+    TEXT = 0;
+    AUDIO = 1;
+    ACTION = 2;
+}
+
+message InputInteraction {
     string text = 1;
     string audio_bytes = 2;
     // A requested interaction (like a click on a result).
@@ -33,6 +34,15 @@ message Interaction {
     InteractionType type = 4;
     string device_type = 5;
     string language_code = 6;
+}
+
+message OutputInteraction {
+    string text = 1;
+    string audio_bytes = 2;
+    // A requested interaction (like a click on a result).
+    // additional data about the type of click - result id, etc...
+    repeated string action = 3;
+    InteractionType type = 4;
 }
 
 //TODO(Adam) write documentation

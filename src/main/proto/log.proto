@@ -22,7 +22,7 @@ message RequestLog {
     string request_id = 1; // The id which is being assigned by DialogManager.
     google.protobuf.Timestamp time = 2;
     string client_id = 3;
-    Interaction interaction = 4;
+    InputInteraction interaction = 4;
 }
 
 message ResponseLog {
@@ -38,7 +38,7 @@ message ResponseLog {
 message SystemAct {
     string action = 1; // The name of the action we get from API.
     repeated Slot slot = 2;
-    Interaction interaction = 3;
+    OutputInteraction interaction = 3;
 }
 
 // e.g. name = "author", value = "Ada Lovelace"
