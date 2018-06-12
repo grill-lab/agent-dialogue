@@ -34,7 +34,4 @@ message Interaction {
     string device_type = 5;
 }
 
-
-
-
 //TODO(Adam) write documentations

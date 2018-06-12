@@ -48,5 +48,4 @@ message Slot {
     string value = 2;
 }
 
-
 //TODO(Adam) write documentations
