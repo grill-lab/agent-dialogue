@@ -138,7 +138,7 @@ public class DialogflowDialogManager implements DialogManagerInterface {
 
             //TODO(Adam): Setting client ID in the log.
             /**
-             * Put values to response log.
+             * Put values to response log builder.
              */
             ResponseLog.Builder responseLogBuilder = ResponseLog.newBuilder()
                     .setResponseId(response.getResponseId())
@@ -146,53 +146,46 @@ public class DialogflowDialogManager implements DialogManagerInterface {
                     .setServiceProvider("Dialogflow")
                     .setRawResponse(response.toString());
 
-            //TODO(Adam)
-            for (/*each action we get from API*/){
+            /**
+             * As we get only one action back from the Dialogflow, we don't have repeated
+             * SystemAct action entries.
+             */
+            Interaction responseInteraction = Interaction.newBuilder()
+                    .addAction(queryResult.getAction()) //TODO(Adam) what do we mean by action?
+                    // Dialogflow doesn't specify what action the client would have to take?
+                    .setLanguageCode(queryResult.getLanguageCode())
+                    .build();
 
+
+            /**
+             * Put values to SystemAct
+             */
+            SystemAct.Builder systemActBuilder = SystemAct.newBuilder()
+                    .setAction(queryResult.getAction())
+                    .setInteraction(responseInteraction);
+            for (Context context : queryResult.getOutputContextsList()) {
                 /**
-                 * Put values to slot. TODO(Adam)
+                 * Set the slot's name and value for every Slot
                  */
-                Interaction responseInteraction = Interaction.newBuilder()
-                        .setAction()
-
-
-                /** Put values to SystemAct
-                 */
-                SystemAct.Builder systemActBuilder = SystemAct.newBuilder()
-                        .setAction(queryResult.getAction())
-                        .setInteraction(responseInteraction);
-                for (Context context : queryResult.getOutputContextsList()) {
-                    /**
-                     * Set the slot's name and value for every Slot
-                     */
-                    for (Map.Entry<String, Value> parameterEntry : context.getParameters().getFieldsMap().entrySet()) {
-
-                        systemActBuilder.addSlot(Slot.newBuilder()
-                                .setName(parameterEntry.getKey())
-                                .setValue(parameterEntry.getValue().toString())
-                                .build());
-                    }
+                for (Map.Entry<String, Value> parameterEntry : context.getParameters()
+                        .getFieldsMap().entrySet()) {
+                    systemActBuilder.addSlot(Slot.newBuilder()
+                            .setName(parameterEntry.getKey())
+                            .setValue(parameterEntry.getValue().toString())
+                            .build());
                 }
-                responseLogBuilder.addAction(systemActBuilder.build());
             }
-            
+            responseLogBuilder.addAction(systemActBuilder.build());
+
             /**
              * Storing the output in the log file
              */
+            responseLogList.add(responseLogBuilder.build());
+
+
             //TODO(Adam) remove
             System.out.println(response.toString());
-            /* TODO(ADAM) implementation of the logging part. Useful functions:
-            queryResult.getAction()
-                .getQueryText()
-                .getIntent().getDisplayName()
-                .getIntentDetectionConfidence()
-                .getFulfillmentText()*/
-
-
-
-
-            responseLogList.add(responseLogBuilder.build());
         }
-    return responseLogList;
+        return responseLogList;
     }
 }
