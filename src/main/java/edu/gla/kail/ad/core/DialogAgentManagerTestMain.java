@@ -19,7 +19,7 @@ import java.util.UUID;
 /**
  * Class for testing the functionality.
  */
-public class DialogManagerTestMain {
+public class DialogAgentManagerTestMain {
     private static List<ConfigurationTuple> _configurationTuples;
 
     /**
@@ -29,12 +29,11 @@ public class DialogManagerTestMain {
      * File_check if exists()
      * file.mkDirsc).
      *
-     * @param fileDirectory specifies the directory of the file with data used to set up
-     *                      particular Dialog Managers and their Agents. Each line has one Agent
-     *                      entry, which specified Dialog Manager type and its required
-     *                      parameters, all separated with ". ".
-     * @throws IOException It is thrown when the given name of the particular Dialog Manager is
-     *                     not correctly formatted or the Dialog Manager is not supported yet.
+     * @param fileDirectory It specifies the directory of the file with data used to set up
+     *                      Agents. Each line has one Agent entry, which specified Agent type
+     *                      parameters required by this Agent separated with ", ".
+     * @throws IOException It is thrown when the given type name of the Agent is not correctly
+     * formatted or the Agent type is not supported yet.
      */
     private static void readProjectIdAndKeyFileToHashMap(String fileDirectory) throws Exception {
         _configurationTuples = new ArrayList();
@@ -49,12 +48,12 @@ public class DialogManagerTestMain {
                             projectIdAndJsonKey[2]));
                     break;
                 default:
-                    throw new IllegalArgumentException("The name of the Dialog Manager is " +
-                            "incorrectly formatted or the particular Dialog Manager: " +
+                    throw new IllegalArgumentException("The name of the Agent is not correctly " +
+                            "formatted or the Agent type: " +
                             projectIdAndJsonKey[0] + " is not supported yet.");
             }
         }
-        _configurationTuples.add(new ConfigurationTuple(SupportedDialogManagers.DIALOGFLOW,
+        _configurationTuples.add(new ConfigurationTuple(SupportedAgentTypes.DIALOGFLOW,
                 dialogflowProjectIdAndJsonKeyFileList));
     }
 
@@ -63,10 +62,11 @@ public class DialogManagerTestMain {
     }
 
     public static void main(String[] args) throws Exception {
-        // Different parameters required by the Dialog Manager/s and proto buffers, that would be passed by client.
+        // Different parameters required by the Agents and proto buffers, that would be passed by
+        // the client.
         String languageCode = "en-US";
         String deviceType = "iPhone Google Assistant";
-        File currentClassPathFile = new File(DialogManagerTestMain.class.getProtectionDomain()
+        File currentClassPathFile = new File(DialogAgentManagerTestMain.class.getProtectionDomain()
                 .getCodeSource().getLocation().getPath()).getParentFile();
         String testTextFileDirectory = currentClassPathFile.getParent() +
                 "/src/main/resources/TestTextFiles/";
@@ -81,13 +81,13 @@ public class DialogManagerTestMain {
                 nameOfFileWithProjectIdAndKeysLocations);
 
 
-        DialogManager dialogManager = new DialogManager();
-        dialogManager.setUpDialogManagers(_configurationTuples);
+        DialogAgentManager dialogAgentManager = new DialogAgentManager();
+        dialogAgentManager.setUpAgents(_configurationTuples);
         long millis = System.currentTimeMillis();
         Timestamp timestamp = Timestamp.newBuilder().setSeconds(millis / 1000)
                 .setNanos((int) ((millis % 1000) * 1000000)).build();
 
-        // Call the DialogflowManager on all sentences/lines stored in a text file.
+        // Get responses from all the Agents on the text provided in a text file.
         Path path = Paths.get(testTextFileDirectory + nameOfTestedFile);
         List<String> lines = Files.readAllLines(path, StandardCharsets.UTF_8);
         for (String line : lines) {
@@ -102,7 +102,7 @@ public class DialogManagerTestMain {
                             .setDeviceType(deviceType)
                             .setLanguageCode(languageCode))
                     .build();
-            dialogManager.getResponsesFromAgents(interactionRequest);
+            dialogAgentManager.getResponsesFromAgents(interactionRequest);
             System.out.println("TESTING CLASS OUTPUT: FINISHED HANDLING THE REQUEST FOR: " + line
                     + "\n");
         }
