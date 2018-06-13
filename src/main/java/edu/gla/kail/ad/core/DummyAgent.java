@@ -11,7 +11,7 @@ import edu.gla.kail.ad.core.Log.SystemAct;
 
 
 /**
- * This is a dummy Agent created for testing purposes.
+ * This is a dummy agent created for testing purposes.
  */
 public class DummyAgent implements AgentInterface {
     long millis = System.currentTimeMillis();
@@ -20,8 +20,8 @@ public class DummyAgent implements AgentInterface {
 
     /**
      * @param inputInteraction - a data structure (implemented in log.proto) holding the incoming
-     *                         interaction that is being sent to an Agent.
-     * @return A response from an Agent. ResponseLog is a data structure implemented in log.proto.
+     *                         interaction that is being sent to an agent.
+     * @return A response from an agent. ResponseLog is a data structure implemented in log.proto.
      */
     @Override
     public ResponseLog getResponseFromAgent(InputInteraction inputInteraction) {

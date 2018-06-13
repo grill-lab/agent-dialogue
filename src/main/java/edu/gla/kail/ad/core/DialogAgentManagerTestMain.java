@@ -24,16 +24,16 @@ public class DialogAgentManagerTestMain {
 
     /**
      * Add ConfigurationTuples to the _configurationTuples.
-     * Function prone to crashes.
+     * This is just for testing purposes
      * TODO(Adam): implement the System.get.property("user.dir");
      * File_check if exists()
      * file.mkDirsc).
      *
      * @param fileDirectory It specifies the directory of the file with data used to set up
-     *                      Agents. Each line has one Agent entry, which specified Agent type
-     *                      parameters required by this Agent separated with ",".
-     * @throws IOException It is thrown when the given type name of the Agent is not correctly
-     *                     formatted or the Agent type is not supported yet.
+     *                      agents. Each line has one agent entry, which specified agent type
+     *                      parameters required by this agent separated with ",".
+     * @throws IOException It is thrown when the given type name of the agent is not correctly
+     *                     formatted or the agent type is not supported yet.
      */
     private static void readProjectIdAndKeyFileToHashMap(String fileDirectory) throws Exception {
         _configurationTuples = new ArrayList();
@@ -55,8 +55,8 @@ public class DialogAgentManagerTestMain {
                             .DUMMYAGENT, null));
                     break;
                 default:
-                    throw new IllegalArgumentException("The name of the Agent is not correctly " +
-                            "formatted or the Agent type: " +
+                    throw new IllegalArgumentException("The name of the agent is not correctly " +
+                            "formatted or the agent type: " +
                             projectIdAndJsonKey[0] + " is not supported yet.");
             }
         }
@@ -67,7 +67,7 @@ public class DialogAgentManagerTestMain {
     }
 
     public static void main(String[] args) throws Exception {
-        // Different parameters required by the Agents and proto buffers, that would be passed by
+        // Different parameters required by the agents and proto buffers, that would be passed by
         // the client.
         String languageCode = "en-US";
         String deviceType = "iPhone Google Assistant";
@@ -76,12 +76,12 @@ public class DialogAgentManagerTestMain {
         String testTextFileDirectory = currentClassPathFile.getParent() +
                 "/src/main/resources/TestTextFiles/";
         String logFileDirectory = currentClassPathFile.getParent() +
-                "/src/main/resources/LogFiles/"; //TODO (Adam) Is this line needed?
+                "/src/main/resources/LogFiles/"; // TODO (Adam) Is this line needed?
 
         String nameOfTestedFile = "SampleConversation.txt";
         String nameOfFileWithProjectIdAndKeysLocations = "ProjectIdAndJsonKeyFileLocations.txt";
 
-        // Add the Agents we want to test from text file.
+        // Add the agents we want to test from text file.
         readProjectIdAndKeyFileToHashMap(testTextFileDirectory +
                 nameOfFileWithProjectIdAndKeysLocations);
 
@@ -92,11 +92,11 @@ public class DialogAgentManagerTestMain {
         Timestamp timestamp = Timestamp.newBuilder().setSeconds(millis / 1000)
                 .setNanos((int) ((millis % 1000) * 1000000)).build();
 
-        // Get responses from all the Agents on the text provided in a text file.
+        // Get responses from all the agents on the text provided in a text file.
         Path path = Paths.get(testTextFileDirectory + nameOfTestedFile);
         List<String> lines = Files.readAllLines(path, StandardCharsets.UTF_8);
         for (String line : lines) {
-            //TODO(Adam) delete print statements - however, this is testing class
+            // TODO(Adam) delete print statements - however, this is testing class
             System.out.println("TESTING CLASS OUTPUT: CURRENTLY HANDLING THE REQUEST FOR: " + line);
             InteractionRequest interactionRequest = InteractionRequest.newBuilder()
                     .setTime(timestamp)

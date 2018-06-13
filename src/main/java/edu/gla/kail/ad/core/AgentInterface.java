@@ -4,18 +4,17 @@ import edu.gla.kail.ad.core.Client.InputInteraction;
 import edu.gla.kail.ad.core.Log.ResponseLog;
 
 /**
- * Agent Interface which provides integrity, needed by DialogAgentManager, across different
- * particular Dialog Agents (such as DialogflowAgent).
+ * Agent interface is a common interface to different dialogue framework implementations.
  */
 public interface AgentInterface {
     /**
-     * Return responses for a formated request from all the Agents of the particular Dialog Manager.
+     * Return a response for a formatted request.
      *
      * @param inputInteraction - a data structure (implemented in log.proto) holding the incoming
-     *                         interaction that is being sent to an Agent.
-     * @return A response from an Agent. ResponseLog is a data structure implemented in log.proto.
-     * @throws Exception The type of exception is dependent on the implementation of the function
-     *                   by a particular Dialog Agent.
+     *                         interaction that is being sent to an agent.
+     * @return responseLog - The response from the agent, must be non-null. ResponseLog is a data
+     * structure implemented in log.proto.
+     * @throws Exception
      */
     ResponseLog getResponseFromAgent(InputInteraction inputInteraction) throws Exception;
 }
