@@ -7,7 +7,8 @@ import java.util.Objects;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
- * Store the type of a agent (e.g. Dialogflow) and additional parameters required for its initialization.
+ * Store the type of a agent (e.g. Dialogflow) and additional parameters required for its
+ * initialization.
  * The class is parameterized - it uses the generic type: T.
  */
 public class ConfigurationTuple<T> {
@@ -17,10 +18,10 @@ public class ConfigurationTuple<T> {
     private List<T> _agentSpecificData;
 
     /**
-     * @param supportedAgentTypes                   The type of the agent.
-     * @param agentSpecificData A list of generic type objects, that stores the
-     *                                            data required by a particular agent.
-     * @throws Exception It is thrown when the type of the agent is not provided.
+     * @param supportedAgentTypes - The type of the agent.
+     * @param agentSpecificData   - A list of generic type objects, that stores the data required
+     *                           by a particular agent.
+     * @throws Exception
      */
     public ConfigurationTuple(SupportedAgentTypes supportedAgentTypes, @Nullable List<T>
             agentSpecificData) throws Exception {

@@ -69,9 +69,11 @@ public class DialogAgentManager {
     /**
      * Set up (e.g. authenticate) all agents and store them to the list of agents.
      *
-     * @param configurationTuples The list stores the entities of ConfigurationTuple, which holds
-     *                            data required by each agent.
-     * @throws IllegalArgumentException, Exception Raised by _agents.add(new DialogflowAgent(_sessionId, agentSpecificData.get(0)));
+     * @param configurationTuples - The list stores the entities of ConfigurationTuple, which
+     *                            holds data required by each agent.
+     * @throws Exception                - Raised by _agents.add(new DialogflowAgent(_sessionId,
+     * agentSpecificData.get(0)));
+     * @throws IllegalArgumentException
      */
     public void setUpAgents(List<ConfigurationTuple> configurationTuples) throws
             IllegalArgumentException, Exception {
@@ -106,11 +108,11 @@ public class DialogAgentManager {
      * Return the list of responses for a given request.
      * TODO(Adam): Maybe store the logs after each conversation; need to decide later on.
      *
-     * @param interactionRequest The a data structure (implemented in log.proto) holding the
+     * @param interactionRequest - The a data structure (implemented in log.proto) holding the
      *                           interaction from a client.
-     * @return The list of responses of all agents set up on the setUpAgents(...) function call.
-     * @throws Exception It is thrown when the setUpAgents wasn't called before calling
-     *                   this function.
+     * @return List<ResponseLog> - The list of responses of all agents set up on the setUpAgents
+     * (...) function call.
+     * @throws Exception
      */
     public List<ResponseLog> getResponsesFromAgents(InteractionRequest interactionRequest) throws
             Exception {
@@ -118,10 +120,10 @@ public class DialogAgentManager {
                 " setUpAgents() first.").isEmpty()) {
             throw new Exception("The list of agents is empty!");
         }
+
+        // Set current time on Timestamp.
+        Timestamp timestamp = Timestamp.newBuilder().setNanos(0).build();
         // Convert InteractionRequest to RequestLog.
-        long millis = System.currentTimeMillis();
-        Timestamp timestamp = Timestamp.newBuilder().setSeconds(millis / 1000)
-                .setNanos((int) ((millis % 1000) * 1000000)).build();
         RequestLog requestLog = RequestLog.newBuilder()
                 .setRequestId(generateRequestId())
                 .setTime(timestamp)

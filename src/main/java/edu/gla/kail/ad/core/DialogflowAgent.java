@@ -44,15 +44,14 @@ public class DialogflowAgent implements AgentInterface {
     /**
      * Initialize a ready-to-work DialogflowAgent.
      *
-     * @param sessionId                            A unique ID passed to the function by
+     * @param sessionId                            - A unique ID passed to the function by
      *                                             DialogAgentManager.
-     * @param tupleOfProjectIdAndAuthorizationFile A tuple specific for DialogflowAgent.
-     *                                             It holds the project ID of a particular
-     *                                             agent and the directory location of the file
-     *                                             with Service Account key for this particular
-     *                                             agent.
-     * @throws Exception the setUpAgent function may throw exception if the data passed in the
-     *                   tupleOfProjectIdAndAuthorizationFile is invalid.
+     * @param tupleOfProjectIdAndAuthorizationFile - A tuple specific for DialogflowAgent. It
+     *                                             holds the project ID of a particular agent and
+     *                                             the directory location of the file with
+     *                                             Service Account key for this particular agent.
+     * @throws Exception - T setUpAgent function may throw exception if the data passed in the
+     * tupleOfProjectIdAndAuthorizationFile is invalid.
      */
     public DialogflowAgent(String sessionId,
                            Tuple<String, String>
@@ -65,13 +64,12 @@ public class DialogflowAgent implements AgentInterface {
      * Create the SessionClients and SessionNames for all the agents which project ID and Service
      * Account key file directories are provided.
      *
-     * @param tupleOfProjectIdAndAuthenticationFile A tuple specific for DialogflowAgent.
-     *                                              It holds the project ID of a particular
-     *                                              agent and the directory location of the file
-     *                                              with Service Account key for this particular
-     *                                              agent.
-     * @throws Exception When a projectID or the Service Account key is either null or empty,
-     *                   appropriate exception is thrown.
+     * @param tupleOfProjectIdAndAuthenticationFile - A tuple specific for DialogflowAgent. It
+     *                                              holds the project ID of a particular agent
+     *                                              and the directory location of the file with
+     *                                              Service Account key for this particular agent.
+     * @throws Exception - When a projectID or the Service Account key is either null or empty,
+     * appropriate exception is thrown.
      */
     private void setUpAgent(Tuple<String, String>
                                     tupleOfProjectIdAndAuthenticationFile) throws Exception {
@@ -101,8 +99,8 @@ public class DialogflowAgent implements AgentInterface {
 
 
     /**
-     * @throws IllegalArgumentException The exception is being thrown when the type of the
-     *                                  interaction requested is not recognised or supported.
+     * @throws IllegalArgumentException - The exception is being thrown when the type of the
+     * interaction requested is not recognised or supported.
      */
     @Override
     public ResponseLog getResponseFromAgent(InputInteraction inputInteraction) throws
