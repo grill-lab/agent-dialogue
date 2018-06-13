@@ -33,7 +33,7 @@ public class DialogAgentManagerTestMain {
      *                      Agents. Each line has one Agent entry, which specified Agent type
      *                      parameters required by this Agent separated with ", ".
      * @throws IOException It is thrown when the given type name of the Agent is not correctly
-     * formatted or the Agent type is not supported yet.
+     *                     formatted or the Agent type is not supported yet.
      */
     private static void readProjectIdAndKeyFileToHashMap(String fileDirectory) throws Exception {
         _configurationTuples = new ArrayList();

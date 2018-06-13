@@ -78,7 +78,8 @@ public class DialogAgentManager {
                             .get_agentSpecificData(), "The Dialogflow specific data is null!");
                     if (agentSpecificData.size() != 1) {
                         throw new IllegalArgumentException("The Dialogflow Agent specific data " +
-                                "passed is not valid for Dialogflow! It has to be project ID and Service Account key file directory.");
+                                "passed is not valid for Dialogflow! It has to be project ID and " +
+                                "Service Account key file directory.");
                     }
                     _listOfAgents.add(new DialogflowAgent(_sessionId, agentSpecificData.get(0)));
                     break;
