@@ -29,11 +29,11 @@ public class DialogAgentManagerTestMain {
      * File_check if exists()
      * file.mkDirsc).
      *
-     * @param fileDirectory It specifies the directory of the file with data used to set up
+     * @param fileDirectory - It specifies the directory of the file with data used to set up
      *                      agents. Each line has one agent entry, which specified agent type
      *                      parameters required by this agent separated with ",".
-     * @throws IOException It is thrown when the given type name of the agent is not correctly
-     *                     formatted or the agent type is not supported yet.
+     * @throws Exception - It is thrown when the given type name of the agent is not correctly
+     *      *                     formatted or the agent type is not supported yet.
      */
     private static void readProjectIdAndKeyFileToHashMap(String fileDirectory) throws Exception {
         _configurationTuples = new ArrayList();
@@ -88,10 +88,7 @@ public class DialogAgentManagerTestMain {
 
         DialogAgentManager dialogAgentManager = new DialogAgentManager();
         dialogAgentManager.setUpAgents(_configurationTuples);
-        long millis = System.currentTimeMillis();
-        Timestamp timestamp = Timestamp.newBuilder().setSeconds(millis / 1000)
-                .setNanos((int) ((millis % 1000) * 1000000)).build();
-
+        Timestamp timestamp = Timestamp.newBuilder().setNanos(0).build();
         // Get responses from all the agents on the text provided in a text file.
         Path path = Paths.get(testTextFileDirectory + nameOfTestedFile);
         List<String> lines = Files.readAllLines(path, StandardCharsets.UTF_8);

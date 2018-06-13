@@ -10,7 +10,7 @@ public interface AgentInterface {
     /**
      * Return a response for a formatted request.
      *
-     * @param inputInteraction - a data structure (implemented in log.proto) holding the incoming
+     * @param inputInteraction - A data structure (implemented in log.proto) holding the incoming
      *                         interaction that is being sent to an agent.
      * @return responseLog - The response from the agent, must be non-null. ResponseLog is a data
      * structure implemented in log.proto.
