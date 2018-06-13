@@ -83,7 +83,8 @@ public class DialogAgentManager {
                     }
                     _listOfAgents.add(new DialogflowAgent(_sessionId, agentSpecificData.get(0)));
                     break;
-                case DUMMYAGENT: _listOfAgents.add(new DummyAgent());
+                case DUMMYAGENT:
+                    _listOfAgents.add(new DummyAgent());
                     break;
                 default:
                     throw new IllegalArgumentException("The type of the Agent provided " +

@@ -25,21 +25,23 @@ public class DummyAgent implements AgentInterface {
      */
     @Override
     public ResponseLog getResponseFromAgent(InputInteraction inputInteraction) {
-        return ResponseLog.newBuilder()
+        ResponseLog responseLog = ResponseLog.newBuilder()
                 .setResponseId("ResponseId set by DummyBuilder")
                 .setTime(timestamp)
                 .setClientId("ClientId set by DummyBuilder")
                 .setServiceProvider(ServiceProvider.DUMMYAGENT)
                 .setRawResponse("RawResponse set by DummyBuilder")
                 .addAction(SystemAct.newBuilder()
-                .setAction("Action set by DummyBuilder")
-                .setInteraction(OutputInteraction.newBuilder()
-                .setText("Text set by DummyBuilder")
-                .setType(InteractionType.TEXT).build())
-                .addSlot(Slot.newBuilder()
-                .setName("SlotName set by DummyBuilder")
-                .setValue("SlotValue set by DummyBuilder").build())
-                .build())
+                        .setAction("Action set by DummyBuilder")
+                        .setInteraction(OutputInteraction.newBuilder()
+                                .setText("Text set by DummyBuilder")
+                                .setType(InteractionType.TEXT).build())
+                        .addSlot(Slot.newBuilder()
+                                .setName("SlotName set by DummyBuilder")
+                                .setValue("SlotValue set by DummyBuilder").build())
+                        .build())
                 .build();
+        System.out.println("\n\nDummy agent response: \n\n:" + responseLog.toString());
+        return responseLog;
     }
 }
