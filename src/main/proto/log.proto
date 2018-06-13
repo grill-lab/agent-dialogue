@@ -31,6 +31,7 @@ message RequestLog {
 message ResponseLog {
     enum ServiceProvider {
         DIALOGFLOW = 0;
+        DUMMYAGENT = 1;
     }
     string response_id = 1; // The response ID obtained from the Agent.
     google.protobuf.Timestamp time = 2; // The time the response was created.
@@ -42,8 +43,8 @@ message ResponseLog {
 
 message SystemAct {
     string action = 1; // The name of the action we get from the Agent's API.
-    repeated Slot slot = 2; // The parameters that are passed by the Agent.
-    OutputInteraction interaction = 3; // Contains the response from the Agent.
+    OutputInteraction interaction = 2; // Contains the response from the Agent.
+    repeated Slot slot = 3; // The parameters that are passed by the Agent.
 }
 
 
