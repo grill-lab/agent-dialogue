@@ -11,21 +11,31 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * Store the name of the Agent manager and additional parameters required by the Agent manager.
  */
 public class ConfigurationTuple<T> {
+    // The type of the particular Dialog Manager which is used to interact with its Agents.
     private SupportedDialogManagers _dialogManagerType;
-    private List<T> _parametersRequiredByTheAgent;
+    // List of generic type Objects which may be different for every type of the particular
+    // Dialog Manager.
+    private List<T> _particularDialogManagerSpecificData;
 
+    /**
+     * @param dialogManagerType                   The type of the particular Dialog Manager which
+     *                                            is used to interact with its Agents.
+     * @param particularDialogManagerSpecificData A list of generic type objects, that stores the
+     *                                            data required by a particular Dialog Manager
+     * @throws Exception It is thrown when the name of the service is not provided.
+     */
     public ConfigurationTuple(SupportedDialogManagers dialogManagerType, @Nullable List<T>
-            parametersRequiredByTheAgent) throws Exception {
+            particularDialogManagerSpecificData) throws Exception {
         _dialogManagerType = checkNotNull(dialogManagerType, "The name of the service is null");
-        _parametersRequiredByTheAgent = parametersRequiredByTheAgent;
+        _particularDialogManagerSpecificData = particularDialogManagerSpecificData;
     }
 
     public SupportedDialogManagers get_dialogManagerType() {
         return _dialogManagerType;
     }
 
-    public List<T> get_parametersRequiredByTheAgent() {
-        return _parametersRequiredByTheAgent;
+    public List<T> get_particularDialogManagerSpecificData() {
+        return _particularDialogManagerSpecificData;
     }
 
     @Override
@@ -34,19 +44,20 @@ public class ConfigurationTuple<T> {
         if (o == null || getClass() != o.getClass()) return false;
         ConfigurationTuple<?> that = (ConfigurationTuple<?>) o;
         return Objects.equals(_dialogManagerType, that._dialogManagerType) &&
-                Objects.equals(_parametersRequiredByTheAgent, that._parametersRequiredByTheAgent);
+                Objects.equals(_particularDialogManagerSpecificData, that
+                        ._particularDialogManagerSpecificData);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(_dialogManagerType, _parametersRequiredByTheAgent);
+        return Objects.hash(_dialogManagerType, _particularDialogManagerSpecificData);
     }
 
     @Override
     public String toString() {
         return "ConfigurationTuple{" +
                 "_dialogManagerType='" + _dialogManagerType + '\'' +
-                ", _parametersRequiredByTheAgent=" + _parametersRequiredByTheAgent +
+                ", _particularDialogManagerSpecificData=" + _particularDialogManagerSpecificData +
                 '}';
     }
 }
