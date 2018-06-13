@@ -39,7 +39,7 @@ public class DialogManager {
     /**
      * Create a unique sessionId. TODO(Adam) the choice of Session ID generator function.
      */
-    public void startSession() {
+    private void startSession() {
         _sessionId = getRandomNumberAsString();
     }
 
@@ -61,20 +61,20 @@ public class DialogManager {
     }
 
     /**
-     * Set up Dialog Managers, such as Dialogflow.
+     * Set up (e.g. authenticate agents) a particular Dialog Managers (such as DialogflowDialogManager) and their Agents.
      *
-     * @param configurationTuples
+     * @param configurationTuples The list stores the entities of ConfigurationTuple, which holds data required by each particular Dialog Manager
      * @throws Exception
      */
-    public void setUpDialogManagers(List<ConfigurationTuple>
-                                            configurationTuples) throws Exception {
+    private void setUpDialogManagers(List<ConfigurationTuple>
+                                             configurationTuples) throws Exception {
         _listOfDialogManagers = new ArrayList();
         for (ConfigurationTuple configurationTuple :
                 configurationTuples) {
             switch (configurationTuple.get_dialogManagerType()) {
                 case DIALOGFLOW:
                     _listOfDialogManagers.add(new DialogflowDialogManager(_sessionId,
-                            configurationTuple.get_parametersRequiredByTheAgent()));
+                            configurationTuple.get_particularDialogManagerSpecificData()));
                     break;
                 default:
                     throw new IllegalArgumentException("The type of the Agent Provided \"" +
@@ -85,17 +85,22 @@ public class DialogManager {
     }
 
     /**
-     * Return the list of responses for a given request all the responses in
-     * the log file.
-     * Get Request from Client: and convert it to the RequestLog.
-     * Store the logs after each conversation.
+     * Get Request from Client and convert it to the RequestLog.
+     * Return the list of responses for a given request.
+     * TODO(Adam): Maybe store the logs after each conversation; need to decide later on.
      *
      * @param interactionRequest
-     * @return the list of ReponseLog instances with saved responses within them
-     * @throws Exception
+     * @return The list of responses of each agent of each particular Dialog Manager specified
+     *      during the setUpDialogManagers(...) function call.
+     * @throws Exception It is thrown when the setUpDialogManagers wasn't called before calling
+     *      this function.
      */
     public List<ResponseLog> getResponsesFromAgents(InteractionRequest interactionRequest) throws
             Exception {
+        if (checkNotNull(_listOfDialogManagers, "Dialog Managers are not set up! Use the function" +
+                " setUpDialogManagers() first.").isEmpty()) {
+            throw new Exception("The list of Dialog Managers is empty!");
+        }
         // Convert InteractionRequest to RequestLog.
         long millis = System.currentTimeMillis();
         Timestamp timestamp = Timestamp.newBuilder().setSeconds(millis / 1000)
@@ -105,12 +110,8 @@ public class DialogManager {
                 .setTime(timestamp)
                 .setClientId(interactionRequest.getClientId())
                 .setInteraction(interactionRequest.getInteraction()).build();
-        if (checkNotNull(_listOfDialogManagers, "Dialog Managers are not set up! Use the function" +
-                " setUpDialogManagers() first.").isEmpty()) {
-            throw new Exception("The list of Dialog Managers is empty!");
-        }
 
-        // Call the Agents and store the responses in a list.
+        // Store the responses from the Agents in a list.
         List<ResponseLog> listOfResponseLogs = new ArrayList();
         InputInteraction inputInteraction = requestLog.getInteraction();
         for (DialogManagerInterface dialogManagerInterfaceInstance : _listOfDialogManagers) {
@@ -122,5 +123,5 @@ public class DialogManager {
 
     // TODO(Adam): Raking function;
 
-    //TODO(Adam) store the conversation in the log as a single Turn
+    //TODO(Adam): store the conversation in the log as a single Turn
 }

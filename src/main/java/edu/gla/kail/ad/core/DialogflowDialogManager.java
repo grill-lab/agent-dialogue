@@ -15,6 +15,7 @@ import com.google.cloud.dialogflow.v2beta1.TextInput;
 import com.google.protobuf.Timestamp;
 import com.google.protobuf.Value;
 import edu.gla.kail.ad.core.Client.InputInteraction;
+import edu.gla.kail.ad.core.Client.InteractionType;
 import edu.gla.kail.ad.core.Client.OutputInteraction;
 import edu.gla.kail.ad.core.Log.ResponseLog;
 import edu.gla.kail.ad.core.Log.ResponseLog.ServiceProvider;
@@ -36,15 +37,24 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * The responses from Agents are added to the log, but not saved.
  */
 public class DialogflowDialogManager implements DialogManagerInterface {
+    // List stores the instances of SessionsClient and SessionName, for every Agent, which are
+    // needed for the dialog interaction.
     private List<Tuple<SessionsClient, SessionName>> _listOfSessionsClientsAndSessionsNames;
+    // A unique ID passed set in the constructor, passed by DialogManager.
     private String _sessionId;
 
     /**
      * Initialize a ready-to-work DialogflowDialogManager.
      *
-     * @param sessionId
-     * @param listOfProjectIdAndAuthorizationFile
-     * @throws Exception
+     * @param sessionId                           A unique ID passed to the function by
+     *                                            DialogManager.
+     * @param listOfProjectIdAndAuthorizationFile A list specific for DialogflowDialogManager.
+     *                                            Each tuple holds the project ID of a particular
+     *                                            Agent and the directory location of the file
+     *                                            with Service Account key for this particular
+     *                                            Agent.
+     * @throws Exception the setUpAgents function may throw exception if the data passed in the
+     *                   listOfProjectIdAndAuthorizationFile is invalid.
      */
     public DialogflowDialogManager(String sessionId,
                                    List<Tuple<String, String>>
@@ -54,16 +64,21 @@ public class DialogflowDialogManager implements DialogManagerInterface {
     }
 
     /**
-     * Put the SessionClients and SessionNames of corresponding project IDs' and the
-     * directory of their authorisation files into the list.
+     * Create the SessionClients and SessionNames for all the Agents which project ID and Service
+     * Account key file directories are provided.
      *
-     * @param listOfProjectIdAndAuthorizationFile
-     * @throws Exception
+     * @param listOfProjectIdAndAuthorizationFile A list specific for DialogflowDialogManager.
+     *                                            Each tuple holds the project ID of a particular
+     *                                            Agent and the directory location of the file
+     *                                            with Service Account key for this particular
+     *                                            Agent.
+     * @throws Exception When a projectID or the Service Account key is either null or empty,
+     *                   appropriate exception is thrown.
      */
     private void setUpAgents(List<Tuple<String, String>>
                                      listOfProjectIdAndAuthorizationFile) throws Exception {
         if (listOfProjectIdAndAuthorizationFile.isEmpty()) {
-            throw new IllegalArgumentException("List of agents is empty!");
+            throw new IllegalArgumentException("List of Agents is empty!");
         } else {
             _listOfSessionsClientsAndSessionsNames = new ArrayList();
             for (Tuple<String, String> tupleOfProjectIdAndAuthorizationFileDirectory :
@@ -81,14 +96,13 @@ public class DialogflowDialogManager implements DialogManagerInterface {
                             "does not exist: " + jsonKeyFileLocation);
                 }
 
-                // Authorize access to the agent currently tested.
+                // Authenticate the access to the Agent.
                 CredentialsProvider credentialsProvider = FixedCredentialsProvider.create(
                         (ServiceAccountCredentials
                                 .fromStream(new FileInputStream(jsonKeyFileLocation))));
                 SessionsSettings sessionsSettings = SessionsSettings.newBuilder()
                         .setCredentialsProvider(credentialsProvider).build();
 
-                // Create SessionClient.
                 SessionsClient sessionsClient = SessionsClient.create(sessionsSettings);
                 SessionName session = SessionName.of(projectId, _sessionId);
                 _listOfSessionsClientsAndSessionsNames.add(Tuple.of(sessionsClient, session));
@@ -97,18 +111,18 @@ public class DialogflowDialogManager implements DialogManagerInterface {
     }
 
     /**
-     * Get the responses from each agent and safe it to the list.
-     *
-     * @return
+     * @throws IllegalArgumentException The exception is being thrown when the type of the
+     *                                  interaction requested is not recognised or supported.
      */
+    @Override
     public List<ResponseLog> getResponsesFromAgents(InputInteraction inputInteraction) throws
             IllegalArgumentException {
-        // Append the response from each agent to the list of responses.
+        // Append the response from each Agent to the list of responses.
         List<ResponseLog> responseLogList = new ArrayList();
         for (Tuple<SessionsClient, SessionName> tupleOfSessionClientsAndSessionNames :
                 _listOfSessionsClientsAndSessionsNames) {
 
-            // Get a response from an Dialogflow Agent for a particular request.
+            // Get a response from a Dialogflow Agent for a particular request.
             QueryInput queryInput = null;
             switch (inputInteraction.getType()) {
                 case TEXT:
@@ -143,28 +157,35 @@ public class DialogflowDialogManager implements DialogManagerInterface {
                     throw new IllegalArgumentException("Unrecognised interaction type.");
             }
 
+            // Set up Dialogflow classes' instances used for obtaining the response.
             SessionsClient sessionsClient = tupleOfSessionClientsAndSessionNames.x();
             SessionName session = tupleOfSessionClientsAndSessionNames.y();
             DetectIntentResponse response = sessionsClient.detectIntent(session, queryInput);
             QueryResult queryResult = response.getQueryResult();
 
+            // Get current time.
             long millis = System.currentTimeMillis();
             Timestamp timestamp = Timestamp.newBuilder().setSeconds(millis / 1000)
                     .setNanos((int) ((millis % 1000) * 1000000)).build();
 
-            // Put values to response log builder.
+            // Safe values to response log builder instance.
             ResponseLog.Builder responseLogBuilder = ResponseLog.newBuilder()
                     .setResponseId(response.getResponseId())
                     .setTime(timestamp)
                     .setServiceProvider(ServiceProvider.DIALOGFLOW)
                     .setRawResponse(response.toString());
 
-            // Put values to SystemAct
+            // Create SystemAct builder with values of
             SystemAct.Builder systemActBuilder = SystemAct.newBuilder()
                     .setAction(queryResult.getAction())
-                    .setInteraction(OutputInteraction.newBuilder().build());
+                    .setInteraction(OutputInteraction.newBuilder()
+                            .setType(InteractionType.TEXT) //TODO(Adam): If more advanced
+                            // Dialogflow Agents can send a response with differnet interaction
+                            // type, this needs to be changed.
+                            .setText(queryResult.getQueryText())
+                            .build());
             for (Context context : queryResult.getOutputContextsList()) {
-                // Set the slot's name and value for every Slot
+                // Set the slot's name and value for every Slot.
                 for (Map.Entry<String, Value> parameterEntry : context.getParameters()
                         .getFieldsMap().entrySet()) {
                     systemActBuilder.addSlot(Slot.newBuilder()
