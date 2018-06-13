@@ -13,24 +13,25 @@ import java.util.UUID;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
- * This class manages the conversation with different Dialog Managers e.g. Dialogflow, Alexa.
+ * This class manages the conversation with different particular Dialog Managers e.g. Dialogflow,
+ * Alexa.
+ * Assign unique Session ID for each session (List of Turns, as specified in log.proto file).
+ * Assign unique Request ID for each request sent to all the specified Dialog Managers.
+ * This class is responsible for storing the logs.
+ * <p>
  * Instruction of using:
  * 1) Set up the Dialog Managers using setUpDialogManagers function
  * 2) Call the getResponsesFromAgents for required inputs
- * 3) Don't know yet, Rank?
- * <p>
- * This class is responsible for storing the logs.
+ * 3) Use ranking function. TODO(Adam): further part needs to be implemented
  **/
-//TODO(Adam) - add description of all the variables, functions, classes etc.
 
 public class DialogManager {
-    private List<DialogManagerInterface> _listOfDialogManagers; // List of instances of used
-    // Dialog Managers.
+    // List of instances of used Dialog Managers.
+    private List<DialogManagerInterface> _listOfDialogManagers;
     private String _sessionId;
 
     /**
-     * Constructor of this class creates LogEntry.Builder which is used for login of the entire
-     * conversation and assigns unique session ID, which is generated with startSession() function.
+     * Create a unique session ID generated with startSession() function.
      */
     public DialogManager() {
         startSession();
@@ -61,10 +62,13 @@ public class DialogManager {
     }
 
     /**
-     * Set up (e.g. authenticate agents) a particular Dialog Managers (such as DialogflowDialogManager) and their Agents.
+     * Set up (e.g. authenticate agents) a particular Dialog Managers (such as
+     * DialogflowDialogManager) and their Agents.
      *
-     * @param configurationTuples The list stores the entities of ConfigurationTuple, which holds data required by each particular Dialog Manager
-     * @throws Exception
+     * @param configurationTuples The list stores the entities of ConfigurationTuple, which holds
+     *                            data required by each particular Dialog Manager
+     * @throws Exception It is thrown when the type of the Dialog Manager passed in the
+     *                   configurationTuples list is not supported (yet).
      */
     private void setUpDialogManagers(List<ConfigurationTuple>
                                              configurationTuples) throws Exception {
@@ -77,9 +81,11 @@ public class DialogManager {
                             configurationTuple.get_particularDialogManagerSpecificData()));
                     break;
                 default:
-                    throw new IllegalArgumentException("The type of the Agent Provided \"" +
+                    throw new IllegalArgumentException("The type of the Dialog Manager Provided " +
+                            "\"" +
                             configurationTuple
-                                    .get_dialogManagerType() + "\" is not currently supported!");
+                                    .get_dialogManagerType() + "\" is not currently supported " +
+                            "(yet)!");
             }
         }
     }
@@ -91,9 +97,9 @@ public class DialogManager {
      *
      * @param interactionRequest
      * @return The list of responses of each agent of each particular Dialog Manager specified
-     *      during the setUpDialogManagers(...) function call.
+     * during the setUpDialogManagers(...) function call.
      * @throws Exception It is thrown when the setUpDialogManagers wasn't called before calling
-     *      this function.
+     *                   this function.
      */
     public List<ResponseLog> getResponsesFromAgents(InteractionRequest interactionRequest) throws
             Exception {
