@@ -8,34 +8,32 @@ import java.util.Objects;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
- * Store the name of the Agent manager and additional parameters required by the Agent manager.
+ * Store the type of a Agent (e.g. Dialogflow) and additional parameters required for its initialization.
  */
 public class ConfigurationTuple<T> {
-    // The type of the particular Dialog Manager which is used to interact with its Agents.
-    private SupportedDialogManagers _dialogManagerType;
-    // List of generic type Objects which may be different for every type of the particular
-    // Dialog Manager.
-    private List<T> _particularDialogManagerSpecificData;
+    // The type of the particular Agent.
+    private SupportedAgentTypes _agentType;
+    // List of generic type Objects which may be different for every Agent type.
+    private List<T> _agentSpecificData;
 
     /**
-     * @param dialogManagerType                   The type of the particular Dialog Manager which
-     *                                            is used to interact with its Agents.
-     * @param particularDialogManagerSpecificData A list of generic type objects, that stores the
-     *                                            data required by a particular Dialog Manager
-     * @throws Exception It is thrown when the name of the service is not provided.
+     * @param supportedAgentTypes                   The type of the Agent.
+     * @param agentSpecificData A list of generic type objects, that stores the
+     *                                            data required by a particular Agent.
+     * @throws Exception It is thrown when the type of the Agent is not provided.
      */
-    public ConfigurationTuple(SupportedDialogManagers dialogManagerType, @Nullable List<T>
-            particularDialogManagerSpecificData) throws Exception {
-        _dialogManagerType = checkNotNull(dialogManagerType, "The name of the service is null");
-        _particularDialogManagerSpecificData = particularDialogManagerSpecificData;
+    public ConfigurationTuple(SupportedAgentTypes supportedAgentTypes, @Nullable List<T>
+            agentSpecificData) throws Exception {
+        _agentType = checkNotNull(supportedAgentTypes, "The name of the service is null");
+        _agentSpecificData = agentSpecificData;
     }
 
-    public SupportedDialogManagers get_dialogManagerType() {
-        return _dialogManagerType;
+    public SupportedAgentTypes get_agentType() {
+        return _agentType;
     }
 
-    public List<T> get_particularDialogManagerSpecificData() {
-        return _particularDialogManagerSpecificData;
+    public List<T> get_agentSpecificData() {
+        return _agentSpecificData;
     }
 
     @Override
@@ -43,21 +41,21 @@ public class ConfigurationTuple<T> {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ConfigurationTuple<?> that = (ConfigurationTuple<?>) o;
-        return Objects.equals(_dialogManagerType, that._dialogManagerType) &&
-                Objects.equals(_particularDialogManagerSpecificData, that
-                        ._particularDialogManagerSpecificData);
+        return Objects.equals(_agentType, that._agentType) &&
+                Objects.equals(_agentSpecificData, that
+                        ._agentSpecificData);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(_dialogManagerType, _particularDialogManagerSpecificData);
+        return Objects.hash(_agentType, _agentSpecificData);
     }
 
     @Override
     public String toString() {
         return "ConfigurationTuple{" +
-                "_dialogManagerType='" + _dialogManagerType + '\'' +
-                ", _particularDialogManagerSpecificData=" + _particularDialogManagerSpecificData +
+                "_agentType='" + _agentType + '\'' +
+                ", _agentSpecificData=" + _agentSpecificData +
                 '}';
     }
 }
