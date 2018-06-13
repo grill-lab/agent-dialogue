@@ -75,8 +75,7 @@ public class DialogflowAgent implements AgentInterface {
      */
     private void setUpAgent(Tuple<String, String>
                                     tupleOfProjectIdAndAuthenticationFile) throws Exception {
-        checkNotNull(tupleOfProjectIdAndAuthenticationFile, "The passed tuple of Project ID and " +
-                "the Direction of Authentication File is empty!");
+        checkNotNull(tupleOfProjectIdAndAuthenticationFile, "The passed tuple is null!");
         String projectId = checkNotNull(tupleOfProjectIdAndAuthenticationFile.x(), "The project " +
                 "ID is null!");
         String jsonKeyFileLocation = checkNotNull(tupleOfProjectIdAndAuthenticationFile.y(), "The" +
