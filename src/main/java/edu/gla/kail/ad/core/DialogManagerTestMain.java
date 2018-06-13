@@ -25,9 +25,16 @@ public class DialogManagerTestMain {
     /**
      * Add ConfigurationTuples to the _configurationTuples.
      * Function prone to crashes.
+     * TODO(Adam): implement the System.get.property("user.dir");
+     * File_check if exists()
+     * file.mkDirsc).
      *
-     * @param fileDirectory
-     * @throws IOException
+     * @param fileDirectory specifies the directory of the file with data used to set up
+     *                      particular Dialog Managers and their Agents. Each line has one Agent
+     *                      entry, which specified Dialog Manager type and its required
+     *                      parameters, all separated with ". ".
+     * @throws IOException It is thrown when the given name of the particular Dialog Manager is
+     *                     not correctly formatted or the Dialog Manager is not supported yet.
      */
     private static void readProjectIdAndKeyFileToHashMap(String fileDirectory) throws Exception {
         _configurationTuples = new ArrayList();
@@ -42,8 +49,9 @@ public class DialogManagerTestMain {
                             projectIdAndJsonKey[2]));
                     break;
                 default:
-                    throw new IllegalArgumentException("The given Dialog Manager is not supported" +
-                            " yet.");
+                    throw new IllegalArgumentException("The name of the Dialog Manager is " +
+                            "incorrectly formatted or the particular Dialog Manager: " +
+                            projectIdAndJsonKey[0] + " is not supported yet.");
             }
         }
         _configurationTuples.add(new ConfigurationTuple(SupportedDialogManagers.DIALOGFLOW,
@@ -55,6 +63,7 @@ public class DialogManagerTestMain {
     }
 
     public static void main(String[] args) throws Exception {
+        // Different parameters required by the Dialog Manager/s and proto buffers, that would be passed by client.
         String languageCode = "en-US";
         String deviceType = "iPhone Google Assistant";
         File currentClassPathFile = new File(DialogManagerTestMain.class.getProtectionDomain()
