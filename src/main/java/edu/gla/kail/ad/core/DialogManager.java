@@ -70,8 +70,8 @@ public class DialogManager {
      * @throws Exception It is thrown when the type of the Dialog Manager passed in the
      *                   configurationTuples list is not supported (yet).
      */
-    private void setUpDialogManagers(List<ConfigurationTuple>
-                                             configurationTuples) throws Exception {
+    public void setUpDialogManagers(List<ConfigurationTuple>
+                                            configurationTuples) throws Exception {
         _listOfDialogManagers = new ArrayList();
         for (ConfigurationTuple configurationTuple :
                 configurationTuples) {
@@ -95,7 +95,8 @@ public class DialogManager {
      * Return the list of responses for a given request.
      * TODO(Adam): Maybe store the logs after each conversation; need to decide later on.
      *
-     * @param interactionRequest
+     * @param interactionRequest The a data structure (implemented in log.proto) holding the
+     *                           interaction from a client.
      * @return The list of responses of each agent of each particular Dialog Manager specified
      * during the setUpDialogManagers(...) function call.
      * @throws Exception It is thrown when the setUpDialogManagers wasn't called before calling
