@@ -1,6 +1,5 @@
 package edu.gla.kail.ad.core;
 
-
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Objects;
@@ -8,19 +7,20 @@ import java.util.Objects;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
- * Store the type of a Agent (e.g. Dialogflow) and additional parameters required for its initialization.
+ * Store the type of a agent (e.g. Dialogflow) and additional parameters required for its initialization.
+ * The class is parameterized - it uses the generic type: T.
  */
 public class ConfigurationTuple<T> {
-    // The type of the particular Agent.
+    // The type of the particular agent.
     private SupportedAgentTypes _agentType;
-    // List of generic type Objects which may be different for every Agent type.
+    // List of configuration objects specific to the type of agent.
     private List<T> _agentSpecificData;
 
     /**
-     * @param supportedAgentTypes                   The type of the Agent.
+     * @param supportedAgentTypes                   The type of the agent.
      * @param agentSpecificData A list of generic type objects, that stores the
-     *                                            data required by a particular Agent.
-     * @throws Exception It is thrown when the type of the Agent is not provided.
+     *                                            data required by a particular agent.
+     * @throws Exception It is thrown when the type of the agent is not provided.
      */
     public ConfigurationTuple(SupportedAgentTypes supportedAgentTypes, @Nullable List<T>
             agentSpecificData) throws Exception {

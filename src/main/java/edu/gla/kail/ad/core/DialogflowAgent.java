@@ -31,8 +31,8 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 
 /**
- * A class used to talk to Dialogflow Agents.
- * The responses from Agents are added to the log, but not saved.
+ * A class used to talk to Dialogflow agents.
+ * The responses from agent is added to the log.
  */
 public class DialogflowAgent implements AgentInterface {
     // The SessionsClient and SessionName are needed for the Dialogflow interaction.
@@ -48,9 +48,9 @@ public class DialogflowAgent implements AgentInterface {
      *                                             DialogAgentManager.
      * @param tupleOfProjectIdAndAuthorizationFile A tuple specific for DialogflowAgent.
      *                                             It holds the project ID of a particular
-     *                                             Agent and the directory location of the file
+     *                                             agent and the directory location of the file
      *                                             with Service Account key for this particular
-     *                                             Agent.
+     *                                             agent.
      * @throws Exception the setUpAgent function may throw exception if the data passed in the
      *                   tupleOfProjectIdAndAuthorizationFile is invalid.
      */
@@ -62,14 +62,14 @@ public class DialogflowAgent implements AgentInterface {
     }
 
     /**
-     * Create the SessionClients and SessionNames for all the Agents which project ID and Service
+     * Create the SessionClients and SessionNames for all the agents which project ID and Service
      * Account key file directories are provided.
      *
      * @param tupleOfProjectIdAndAuthenticationFile A tuple specific for DialogflowAgent.
      *                                              It holds the project ID of a particular
-     *                                              Agent and the directory location of the file
+     *                                              agent and the directory location of the file
      *                                              with Service Account key for this particular
-     *                                              Agent.
+     *                                              agent.
      * @throws Exception When a projectID or the Service Account key is either null or empty,
      *                   appropriate exception is thrown.
      */
@@ -88,7 +88,7 @@ public class DialogflowAgent implements AgentInterface {
                     "does not exist: " + jsonKeyFileLocation);
         }
 
-        // Authenticate the access to the Agent.
+        // Authenticate the access to the agent.
         CredentialsProvider credentialsProvider = FixedCredentialsProvider.create(
                 (ServiceAccountCredentials
                         .fromStream(new FileInputStream(jsonKeyFileLocation))));
@@ -107,7 +107,7 @@ public class DialogflowAgent implements AgentInterface {
     @Override
     public ResponseLog getResponseFromAgent(InputInteraction inputInteraction) throws
             IllegalArgumentException {
-        // Get a response from a Dialogflow Agent for a particular request.
+        // Get a response from a Dialogflow agent for a particular request.
         QueryInput queryInput = null;
         switch (inputInteraction.getType()) {
             case TEXT:
@@ -125,7 +125,7 @@ public class DialogflowAgent implements AgentInterface {
 //                    queryInput = QueryInput.newBuilder().setAudioConfig(inputAudioConfig).build();
                 throw new IllegalArgumentException("The AUDIO function for DialogFlow is not " +
                         "yet supported" +
-                        "."); //TODO(Adam): implement;
+                        "."); // TODO(Adam): implement;
                 // break;
             case ACTION:
 //                    EventInput eventInput = EventInput.newBuilder()
@@ -136,7 +136,7 @@ public class DialogflowAgent implements AgentInterface {
 //                    queryInput = QueryInput.newBuilder().setEvent(eventInput).build();
                 throw new IllegalArgumentException("The ACTION function for DialogFlow is not" +
                         " yet supported" +
-                        "."); //TODO(Adam): implement;
+                        "."); // TODO(Adam): implement;
                 // break;
             case UNRECOGNIZED:
                 throw new IllegalArgumentException("Unrecognised interaction type.");
@@ -162,8 +162,8 @@ public class DialogflowAgent implements AgentInterface {
         SystemAct.Builder systemActBuilder = SystemAct.newBuilder()
                 .setAction(queryResult.getAction())
                 .setInteraction(OutputInteraction.newBuilder()
-                        .setType(InteractionType.TEXT) //TODO(Adam): If more advanced
-                        // Dialogflow Agents can send a response with differnet interaction
+                        .setType(InteractionType.TEXT) // TODO(Adam): If more advanced
+                        // Dialogflow agents can send a response with differnet interaction
                         // type, this needs to be changed.
                         .setText(queryResult.getQueryText())
                         .build());
@@ -179,7 +179,7 @@ public class DialogflowAgent implements AgentInterface {
         }
         responseLogBuilder.addAction(systemActBuilder.build());
 
-        //TODO(Adam) Remove after the log writing to files is implemented; now we can see
+        // TODO(Adam) Remove after the log writing to files is implemented; now we can see
         // the output.
         System.out.println(response.toString());
         return responseLogBuilder.build();

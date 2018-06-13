@@ -14,20 +14,28 @@ import java.util.UUID;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
- * This class manages the conversation with Agents of different type e.g. Dialogflow or Alexa.
- * Assign unique Session ID for each session (List of Turns, as specified in log.proto file).
- * Assign unique Request ID for each request sent to all the specified Agents.
- * This class is responsible for storing the logs.
+ * The manager is configured to have conversations with specified agents (of certain agent type,
+ * * e.g. Dialogflow or Alexa).
+ * Conversation management includes handling session state, including starting sessions (assigning
+ * session IDs), as well as request identifiers. It also handles serialization of conversation log
+ * data.
  * <p>
- * Instruction of using:
- * 1) Set up the Dialog Agents using setUpAgents function
+ * Instruction of usage:
+ * 1) Set up the Dialog agents using setUpAgents function
  * 2) Call the getResponseFromAgent for required inputs
  * 3) Use ranking function. TODO(Adam): further part needs to be implemented
+ * <p>
+ * Example usage :
+ * DialogAgentManager dialogAgentManager = new DialogAgentManager();
+ * dialogAgentManager.setUpAgents(_configurationTuples);
+ * dialogAgentManager.getResponsesFromAgents(interactionRequest);
  **/
 
 public class DialogAgentManager {
-    // List of instances of used Dialog Agents.
-    private List<AgentInterface> _listOfAgents;
+    // List of instances of used Dialog agents.
+    private List<AgentInterface> _agents;
+    // Session ID is a unique identifier of a session which is assigned by the function
+    // startSession() called by DialogAgentManager constructor.
     private String _sessionId;
 
     /**
@@ -44,50 +52,47 @@ public class DialogAgentManager {
         _sessionId = getRandomNumberAsString();
     }
 
-    /**
-     * Function called at the end of the session, which will do sth - not known now.
-     */
     public void endSession() {
-        //TODO(Adam): Creation of configuration file - to be done later on.
-        //TODO(Adam): Updating/Saving to the log file?
+        // TODO(Adam): Creation of configuration file - to be done later on.
+        // TODO(Adam): Updating/Saving to the log file?
     }
 
     private String getRandomNumberAsString() {
         return UUID.randomUUID().toString();
     }
 
-    //TODO(Adam): generateRequestId needs to be implemented
+    // TODO(Adam): generateRequestId needs to be implemented
     private String generateRequestId() {
         return getRandomNumberAsString();
     }
 
     /**
-     * Set up (e.g. authenticate) all Agents and store them to the list of agents.
+     * Set up (e.g. authenticate) all agents and store them to the list of agents.
      *
      * @param configurationTuples The list stores the entities of ConfigurationTuple, which holds
-     *                            data required by each Agent.
-     * @throws Exception It is thrown when the type of the DialogManager passed in the
-     *                   configurationTuples list is not supported (yet).
+     *                            data required by each agent.
+     * @throws IllegalArgumentException, Exception Raised by _agents.add(new DialogflowAgent(_sessionId, agentSpecificData.get(0)));
      */
-    public void setUpAgents(List<ConfigurationTuple> configurationTuples) throws Exception {
-        _listOfAgents = new ArrayList();
+    public void setUpAgents(List<ConfigurationTuple> configurationTuples) throws
+            IllegalArgumentException, Exception {
+        _agents = new ArrayList();
         for (ConfigurationTuple configurationTuple : configurationTuples) {
             switch (configurationTuple.get_agentType()) {
                 case DIALOGFLOW:
                     List<Tuple> agentSpecificData = checkNotNull(configurationTuple
                             .get_agentSpecificData(), "The Dialogflow specific data is null!");
                     if (agentSpecificData.size() != 1) {
-                        throw new IllegalArgumentException("The Dialogflow Agent specific data " +
+                        throw new IllegalArgumentException("The Dialogflow agent specific data " +
                                 "passed is not valid for Dialogflow! It has to be project ID and " +
                                 "Service Account key file directory.");
                     }
-                    _listOfAgents.add(new DialogflowAgent(_sessionId, agentSpecificData.get(0)));
+                    _agents.add(new DialogflowAgent(_sessionId, agentSpecificData.get(0)));
                     break;
                 case DUMMYAGENT:
-                    _listOfAgents.add(new DummyAgent());
+                    _agents.add(new DummyAgent());
                     break;
                 default:
-                    throw new IllegalArgumentException("The type of the Agent provided " +
+                    throw new IllegalArgumentException("The type of the agent provided " +
                             "\"" +
                             configurationTuple
                                     .get_agentType() + "\" is not currently supported " +
@@ -103,15 +108,15 @@ public class DialogAgentManager {
      *
      * @param interactionRequest The a data structure (implemented in log.proto) holding the
      *                           interaction from a client.
-     * @return The list of responses of all Agents set up on the setUpAgents(...) function call.
+     * @return The list of responses of all agents set up on the setUpAgents(...) function call.
      * @throws Exception It is thrown when the setUpAgents wasn't called before calling
      *                   this function.
      */
     public List<ResponseLog> getResponsesFromAgents(InteractionRequest interactionRequest) throws
             Exception {
-        if (checkNotNull(_listOfAgents, "Agents are not set up! Use the function" +
+        if (checkNotNull(_agents, "agents are not set up! Use the function" +
                 " setUpAgents() first.").isEmpty()) {
-            throw new Exception("The list of Agents is empty!");
+            throw new Exception("The list of agents is empty!");
         }
         // Convert InteractionRequest to RequestLog.
         long millis = System.currentTimeMillis();
@@ -123,11 +128,11 @@ public class DialogAgentManager {
                 .setClientId(interactionRequest.getClientId())
                 .setInteraction(interactionRequest.getInteraction()).build();
 
-        // Store the responses from the Agents in a list.
+        // Store the responses from the agents in a list.
         List<ResponseLog> listOfResponseLogs = new ArrayList();
         InputInteraction inputInteraction = requestLog.getInteraction();
-        for (AgentInterface agentInterfaceInstance : _listOfAgents) {
-            listOfResponseLogs.add(agentInterfaceInstance.getResponseFromAgent(inputInteraction));
+        for (AgentInterface agent : _agents) {
+            listOfResponseLogs.add(agent.getResponseFromAgent(inputInteraction));
         }
         return listOfResponseLogs;
     }
