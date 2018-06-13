@@ -31,7 +31,7 @@ public class DialogAgentManagerTestMain {
      *
      * @param fileDirectory It specifies the directory of the file with data used to set up
      *                      Agents. Each line has one Agent entry, which specified Agent type
-     *                      parameters required by this Agent separated with ", ".
+     *                      parameters required by this Agent separated with ",".
      * @throws IOException It is thrown when the given type name of the Agent is not correctly
      *                     formatted or the Agent type is not supported yet.
      */
@@ -39,13 +39,20 @@ public class DialogAgentManagerTestMain {
         _configurationTuples = new ArrayList();
         Path path = Paths.get(fileDirectory);
         List<String> lines = Files.readAllLines(path, StandardCharsets.UTF_8);
-        List<Tuple<String, String>> dialogflowProjectIdAndJsonKeyFileList = new ArrayList();
         for (String line : lines) {
-            String[] projectIdAndJsonKey = line.split(", ");
+            String[] projectIdAndJsonKey = line.split(",");
             switch (projectIdAndJsonKey[0]) {
                 case "Dialogflow":
+                    List<Tuple<String, String>> dialogflowProjectIdAndJsonKeyFileList = new
+                            ArrayList();
                     dialogflowProjectIdAndJsonKeyFileList.add(Tuple.of(projectIdAndJsonKey[1],
                             projectIdAndJsonKey[2]));
+                    _configurationTuples.add(new ConfigurationTuple(SupportedAgentTypes.DIALOGFLOW,
+                            dialogflowProjectIdAndJsonKeyFileList));
+                    break;
+                case "DummyAgent":
+                    _configurationTuples.add(new ConfigurationTuple(SupportedAgentTypes
+                            .DUMMYAGENT, null));
                     break;
                 default:
                     throw new IllegalArgumentException("The name of the Agent is not correctly " +
@@ -53,8 +60,6 @@ public class DialogAgentManagerTestMain {
                             projectIdAndJsonKey[0] + " is not supported yet.");
             }
         }
-        _configurationTuples.add(new ConfigurationTuple(SupportedAgentTypes.DIALOGFLOW,
-                dialogflowProjectIdAndJsonKeyFileList));
     }
 
     private static String getRandomNumberAsString() {
