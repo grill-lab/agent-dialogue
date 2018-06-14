@@ -1,10 +1,5 @@
 package edu.gla.kail.ad.core;
 
-import com.google.api.gax.core.CredentialsProvider;
-import com.google.api.gax.core.FixedCredentialsProvider;
-import com.google.api.gax.core.GoogleCredentialsProvider;
-import com.google.auth.oauth2.GoogleCredentials;
-import com.google.auth.oauth2.ServiceAccountCredentials;
 import com.google.cloud.Tuple;
 import com.google.cloud.dialogflow.v2beta1.Context;
 import com.google.cloud.dialogflow.v2beta1.DetectIntentResponse;
@@ -12,7 +7,6 @@ import com.google.cloud.dialogflow.v2beta1.QueryInput;
 import com.google.cloud.dialogflow.v2beta1.QueryResult;
 import com.google.cloud.dialogflow.v2beta1.SessionName;
 import com.google.cloud.dialogflow.v2beta1.SessionsClient;
-import com.google.cloud.dialogflow.v2beta1.SessionsSettings;
 import com.google.cloud.dialogflow.v2beta1.TextInput;
 import com.google.protobuf.Timestamp;
 import com.google.protobuf.Value;
@@ -24,13 +18,11 @@ import edu.gla.kail.ad.core.Log.ResponseLog.ServiceProvider;
 import edu.gla.kail.ad.core.Log.Slot;
 import edu.gla.kail.ad.core.Log.SystemAct;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.time.Instant;
 import java.util.Map;
 
-import static com.google.common.base.Preconditions.checkNotNull;
+import static edu.gla.kail.ad.core.DialogflowAgentAuthorizationSingleton
+        .getProjectIdAndSessionsClient;
 
 
 /**
@@ -76,28 +68,10 @@ public class DialogflowAgent implements AgentInterface {
      */
     private void setUpAgent(Tuple<String, String>
                                     tupleOfProjectIdAndAuthenticationFile) throws Exception {
-        checkNotNull(tupleOfProjectIdAndAuthenticationFile, "The passed tuple is null!");
-        String projectId = checkNotNull(tupleOfProjectIdAndAuthenticationFile.x(), "The project " +
-                "ID is null!");
-        String jsonKeyFileLocation = checkNotNull(tupleOfProjectIdAndAuthenticationFile.y(), "The" +
-                " JSON file location is null!");
-        if (projectId.isEmpty()) {
-            throw new Exception("The provided project ID of the service is empty!");
-        }
-        if (!new File(jsonKeyFileLocation).isFile()) {
-            throw new FileNotFoundException("The location of the JSON key file provided " +
-                    "does not exist: " + jsonKeyFileLocation);
-        }
-
-        CredentialsProvider credentialsProvider = FixedCredentialsProvider.create(
-                (ServiceAccountCredentials
-                        .fromStream(new FileInputStream(jsonKeyFileLocation))));
-
-        SessionsSettings sessionsSettings = SessionsSettings.newBuilder()
-                .setCredentialsProvider(credentialsProvider).build();
-
-        _sessionsClient = SessionsClient.create(sessionsSettings);
-        _session = SessionName.of(projectId, _sessionId);
+        Tuple<String, SessionsClient> projectIdAndSessionsClient = getProjectIdAndSessionsClient
+                (tupleOfProjectIdAndAuthenticationFile);
+        _sessionsClient = projectIdAndSessionsClient.y();
+        _session = SessionName.of(projectIdAndSessionsClient.x(), _sessionId);
     }
 
 
