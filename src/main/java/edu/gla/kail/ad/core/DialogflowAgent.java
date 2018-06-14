@@ -2,6 +2,8 @@ package edu.gla.kail.ad.core;
 
 import com.google.api.gax.core.CredentialsProvider;
 import com.google.api.gax.core.FixedCredentialsProvider;
+import com.google.api.gax.core.GoogleCredentialsProvider;
+import com.google.auth.oauth2.GoogleCredentials;
 import com.google.auth.oauth2.ServiceAccountCredentials;
 import com.google.cloud.Tuple;
 import com.google.cloud.dialogflow.v2beta1.Context;
@@ -87,10 +89,10 @@ public class DialogflowAgent implements AgentInterface {
                     "does not exist: " + jsonKeyFileLocation);
         }
 
-        // Authenticate the access to the agent.
         CredentialsProvider credentialsProvider = FixedCredentialsProvider.create(
                 (ServiceAccountCredentials
                         .fromStream(new FileInputStream(jsonKeyFileLocation))));
+
         SessionsSettings sessionsSettings = SessionsSettings.newBuilder()
                 .setCredentialsProvider(credentialsProvider).build();
 
