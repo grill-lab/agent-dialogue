@@ -7,11 +7,11 @@ import edu.gla.kail.ad.core.Client.InteractionRequest;
 import edu.gla.kail.ad.core.Client.InteractionType;
 
 import java.io.File;
-import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -33,7 +33,7 @@ public class DialogAgentManagerTestMain {
      *                      agents. Each line has one agent entry, which specified agent type
      *                      parameters required by this agent separated with ",".
      * @throws Exception - It is thrown when the given type name of the agent is not correctly
-     *      *                     formatted or the agent type is not supported yet.
+     *                   *                     formatted or the agent type is not supported yet.
      */
     private static void readProjectIdAndKeyFileToHashMap(String fileDirectory) throws Exception {
         _configurationTuples = new ArrayList();
@@ -88,7 +88,12 @@ public class DialogAgentManagerTestMain {
 
         DialogAgentManager dialogAgentManager = new DialogAgentManager();
         dialogAgentManager.setUpAgents(_configurationTuples);
-        Timestamp timestamp = Timestamp.newBuilder().setNanos(0).build();
+        Timestamp timestamp = Timestamp.newBuilder()
+                .setSeconds(Instant.now()
+                        .getEpochSecond())
+                .setNanos(Instant.now()
+                        .getNano())
+                .build();
         // Get responses from all the agents on the text provided in a text file.
         Path path = Paths.get(testTextFileDirectory + nameOfTestedFile);
         List<String> lines = Files.readAllLines(path, StandardCharsets.UTF_8);
