@@ -9,12 +9,19 @@ import edu.gla.kail.ad.core.Log.ResponseLog.ServiceProvider;
 import edu.gla.kail.ad.core.Log.Slot;
 import edu.gla.kail.ad.core.Log.SystemAct;
 
+import java.time.Instant;
+
 
 /**
  * This is a dummy agent created for testing purposes.
  */
 public class DummyAgent implements AgentInterface {
-    Timestamp timestamp = Timestamp.newBuilder().setNanos(0).build();
+    Timestamp timestamp = Timestamp.newBuilder()
+            .setSeconds(Instant.now()
+                    .getEpochSecond())
+            .setNanos(Instant.now()
+                    .getNano())
+            .build();
 
     @Override
     public ResponseLog getResponseFromAgent(InputInteraction inputInteraction) {

@@ -25,6 +25,7 @@ import edu.gla.kail.ad.core.Log.SystemAct;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.time.Instant;
 import java.util.Map;
 
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -51,7 +52,7 @@ public class DialogflowAgent implements AgentInterface {
      *                                             the directory location of the file with
      *                                             Service Account key for this particular agent.
      * @throws Exception - T setUpAgent function may throw exception if the data passed in the
-     * tupleOfProjectIdAndAuthorizationFile is invalid.
+     *                   tupleOfProjectIdAndAuthorizationFile is invalid.
      */
     public DialogflowAgent(String sessionId,
                            Tuple<String, String>
@@ -69,7 +70,7 @@ public class DialogflowAgent implements AgentInterface {
      *                                              and the directory location of the file with
      *                                              Service Account key for this particular agent.
      * @throws Exception - When a projectID or the Service Account key is either null or empty,
-     * appropriate exception is thrown.
+     *                   appropriate exception is thrown.
      */
     private void setUpAgent(Tuple<String, String>
                                     tupleOfProjectIdAndAuthenticationFile) throws Exception {
@@ -100,7 +101,7 @@ public class DialogflowAgent implements AgentInterface {
 
     /**
      * @throws IllegalArgumentException - The exception is being thrown when the type of the
-     * interaction requested is not recognised or supported.
+     *                                  interaction requested is not recognised or supported.
      */
     @Override
     public ResponseLog getResponseFromAgent(InputInteraction inputInteraction) throws
@@ -145,9 +146,12 @@ public class DialogflowAgent implements AgentInterface {
         QueryResult queryResult = response.getQueryResult();
 
         // Get current time.
-        long millis = System.currentTimeMillis();
-        Timestamp timestamp = Timestamp.newBuilder().setSeconds(millis / 1000)
-                .setNanos((int) ((millis % 1000) * 1000000)).build();
+        Timestamp timestamp = Timestamp.newBuilder()
+                .setSeconds(Instant.now()
+                        .getEpochSecond())
+                .setNanos(Instant.now()
+                        .getNano())
+                .build();
 
         // Safe values to response log builder instance.
         ResponseLog.Builder responseLogBuilder = ResponseLog.newBuilder()

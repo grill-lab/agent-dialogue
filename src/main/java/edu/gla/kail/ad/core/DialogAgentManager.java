@@ -7,6 +7,7 @@ import edu.gla.kail.ad.core.Client.InteractionRequest;
 import edu.gla.kail.ad.core.Log.RequestLog;
 import edu.gla.kail.ad.core.Log.ResponseLog;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -82,7 +83,7 @@ public class DialogAgentManager {
      * @param configurationTuples - The list stores the entities of ConfigurationTuple, which
      *                            holds data required by each agent.
      * @throws Exception                - Raised by _agents.add(new DialogflowAgent(_sessionId,
-     * agentSpecificData.get(0)));
+     *                                  agentSpecificData.get(0)));
      * @throws IllegalArgumentException
      */
     public void setUpAgents(List<ConfigurationTuple> configurationTuples) throws
@@ -132,7 +133,12 @@ public class DialogAgentManager {
         }
 
         // Set current time on Timestamp.
-        Timestamp timestamp = Timestamp.newBuilder().setNanos(0).build();
+        Timestamp timestamp = Timestamp.newBuilder()
+                .setSeconds(Instant.now()
+                        .getEpochSecond())
+                .setNanos(Instant.now()
+                        .getNano())
+                .build();
         // Convert InteractionRequest to RequestLog.
         RequestLog requestLog = RequestLog.newBuilder()
                 .setRequestId(generateRequestId())
