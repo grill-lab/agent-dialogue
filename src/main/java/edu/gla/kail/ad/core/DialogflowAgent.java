@@ -97,23 +97,23 @@ class DialogflowAgent implements AgentInterface {
         switch (inputInteraction.getType()) {
             case TEXT:
                 if (checkNotNull(inputInteraction.getText(), String.format(ERROR_MESSAGE, "TEXT",
-                        "null", "text")).isEmpty()) {
+                        "a null", "text")).isEmpty()) {
                     throw new IllegalArgumentException(String.format(ERROR_MESSAGE, "TEXT",
-                            "empty", "text"));
+                            "an empty", "text"));
                 }
                 break;
             case ACTION:
                 if (checkNotNull(inputInteraction.getActionList(), String.format(ERROR_MESSAGE,
-                        "ACTION", "null", "action")).isEmpty()) {
+                        "ACTION", "a null", "action")).isEmpty()) {
                     throw new IllegalArgumentException(String.format(ERROR_MESSAGE, "ACTION",
-                            "empty", "action"));
+                            "an empty", "action"));
                 }
                 break;
             case AUDIO:
                 if (checkNotNull(inputInteraction.getAudioBytes(), String.format(ERROR_MESSAGE,
-                        "AUDIO", "null", "audio")).isEmpty()) {
+                        "AUDIO", "a null", "audio")).isEmpty()) {
                     throw new IllegalArgumentException(String.format(ERROR_MESSAGE, "AUDIO",
-                            "empty", "audio"));
+                            "an empty", "audio"));
                 }
                 break;
             default:
