@@ -100,48 +100,57 @@ public class DialogflowAgent implements AgentInterface {
 
 
     /**
-     * @throws IllegalArgumentException - The exception is being thrown when the type of the
-     *                                  interaction requested is not recognised or supported.
+     * Return Query input for any type of inputInteraction the user may get: audio, text or action.
+     *
+     * @param inputInteraction- A data structure (implemented in log.proto) holding the incoming
+     *                          interaction that is being sent to an agent.
+     * @return queryInput - A data structure which holds the query that needs to be send to
+     * Dialogflow.
+     * @throws IllegalArgumentException
      */
-    @Override
-    public ResponseLog getResponseFromAgent(InputInteraction inputInteraction) throws
-            IllegalArgumentException {
+    private QueryInput provideQuery(InputInteraction inputInteraction) {
         // Get a response from a Dialogflow agent for a particular request.
-        QueryInput queryInput = null;
         switch (inputInteraction.getType()) {
             case TEXT:
                 TextInput.Builder textInput = TextInput.newBuilder().setText(inputInteraction
                         .getText())
                         .setLanguageCode(inputInteraction.getLanguageCode());
-                queryInput = QueryInput.newBuilder().setText(textInput).build();
-                break;
+                return QueryInput.newBuilder().setText(textInput).build();
             case AUDIO:
 //                    InputAudioConfig inputAudioConfig = InputAudioConfig.newBuilder()
 //                            .setLanguageCode(inputInteraction.getLanguageCode())
 //                            .setAudioEncoding() // Needs an argument AudioEncoding
 //                            .setSampleRateHertz() // Needs an argument int32
 //                            .build();
-//                    queryInput = QueryInput.newBuilder().setAudioConfig(inputAudioConfig).build();
+//                    return QueryInput.newBuilder().setAudioConfig(inputAudioConfig).build();
                 throw new IllegalArgumentException("The AUDIO function for DialogFlow is not " +
                         "yet supported" +
                         "."); // TODO(Adam): implement;
-                // break;
             case ACTION:
 //                    EventInput eventInput = EventInput.newBuilder()
 //                            .setLanguageCode(inputInteraction.getLanguageCode())
 //                            .setName() // Needs an argument String
 //                            .setParameters() // Optional, needs a Struct
 //                            .build();
-//                    queryInput = QueryInput.newBuilder().setEvent(eventInput).build();
+//                    return QueryInput.newBuilder().setEvent(eventInput).build();
                 throw new IllegalArgumentException("The ACTION function for DialogFlow is not" +
                         " yet supported" +
                         "."); // TODO(Adam): implement;
-                // break;
-            case UNRECOGNIZED:
+            default:
                 throw new IllegalArgumentException("Unrecognised interaction type.");
         }
+    }
 
+    /**
+     * @throws IllegalArgumentException - The exception is being thrown when the type of the
+     *                                  interaction requested is not recognised or supported.
+     */
+    @Override
+    public ResponseLog getResponseFromAgent(InputInteraction inputInteraction) throws
+            IllegalArgumentException {
+        QueryInput queryInput = provideQuery(inputInteraction);
         // Set up Dialogflow classes' instances used for obtaining the response.
+        // What do do her when things go wrong?  Handle RPC errors?  Throw an exception?
         DetectIntentResponse response = _sessionsClient.detectIntent(_session, queryInput);
         QueryResult queryResult = response.getQueryResult();
 
