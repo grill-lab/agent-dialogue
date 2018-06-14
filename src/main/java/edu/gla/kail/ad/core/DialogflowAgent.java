@@ -85,6 +85,10 @@ class DialogflowAgent implements AgentInterface {
     private void validateInputInteractionValidity(InputInteraction inputInteraction) throws
             IllegalArgumentException {
         checkNotNull(inputInteraction, "The passed inputInteraction is null!");
+        if (checkNotNull(inputInteraction.getLanguageCode(), "The inputInteraction LanguageCode " +
+                "is set to null!").isEmpty()) {
+            throw new IllegalArgumentException("The inputInteraction LanguageCode is empty!");
+        }
         String ERROR_MESSAGE = "The inputInteraction of type %s has %s %s field!";
         if (checkNotNull(inputInteraction.getType(), "The inputInteraction type is null!")
                 .toString().isEmpty()) {
@@ -155,7 +159,8 @@ class DialogflowAgent implements AgentInterface {
                 throw new IllegalArgumentException("The ACTION function for DialogFlow is not" +
                         " yet supported" +
                         "."); // TODO(Adam): implement;
-            default:
+            default: // TODO(Adam): Can be delited, as we validate the inputInteraction in a
+                // separate function.
                 throw new IllegalArgumentException("Unrecognised interaction type.");
         }
     }
