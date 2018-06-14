@@ -152,7 +152,7 @@ public class DialogflowAgent implements AgentInterface {
                         .setType(InteractionType.TEXT) // TODO(Adam): If more advanced
                         // Dialogflow agents can send a response with differnet interaction
                         // type, this needs to be changed.
-                        .setText(queryResult.getQueryText())
+                        .setText(queryResult.getFulfillmentText())
                         .build());
         for (Context context : queryResult.getOutputContextsList()) {
             // Set the slot's name and value for every Slot.
