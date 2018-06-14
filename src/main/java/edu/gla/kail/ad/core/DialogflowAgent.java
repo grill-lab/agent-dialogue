@@ -77,6 +77,7 @@ class DialogflowAgent implements AgentInterface {
 
     /**
      * Validate the inputInteraction for Dialogflow usage.
+     * Checks: inputInteraction, type, respective type field, language code.
      *
      * @param inputInteraction - A data structure (implemented in log.proto) holding the incoming
      *                         interaction that is being sent to an agent.
