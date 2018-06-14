@@ -21,6 +21,7 @@ import edu.gla.kail.ad.core.Log.SystemAct;
 import java.time.Instant;
 import java.util.Map;
 
+import static com.google.common.base.Preconditions.checkNotNull;
 import static edu.gla.kail.ad.core.DialogflowAgentAuthorizationSingleton
         .getProjectIdAndSessionsClient;
 
@@ -74,18 +75,60 @@ class DialogflowAgent implements AgentInterface {
         _session = SessionName.of(projectIdAndSessionsClient.x(), _sessionId);
     }
 
+    /**
+     * Validate the inputInteraction for Dialogflow usage.
+     *
+     * @param inputInteraction - A data structure (implemented in log.proto) holding the incoming
+     *                         interaction that is being sent to an agent.
+     * @throws IllegalArgumentException
+     */
+    private void validateInputInteractionValidity(InputInteraction inputInteraction) throws
+            IllegalArgumentException {
+        checkNotNull(inputInteraction, "The passed inputInteraction is null!");
+        String ERROR_MESSAGE = "The inputInteraction of type %s has %s %s field!";
+        if (checkNotNull(inputInteraction.getType(), "The inputInteraction type is null!")
+                .toString().isEmpty()) {
+            throw new IllegalArgumentException("The inputInteraction type is not set!");
+        }
+        switch (inputInteraction.getType()) {
+            case TEXT:
+                if (checkNotNull(inputInteraction.getText(), String.format(ERROR_MESSAGE, "TEXT",
+                        "null", "text")).isEmpty()) {
+                    throw new IllegalArgumentException(String.format(ERROR_MESSAGE, "TEXT",
+                            "empty", "text"));
+                }
+                break;
+            case ACTION:
+                if (checkNotNull(inputInteraction.getActionList(), String.format(ERROR_MESSAGE,
+                        "ACTION", "null", "action")).isEmpty()) {
+                    throw new IllegalArgumentException(String.format(ERROR_MESSAGE, "ACTION",
+                            "empty", "action"));
+                }
+                break;
+            case AUDIO:
+                if (checkNotNull(inputInteraction.getAudioBytes(), String.format(ERROR_MESSAGE,
+                        "AUDIO", "null", "audio")).isEmpty()) {
+                    throw new IllegalArgumentException(String.format(ERROR_MESSAGE, "AUDIO",
+                            "empty", "audio"));
+                }
+                break;
+            default:
+                throw new IllegalArgumentException("Unrecognised interaction type.");
+        }
+    }
 
     /**
      * Return Query input for any type of inputInteraction the user may get: audio, text or action.
      *
-     * @param inputInteraction- A data structure (implemented in log.proto) holding the incoming
-     *                          interaction that is being sent to an agent.
+     * @param inputInteraction - A data structure (implemented in log.proto) holding the incoming
+     *                         interaction that is being sent to an agent.
      * @return queryInput - A data structure which holds the query that needs to be send to
      * Dialogflow.
      * @throws IllegalArgumentException
      */
     private QueryInput provideQuery(InputInteraction inputInteraction) {
-        // Get a response from a Dialogflow agent for a particular request.
+        validateInputInteractionValidity(inputInteraction);
+        // Get a response from a Dialogflow agent for a particular request (inputInteraction type).
         switch (inputInteraction.getType()) {
             case TEXT:
                 TextInput.Builder textInput = TextInput.newBuilder().setText(inputInteraction
