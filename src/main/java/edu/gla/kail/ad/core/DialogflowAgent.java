@@ -168,7 +168,8 @@ public class DialogflowAgent implements AgentInterface {
 
         // TODO(Adam) Remove after the log writing to files is implemented; now we can see
         // the output.
-        System.out.println(response.toString());
+        System.out.println("------------------------------------------------------------------\n" +
+                "\n Dialogflow response: \n\n" + responseLogBuilder.build().toString());
         return responseLogBuilder.build();
     }
 }
