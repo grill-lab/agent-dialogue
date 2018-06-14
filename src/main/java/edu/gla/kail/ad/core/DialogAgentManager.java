@@ -146,7 +146,7 @@ public class DialogAgentManager {
         return listOfResponseLogs;
     }
 
-    // TODO(Adam): Raking function;
+    // TODO(Adam): Raking leaves?;
 
     // TODO(Adam): store the conversation in the log as a single Turn
 }
