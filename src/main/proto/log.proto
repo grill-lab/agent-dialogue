@@ -30,8 +30,9 @@ message RequestLog {
 
 message ResponseLog {
     enum ServiceProvider {
-        DIALOGFLOW = 0;
-        DUMMYAGENT = 1;
+        NOTSET = 0; // Proto3 doesn't distinguish between field that is empty or is set to it's default (value = 0).
+        DIALOGFLOW = 1;
+        DUMMYAGENT = 2;
     }
     string response_id = 1; // The response ID obtained from the Agent.
     google.protobuf.Timestamp time = 2; // The time the response was created.
