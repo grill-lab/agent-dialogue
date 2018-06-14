@@ -59,7 +59,7 @@ class DialogflowAgentAuthorizationSingleton {
         CredentialsProvider credentialsProvider = FixedCredentialsProvider.create(
                 (ServiceAccountCredentials.fromStream(new FileInputStream(jsonKeyFileLocation))));
         SessionsSettings sessionsSettings = SessionsSettings.newBuilder().setCredentialsProvider
-                (credentialsProvider).build(); //TODO(Adam) - handle the error given by this
+                (credentialsProvider).build(); // TODO(Adam) - handle the error given by this
         // method, when the authorization fails.
         _sessionsClient = SessionsClient.create(sessionsSettings);
     }
