@@ -15,7 +15,7 @@ import java.time.Instant;
 /**
  * This is a dummy agent created for testing purposes.
  */
-public class DummyAgent implements AgentInterface {
+class DummyAgent implements AgentInterface {
     Timestamp timestamp = Timestamp.newBuilder()
             .setSeconds(Instant.now()
                     .getEpochSecond())

@@ -16,14 +16,14 @@ import java.util.Map;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
- * Modified singleton pattern design class: verifies the creation of new instance of the class
- * based on tuple tupleOfProjectIdAndAuthenticationFile occurrence in the
+ * Modified singleton-design-pattern package-private class: verifies the creation of new instance
+ * of the class based on tuple tupleOfProjectIdAndAuthenticationFile occurrence in the
  * _agentAuthorizationInstances.
  * The only accessible method is getProjectIdAndSessionsClient(), which returns the Tuple of
  * projectID and SessionClient.
  * The class is thread safe.
  */
-public class DialogflowAgentAuthorizationSingleton {
+class DialogflowAgentAuthorizationSingleton {
     private static Map<Tuple<String, String>, DialogflowAgentAuthorizationSingleton>
             _agentAuthorizationInstances;
     private SessionsClient _sessionsClient;
@@ -73,7 +73,9 @@ public class DialogflowAgentAuthorizationSingleton {
      *                                              holds the project ID of a particular agent
      *                                              and the directory location of the file with
      *                                              Service Account key for this particular agent.
-     * @return Tuple<String   ,       SessionsClient> - A data structure holding projectID and
+     * @return Tuple<String               ,                               SessionsClient> - A
+     * data structure holding
+     * projectID and
      * SessionClient required for the authorization.
      * @throws Exception - When a projectID or the Service Account key is either null or empty,
      *                   appropriate exception is thrown.

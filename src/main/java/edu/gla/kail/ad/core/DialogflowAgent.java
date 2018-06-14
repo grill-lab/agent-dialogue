@@ -29,7 +29,7 @@ import static edu.gla.kail.ad.core.DialogflowAgentAuthorizationSingleton
  * A class used to talk to Dialogflow agents.
  * The responses from agent is added to the log.
  */
-public class DialogflowAgent implements AgentInterface {
+class DialogflowAgent implements AgentInterface {
     // The SessionsClient and SessionName are needed for the Dialogflow interaction.
     private SessionsClient _sessionsClient;
     private SessionName _session;
