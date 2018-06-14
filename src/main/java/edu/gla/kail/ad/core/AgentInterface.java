@@ -6,7 +6,7 @@ import edu.gla.kail.ad.core.Log.ResponseLog;
 /**
  * Agent interface is a common interface to different dialogue framework implementations.
  */
-public interface AgentInterface {
+interface AgentInterface {
     /**
      * Return a response for a formatted request.
      *
