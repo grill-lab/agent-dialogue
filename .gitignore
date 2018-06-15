@@ -1,0 +1,9 @@
+
+# User-specific stuff
+.idea
+src/main/resources/
+src/test/
+target/
+dependency-reduced-pom.xml
+agent-dialogue.iml
+.iml
