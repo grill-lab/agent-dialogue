@@ -76,7 +76,7 @@ public class DialogAgentManagerTestMain {
         String logFileDirectory = currentClassPathFile.getParent() +
                 "/src/main/resources/LogFiles/"; // TODO (Adam) Is this line needed?
 
-        String nameOfTestedFile = "possible_invalid_inputs.txt";
+        String nameOfTestedFile = "SampleConversation.txt";
         String nameOfFileWithProjectIdAndKeysLocations = "ProjectIdAndJsonKeyFileLocations.txt";
 
         // Add the agents, we want to test, from text file.
