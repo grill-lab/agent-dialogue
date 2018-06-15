@@ -19,8 +19,8 @@ public class ConfigurationTuple<T> {
 
     /**
      * @param supportedAgentTypes - The type of the agent.
-     * @param agentSpecificData   - A list of generic type objects, that stores the data required
-     *                            by a particular agent.
+     * @param agentSpecificData - A list of generic type objects, that stores the data
+     *         required by a particular agent.
      */
     public ConfigurationTuple(SupportedAgentTypes supportedAgentTypes, @Nullable List<T>
             agentSpecificData) {

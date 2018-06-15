@@ -16,11 +16,10 @@ import java.util.Map;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
- * Modified singleton-design-pattern package-private class: verifies the creation of new instance
- * of the class based on tuple tupleOfProjectIdAndAuthenticationFile occurrence in the
- * _agentAuthorizationInstances.
- * The only accessible method is getProjectIdAndSessionsClient(), which returns the Tuple of
- * projectID and SessionClient.
+ * Modified singleton-design-pattern package-private class: verifies the creation of new instance of
+ * the class based on tuple tupleOfProjectIdAndAuthenticationFile occurrence in the
+ * _agentAuthorizationInstances. The only accessible method is getProjectIdAndSessionsClient(),
+ * which returns the Tuple of projectID and SessionClient.
  * The class is thread safe.
  */
 class DialogflowAgentAuthorizationSingleton {
@@ -30,15 +29,14 @@ class DialogflowAgentAuthorizationSingleton {
     private String _projectId;
 
     /**
-     * Create the SessionClients and project for all the agents which project ID and Service
-     * Account key file directories are provided.
+     * Create the SessionClients and project for all the agents which project ID and Service Account
+     * key file directories are provided.
      *
-     * @param tupleOfProjectIdAndAuthenticationFile - A tuple specific for DialogflowAgent. It
-     *                                              holds the project ID of a particular agent
-     *                                              and the directory location of the file with
-     *                                              Service Account key for this particular agent.
-     * @throws Exception - When a projectID or the Service Account key is either null or empty,
-     *                   appropriate exception is thrown.
+     * @param tupleOfProjectIdAndAuthenticationFile - A tuple specific for DialogflowAgent.
+     *         It holds the project ID of a particular agent and the directory location of the file
+     *         with Service Account key for this particular agent.
+     * @throws Exception - When a projectID or the Service Account key is either null or
+     *         empty, appropriate exception is thrown.
      */
     private DialogflowAgentAuthorizationSingleton(Tuple<String, String>
                                                           tupleOfProjectIdAndAuthenticationFile)
@@ -66,19 +64,22 @@ class DialogflowAgentAuthorizationSingleton {
 
     /**
      * Thread safe method, verifying the existence of an instance of
-     * DialogflowAgentAuthorizationSingleton corresponding to a passed tuple, which returns the
-     * Tuple of projectID and SessionClient.
+     * DialogflowAgentAuthorizationSingleton
+     * corresponding to a passed tuple, which returns the Tuple of projectID and SessionClient.
      *
-     * @param tupleOfProjectIdAndAuthenticationFile - A tuple specific for DialogflowAgent. It
-     *                                              holds the project ID of a particular agent
-     *                                              and the directory location of the file with
-     *                                              Service Account key for this particular agent.
-     * @return Tuple<String               ,                               SessionsClient> - A
-     * data structure holding
-     * projectID and
-     * SessionClient required for the authorization.
-     * @throws Exception - When a projectID or the Service Account key is either null or empty,
-     *                   appropriate exception is thrown.
+     * @param tupleOfProjectIdAndAuthenticationFile - A tuple specific for DialogflowAgent.
+     *         It holds the project ID of a particular agent and the directory location of the file
+     *         with Service Account key for this particular agent.
+     * @return Tuple<String
+                       *
+                       *                                       ,
+                       *
+                       *                                       SessionsClient> - A data structure
+     *         holding projectID and
+     *         SessionClient required for
+     *         the authorization.
+     * @throws Exception - When a projectID or the Service Account key is either null or
+     *         empty, appropriate exception is thrown.
      */
     public static synchronized Tuple<String, SessionsClient> getProjectIdAndSessionsClient
     (Tuple<String, String> tupleOfProjectIdAndAuthenticationFile) throws Exception {

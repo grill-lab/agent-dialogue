@@ -23,17 +23,15 @@ public class DialogAgentManagerTestMain {
     private static List<ConfigurationTuple> _configurationTuples;
 
     /**
-     * Add ConfigurationTuples to the _configurationTuples.
-     * This is just for testing purposes
-     * TODO(Adam): implement the System.get.property("user.dir");
-     * File_check if exists()
+     * Add ConfigurationTuples to the _configurationTuples. This is just for testing purposes
+     * TODO(Adam): implement the System.get.property("user.dir"); File_check if exists()
      * file.mkDirsc).
      *
-     * @param fileDirectory - It specifies the directory of the file with data used to set up
-     *                      agents. Each line has one agent entry, which specified agent type
-     *                      parameters required by this agent separated with ",".
-     * @throws Exception - It is thrown when the given type name of the agent is not correctly
-     *                   *                     formatted or the agent type is not supported yet.
+     * @param fileDirectory - It specifies the directory of the file with data used to set
+     *         up agents. Each line has one agent entry, which specified agent type parameters
+     *         required by this agent separated with ",".
+     * @throws Exception - It is thrown when the given type name of the agent is not
+     *         correctly formatted or the agent type is not supported yet.
      */
     private static void readProjectIdAndKeyFileToHashMap(String fileDirectory) throws Exception {
         _configurationTuples = new ArrayList();
@@ -78,10 +76,10 @@ public class DialogAgentManagerTestMain {
         String logFileDirectory = currentClassPathFile.getParent() +
                 "/src/main/resources/LogFiles/"; // TODO (Adam) Is this line needed?
 
-        String nameOfTestedFile = "SampleConversation.txt";
+        String nameOfTestedFile = "possible_invalid_inputs.txt";
         String nameOfFileWithProjectIdAndKeysLocations = "ProjectIdAndJsonKeyFileLocations.txt";
 
-        // Add the agents we want to test from text file.
+        // Add the agents, we want to test, from text file.
         readProjectIdAndKeyFileToHashMap(testTextFileDirectory +
                 nameOfFileWithProjectIdAndKeysLocations);
 
