@@ -1,0 +1,46 @@
+syntax = "proto3";
+
+package edu.gla.kail.ad.core;
+
+option java_package = "edu.gla.kail.ad.core";
+
+import "google/protobuf/timestamp.proto";
+
+// This protobuffer is used for storing the data that is being obtained from the client
+// and that is being sent back to the client.
+
+message InteractionRequest {
+    google.protobuf.Timestamp time = 1; // The time of the creation of the request
+    string client_id = 2; // The ID of the client the request is sent from.
+    InputInteraction interaction = 3;
+}
+
+message InteractionResponse {
+    string response_id = 1; // The ID assigned by the Agent.
+    google.protobuf.Timestamp time = 2; // The time of the creation of the response.
+    string client_id = 3; // The ID of the client the request is sent from.
+    repeated OutputInteraction interaction = 4;
+}
+
+enum InteractionType {
+    NOTSET = 0; // Proto3 doesn't distinguish between field that is empty or is set to it's default (value = 0).
+    TEXT = 1;
+    AUDIO = 2;
+    ACTION = 3;
+}
+
+message InputInteraction {
+    string text = 1; // The text that is being sent to the Agent.
+    string audio_bytes = 2; // The audio bytes that are being sent to the Agent.
+    repeated string action = 3; // The requested interaction (e.g. "click on a result").
+    InteractionType type = 4;
+    string device_type = 5; // The type of the device the request is sent from.
+    string language_code = 6; // The language code, e.g. "en-US".
+}
+
+message OutputInteraction {
+    string text = 1; // The text that is being sent as the response by the Agent.
+    string audio_bytes = 2; // The audio bytes that are being sent as the response by the Agent.
+    repeated string action = 3; // The requested interaction (e.g. "click on a result").
+    InteractionType type = 4;
+}
