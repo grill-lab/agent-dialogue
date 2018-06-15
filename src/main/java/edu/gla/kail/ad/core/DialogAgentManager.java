@@ -20,12 +20,12 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * Conversation management includes handling session state, including starting sessions (assigning
  * session IDs), as well as request identifiers. It also handles serialization of conversation log
  * data.
- * <p>
+ *
  * Instruction of usage:
  * 1) Set up the Dialog agents using setUpAgents function
  * 2) Call the getResponseFromAgent for required inputs
  * 3) Use ranking function. TODO(Adam): further part needs to be implemented
- * <p>
+ *
  * Example usage :
  * DialogAgentManager dialogAgentManager = new DialogAgentManager();
  * dialogAgentManager.setUpAgents(_configurationTuples);
@@ -71,10 +71,10 @@ public class DialogAgentManager {
     /**
      * Set up (e.g. authenticate) all agents and store them to the list of agents.
      *
-     * @param configurationTuples - The list stores the entities of ConfigurationTuple, which
-     *                            holds data required by each agent.
-     * @throws Exception                - Raised by _agents.add(new DialogflowAgent(_sessionId,
-     *                                  agentSpecificData.get(0)));
+     * @param configurationTuples - The list stores the entities of ConfigurationTuple,
+     *         which holds data required by each agent.
+     * @throws Exception - Raised by _agents.add(new DialogflowAgent(_sessionId,
+     *         agentSpecificData.get(0)));
      * @throws IllegalArgumentException
      */
     public void setUpAgents(List<ConfigurationTuple> configurationTuples) throws
@@ -110,10 +110,10 @@ public class DialogAgentManager {
      * Return the list of responses for a given request.
      * TODO(Adam): Maybe store the logs after each conversation; need to decide later on.
      *
-     * @param interactionRequest - The a data structure (implemented in log.proto) holding the
-     *                           interaction from a client.
-     * @return List<ResponseLog> - The list of responses of all agents set up on the setUpAgents
-     * (...) function call.
+     * @param interactionRequest - The a data structure (implemented in log.proto) holding
+     *         the interaction from a client.
+     * @return List<ResponseLog> - The list of responses of all agents set up on the
+     *         setUpAgents(...) function call.
      * @throws Exception
      */
     public List<ResponseLog> getResponsesFromAgents(InteractionRequest interactionRequest) throws
@@ -123,14 +123,14 @@ public class DialogAgentManager {
             throw new Exception("The list of agents is empty!");
         }
 
-        // Set current time on Timestamp.
         Timestamp timestamp = Timestamp.newBuilder()
                 .setSeconds(Instant.now()
                         .getEpochSecond())
                 .setNanos(Instant.now()
                         .getNano())
                 .build();
-        // Convert InteractionRequest to RequestLog.
+
+        // Save data from InteractionRequest to RequestLog.
         RequestLog requestLog = RequestLog.newBuilder()
                 .setRequestId(getRandomID())
                 .setTime(timestamp)

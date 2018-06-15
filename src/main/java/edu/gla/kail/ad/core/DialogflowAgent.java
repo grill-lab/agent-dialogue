@@ -40,14 +40,12 @@ class DialogflowAgent implements AgentInterface {
     /**
      * Initialize a ready-to-work DialogflowAgent.
      *
-     * @param sessionId                            - A unique ID passed to the function by
-     *                                             DialogAgentManager.
-     * @param tupleOfProjectIdAndAuthorizationFile - A tuple specific for DialogflowAgent. It
-     *                                             holds the project ID of a particular agent and
-     *                                             the directory location of the file with
-     *                                             Service Account key for this particular agent.
-     * @throws Exception - T setUpAgent function may throw exception if the data passed in the
-     *                   tupleOfProjectIdAndAuthorizationFile is invalid.
+     * @param sessionId - A unique ID passed to the function by DialogAgentManager.
+     * @param tupleOfProjectIdAndAuthorizationFile - A tuple specific for DialogflowAgent.
+     *         It holds the project ID of a particular agent and the directory location of the file
+     *         with Service Account key for this particular agent.
+     * @throws Exception - T setUpAgent function may throw exception if the data passed in
+     *         the tupleOfProjectIdAndAuthorizationFile is invalid.
      */
     public DialogflowAgent(String sessionId,
                            Tuple<String, String>
@@ -60,12 +58,11 @@ class DialogflowAgent implements AgentInterface {
      * Create the SessionClients and SessionNames for all the agents which project ID and Service
      * Account key file directories are provided.
      *
-     * @param tupleOfProjectIdAndAuthenticationFile - A tuple specific for DialogflowAgent. It
-     *                                              holds the project ID of a particular agent
-     *                                              and the directory location of the file with
-     *                                              Service Account key for this particular agent.
-     * @throws Exception - When a projectID or the Service Account key is either null or empty,
-     *                   appropriate exception is thrown.
+     * @param tupleOfProjectIdAndAuthenticationFile - A tuple specific for DialogflowAgent.
+     *         It holds the project ID of a particular agent and the directory location of the file
+     *         with Service Account key for this particular agent.
+     * @throws Exception - When a projectID or the Service Account key is either null or
+     *         empty, appropriate exception is thrown.
      */
     private void setUpAgent(Tuple<String, String>
                                     tupleOfProjectIdAndAuthenticationFile) throws Exception {
@@ -79,11 +76,11 @@ class DialogflowAgent implements AgentInterface {
      * Validate the inputInteraction for Dialogflow usage.
      * Checks: inputInteraction, type, respective type field, language code.
      *
-     * @param inputInteraction - A data structure (implemented in log.proto) holding the incoming
-     *                         interaction that is being sent to an agent.
+     * @param inputInteraction - A data structure (implemented in log.proto) holding the
+     *         incoming interaction that is being sent to an agent.
      * @throws IllegalArgumentException
      */
-    private void validateInputInteractionValidity(InputInteraction inputInteraction) throws
+    private void validateInputInteraction(InputInteraction inputInteraction) throws
             IllegalArgumentException {
         checkNotNull(inputInteraction, "The passed inputInteraction is null!");
         if (checkNotNull(inputInteraction.getLanguageCode(), "The inputInteraction LanguageCode " +
@@ -125,14 +122,14 @@ class DialogflowAgent implements AgentInterface {
     /**
      * Return Query input for any type of inputInteraction the user may get: audio, text or action.
      *
-     * @param inputInteraction - A data structure (implemented in log.proto) holding the incoming
-     *                         interaction that is being sent to an agent.
+     * @param inputInteraction - A data structure (implemented in log.proto) holding the
+     *         incoming interaction that is being sent to an agent.
      * @return queryInput - A data structure which holds the query that needs to be send to
-     * Dialogflow.
+     *         Dialogflow.
      * @throws IllegalArgumentException
      */
     private QueryInput provideQuery(InputInteraction inputInteraction) {
-        validateInputInteractionValidity(inputInteraction);
+        validateInputInteraction(inputInteraction);
         // Get a response from a Dialogflow agent for a particular request (inputInteraction type).
         switch (inputInteraction.getType()) {
             case TEXT:
@@ -168,18 +165,17 @@ class DialogflowAgent implements AgentInterface {
 
     /**
      * @throws IllegalArgumentException - The exception is being thrown when the type of the
-     *                                  interaction requested is not recognised or supported.
+     *         interaction requested is not recognised or supported.
      */
     @Override
     public ResponseLog getResponseFromAgent(InputInteraction inputInteraction) throws
             IllegalArgumentException {
         QueryInput queryInput = provideQuery(inputInteraction);
         // Set up Dialogflow classes' instances used for obtaining the response.
-        // What do do her when things go wrong?  Handle RPC errors?  Throw an exception?
+        // TODO(Adam): What do do her when things go wrong?  Handle RPC errors?  Throw an exception?
         DetectIntentResponse response = _sessionsClient.detectIntent(_session, queryInput);
         QueryResult queryResult = response.getQueryResult();
 
-        // Get current time.
         Timestamp timestamp = Timestamp.newBuilder()
                 .setSeconds(Instant.now()
                         .getEpochSecond())
@@ -187,20 +183,18 @@ class DialogflowAgent implements AgentInterface {
                         .getNano())
                 .build();
 
-        // Safe values to response log builder instance.
         ResponseLog.Builder responseLogBuilder = ResponseLog.newBuilder()
                 .setResponseId(response.getResponseId())
                 .setTime(timestamp)
                 .setServiceProvider(ServiceProvider.DIALOGFLOW)
                 .setRawResponse(response.toString());
 
-        // Create SystemAct builder with values of
         SystemAct.Builder systemActBuilder = SystemAct.newBuilder()
                 .setAction(queryResult.getAction())
                 .setInteraction(OutputInteraction.newBuilder()
-                        .setType(InteractionType.TEXT) // TODO(Adam): If more advanced
-                        // Dialogflow agents can send a response with differnet interaction
-                        // type, this needs to be changed.
+                        .setType(InteractionType.TEXT) // TODO(Adam): If more advanced Dialogflow
+                        // agents can send a response with different interaction type, this needs
+                        // to be changed.
                         .setText(queryResult.getFulfillmentText())
                         .build());
         for (Context context : queryResult.getOutputContextsList()) {
@@ -215,8 +209,7 @@ class DialogflowAgent implements AgentInterface {
         }
         responseLogBuilder.addAction(systemActBuilder.build());
 
-        // TODO(Adam) Remove after the log writing to files is implemented; now we can see
-        // the output.
+        // TODO(Adam) Remove when the log saving is implemented. Currently we can see the output.
         System.out.println("------------------------------------------------------------------\n" +
                 "\n Dialogflow response: \n\n" + responseLogBuilder.build().toString());
         return responseLogBuilder.build();
