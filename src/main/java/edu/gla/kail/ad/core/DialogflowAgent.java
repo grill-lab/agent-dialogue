@@ -29,6 +29,8 @@ import static edu.gla.kail.ad.core.DialogflowAgentAuthorizationSingleton
 /**
  * A class used to talk to Dialogflow agents.
  * The responses from agent is added to the log.
+ * The request sent to the agent are validated. (There are no invalid characters which can crash
+ * dialogflow)
  */
 class DialogflowAgent implements AgentInterface {
     // The SessionsClient and SessionName are needed for the Dialogflow interaction.
@@ -197,6 +199,7 @@ class DialogflowAgent implements AgentInterface {
                         // to be changed.
                         .setText(queryResult.getFulfillmentText())
                         .build());
+
         for (Context context : queryResult.getOutputContextsList()) {
             // Set the slot's name and value for every Slot.
             for (Map.Entry<String, Value> parameterEntry : context.getParameters()
