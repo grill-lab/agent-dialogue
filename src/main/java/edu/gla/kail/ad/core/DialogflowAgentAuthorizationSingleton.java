@@ -22,7 +22,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * which returns the Tuple of projectID and SessionClient.
  * The class is thread safe.
  */
-class DialogflowAgentAuthorizationSingleton {
+final class DialogflowAgentAuthorizationSingleton {
     private static Map<Tuple<String, String>, DialogflowAgentAuthorizationSingleton>
             _agentAuthorizationInstances;
     private SessionsClient _sessionsClient;
