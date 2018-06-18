@@ -4,6 +4,9 @@ import com.google.cloud.Tuple;
 import com.google.protobuf.Timestamp;
 import edu.gla.kail.ad.core.Client.InputInteraction;
 import edu.gla.kail.ad.core.Client.InteractionRequest;
+import edu.gla.kail.ad.core.Client.InteractionResponse;
+import edu.gla.kail.ad.core.Client.InteractionType;
+import edu.gla.kail.ad.core.Client.OutputInteraction;
 import edu.gla.kail.ad.core.Log.RequestLog;
 import edu.gla.kail.ad.core.Log.ResponseLog;
 
@@ -44,6 +47,34 @@ public class DialogAgentManager {
      */
     public DialogAgentManager() {
         startSession();
+    }
+
+    /**
+     * Method used for testing the server.
+     * TODO(Adam): Delete after testing is done.
+     *
+     * @param interactionRequest
+     * @throws Exception
+     */
+    public InteractionResponse getResponseFromAgentAsInteractionResponse(InteractionRequest
+                                                                                 interactionRequest)
+            throws Exception {
+        InteractionResponse interactionResponse = InteractionResponse.newBuilder()
+                .setResponseId("Setting response Id was successful")
+                .setTime(Timestamp.newBuilder()
+                        .setSeconds(Instant.now()
+                                .getEpochSecond())
+                        .setNanos(Instant.now()
+                                .getNano())
+                        .build())
+                .setClientId("Setting Client Id was successful")
+                .addInteraction(OutputInteraction.newBuilder()
+                        .setType(InteractionType.TEXT)
+                        .setText("Setting OutputInteraction text was succrssful")
+                        .addAction("Adding OutputInteraction Action was successful")
+                        .build())
+                .build();
+        return interactionResponse;
     }
 
     /**
@@ -145,7 +176,6 @@ public class DialogAgentManager {
         }
         return listOfResponseLogs;
     }
-
     // TODO(Adam): Raking leaves?;
 
     // TODO(Adam): store the conversation in the log as a single Turn

@@ -18,6 +18,7 @@
         <os-maven-plugin.version>1.6.0</os-maven-plugin.version>
         <kotlin.version>1.2.50</kotlin.version>
         <jetty.version>9.4.11.v20180605</jetty.version>
+        <jersey.verstion>2.17</jersey.verstion>
     </properties>
 
     <dependencies>
@@ -33,13 +34,33 @@
         </dependency>
         <dependency>
             <groupId>org.eclipse.jetty</groupId>
-            <artifactId>jetty-adServer</artifactId>
+            <artifactId>jetty-server</artifactId>
             <version>${jetty.version}</version>
         </dependency>
         <dependency>
             <groupId>org.eclipse.jetty</groupId>
             <artifactId>jetty-servlet</artifactId>
             <version>${jetty.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.glassfish.jersey.core</groupId>
+            <artifactId>jersey-client</artifactId>
+            <version>${jersey.verstion}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.glassfish.jersey.core</groupId>
+            <artifactId>jersey-server</artifactId>
+            <version>${jersey.verstion}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.glassfish.jersey.containers</groupId>
+            <artifactId>jersey-container-jetty-servlet</artifactId>
+            <version>${jersey.verstion}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.glassfish.jersey.media</groupId>
+            <artifactId>jersey-media-json-jackson</artifactId>
+            <version>${jersey.verstion}</version>
         </dependency>
     </dependencies>
 
