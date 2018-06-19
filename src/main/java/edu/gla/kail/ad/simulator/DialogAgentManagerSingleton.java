@@ -1,4 +1,4 @@
-package edu.gla.kail.ad.server;
+package edu.gla.kail.ad.simulator;
 
 import com.google.cloud.Tuple;
 import edu.gla.kail.ad.core.ConfigurationTuple;
