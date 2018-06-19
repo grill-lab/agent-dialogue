@@ -11,7 +11,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * initialization.
  * The class is parameterized - it uses the generic type: T.
  */
-public class ConfigurationTuple<T> {
+public final class ConfigurationTuple<T> {
     // The type of the particular agent.
     private SupportedAgentTypes _agentType;
     // List of configuration objects specific to the type of agent.

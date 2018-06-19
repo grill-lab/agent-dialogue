@@ -4,9 +4,13 @@ import com.google.cloud.Tuple;
 import com.google.protobuf.Timestamp;
 import edu.gla.kail.ad.core.Client.InputInteraction;
 import edu.gla.kail.ad.core.Client.InteractionRequest;
+import edu.gla.kail.ad.core.Client.InteractionResponse;
+import edu.gla.kail.ad.core.Client.InteractionType;
+import edu.gla.kail.ad.core.Client.OutputInteraction;
 import edu.gla.kail.ad.core.Log.RequestLog;
 import edu.gla.kail.ad.core.Log.ResponseLog;
 
+import java.io.IOException;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
@@ -47,6 +51,33 @@ public class DialogAgentManager {
     }
 
     /**
+     * Method used for testing the server.
+     * TODO(Adam): Delete after testing is done.
+     *
+     * @param interactionRequest - interactionRequest sent by the client.
+     * @return
+     */
+    public InteractionResponse getResponseFromAgentAsInteractionResponse(InteractionRequest
+                                                                                 interactionRequest) {
+        InteractionResponse interactionResponse = InteractionResponse.newBuilder()
+                .setResponseId("Setting response Id was successful")
+                .setTime(Timestamp.newBuilder()
+                        .setSeconds(Instant.now()
+                                .getEpochSecond())
+                        .setNanos(Instant.now()
+                                .getNano())
+                        .build())
+                .setClientId("Setting Client Id was successful")
+                .addInteraction(OutputInteraction.newBuilder()
+                        .setType(InteractionType.TEXT)
+                        .setText("Setting OutputInteraction text was succrssful")
+                        .addAction("Adding OutputInteraction Action was successful")
+                        .build())
+                .build();
+        return interactionResponse;
+    }
+
+    /**
      * Create a unique sessionId.
      */
     private void startSession() {
@@ -73,12 +104,12 @@ public class DialogAgentManager {
      *
      * @param configurationTuples - The list stores the entities of ConfigurationTuple,
      *         which holds data required by each agent.
-     * @throws Exception - Raised by _agents.add(new DialogflowAgent(_sessionId,
-     *         agentSpecificData.get(0)));
-     * @throws IllegalArgumentException
+     * @throws IllegalArgumentException - Raised by _agents.add(new
+     *         DialogflowAgent(_sessionId, agentSpecificData.get(0)));
+     * @throws IOException
      */
     public void setUpAgents(List<ConfigurationTuple> configurationTuples) throws
-            IllegalArgumentException, Exception {
+            IllegalArgumentException, IOException {
         _agents = new ArrayList();
         for (ConfigurationTuple configurationTuple : configurationTuples) {
             switch (configurationTuple.get_agentType()) {
@@ -145,7 +176,6 @@ public class DialogAgentManager {
         }
         return listOfResponseLogs;
     }
-
     // TODO(Adam): Raking leaves?;
 
     // TODO(Adam): store the conversation in the log as a single Turn

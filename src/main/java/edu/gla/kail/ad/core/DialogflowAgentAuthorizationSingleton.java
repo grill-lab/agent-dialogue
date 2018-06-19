@@ -10,6 +10,7 @@ import com.google.cloud.dialogflow.v2beta1.SessionsSettings;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -22,7 +23,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * which returns the Tuple of projectID and SessionClient.
  * The class is thread safe.
  */
-class DialogflowAgentAuthorizationSingleton {
+final class DialogflowAgentAuthorizationSingleton {
     private static Map<Tuple<String, String>, DialogflowAgentAuthorizationSingleton>
             _agentAuthorizationInstances;
     private SessionsClient _sessionsClient;
@@ -35,19 +36,19 @@ class DialogflowAgentAuthorizationSingleton {
      * @param tupleOfProjectIdAndAuthenticationFile - A tuple specific for DialogflowAgent.
      *         It holds the project ID of a particular agent and the directory location of the file
      *         with Service Account key for this particular agent.
-     * @throws Exception - When a projectID or the Service Account key is either null or
-     *         empty, appropriate exception is thrown.
+     * @throws FileNotFoundException
+     * @throws IllegalArgumentException
      */
     private DialogflowAgentAuthorizationSingleton(Tuple<String, String>
                                                           tupleOfProjectIdAndAuthenticationFile)
-            throws Exception {
+            throws FileNotFoundException, IllegalArgumentException, IOException {
         checkNotNull(tupleOfProjectIdAndAuthenticationFile, "The passed tuple is null!");
         _projectId = checkNotNull(tupleOfProjectIdAndAuthenticationFile.x(), "The project " +
                 "ID is null!");
         String jsonKeyFileLocation = checkNotNull(tupleOfProjectIdAndAuthenticationFile.y(), "The" +
                 " JSON file location is null!");
         if (_projectId.isEmpty()) {
-            throw new Exception("The provided project ID of the service is empty!");
+            throw new IllegalArgumentException("The provided project ID of the service is empty!");
         }
         if (!new File(jsonKeyFileLocation).isFile()) {
             throw new FileNotFoundException("The location of the JSON key file provided does not " +
@@ -78,11 +79,11 @@ class DialogflowAgentAuthorizationSingleton {
      *         holding projectID and
      *         SessionClient required for
      *         the authorization.
-     * @throws Exception - When a projectID or the Service Account key is either null or
+     * @throws IOException - When a projectID or the Service Account key is either null or
      *         empty, appropriate exception is thrown.
      */
     public static synchronized Tuple<String, SessionsClient> getProjectIdAndSessionsClient
-    (Tuple<String, String> tupleOfProjectIdAndAuthenticationFile) throws Exception {
+    (Tuple<String, String> tupleOfProjectIdAndAuthenticationFile) throws IOException {
         if (_agentAuthorizationInstances == null) {
             _agentAuthorizationInstances = new HashMap();
         }
