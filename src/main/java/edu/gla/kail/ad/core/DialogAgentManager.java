@@ -10,6 +10,7 @@ import edu.gla.kail.ad.core.Client.OutputInteraction;
 import edu.gla.kail.ad.core.Log.RequestLog;
 import edu.gla.kail.ad.core.Log.ResponseLog;
 
+import java.io.IOException;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
@@ -54,11 +55,10 @@ public class DialogAgentManager {
      * TODO(Adam): Delete after testing is done.
      *
      * @param interactionRequest - interactionRequest sent by the client.
-     * @throws Exception
+     * @return
      */
     public InteractionResponse getResponseFromAgentAsInteractionResponse(InteractionRequest
-                                                                                 interactionRequest)
-            throws Exception {
+                                                                                 interactionRequest) {
         InteractionResponse interactionResponse = InteractionResponse.newBuilder()
                 .setResponseId("Setting response Id was successful")
                 .setTime(Timestamp.newBuilder()
@@ -104,12 +104,12 @@ public class DialogAgentManager {
      *
      * @param configurationTuples - The list stores the entities of ConfigurationTuple,
      *         which holds data required by each agent.
-     * @throws Exception - Raised by _agents.add(new DialogflowAgent(_sessionId,
-     *         agentSpecificData.get(0)));
-     * @throws IllegalArgumentException
+     * @throws IllegalArgumentException - Raised by _agents.add(new
+     *         DialogflowAgent(_sessionId, agentSpecificData.get(0)));
+     * @throws IOException
      */
     public void setUpAgents(List<ConfigurationTuple> configurationTuples) throws
-            IllegalArgumentException, Exception {
+            IllegalArgumentException, IOException {
         _agents = new ArrayList();
         for (ConfigurationTuple configurationTuple : configurationTuples) {
             switch (configurationTuple.get_agentType()) {

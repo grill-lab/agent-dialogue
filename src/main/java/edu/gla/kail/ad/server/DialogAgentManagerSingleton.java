@@ -7,6 +7,7 @@ import edu.gla.kail.ad.core.DialogAgentManagerTestMain;
 import edu.gla.kail.ad.core.SupportedAgentTypes;
 
 import java.io.File;
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -34,7 +35,7 @@ final class DialogAgentManagerSingleton {
      * @throws Exception
      */
     static synchronized DialogAgentManager getDialogAgentManager(String clientId) throws
-            Exception {
+            IOException {
         if (_instance == null) {
             _instance = new DialogAgentManagerSingleton();
         }
@@ -56,7 +57,7 @@ final class DialogAgentManagerSingleton {
      * @return List<ConfigurationTuple> - the tuples used to set up agents
      * @throws Exception
      */
-    private static List<ConfigurationTuple> supportingFunctionToBeDeleted() throws Exception {
+    private static List<ConfigurationTuple> supportingFunctionToBeDeleted() throws IOException {
         List<ConfigurationTuple> configurationTuples = new ArrayList();
         File currentClassPathFile = new File(DialogAgentManagerTestMain.class.getProtectionDomain()
                 .getCodeSource().getLocation().getPath()).getParentFile();

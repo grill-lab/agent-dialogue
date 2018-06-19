@@ -18,6 +18,7 @@ import edu.gla.kail.ad.core.Log.ResponseLog.ServiceProvider;
 import edu.gla.kail.ad.core.Log.Slot;
 import edu.gla.kail.ad.core.Log.SystemAct;
 
+import java.io.IOException;
 import java.time.Instant;
 import java.util.Map;
 
@@ -46,12 +47,12 @@ class DialogflowAgent implements AgentInterface {
      * @param tupleOfProjectIdAndAuthorizationFile - A tuple specific for DialogflowAgent.
      *         It holds the project ID of a particular agent and the directory location of the file
      *         with Service Account key for this particular agent.
-     * @throws Exception - T setUpAgent function may throw exception if the data passed in
+     * @throws IOException - T setUpAgent function may throw exception if the data passed in
      *         the tupleOfProjectIdAndAuthorizationFile is invalid.
      */
     public DialogflowAgent(String sessionId,
                            Tuple<String, String>
-                                   tupleOfProjectIdAndAuthorizationFile) throws Exception {
+                                   tupleOfProjectIdAndAuthorizationFile) throws IOException {
         _sessionId = sessionId;
         setUpAgent(tupleOfProjectIdAndAuthorizationFile);
     }
@@ -63,11 +64,11 @@ class DialogflowAgent implements AgentInterface {
      * @param tupleOfProjectIdAndAuthenticationFile - A tuple specific for DialogflowAgent.
      *         It holds the project ID of a particular agent and the directory location of the file
      *         with Service Account key for this particular agent.
-     * @throws Exception - When a projectID or the Service Account key is either null or
+     * @throws IOException - When a projectID or the Service Account key is either null or
      *         empty, appropriate exception is thrown.
      */
     private void setUpAgent(Tuple<String, String>
-                                    tupleOfProjectIdAndAuthenticationFile) throws Exception {
+                                    tupleOfProjectIdAndAuthenticationFile) throws IOException {
         Tuple<String, SessionsClient> projectIdAndSessionsClient = getProjectIdAndSessionsClient
                 (tupleOfProjectIdAndAuthenticationFile);
         _sessionsClient = projectIdAndSessionsClient.y();
