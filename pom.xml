@@ -16,10 +16,27 @@
         <mainClass>edu.gla.kail.ad.DialogManagerTestMain</mainClass>
         <protobuf.version>3.5.1</protobuf.version>
         <os-maven-plugin.version>1.6.0</os-maven-plugin.version>
-        <kotlin.version>1.2.50</kotlin.version>
         <jetty.version>9.4.11.v20180605</jetty.version>
         <jersey.verstion>2.17</jersey.verstion>
+        <kotlin.version>1.2.50</kotlin.version>
+        <ktor.version>0.9.2</ktor.version>
+        <junit.version>4.12</junit.version>
     </properties>
+
+    <repositories>
+        <repository>
+            <id>ktor</id>
+            <url>http://dl.bintray.com/kotlin/ktor</url>
+        </repository>
+        <repository>
+            <id>kotlinx</id>
+            <url>http://dl.bintray.com/kotlin/kotlinx</url>
+        </repository>
+        <repository>
+            <id>jcenter</id>
+            <url>http://jcenter.bintray.com</url>
+        </repository>
+    </repositories>
 
     <dependencies>
         <dependency>
@@ -58,9 +75,30 @@
             <version>${jersey.verstion}</version>
         </dependency>
         <dependency>
+            <groupId>org.jetbrains.kotlin</groupId>
+            <artifactId>kotlin-stdlib</artifactId>
+            <version>${kotlin.version}</version>
+        </dependency>
+        <dependency>
             <groupId>org.glassfish.jersey.media</groupId>
             <artifactId>jersey-media-json-jackson</artifactId>
             <version>${jersey.verstion}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jetbrains.kotlin</groupId>
+            <artifactId>kotlin-test-junit</artifactId>
+            <version>${kotlin.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.ktor</groupId>
+            <artifactId>ktor-server-core</artifactId>
+            <version>${ktor.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.ktor</groupId>
+            <artifactId>ktor-server-jetty</artifactId>
+            <version>${ktor.version}</version>
         </dependency>
     </dependencies>
 
@@ -183,7 +221,7 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <jvmTarget>1.8</jvmTarget>
+                    <jvmTarget>${java.version}</jvmTarget>
                 </configuration>
             </plugin>
             <plugin>
