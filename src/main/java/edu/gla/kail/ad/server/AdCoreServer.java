@@ -12,12 +12,13 @@ public class AdCoreServer {
     public static void main(String[] args) throws Exception {
         Server server = new Server(8080);
 
-        /*HandlerList handlers = new HandlerList();
+        /* Alternative implementation with handlers, without using Jersey? Abandoned for now.
+        HandlerList handlers = new HandlerList();
         handlers.setHandlers(new Handler[] { new AdCoreHandler() , new DefaultHandler() });
         server.setHandler(handlers);*/
 
         ServletContextHandler servletContextHandler = new ServletContextHandler(NO_SESSIONS); //
-        // TODO(Jeff): if it's REST the session should be stateless, otherwise we should have
+        // TODO(Jeff): if it is REST, the session should be stateless, otherwise we should have
         // session, shouldn't we?
 
         servletContextHandler.setContextPath("/"); // Set context path to the root.
@@ -31,8 +32,8 @@ public class AdCoreServer {
         // with order>=0 are initialized in increasing order when the handler is started."
 
         server.start();
-        server.dumpStdErr(); // TODO(Adam): no idea what it does!
+        // server.dumpStdErr(); TODO(Adam): not sure if we need it
         server.join();
-        //  server.destroy();
+        //  server.destroy(); TODO(Adam): not sure if we need it
     }
 }
