@@ -1,11 +1,9 @@
 package edu.gla.kail.ad.server;
 
-import com.google.protobuf.ByteString;
 import edu.gla.kail.ad.core.Client.InteractionRequest;
 import edu.gla.kail.ad.core.Client.InteractionResponse;
 import edu.gla.kail.ad.core.DialogAgentManager;
-
-import java.nio.charset.Charset;
+import com.google.protobuf.util.JsonFormat;
 
 public class TalkToAgents {
     /**
@@ -17,12 +15,13 @@ public class TalkToAgents {
      */
     public static String getInteractionResponse(String stringInteractionRequest)
             throws Exception {
-        ByteString byteStringInteractionRequest = ByteString.copyFrom(stringInteractionRequest, Charset.defaultCharset());
         // TODO(Adam): Extract all the information from the JSON and then check whether it's valid.
-        InteractionRequest interactionRequest = InteractionRequest.parseFrom
-                (byteStringInteractionRequest);
-
         // TODO(Adam): Implement calling agents.
+
+        InteractionRequest.Builder interactionRequestBuilder = InteractionRequest.newBuilder();
+        JsonFormat.parser().merge(stringInteractionRequest, interactionRequestBuilder);
+        InteractionRequest interactionRequest = interactionRequestBuilder.build();
+
         String clientId = interactionRequest.getClientId();
         DialogAgentManager dialogAgentManager = DialogAgentManagerSingleton.getDialogAgentManager
                 (clientId);
@@ -30,7 +29,7 @@ public class TalkToAgents {
         // functionality.
         InteractionResponse interactionResponse = dialogAgentManager
                 .getResponseFromAgentAsInteractionResponse(interactionRequest);
-        return interactionRequest.toByteString().toString();
+        return JsonFormat.printer().print(interactionResponse);
     }
 
 }

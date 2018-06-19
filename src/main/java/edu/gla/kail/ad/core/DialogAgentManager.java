@@ -53,7 +53,7 @@ public class DialogAgentManager {
      * Method used for testing the server.
      * TODO(Adam): Delete after testing is done.
      *
-     * @param interactionRequest
+     * @param interactionRequest - interactionRequest sent by the client.
      * @throws Exception
      */
     public InteractionResponse getResponseFromAgentAsInteractionResponse(InteractionRequest

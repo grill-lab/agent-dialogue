@@ -23,12 +23,8 @@ import java.util.Map;
 final class DialogAgentManagerSingleton {
     // The map of clientId and the DialogAgentManager instances assigned to each session
     // (currently client).
-    private static Map<String, DialogAgentManager> _initializedManagers;
+    private static Map<String, DialogAgentManager> _initializedManagers = new HashMap();
     private static DialogAgentManagerSingleton _instance;
-
-    private DialogAgentManagerSingleton() {
-        _initializedManagers = new HashMap();
-    }
 
     /**
      * @param clientId - The identification String ClientID, which is sent by each client
@@ -37,7 +33,7 @@ final class DialogAgentManagerSingleton {
      *         (currently client).
      * @throws Exception
      */
-    public static synchronized DialogAgentManager getDialogAgentManager(String clientId) throws
+    static synchronized DialogAgentManager getDialogAgentManager(String clientId) throws
             Exception {
         if (_instance == null) {
             _instance = new DialogAgentManagerSingleton();
