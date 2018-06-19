@@ -1,6 +1,7 @@
 package edu.gla.kail.ad.server.resources;
 
-import com.google.protobuf.ByteString;
+import edu.gla.kail.ad.core.Client.InteractionRequest;
+import edu.gla.kail.ad.core.Client.InteractionResponse;
 import edu.gla.kail.ad.server.TalkToAgents;
 
 import javax.ws.rs.Consumes;
@@ -17,17 +18,17 @@ public class AgentInteractionResource {
      * Function returning the InteractionResponse object holding the response chosen by the
      * agent-dialogue-core.
      *
-     * @param byteStringInteractionRequest - A ByteString object created by calling the
+     * @param stringInteractionRequest - A ByteString object created by calling the
      *         toByteString() method on an InteractionRequest object.
      * @return ByteString - A ByteString object created by calling the toByteString() method on an
      *         InteractionResponse.
      * @throws Exception
      */
     @POST
-
+    @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.TEXT_PLAIN)
-    public String getResponsesFromAgents(String byteStringInteractionRequest) throws
+    public String getResponsesFromAgents(String stringInteractionRequest) throws
             Exception {
-        return TalkToAgents.getInteractionResponse(byteStringInteractionRequest);
+        return TalkToAgents.getInteractionResponse(stringInteractionRequest);
     }
 }
