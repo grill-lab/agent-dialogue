@@ -1,6 +1,6 @@
-package edu.gla.kail.ad.server.resources;
+package edu.gla.kail.ad.simulator.resources;
 
-import edu.gla.kail.ad.server.TalkToAgents;
+import edu.gla.kail.ad.simulator.TalkToAgents;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;

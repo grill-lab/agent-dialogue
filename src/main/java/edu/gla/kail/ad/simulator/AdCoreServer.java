@@ -1,4 +1,4 @@
-package edu.gla.kail.ad.server;
+package edu.gla.kail.ad.simulator;
 
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.ServletContextHandler;

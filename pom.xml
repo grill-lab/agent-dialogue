@@ -19,24 +19,8 @@
         <jetty.version>9.4.11.v20180605</jetty.version>
         <jersey.verstion>2.17</jersey.verstion>
         <kotlin.version>1.2.50</kotlin.version>
-        <ktor.version>0.9.2</ktor.version>
         <junit.version>4.12</junit.version>
     </properties>
-
-    <repositories>
-        <repository>
-            <id>ktor</id>
-            <url>http://dl.bintray.com/kotlin/ktor</url>
-        </repository>
-        <repository>
-            <id>kotlinx</id>
-            <url>http://dl.bintray.com/kotlin/kotlinx</url>
-        </repository>
-        <repository>
-            <id>jcenter</id>
-            <url>http://jcenter.bintray.com</url>
-        </repository>
-    </repositories>
 
     <dependencies>
         <dependency>
@@ -91,14 +75,9 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>io.ktor</groupId>
-            <artifactId>ktor-server-core</artifactId>
-            <version>${ktor.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>io.ktor</groupId>
-            <artifactId>ktor-server-jetty</artifactId>
-            <version>${ktor.version}</version>
+            <groupId>org.eclipse.jetty.http2</groupId>
+            <artifactId>http2-client</artifactId>
+            <version>9.4.8.v20171121</version>
         </dependency>
     </dependencies>
 
@@ -119,14 +98,30 @@
         <plugins>
             <!-- this is entirely to set the java version -->
             <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.5.1</version>
+                <executions>
+                    <execution>
+                        <id>compile</id>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>compile</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>testCompile</id>
+                        <phase>test-compile</phase>
+                        <goals>
+                            <goal>testCompile</goal>
+                        </goals>
+                    </execution>
+                </executions>
                 <configuration>
                     <source>${javaVersion}</source>
                     <target>${javaVersion}</target>
                 </configuration>
             </plugin>
-
             <!-- copy dependencies to relative classpath -->
             <plugin>
                 <artifactId>maven-dependency-plugin</artifactId>
@@ -205,12 +200,6 @@
                         <goals>
                             <goal>compile</goal>
                         </goals>
-                        <configuration>
-                            <sourceDirs>
-                                <source>src/main/java</source>
-                                <source>target/generated-sources/protobuf/java</source>
-                            </sourceDirs>
-                        </configuration>
                     </execution>
                     <execution>
                         <id>test-compile</id>
@@ -221,28 +210,14 @@
                     </execution>
                 </executions>
                 <configuration>
+                    <sourceDirs>
+                        <sourceDir>src/main/kotlin</sourceDir>
+                    </sourceDirs>
                     <jvmTarget>${java.version}</jvmTarget>
+                    <args>
+                        <arg>-Xcoroutines=enable</arg>
+                    </args>
                 </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>compile</id>
-                        <phase>compile</phase>
-                        <goals>
-                            <goal>compile</goal>
-                        </goals>
-                    </execution>
-                    <execution>
-                        <id>testCompile</id>
-                        <phase>test-compile</phase>
-                        <goals>
-                            <goal>testCompile</goal>
-                        </goals>
-                    </execution>
-                </executions>
             </plugin>
             <plugin>
                 <groupId>org.eclipse.jetty</groupId>
