@@ -36,7 +36,3 @@ public class AdCoreServer {
         //  server.destroy();
     }
 }
-
-// testing the server:
-/* curl -H "Content-Type: text/plain" -X POST -d '{ "time": "2018-06-19T10:47:05.932Z", "clientId": "Random Client ID", "interaction": { "text": "Sample text", "type": "TEXT", "deviceType": "Iphone whatever", "languageCode": "en-US" } }' http://localhost:8080/rest_api/agent_interaction
-* */
