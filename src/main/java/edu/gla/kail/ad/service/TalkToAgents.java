@@ -1,4 +1,4 @@
-package edu.gla.kail.ad.simulator;
+package edu.gla.kail.ad.service;
 
 import com.google.protobuf.util.JsonFormat;
 import edu.gla.kail.ad.core.Client.InteractionRequest;
