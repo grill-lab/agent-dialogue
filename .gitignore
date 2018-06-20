@@ -5,6 +5,7 @@
 /agent-dialogue-core/target/
 /agent-dialogue-core/agent-dialogue-core.iml
 /agent-dialogue-core/src/test
+agent-dialogue-core/src/main/resources/
 /web-simulator/src/test/
 /web-simulator/target/
 /web-simulator/dependency-reduced-pom.xml
