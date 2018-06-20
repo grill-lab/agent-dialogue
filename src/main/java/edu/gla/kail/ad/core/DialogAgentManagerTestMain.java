@@ -2,9 +2,9 @@ package edu.gla.kail.ad.core;
 
 import com.google.cloud.Tuple;
 import com.google.protobuf.Timestamp;
-import edu.gla.kail.ad.core.Client.InputInteraction;
-import edu.gla.kail.ad.core.Client.InteractionRequest;
-import edu.gla.kail.ad.core.Client.InteractionType;
+import edu.gla.kail.ad.Client.InputInteraction;
+import edu.gla.kail.ad.Client.InteractionRequest;
+import edu.gla.kail.ad.Client.InteractionType;
 
 import java.io.File;
 import java.nio.charset.StandardCharsets;

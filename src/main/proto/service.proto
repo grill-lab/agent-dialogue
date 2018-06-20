@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+package edu.gla.kail.ad.service;
+
+option java_package = "edu.gla.kail.ad.service";
+option java_multiple_files = true;
+
+import "google/protobuf/timestamp.proto";
+import "client.proto";
+
+service GetResponseFromAgents {
+    // Send the response from agents using when InteractionRequest is received.
+    rpc GetResponseFromAgentsRpc (InteractionRequest) returns (InteractionResponse) {}
+}

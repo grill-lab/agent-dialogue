@@ -1,9 +1,9 @@
 package edu.gla.kail.ad.core;
 
 import com.google.protobuf.Timestamp;
-import edu.gla.kail.ad.core.Client.InputInteraction;
-import edu.gla.kail.ad.core.Client.InteractionType;
-import edu.gla.kail.ad.core.Client.OutputInteraction;
+import edu.gla.kail.ad.Client.InputInteraction;
+import edu.gla.kail.ad.Client.InteractionType;
+import edu.gla.kail.ad.Client.OutputInteraction;
 import edu.gla.kail.ad.core.Log.ResponseLog;
 import edu.gla.kail.ad.core.Log.ResponseLog.ServiceProvider;
 import edu.gla.kail.ad.core.Log.Slot;

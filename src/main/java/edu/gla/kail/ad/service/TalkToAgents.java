@@ -1,8 +1,8 @@
 package edu.gla.kail.ad.service;
 
 import com.google.protobuf.util.JsonFormat;
-import edu.gla.kail.ad.core.Client.InteractionRequest;
-import edu.gla.kail.ad.core.Client.InteractionResponse;
+import edu.gla.kail.ad.Client.InteractionRequest;
+import edu.gla.kail.ad.Client.InteractionResponse;
 import edu.gla.kail.ad.core.DialogAgentManager;
 
 import java.io.IOException;
