@@ -20,7 +20,7 @@ public class AgentDialogueClient {
     // respond; return response or raise an exception
 
     public AgentDialogueClient(String host, int port) {
-        this(ManagedChannelBuilder.forAddress(host, port).usePlaintext(true)); // usePlainText
+        this(ManagedChannelBuilder.forAddress(host, port).usePlaintext()); // usePlainText
         // skips negation: true
     }
 
@@ -49,7 +49,7 @@ public class AgentDialogueClient {
                         .addAction("Action set by client")
                         .build())
                 .build();
-        AgentDialogueClient client = new AgentDialogueClient("localhost", 8980);
+        AgentDialogueClient client = new AgentDialogueClient("localhost", 8080);
         InteractionResponse interactionResponse = client.getInteractionResponse(interactionRequest);
         System.out.println(interactionResponse.toString());
         client.shutdown();
@@ -73,9 +73,12 @@ public class AgentDialogueClient {
             throws Exception {
         InteractionResponse interactionResponse;
         try {
+            System.out.print("Request for response sent.");
             interactionResponse = _blockingStub.getResponseFromAgents(interactionRequest);
+            System.out.print("Got response.");
             return interactionResponse;
         } catch (StatusRuntimeException e) {
+            e.printStackTrace();
             throw new Exception("Error occured: " + e.getStatus());
         }
     }
