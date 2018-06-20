@@ -55,7 +55,8 @@ public class DialogAgentManager {
      * TODO(Adam): Delete after testing is done.
      *
      * @param interactionRequest - interactionRequest sent by the client.
-     * @return
+     * @return interactionResponse - dummy instance of InteractionResponse created for testing
+     *         output.
      */
     public InteractionResponse getResponseFromAgentAsInteractionResponse(InteractionRequest
                                                                                  interactionRequest) {
@@ -106,7 +107,7 @@ public class DialogAgentManager {
      *         which holds data required by each agent.
      * @throws IllegalArgumentException - Raised by _agents.add(new
      *         DialogflowAgent(_sessionId, agentSpecificData.get(0)));
-     * @throws IOException
+     * @throws IOException, IllegalArgumentException
      */
     public void setUpAgents(List<ConfigurationTuple> configurationTuples) throws
             IllegalArgumentException, IOException {
@@ -145,13 +146,13 @@ public class DialogAgentManager {
      *         the interaction from a client.
      * @return List<ResponseLog> - The list of responses of all agents set up on the
      *         setUpAgents(...) function call.
-     * @throws Exception
+     * @throws IllegalArgumentException, Exception
      */
     public List<ResponseLog> getResponsesFromAgents(InteractionRequest interactionRequest) throws
-            Exception {
+            IllegalArgumentException, Exception {
         if (checkNotNull(_agents, "agents are not set up! Use the function" +
                 " setUpAgents() first.").isEmpty()) {
-            throw new Exception("The list of agents is empty!");
+            throw new IllegalArgumentException("The list of agents is empty!");
         }
 
         Timestamp timestamp = Timestamp.newBuilder()

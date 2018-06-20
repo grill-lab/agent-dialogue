@@ -17,6 +17,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 /**
  * Class used to hold the instances of DialogAgentManager, which are unique for every session.
  * The current version creates unique DialogAgentManager for every client, not every session!
@@ -32,7 +34,7 @@ final class DialogAgentManagerSingleton {
      *         with every request.
      * @return DialogAgentManager - The instance of DialogAgentManager used for particular session
      *         (currently client).
-     * @throws Exception
+     * @throws IOException
      */
     static synchronized DialogAgentManager getDialogAgentManager(String clientId) throws
             IOException {
@@ -55,15 +57,22 @@ final class DialogAgentManagerSingleton {
      * TODO(Adam): Delete this funtion after the database with agents is set up.
      *
      * @return List<ConfigurationTuple> - the tuples used to set up agents
-     * @throws Exception
+     * @throws IOException
      */
-    private static List<ConfigurationTuple> supportingFunctionToBeDeleted() throws IOException {
+    private static List<ConfigurationTuple> supportingFunctionToBeDeleted() {
         List<ConfigurationTuple> configurationTuples = new ArrayList();
         File currentClassPathFile = new File(DialogAgentManagerTestMain.class.getProtectionDomain()
                 .getCodeSource().getLocation().getPath()).getParentFile();
         Path path = Paths.get(currentClassPathFile.getParent() +
                 "/src/main/resources/TestTextFiles/ProjectIdAndJsonKeyFileLocations.txt");
-        List<String> lines = Files.readAllLines(path, StandardCharsets.UTF_8);
+        List<String> lines;
+        try {
+            lines = Files.readAllLines(path, StandardCharsets.UTF_8);
+        } catch (IOException ioException) {
+            ioException.printStackTrace();
+            lines = null;
+        }
+        checkNotNull(lines, "Reading the file with ProjectIds and Json Authrisation file locations failed!");
         for (String line : lines) {
             String[] projectIdAndJsonKey = line.split(",");
             switch (projectIdAndJsonKey[0]) {
