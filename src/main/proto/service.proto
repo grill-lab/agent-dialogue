@@ -8,7 +8,7 @@ option java_multiple_files = true;
 import "google/protobuf/timestamp.proto";
 import "client.proto";
 
-service GetResponseFromAgents {
+service AgentDialogue {
     // Send the response from agents using when InteractionRequest is received.
-    rpc GetResponseFromAgentsRpc (InteractionRequest) returns (InteractionResponse) {}
+    rpc GetResponseFromAgents (InteractionRequest) returns (InteractionResponse) {}
 }
