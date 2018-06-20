@@ -99,6 +99,7 @@ public class AgentDialogueServer {
         @Override
         public void getResponseFromAgents(InteractionRequest interactionRequest,
                                           StreamObserver<InteractionResponse> responseObserver) {
+            System.out.print("Request received!"); // TODO(Adam): delete after testing
             if (checkNotNull(interactionRequest.getClientId(), "The interactionRequest that have " +
                     "been sent doesn't have ClientID!").isEmpty()) {
                 throw new IllegalArgumentException("The interactionRequest that have been has " +
