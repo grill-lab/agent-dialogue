@@ -1,8 +1,8 @@
 syntax = "proto3";
 
-package edu.gla.kail.ad.core;
+package edu.gla.kail.ad;
 
-option java_package = "edu.gla.kail.ad.core";
+option java_package = "edu.gla.kail.ad";
 
 import "google/protobuf/timestamp.proto";
 

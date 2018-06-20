@@ -1,6 +1,6 @@
 package edu.gla.kail.ad.core;
 
-import edu.gla.kail.ad.core.Client.InputInteraction;
+import edu.gla.kail.ad.Client.InputInteraction;
 import edu.gla.kail.ad.core.Log.ResponseLog;
 
 /**
