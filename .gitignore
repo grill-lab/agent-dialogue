@@ -1,9 +1,11 @@
-
 # User-specific stuff
 .idea
-src/main/resources/
-src/test/
-target/
-dependency-reduced-pom.xml
-agent-dialogue.iml
 .iml
+/agent-dialogue-core/dependency-reduced-pom.xml
+/agent-dialogue-core/target/
+/agent-dialogue-core/agent-dialogue-core.iml
+/agent-dialogue-core/src/test
+/web-simulator/src/test/
+/web-simulator/target/
+/web-simulator/dependency-reduced-pom.xml
+/web-simulator/web-simulator.iml
