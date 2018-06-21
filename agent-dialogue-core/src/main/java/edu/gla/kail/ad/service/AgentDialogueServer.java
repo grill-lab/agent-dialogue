@@ -119,16 +119,5 @@ public class AgentDialogueServer {
                     (interactionRequest));
             responseObserver.onCompleted();
         }
-
-        // TODO(Adam): Delete after testing:
-        @Override
-        public void testingRpc(testingMessage _testingMessage,
-                               StreamObserver<testingMessage> responseObserver) {
-            System.out.println("connection made successfully");
-            testingMessage testingMessage1 = testingMessage.newBuilder().setTestingMessageField
-                    ("Message set by server").build();
-            responseObserver.onNext(testingMessage1);
-            responseObserver.onCompleted();
-        }
     }
 }

@@ -1,13 +1,11 @@
 package edu.gla.kail.ad.service;
 
 import com.google.protobuf.Timestamp;
-import edu.gla.kail.ad.service.AgentDialogueGrpc;
-import edu.gla.kail.ad.service.AgentDialogueGrpc.AgentDialogueBlockingStub;
 import edu.gla.kail.ad.Client.InputInteraction;
 import edu.gla.kail.ad.Client.InteractionRequest;
 import edu.gla.kail.ad.Client.InteractionResponse;
 import edu.gla.kail.ad.Client.InteractionType;
-import edu.gla.kail.ad.service.testingMessage;
+import edu.gla.kail.ad.service.AgentDialogueGrpc.AgentDialogueBlockingStub;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 import io.grpc.StatusRuntimeException;
@@ -52,11 +50,6 @@ public class AgentDialogueClient {
                 .build();
         AgentDialogueClient client = new AgentDialogueClient("localhost", 8080);
         try {
-            // TODO(Adam): Delete after testing:
-            testingMessage _testingMessage = client.testingRpc(testingMessage.newBuilder()
-                    .setTestingMessageField("message set").build());
-            System.out.println("Message testing sent well");
-            System.out.println(_testingMessage.getTestingMessageField());
             InteractionResponse interactionResponse = client.getInteractionResponse
                     (interactionRequest);
 
@@ -88,21 +81,6 @@ public class AgentDialogueClient {
             interactionResponse = _blockingStub.getResponseFromAgents(interactionRequest);
             System.out.print("Got response.");
             return interactionResponse;
-        } catch (StatusRuntimeException e) {
-            e.printStackTrace();
-            throw new Exception("Error occured: " + e.getStatus());
-        }
-    }
-
-    // TODO(Adam): Delete after testing:
-    public testingMessage testingRpc(testingMessage _testingMessage)
-            throws Exception {
-        testingMessage testingMessage1;
-        try {
-            System.out.print("Request for testing sent.");
-            testingMessage1 = _blockingStub.testingRpc(_testingMessage);
-            System.out.print("Got response.");
-            return _testingMessage;
         } catch (StatusRuntimeException e) {
             e.printStackTrace();
             throw new Exception("Error occured: " + e.getStatus());
