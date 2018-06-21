@@ -50,7 +50,7 @@ class DialogflowAgent implements AgentInterface {
      * @throws IOException - T setUpAgent method may throw exception if the data passed in
      *         the tupleOfProjectIdAndAuthorizationFile is invalid.
      */
-    public DialogflowAgent(String sessionId,
+    DialogflowAgent(String sessionId,
                            Tuple<String, String>
                                    tupleOfProjectIdAndAuthorizationFile) throws IOException {
         _sessionId = sessionId;

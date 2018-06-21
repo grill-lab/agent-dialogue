@@ -150,7 +150,7 @@ public class DialogAgentManager {
      */
     public List<ResponseLog> getResponsesFromAgents(InteractionRequest interactionRequest) throws
             IllegalArgumentException, Exception {
-        if (checkNotNull(_agents, "agents are not set up! Use the method" +
+        if (checkNotNull(_agents, "Agents are not set up! Use the method" +
                 " setUpAgents() first.").isEmpty()) {
             throw new IllegalArgumentException("The list of agents is empty!");
         }
