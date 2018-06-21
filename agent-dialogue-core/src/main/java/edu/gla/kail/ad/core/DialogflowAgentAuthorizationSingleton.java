@@ -6,6 +6,7 @@ import com.google.auth.oauth2.ServiceAccountCredentials;
 import com.google.cloud.Tuple;
 import com.google.cloud.dialogflow.v2beta1.SessionsClient;
 import com.google.cloud.dialogflow.v2beta1.SessionsSettings;
+import com.google.common.annotations.VisibleForTesting;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -23,7 +24,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * which returns the Tuple of projectID and SessionClient.
  * The class is thread safe.
  */
-final class DialogflowAgentAuthorizationSingleton {
+public final class DialogflowAgentAuthorizationSingleton {
     private static Map<Tuple<String, String>, DialogflowAgentAuthorizationSingleton>
             _agentAuthorizationInstances;
     private SessionsClient _sessionsClient;

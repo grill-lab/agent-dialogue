@@ -33,7 +33,7 @@ import static edu.gla.kail.ad.core.DialogflowAgentAuthorizationSingleton
  * The request sent to the agent are validated. (There are no invalid characters which can crash
  * dialogflow)
  */
-class DialogflowAgent implements AgentInterface {
+public class DialogflowAgent implements AgentInterface {
     // The SessionsClient and SessionName are needed for the Dialogflow interaction.
     private SessionsClient _sessionsClient;
     private SessionName _session;
