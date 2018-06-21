@@ -18,6 +18,7 @@
         <os-maven-plugin.version>1.6.0</os-maven-plugin.version>
         <grpc.version>1.10.1</grpc.version>
         <dialogflow.version>0.50.0-alpha</dialogflow.version>
+        <junit.version>4.12</junit.version>
     </properties>
 
     <dependencies>
@@ -58,6 +59,18 @@
             <groupId>com.google.cloud</groupId>
             <artifactId>google-cloud-dialogflow</artifactId>
             <version>${dialogflow.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>RELEASE</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>${junit.version}</version>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 
