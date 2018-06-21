@@ -51,8 +51,8 @@ final class DialogAgentManagerSingleton {
     }
 
     /**
-     * The supporting function used for the purposes of testing.
-     * When the database with the list of available agents is set up, this function should be
+     * The supporting method used for the purposes of testing.
+     * When the database with the list of available agents is set up, this method should be
      * deleted.
      * TODO(Adam): Delete this funtion after the database with agents is set up.
      *

@@ -43,11 +43,11 @@ class DialogflowAgent implements AgentInterface {
     /**
      * Initialize a ready-to-work DialogflowAgent.
      *
-     * @param sessionId - A unique ID passed to the function by DialogAgentManager.
+     * @param sessionId - A unique ID passed to the method by DialogAgentManager.
      * @param tupleOfProjectIdAndAuthorizationFile - A tuple specific for DialogflowAgent.
      *         It holds the project ID of a particular agent and the directory location of the file
      *         with Service Account key for this particular agent.
-     * @throws IOException - T setUpAgent function may throw exception if the data passed in
+     * @throws IOException - T setUpAgent method may throw exception if the data passed in
      *         the tupleOfProjectIdAndAuthorizationFile is invalid.
      */
     public DialogflowAgent(String sessionId,
@@ -147,7 +147,7 @@ class DialogflowAgent implements AgentInterface {
 //                            .setSampleRateHertz() // Needs an argument int32
 //                            .build();
 //                    return QueryInput.newBuilder().setAudioConfig(inputAudioConfig).build();
-                throw new IllegalArgumentException("The AUDIO function for DialogFlow is not " +
+                throw new IllegalArgumentException("The AUDIO method for DialogFlow is not " +
                         "yet supported" +
                         "."); // TODO(Adam): implement;
             case ACTION:
@@ -157,11 +157,11 @@ class DialogflowAgent implements AgentInterface {
 //                            .setParameters() // Optional, needs a Struct
 //                            .build();
 //                    return QueryInput.newBuilder().setEvent(eventInput).build();
-                throw new IllegalArgumentException("The ACTION function for DialogFlow is not" +
+                throw new IllegalArgumentException("The ACTION method for DialogFlow is not" +
                         " yet supported" +
                         "."); // TODO(Adam): implement;
             default: // TODO(Adam): Can be delited, as we validate the inputInteraction in a
-                // separate function.
+                // separate method.
                 throw new IllegalArgumentException("Unrecognised interaction type.");
         }
     }
