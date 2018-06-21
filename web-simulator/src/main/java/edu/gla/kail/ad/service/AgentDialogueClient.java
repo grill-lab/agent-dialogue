@@ -77,9 +77,7 @@ public class AgentDialogueClient {
             throws Exception {
         InteractionResponse interactionResponse;
         try {
-            System.out.print("Request for response sent.");
             interactionResponse = _blockingStub.getResponseFromAgents(interactionRequest);
-            System.out.print("Got response.");
             return interactionResponse;
         } catch (StatusRuntimeException e) {
             e.printStackTrace();
