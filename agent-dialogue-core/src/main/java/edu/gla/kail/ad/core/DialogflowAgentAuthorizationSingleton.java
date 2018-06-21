@@ -82,7 +82,7 @@ final class DialogflowAgentAuthorizationSingleton {
      * @throws IOException - When a projectID or the Service Account key is either null or
      *         empty, appropriate exception is thrown.
      */
-    public static synchronized Tuple<String, SessionsClient> getProjectIdAndSessionsClient
+    static synchronized Tuple<String, SessionsClient> getProjectIdAndSessionsClient
     (Tuple<String, String> tupleOfProjectIdAndAuthenticationFile) throws IOException {
         if (_agentAuthorizationInstances == null) {
             _agentAuthorizationInstances = new HashMap();
