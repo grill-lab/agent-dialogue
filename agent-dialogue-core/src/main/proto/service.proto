@@ -11,4 +11,10 @@ import "client.proto";
 service AgentDialogue {
     // Send the response from agents using when InteractionRequest is received.
     rpc GetResponseFromAgents (InteractionRequest) returns (InteractionResponse) {}
+    // TODO(Adam): Delete testing rpc and message testingMessage.
+    rpc TestingRpc (testingMessage) returns (testingMessage) {}
+}
+
+message testingMessage {
+    string testingMessageField = 1;
 }
