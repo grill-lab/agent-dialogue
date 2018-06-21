@@ -1,8 +1,8 @@
 syntax = "proto3";
 
-package edu.gla.kail.ad;
+package edu.gla.kail.ad.service;
 
-option java_package = "edu.gla.kail.ad";
+option java_package = "edu.gla.kail.ad.service";
 option java_multiple_files = true;
 
 import "google/protobuf/timestamp.proto";
@@ -11,4 +11,10 @@ import "client.proto";
 service AgentDialogue {
     // Send the response from agents using when InteractionRequest is received.
     rpc GetResponseFromAgents (InteractionRequest) returns (InteractionResponse) {}
+    // TODO(Adam): Delete testing rpc and message testingMessage.
+    rpc TestingRpc (testingMessage) returns (testingMessage) {}
+}
+
+message testingMessage {
+    string testingMessageField = 1;
 }

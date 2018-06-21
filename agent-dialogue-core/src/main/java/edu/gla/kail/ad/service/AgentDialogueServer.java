@@ -30,7 +30,7 @@ public class AgentDialogueServer {
      * @param serverBuilder
      * @param port
      */
-    public AgentDialogueServer(ServerBuilder<?> serverBuilder, int port) {
+    private AgentDialogueServer(ServerBuilder<?> serverBuilder, int port) {
         _port = port;
         _server = serverBuilder.addService(new AgentDialogueService()).build();
     }
@@ -85,7 +85,7 @@ public class AgentDialogueServer {
      * Serves the requests from clients.
      * TODO(Adam): check if the class and the gRPC server are thread safe.
      */
-    private static class AgentDialogueService extends AgentDialogueGrpc.AgentDialogueImplBase {
+    static class AgentDialogueService extends AgentDialogueGrpc.AgentDialogueImplBase {
         /**
          * Sends the request to the agents and retrieves the chosen response.
          * TODO(Adam): Right now the function uses getResponseFromAgentAsInteractionResponse
@@ -117,6 +117,18 @@ public class AgentDialogueServer {
                     "failed!");
             responseObserver.onNext(dialogAgentManager.getResponseFromAgentAsInteractionResponse
                     (interactionRequest));
+            responseObserver.onCompleted();
+        }
+
+        // TODO(Adam): Delete after testing:
+        @Override
+        public void testingRpc(testingMessage _testingMessage,
+                               StreamObserver<testingMessage> responseObserver) {
+            System.out.println("connection made successfully");
+            testingMessage testingMessage1 = testingMessage.newBuilder().setTestingMessageField
+                    ("Message set by server").build();
+            responseObserver.onNext(testingMessage1);
+            responseObserver.onCompleted();
         }
     }
 }
