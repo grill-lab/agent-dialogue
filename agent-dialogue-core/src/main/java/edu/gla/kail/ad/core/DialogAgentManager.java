@@ -26,9 +26,9 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * data.
  *
  * Instruction of usage:
- * 1) Set up the Dialog agents using setUpAgents function
- * 2) Call the getResponseFromAgent for required inputs
- * 3) Use ranking function. TODO(Adam): further part needs to be implemented
+ * 1) Set up the Dialog agents using setUpAgents method.
+ * 2) Call the getResponseFromAgent for required inputs.
+ * 3) Use ranking method. TODO(Adam): further part needs to be implemented
  *
  * Example usage :
  * DialogAgentManager dialogAgentManager = new DialogAgentManager();
@@ -39,12 +39,12 @@ import static com.google.common.base.Preconditions.checkNotNull;
 public class DialogAgentManager {
     // List of instances of used Dialog agents.
     private List<AgentInterface> _agents;
-    // Session ID is a unique identifier of a session which is assigned by the function
+    // Session ID is a unique identifier of a session which is assigned by the method
     // startSession() called by DialogAgentManager constructor.
     private String _sessionId;
 
     /**
-     * Create a unique session ID generated with startSession() function.
+     * Create a unique session ID generated with startSession() method.
      */
     public DialogAgentManager() {
         startSession();
@@ -145,12 +145,12 @@ public class DialogAgentManager {
      * @param interactionRequest - The a data structure (implemented in log.proto) holding
      *         the interaction from a client.
      * @return List<ResponseLog> - The list of responses of all agents set up on the
-     *         setUpAgents(...) function call.
+     *         setUpAgents(...) method call.
      * @throws IllegalArgumentException, Exception
      */
     public List<ResponseLog> getResponsesFromAgents(InteractionRequest interactionRequest) throws
             IllegalArgumentException, Exception {
-        if (checkNotNull(_agents, "agents are not set up! Use the function" +
+        if (checkNotNull(_agents, "agents are not set up! Use the method" +
                 " setUpAgents() first.").isEmpty()) {
             throw new IllegalArgumentException("The list of agents is empty!");
         }

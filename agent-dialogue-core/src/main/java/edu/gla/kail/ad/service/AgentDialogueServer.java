@@ -88,8 +88,8 @@ public class AgentDialogueServer {
     static class AgentDialogueService extends AgentDialogueGrpc.AgentDialogueImplBase {
         /**
          * Sends the request to the agents and retrieves the chosen response.
-         * TODO(Adam): Right now the function uses getResponseFromAgentAsInteractionResponse
-         * function, which is a dummy function for testing purposes.
+         * TODO(Adam): Right now the method uses getResponseFromAgentAsInteractionResponse
+         * method, which is a dummy method for testing purposes.
          *
          * @param interactionRequest - The instance of InteractionRequest passed by the
          *         client to the agents.
