@@ -37,7 +37,7 @@ public class TestClass {
                 .setInteraction(InputInteraction.newBuilder()
                         .setType(InteractionType.TEXT)
                         .setText("Sample text")
-                        .setDeviceType("Iphone whatever")
+                        .setDeviceType("iPhone whatever")
                         .setLanguageCode("en-US")
                         .build())
                 .build();
