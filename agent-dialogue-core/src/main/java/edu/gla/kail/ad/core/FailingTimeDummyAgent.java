@@ -10,11 +10,12 @@ import java.util.concurrent.TimeUnit;
  * Returns null ResponseLog after 10 seconds of waiting.
  * TODO(Adam): Delete after testing is done!
  */
-public class FailingTimeDummyAgent implements AgentInterface  {
+public class FailingTimeDummyAgent implements AgentInterface {
     @Override
     public ResponseLog getResponseFromAgent(InputInteraction inputInteraction) throws Exception {
         ResponseLog responseLog = null;
-        TimeUnit.SECONDS.sleep(10);
-        return responseLog;
+        while (true) {
+            TimeUnit.SECONDS.sleep(10);
+        }
     }
 }
