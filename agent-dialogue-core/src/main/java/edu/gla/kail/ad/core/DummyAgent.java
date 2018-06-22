@@ -14,6 +14,7 @@ import java.time.Instant;
 
 /**
  * This is a dummy agent created for testing purposes.
+ * Returns valid inputInteraction.
  */
 class DummyAgent implements AgentInterface {
     Timestamp timestamp = Timestamp.newBuilder()
