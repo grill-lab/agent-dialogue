@@ -1,6 +1,5 @@
-package edu.gla.kail.ac.core;
+package edu.gla.kail.ad.core;
 
-import edu.gla.kail.ad.core.SupportedAgentTypes;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;

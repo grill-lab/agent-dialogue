@@ -1,4 +1,4 @@
-package edu.gla.kail.ac.service;
+package edu.gla.kail.ad.service;
 
 import com.google.protobuf.Timestamp;
 import com.google.protobuf.util.JsonFormat;
