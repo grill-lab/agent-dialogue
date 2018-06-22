@@ -42,8 +42,9 @@ class DummyAgent implements AgentInterface {
                                 .setValue("SlotValue set by DummyBuilder").build())
                         .build())
                 .build();
-        System.out.println("------------------------------------------------------------------\n" +
-                "\nDummy agent response: \n\n:" + responseLog.toString());
+        // System.out.println
+        // ("------------------------------------------------------------------\n\nDummy agent
+        // response: \n\n:" + responseLog.toString());
         return responseLog;
     }
 }

@@ -27,11 +27,11 @@ import static org.junit.Assert.fail;
 @RunWith(JUnit4.class)
 public class DialogflowAgentManagerTest {
     DialogAgentManager _dialogAgentManager;
-    List<ConfigurationTuple> _configurationTuples;
+    static List<ConfigurationTuple> _configurationTuples;
     InteractionRequest _interactionRequest;
 
     @BeforeClass
-    public void setUpClass() {
+    public static void setUpClass() {
         File currentClassPathFile = new File(DialogAgentManagerTestMain.class.getProtectionDomain()
                 .getCodeSource().getLocation().getPath()).getParentFile();
         String testTextFileDirectory = currentClassPathFile.getParent() +
