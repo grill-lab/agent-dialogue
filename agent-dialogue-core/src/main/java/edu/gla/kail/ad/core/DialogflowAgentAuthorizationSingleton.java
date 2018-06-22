@@ -6,7 +6,6 @@ import com.google.auth.oauth2.ServiceAccountCredentials;
 import com.google.cloud.Tuple;
 import com.google.cloud.dialogflow.v2beta1.SessionsClient;
 import com.google.cloud.dialogflow.v2beta1.SessionsSettings;
-import com.google.common.annotations.VisibleForTesting;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -72,14 +71,8 @@ public final class DialogflowAgentAuthorizationSingleton {
      * @param tupleOfProjectIdAndAuthenticationFile - A tuple specific for DialogflowAgent.
      *         It holds the project ID of a particular agent and the directory location of the file
      *         with Service Account key for this particular agent.
-     * @return Tuple<String
-                       *
-                       *                                       ,
-                       *
-                       *                                       SessionsClient> - A data structure
-     *         holding projectID and
-     *         SessionClient required for
-     *         the authorization.
+     * @return Tuple<> - A data structure holding projectID and SessionClient required for the
+     *         authorization.
      * @throws IOException - When a projectID or the Service Account key is either null or
      *         empty, appropriate exception is thrown.
      */
