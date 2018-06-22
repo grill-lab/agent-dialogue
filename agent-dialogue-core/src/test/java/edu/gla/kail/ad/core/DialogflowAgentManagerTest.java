@@ -24,6 +24,8 @@ import java.util.List;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+
+// TODO(Adam): Restructure the majority of the class!
 @RunWith(JUnit4.class)
 public class DialogflowAgentManagerTest {
     DialogAgentManager _dialogAgentManager;
