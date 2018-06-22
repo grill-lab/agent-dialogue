@@ -22,7 +22,7 @@ import java.util.concurrent.TimeUnit;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
-
+// TODO(Adam): Restructure the entire class!
 @RunWith(JUnit4.class)
 public class DialogflowAgentTest {
     String _jsonKeyFileLocation;
@@ -139,7 +139,6 @@ public class DialogflowAgentTest {
                 "jsonKeyFileLocation: " + _jsonKeyFileLocation + " was unsuccessful!");
     }
 
-
     /**
      * Test the validation method for a text input with invalid input.
      */
@@ -148,173 +147,6 @@ public class DialogflowAgentTest {
         InputInteraction inputInteraction = InputInteraction.newBuilder()
                 .setType(InteractionType.TEXT)
                 .setText("")
-                .setDeviceType("iPhone whatever")
-                .setLanguageCode("en-US")
-                .build();
-        _dialogFlowAgent.getResponseFromAgent(inputInteraction);
-    }
-
-    @Test(expected = IllegalArgumentException.class)
-    public void testValidateInputInteraction1() {
-        InputInteraction inputInteraction = InputInteraction.newBuilder()
-                .setType(InteractionType.TEXT)
-                .setText("some input")
-                .setDeviceType("iPhone whatever")
-                .setLanguageCode("")
-                .build();
-        _dialogFlowAgent.getResponseFromAgent(inputInteraction);
-    }
-
-    @Test(expected = NullPointerException.class)
-    public void testValidateInputInteraction2() {
-        InputInteraction inputInteraction = InputInteraction.newBuilder()
-                .setType(InteractionType.TEXT)
-                .setText(null)
-                .setDeviceType("iPhone whatever")
-                .setLanguageCode("en-US")
-                .build();
-        _dialogFlowAgent.getResponseFromAgent(inputInteraction);
-    }
-
-    @Test(expected = NullPointerException.class)
-    public void testValidateInputInteraction3() {
-        InputInteraction inputInteraction = InputInteraction.newBuilder()
-                .setType(InteractionType.TEXT)
-                .setText("some input")
-                .setDeviceType("iPhone whatever")
-                .setLanguageCode(null)
-                .build();
-        _dialogFlowAgent.getResponseFromAgent(inputInteraction);
-    }
-
-    @Test(expected = Exception.class)
-    public void testValidateInputInteraction4() {
-        InputInteraction inputInteraction = InputInteraction.newBuilder()
-                .setType(InteractionType.AUDIO)
-                .setText("some input")
-                .setDeviceType("iPhone whatever")
-                .setLanguageCode(null)
-                .build();
-        _dialogFlowAgent.getResponseFromAgent(inputInteraction);
-    }
-
-    @Test(expected = Exception.class)
-    public void testValidateInputInteraction5() {
-        InputInteraction inputInteraction = InputInteraction.newBuilder()
-                .setType(InteractionType.ACTION)
-                .setText("some input")
-                .setDeviceType("iPhone whatever")
-                .setLanguageCode(null)
-                .build();
-        _dialogFlowAgent.getResponseFromAgent(inputInteraction);
-    }
-
-    @Test(expected = Exception.class)
-    public void testValidateInputInteraction6() {
-        InputInteraction inputInteraction = InputInteraction.newBuilder()
-                .setType(InteractionType.TEXT)
-                .setDeviceType("iPhone whatever")
-                .setLanguageCode(null)
-                .build();
-        _dialogFlowAgent.getResponseFromAgent(inputInteraction);
-    }
-
-    @Test(expected = Exception.class)
-    public void testValidateInputInteraction7() {
-        InputInteraction inputInteraction = InputInteraction.newBuilder()
-                .setType(InteractionType.ACTION)
-                .setText("some input")
-                .setDeviceType("iPhone whatever")
-                .build();
-        _dialogFlowAgent.getResponseFromAgent(inputInteraction);
-    }
-
-    @Test(expected = Exception.class)
-    public void testValidateInputInteraction8() {
-        InputInteraction inputInteraction = InputInteraction.newBuilder()
-                .setText("some input")
-                .setLanguageCode(null)
-                .build();
-        _dialogFlowAgent.getResponseFromAgent(inputInteraction);
-    }
-
-    @Test(expected = Exception.class)
-    public void testValidateInputInteraction9() {
-        InputInteraction inputInteraction = InputInteraction.newBuilder()
-                .setType(InteractionType.ACTION)
-                .setText("some input")
-                .setDeviceType("iPhone whatever")
-                .setLanguageCode(null)
-                .build();
-        _dialogFlowAgent.getResponseFromAgent(inputInteraction);
-    }
-
-
-    /**
-     * Test the validation method for an invalid audio input.
-     */
-    @Test(expected = Exception.class)
-    public void testValidateInputInteraction10() {
-        InputInteraction inputInteraction = InputInteraction.newBuilder()
-                .setType(InteractionType.AUDIO)
-                .setText("somehting")
-                .setDeviceType("iPhone whatever")
-                .setLanguageCode("en-US")
-                .build();
-        _dialogFlowAgent.getResponseFromAgent(inputInteraction);
-    }
-
-    @Test(expected = Exception.class)
-    public void testValidateInputInteraction11() {
-        InputInteraction inputInteraction = InputInteraction.newBuilder()
-                .setType(InteractionType.AUDIO)
-                .setAudioBytes("somehting")
-                .setLanguageCode("en-US")
-                .build();
-        _dialogFlowAgent.getResponseFromAgent(inputInteraction);
-    }
-
-    @Test(expected = Exception.class)
-    public void testValidateInputInteraction12() {
-        InputInteraction inputInteraction = InputInteraction.newBuilder()
-                .setType(InteractionType.AUDIO)
-                .setAudioBytes("somehting")
-                .setDeviceType("iPhone whatever")
-                .setLanguageCode("en-US")
-                .build();
-        _dialogFlowAgent.getResponseFromAgent(inputInteraction);
-    }
-
-    /**
-     * Test the validation method for an unvalid action input.
-     */
-    @Test(expected = Exception.class)
-    public void testValidateInputInteraction13() {
-        InputInteraction inputInteraction = InputInteraction.newBuilder()
-                .setType(InteractionType.TEXT)
-                .setText("")
-                .setDeviceType("iPhone whatever")
-                .setLanguageCode("en-US")
-                .build();
-        _dialogFlowAgent.getResponseFromAgent(inputInteraction);
-    }
-
-    @Test(expected = Exception.class)
-    public void testValidateInputInteraction14() {
-        InputInteraction inputInteraction = InputInteraction.newBuilder()
-                .setType(InteractionType.TEXT)
-                .setText("")
-                .setDeviceType("iPhone whatever")
-                .setLanguageCode("en-US")
-                .build();
-        _dialogFlowAgent.getResponseFromAgent(inputInteraction);
-    }
-
-    @Test(expected = Exception.class)
-    public void testValidateInputInteraction15() {
-        InputInteraction inputInteraction = InputInteraction.newBuilder()
-                .setType(InteractionType.TEXT)
-                .setAction(0, null)
                 .setDeviceType("iPhone whatever")
                 .setLanguageCode("en-US")
                 .build();
