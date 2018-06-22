@@ -18,17 +18,17 @@ import java.io.IOException;
 
 @RunWith(JUnit4.class)
 public class DialogflowAgentAuthorizationSingletonTest {
-    String jsonKeyFileLocation;
-    String projectId;
+    String _jsonKeyFileLocation;
+    String _projectId;
 
     /**
-     * Set up jsonKeyFileLocation and projectID for the myquotemaster-13899 project.
+     * Set up _jsonKeyFileLocation and projectID for the myquotemaster-13899 project.
      */
     @Before
     public void setUp() {
-        jsonKeyFileLocation = "/Users/Adam/Documents/Internship/myquotemaster-13899" +
+        _jsonKeyFileLocation = "/Users/Adam/Documents/Internship/myquotemaster-13899" +
                 "-04ed41718e57.json";
-        projectId = "myquotemaster-13899";
+        _projectId = "myquotemaster-13899";
     }
 
     /**
@@ -36,82 +36,79 @@ public class DialogflowAgentAuthorizationSingletonTest {
      */
     @Test
     public void testInitialization() {
-        Tuple<String, String> tupleOfProjectIdAndAuthenticationFile = Tuple.of(projectId,
-                jsonKeyFileLocation);
+        Tuple<String, String> tupleOfProjectIdAndAuthenticationFile = Tuple.of(_projectId,
+                _jsonKeyFileLocation);
         try {
             Tuple<String, SessionsClient> tupleOfSessionIDAndSessionClient =
                     DialogflowAgentAuthorizationSingleton
                             .getProjectIdAndSessionsClient(tupleOfProjectIdAndAuthenticationFile);
         } catch (FileNotFoundException fileNotFoundException) {
             Assert.fail("The specified file directory doesn't exist or the file is missing: " +
-                    jsonKeyFileLocation);
+                    _jsonKeyFileLocation);
         } catch (IOException iOException) {
             Assert.fail("The creation of CredentialsProvider, SessionsSettings or SessionsClient " +
-                    "for projectID: " + projectId + " failed.");
+                    "for projectID: " + _projectId + " failed.");
         }
     }
 
     /**
      * Test myquotemaster-13899 Dialogflow's CredentialsProvider initialization.
-     * TODO(Adam): Include this test also in DialogflowAgentTest class!
      */
     @Test
     public void testDialogflowCredentialsProviderInitialization() {
         try {
             CredentialsProvider credentialsProvider = FixedCredentialsProvider.create(
                     (ServiceAccountCredentials.fromStream(new FileInputStream
-                            (jsonKeyFileLocation))));
+                            (_jsonKeyFileLocation))));
         } catch (IOException iOException) {
-            Assert.fail("The creation of CredentialsProvider with given jsonKeyFileLocation: " +
-                    jsonKeyFileLocation + " failed!");
+            Assert.fail("The creation of CredentialsProvider with given _jsonKeyFileLocation: " +
+                    _jsonKeyFileLocation + " failed!");
         }
     }
 
     /**
      * Test myquotemaster-13899 Dialogflow's SessionsSettings initialization.
-     * TODO(Adam): Include this test also in DialogflowAgentTest class!
      */
     @Test
     public void testDialogflowSessionsSettingsInitialization() {
         try {
             CredentialsProvider credentialsProvider = FixedCredentialsProvider.create(
                     (ServiceAccountCredentials.fromStream(new FileInputStream
-                            (jsonKeyFileLocation))));
+                            (_jsonKeyFileLocation))));
             SessionsSettings sessionsSettings = SessionsSettings.newBuilder().setCredentialsProvider
                     (credentialsProvider).build();
         } catch (IOException iOException) {
             Assert.fail("The creation of SessionsSettings (or CredentialsProvider) with given " +
-                    "jsonKeyFileLocation: " + jsonKeyFileLocation + " failed!");
+                    "_jsonKeyFileLocation: " + _jsonKeyFileLocation + " failed!");
         }
     }
 
     /**
      * Test myquotemaster-13899 Dialogflow's SessionsClient initialization.
-     * TODO(Adam): Include this test also in DialogflowAgentTest class!
      */
     @Test
     public void testDialogflowSessionsClientInitialization() {
         try {
             CredentialsProvider credentialsProvider = FixedCredentialsProvider.create(
                     (ServiceAccountCredentials.fromStream(new FileInputStream
-                            (jsonKeyFileLocation))));
+                            (_jsonKeyFileLocation))));
             SessionsSettings sessionsSettings = SessionsSettings.newBuilder().setCredentialsProvider
                     (credentialsProvider).build();
             SessionsClient sessionsClient = SessionsClient.create(sessionsSettings);
         } catch (IOException iOException) {
             Assert.fail("The creation of SessionsClient (or SessionsSettings or " +
-                    "CredentialsProvider) with given jsonKeyFileLocation: " + jsonKeyFileLocation
+                    "CredentialsProvider) with given _jsonKeyFileLocation: " + _jsonKeyFileLocation
                     + " failed!");
         }
     }
 
     /**
-     * Test when a wrong jsonKeyFileLocation is provided.
+     * Test when a wrong _jsonKeyFileLocation is provided.
      */
     @Test(expected = FileNotFoundException.class)
     public void testHandlingNonexistentFileDirection() {
         String jsonKeyFileLocation = "NonExisting file directory.";
-        Tuple<String, String> tupleOfProjectIdAndAuthenticationFile = Tuple.of(projectId,
+        Tuple<String, String> tupleOfProjectIdAndAuthenticationFile = Tuple.of(_projectId,
                 jsonKeyFileLocation);
         try {
             Tuple<String, SessionsClient> tupleOfSessionIDAndSessionClient =
@@ -128,7 +125,7 @@ public class DialogflowAgentAuthorizationSingletonTest {
     public void testNullProjectId() {
         String projectId = null;
         Tuple<String, String> tupleOfProjectIdAndAuthenticationFile = Tuple.of(projectId,
-                jsonKeyFileLocation);
+                _jsonKeyFileLocation);
         try {
             Tuple<String, SessionsClient> tupleOfSessionIDAndSessionClient =
                     DialogflowAgentAuthorizationSingleton.getProjectIdAndSessionsClient
@@ -144,7 +141,7 @@ public class DialogflowAgentAuthorizationSingletonTest {
     public void testEmptyProjectId() {
         String projectId = "";
         Tuple<String, String> tupleOfProjectIdAndAuthenticationFile = Tuple.of(projectId,
-                jsonKeyFileLocation);
+                _jsonKeyFileLocation);
         try {
             Tuple<String, SessionsClient> tupleOfSessionIDAndSessionClient =
                     DialogflowAgentAuthorizationSingleton.getProjectIdAndSessionsClient
@@ -154,12 +151,12 @@ public class DialogflowAgentAuthorizationSingletonTest {
     }
 
     /**
-     * Test when a null jsonKeyFileLocation is provided.
+     * Test when a null _jsonKeyFileLocation is provided.
      */
     @Test(expected = NullPointerException.class)
     public void testNullJsonKeyFileLocation() {
         String jsonKeyFileLocation = null;
-        Tuple<String, String> tupleOfProjectIdAndAuthenticationFile = Tuple.of(projectId,
+        Tuple<String, String> tupleOfProjectIdAndAuthenticationFile = Tuple.of(_projectId,
                 jsonKeyFileLocation);
         try {
             Tuple<String, SessionsClient> tupleOfSessionIDAndSessionClient =
@@ -170,12 +167,12 @@ public class DialogflowAgentAuthorizationSingletonTest {
     }
 
     /**
-     * Test when an empty jsonKeyFileLocation is provided.
+     * Test when an empty _jsonKeyFileLocation is provided.
      */
     @Test(expected = FileNotFoundException.class)
     public void testEmptyJsonKeyFileLocation() {
         String jsonKeyFileLocation = "";
-        Tuple<String, String> tupleOfProjectIdAndAuthenticationFile = Tuple.of(projectId,
+        Tuple<String, String> tupleOfProjectIdAndAuthenticationFile = Tuple.of(_projectId,
                 jsonKeyFileLocation);
         try {
             Tuple<String, SessionsClient> tupleOfSessionIDAndSessionClient =
