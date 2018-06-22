@@ -11,6 +11,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -50,7 +52,7 @@ public final class DialogflowAgentAuthorizationSingleton {
         if (_projectId.isEmpty()) {
             throw new IllegalArgumentException("The provided project ID of the service is empty!");
         }
-        if (!new File(jsonKeyFileLocation).isFile()) {
+        if (!(Files.exists(Paths.get(jsonKeyFileLocation)))) {
             throw new FileNotFoundException("The location of the JSON key file provided does not " +
                     "exist: " + jsonKeyFileLocation);
         }

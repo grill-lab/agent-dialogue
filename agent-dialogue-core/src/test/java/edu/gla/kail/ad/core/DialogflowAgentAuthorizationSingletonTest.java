@@ -6,7 +6,6 @@ import com.google.auth.oauth2.ServiceAccountCredentials;
 import com.google.cloud.Tuple;
 import com.google.cloud.dialogflow.v2beta1.SessionsClient;
 import com.google.cloud.dialogflow.v2beta1.SessionsSettings;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -15,6 +14,8 @@ import org.junit.runners.JUnit4;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+
+import static org.junit.Assert.fail;
 
 @RunWith(JUnit4.class)
 public class DialogflowAgentAuthorizationSingletonTest {
@@ -43,10 +44,10 @@ public class DialogflowAgentAuthorizationSingletonTest {
                     DialogflowAgentAuthorizationSingleton
                             .getProjectIdAndSessionsClient(tupleOfProjectIdAndAuthenticationFile);
         } catch (FileNotFoundException fileNotFoundException) {
-            Assert.fail("The specified file directory doesn't exist or the file is missing: " +
+            fail("The specified file directory doesn't exist or the file is missing: " +
                     _jsonKeyFileLocation);
         } catch (IOException iOException) {
-            Assert.fail("The creation of CredentialsProvider, SessionsSettings or SessionsClient " +
+            fail("The creation of CredentialsProvider, SessionsSettings or SessionsClient " +
                     "for projectID: " + _projectId + " failed.");
         }
     }
@@ -61,7 +62,7 @@ public class DialogflowAgentAuthorizationSingletonTest {
                     (ServiceAccountCredentials.fromStream(new FileInputStream
                             (_jsonKeyFileLocation))));
         } catch (IOException iOException) {
-            Assert.fail("The creation of CredentialsProvider with given _jsonKeyFileLocation: " +
+            fail("The creation of CredentialsProvider with given _jsonKeyFileLocation: " +
                     _jsonKeyFileLocation + " failed!");
         }
     }
@@ -78,7 +79,7 @@ public class DialogflowAgentAuthorizationSingletonTest {
             SessionsSettings sessionsSettings = SessionsSettings.newBuilder().setCredentialsProvider
                     (credentialsProvider).build();
         } catch (IOException iOException) {
-            Assert.fail("The creation of SessionsSettings (or CredentialsProvider) with given " +
+            fail("The creation of SessionsSettings (or CredentialsProvider) with given " +
                     "_jsonKeyFileLocation: " + _jsonKeyFileLocation + " failed!");
         }
     }
@@ -96,7 +97,7 @@ public class DialogflowAgentAuthorizationSingletonTest {
                     (credentialsProvider).build();
             SessionsClient sessionsClient = SessionsClient.create(sessionsSettings);
         } catch (IOException iOException) {
-            Assert.fail("The creation of SessionsClient (or SessionsSettings or " +
+            fail("The creation of SessionsClient (or SessionsSettings or " +
                     "CredentialsProvider) with given _jsonKeyFileLocation: " + _jsonKeyFileLocation
                     + " failed!");
         }
@@ -105,7 +106,7 @@ public class DialogflowAgentAuthorizationSingletonTest {
     /**
      * Test when a wrong _jsonKeyFileLocation is provided.
      */
-    @Test(expected = FileNotFoundException.class)
+    @Test
     public void testHandlingNonexistentFileDirection() {
         String jsonKeyFileLocation = "NonExisting file directory.";
         Tuple<String, String> tupleOfProjectIdAndAuthenticationFile = Tuple.of(_projectId,
@@ -114,8 +115,10 @@ public class DialogflowAgentAuthorizationSingletonTest {
             Tuple<String, SessionsClient> tupleOfSessionIDAndSessionClient =
                     DialogflowAgentAuthorizationSingleton.getProjectIdAndSessionsClient
                             (tupleOfProjectIdAndAuthenticationFile);
-        } catch (IOException e) {
+        } catch (Exception e) {
+            return;
         }
+        fail("No exception was thrown!");
     }
 
     /**
@@ -169,7 +172,7 @@ public class DialogflowAgentAuthorizationSingletonTest {
     /**
      * Test when an empty _jsonKeyFileLocation is provided.
      */
-    @Test(expected = FileNotFoundException.class)
+    @Test
     public void testEmptyJsonKeyFileLocation() {
         String jsonKeyFileLocation = "";
         Tuple<String, String> tupleOfProjectIdAndAuthenticationFile = Tuple.of(_projectId,
@@ -178,14 +181,16 @@ public class DialogflowAgentAuthorizationSingletonTest {
             Tuple<String, SessionsClient> tupleOfSessionIDAndSessionClient =
                     DialogflowAgentAuthorizationSingleton.getProjectIdAndSessionsClient
                             (tupleOfProjectIdAndAuthenticationFile);
-        } catch (IOException e) {
+        } catch (Exception e) {
+            return;
         }
+        fail("No exception was thrown!");
     }
 
     /**
      * Test when an a null Tuple is provided.
      */
-    @Test(expected = FileNotFoundException.class)
+    @Test(expected = NullPointerException.class)
     public void testNullTuple() {
         Tuple<String, String> tupleOfProjectIdAndAuthenticationFile = null;
         try {

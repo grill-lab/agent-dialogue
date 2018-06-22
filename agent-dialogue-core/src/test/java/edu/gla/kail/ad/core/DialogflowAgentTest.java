@@ -8,6 +8,7 @@ import com.google.cloud.dialogflow.v2beta1.SessionsClient;
 import com.google.cloud.dialogflow.v2beta1.SessionsSettings;
 import edu.gla.kail.ad.Client.InputInteraction;
 import edu.gla.kail.ad.Client.InteractionType;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -16,6 +17,7 @@ import org.junit.runners.JUnit4;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
@@ -54,12 +56,13 @@ public class DialogflowAgentTest {
         }
     }
 
-
-    @Test
-    public void testInitialization() {
-
+    @After
+    public void cleanUp() {
+        try {
+            TimeUnit.SECONDS.sleep((long) 0.4);
+        } catch (Exception e) {
+        }
     }
-
 
     /**
      * Test setting up the agent with valid parameters.
@@ -78,8 +81,8 @@ public class DialogflowAgentTest {
     /**
      * Test setting up the agent with invalid parameters.
      */
-    @Test
-    public void testSetUpAgentNullSessionID() {
+    @Test(expected = NullPointerException.class)
+    public void testSetUpAgentNullProjectID() {
         Tuple<String, String> setUpAgentTuple = Tuple.of(null, _jsonKeyFileLocation);
         try {
             DialogflowAgent dialogflowAgent = new DialogflowAgent(_sessionId, setUpAgentTuple);
@@ -87,14 +90,15 @@ public class DialogflowAgentTest {
             return;
         }
         fail("Setting up the agent with projectID: " + _projectId + " and " +
-                "jsonKeyFileLocation: " + _jsonKeyFileLocation + " was unsuccessful!");
+                "jsonKeyFiletestSetUpAgentEmptySessionIDLocation: " + _jsonKeyFileLocation + " " +
+                "was unsuccessful!");
     }
 
     /**
      * Test setting up the agent with invalid parameters.
      */
-    @Test
-    public void testSetUpAgentEmptySessionID() {
+    @Test(expected = IllegalArgumentException.class)
+    public void testSetUpAgentEmptyProjectID() {
         Tuple<String, String> setUpAgentTuple = Tuple.of("", _jsonKeyFileLocation);
         try {
             DialogflowAgent dialogflowAgent = new DialogflowAgent(_sessionId, setUpAgentTuple);
@@ -108,7 +112,7 @@ public class DialogflowAgentTest {
     /**
      * Test setting up the agent with invalid parameters.
      */
-    @Test
+    @Test(expected = NullPointerException.class)
     public void testSetUpAgentNullJsonFileLocation() {
         Tuple<String, String> setUpAgentTuple = Tuple.of(_projectId, null);
         try {
@@ -128,7 +132,7 @@ public class DialogflowAgentTest {
         Tuple<String, String> setUpAgentTuple = Tuple.of(_projectId, "Invalid file location.");
         try {
             DialogflowAgent dialogflowAgent = new DialogflowAgent(_sessionId, setUpAgentTuple);
-        } catch (IOException iOException) {
+        } catch (Exception iOException) {
             return;
         }
         fail("Setting up the agent with projectID: " + _projectId + " and " +
