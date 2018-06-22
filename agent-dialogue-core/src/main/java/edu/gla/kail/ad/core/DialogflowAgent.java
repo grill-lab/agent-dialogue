@@ -51,15 +51,15 @@ public class DialogflowAgent implements AgentInterface {
      *         the tupleOfProjectIdAndAuthorizationFile is invalid.
      */
     DialogflowAgent(String sessionId,
-                           Tuple<String, String>
-                                   tupleOfProjectIdAndAuthorizationFile) throws IOException {
+                    Tuple<String, String>
+                            tupleOfProjectIdAndAuthorizationFile) throws IOException {
         _sessionId = sessionId;
         setUpAgent(tupleOfProjectIdAndAuthorizationFile);
     }
 
     /**
-     * Create the SessionClients and SessionNames for all the agents which project ID and Service
-     * Account key file directories are provided.
+     * Create the SessionClients and SessionNames for the agent which project ID and Service Account
+     * key file directory.
      *
      * @param tupleOfProjectIdAndAuthenticationFile - A tuple specific for DialogflowAgent.
      *         It holds the project ID of a particular agent and the directory location of the file
