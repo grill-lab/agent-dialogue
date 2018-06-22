@@ -177,7 +177,15 @@ public class DialogAgentManager {
         }
         return listOfResponseLogs;
     }
-    // TODO(Adam): Raking leaves?;
+
+    public ResponseLog chooseOneResponse(List<ResponseLog> responses) {
+        return chooseFirstValidResponse(responses);
+    }
+
+    public ResponseLog chooseFirstValidResponse(List<ResponseLog> responses) {
+        // TODO(Adam): Neet to choose the VALID response, not just the first repsonse.
+        return responses.get(0);
+    }
 
     // TODO(Adam): store the conversation in the log as a single Turn
 }

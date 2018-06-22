@@ -115,7 +115,9 @@ public class AgentDialogueServer {
             checkNotNull(dialogAgentManager, "The initialization of the dialogAgentManager " +
                     "failed!");
             responseObserver.onNext(dialogAgentManager.getResponseFromAgentAsInteractionResponse
-                    (interactionRequest));
+                    (interactionRequest)); // TODO(Adam): Use the dialogAgentManager
+            // .chooseOneResponse(dialogAgentManager.getResponsesFromAgents(interactionRequest))
+            // instead
             responseObserver.onCompleted();
         }
     }
