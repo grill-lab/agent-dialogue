@@ -9,8 +9,8 @@ import edu.gla.kail.ad.Client.InteractionType;
 import edu.gla.kail.ad.Client.OutputInteraction;
 import edu.gla.kail.ad.core.Log.RequestLog;
 import edu.gla.kail.ad.core.Log.ResponseLog;
-import io.reactivex.Completable;
 import io.reactivex.Observable;
+import io.reactivex.Scheduler;
 import io.reactivex.schedulers.Schedulers;
 
 import java.io.IOException;
@@ -172,41 +172,18 @@ public class DialogAgentManager {
                 .setClientId(interactionRequest.getClientId())
                 .setInteraction(interactionRequest.getInteraction()).build();
 
-        // Store the responses from the agents in a list.
-        List<ResponseLog> listOfResponseLogs = new ArrayList();
         InputInteraction inputInteraction = requestLog.getInteraction();
 
-/*
         // Get responses the agents using RxJava asynchronously.
-        Observable.from(_agents)
-                .subscribe(
-                        agent -> {
-                            try {
-                                ResponseLog responseLog = agent.getResponseFromAgent
-                                        (inputInteraction);
-                                listOfResponseLogs.add(responseLog);
-                            } catch (Exception exception) {
-                                listOfResponseLogs.add(ResponseLog.newBuilder()
-                                        .setMessageStatus(MessageStatus.UNSUCCESFUL)
-                                        .setErrorMessage(exception.getMessage())
-                                        .build());
-                            }
-                        },
-                        // TODO(Adam): Implemnt these methods.
-                        error -> System.out.println("Something went wrong" + error.getMessage()),
-                        () -> System.out.println("This observable is finished"));
-*/
-
         Observable<AgentInterface> agentInterfaceObservable = Observable.fromIterable(_agents);
-        ThreadPoolE
-        Observable.zip()
-        agentInterfaceObservable.flatMap(agentObservable -> Observable.just(agentObservable)
+        List<ResponseLog> listOfResponseLogs = (agentInterfaceObservable.flatMap(agentObservable -> Observable
+                .just(agentObservable)
                 .subscribeOn(Schedulers.computation())
                 .map(agent -> {
-                        return agent.getResponseFromAgent(inputInteraction);})
-                )
-                .subscribe(responses -> listOfResponseLogs.add(responses) );
-        System.out.println("Currently handled request for: " + inputInteraction.getText());
+                    return agent.getResponseFromAgent(inputInteraction);
+                })
+        ).toList().blockingGet());
+
         // TODO(Adam) Remove when the log saving is implemented. Currently we can see the output.
         listOfResponseLogs.forEach(System.out::println);
         return listOfResponseLogs;
