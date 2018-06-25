@@ -198,7 +198,8 @@ public class DialogAgentManager {
 */
 
         Observable<AgentInterface> agentInterfaceObservable = Observable.fromIterable(_agents);
-
+        ThreadPoolE
+        Observable.zip()
         agentInterfaceObservable.flatMap(agentObservable -> Observable.just(agentObservable)
                 .subscribeOn(Schedulers.computation())
                 .map(agent -> {
