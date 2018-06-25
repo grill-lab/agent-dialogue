@@ -9,8 +9,8 @@ import edu.gla.kail.ad.Client.InteractionType;
 import edu.gla.kail.ad.Client.OutputInteraction;
 import edu.gla.kail.ad.core.Log.RequestLog;
 import edu.gla.kail.ad.core.Log.ResponseLog;
+import edu.gla.kail.ad.core.Log.ResponseLog.MessageStatus;
 import io.reactivex.Observable;
-import io.reactivex.Scheduler;
 import io.reactivex.schedulers.Schedulers;
 
 import java.io.IOException;
@@ -176,11 +176,19 @@ public class DialogAgentManager {
 
         // Get responses the agents using RxJava asynchronously.
         Observable<AgentInterface> agentInterfaceObservable = Observable.fromIterable(_agents);
-        List<ResponseLog> listOfResponseLogs = (agentInterfaceObservable.flatMap(agentObservable -> Observable
+        List<ResponseLog> listOfResponseLogs = (agentInterfaceObservable.flatMap(agentObservable
+                -> Observable
                 .just(agentObservable)
                 .subscribeOn(Schedulers.computation())
                 .map(agent -> {
-                    return agent.getResponseFromAgent(inputInteraction);
+                    try {
+                        return agent.getResponseFromAgent(inputInteraction);
+                    } catch (Exception exception) {
+                        return ResponseLog.newBuilder()
+                                .setMessageStatus(MessageStatus.UNSUCCESFUL)
+                                .setErrorMessage(exception.getMessage())
+                                .build();
+                    }
                 })
         ).toList().blockingGet());
 
@@ -194,6 +202,7 @@ public class DialogAgentManager {
     }
 
     public ResponseLog chooseFirstValidResponse(List<ResponseLog> responses) {
+        
         // TODO(Adam): Neet to choose the VALID response, not just the first repsonse.
         return responses.get(0);
     }
