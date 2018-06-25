@@ -219,9 +219,8 @@ public class DialogflowAgent implements AgentInterface {
         responseLogBuilder.addAction(systemActBuilder.build());
 
         // TODO(Adam) Remove when the log saving is implemented. Currently we can see the output.
-        // System.out.println
-        // ("------------------------------------------------------------------\n\n Dialogflow
-        // response: \n\n" + responseLogBuilder.build().toString());
+        System.out.println("------------------------------------------------------------------\n" +
+                "\n Dialogflow response: \n\n" + responseLogBuilder.build().toString());
         return responseLogBuilder.setMessageStatus(MessageStatus.SUCCESSFUL).build();
     }
 }
