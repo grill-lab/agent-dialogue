@@ -197,14 +197,21 @@ public class DialogAgentManager {
         return listOfResponseLogs;
     }
 
-    public ResponseLog chooseOneResponse(List<ResponseLog> responses) {
+    public ResponseLog chooseOneResponse(List<ResponseLog> responses) throws Exception {
+        if (checkNotNull(responses, "The list passed to the chooseOneResponse function is not " +
+                "initialized!").isEmpty()) {
+            throw new IllegalArgumentException("The list of responses is empty!");
+        }
         return chooseFirstValidResponse(responses);
     }
 
-    public ResponseLog chooseFirstValidResponse(List<ResponseLog> responses) {
-        
-        // TODO(Adam): Neet to choose the VALID response, not just the first repsonse.
-        return responses.get(0);
+    public ResponseLog chooseFirstValidResponse(List<ResponseLog> responses) throws Exception {
+        for (ResponseLog responseLog : responses) {
+            if (responseLog.getMessageStatus() == MessageStatus.SUCCESSFUL) {
+                return responseLog;
+            }
+        }
+        throw new Exception("Non of the passed responses had a successful call to the agent.");
     }
 
     // TODO(Adam): store the conversation in the log as a single Turn
