@@ -173,7 +173,14 @@ public class DialogAgentManager {
                 .setInteraction(interactionRequest.getInteraction()).build();
 
         InputInteraction inputInteraction = requestLog.getInteraction();
+        List<ResponseLog> listOfResponseLogs = asynchronousAgentCaller(inputInteraction);
 
+        // TODO(Adam) Remove when the log saving is implemented. Currently we can see the output.
+        listOfResponseLogs.forEach(System.out::println);
+        return listOfResponseLogs;
+    }
+
+    private List<ResponseLog> asynchronousAgentCaller(InputInteraction inputInteraction) {
         // Get responses the agents using RxJava asynchronously.
         Observable<AgentInterface> agentInterfaceObservable = Observable.fromIterable(_agents);
         List<ResponseLog> listOfResponseLogs = (agentInterfaceObservable.flatMap(agentObservable
@@ -190,10 +197,23 @@ public class DialogAgentManager {
                                 .build();
                     }
                 })
-        ).toList().blockingGet());
+        ).toList().blockingGet()); // TODO(Adam): Check if blockingGet and the entire code throws
+        // exceptions!
+        return listOfResponseLogs;
+    }
 
-        // TODO(Adam) Remove when the log saving is implemented. Currently we can see the output.
-        listOfResponseLogs.forEach(System.out::println);
+    private List<ResponseLog> synchronousAgentCaller(InputInteraction inputInteraction) {
+        List<ResponseLog> listOfResponseLogs = new ArrayList();
+        for (AgentInterface agent : _agents) {
+            try {
+                listOfResponseLogs.add(agent.getResponseFromAgent(inputInteraction));
+            } catch (Exception exception) {
+                listOfResponseLogs.add(ResponseLog.newBuilder()
+                        .setMessageStatus(MessageStatus.UNSUCCESFUL)
+                        .setErrorMessage(exception.getMessage())
+                        .build());
+            }
+        }
         return listOfResponseLogs;
     }
 
