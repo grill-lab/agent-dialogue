@@ -66,17 +66,18 @@
             <version>${junit.version}</version>
             <scope>test</scope>
         </dependency>
-        <!--
         <dependency>
             <groupId>io.reactivex.rxjava2</groupId>
             <artifactId>rxjava</artifactId>
-            <version>${rxjava.version}</version>
-        </dependency> -->
+            <version>2.1.15</version>
+        </dependency>
+        <!--
         <dependency>
             <groupId>io.reactivex</groupId>
             <artifactId>rxjava</artifactId>
             <version>${rxjava.version}</version>
         </dependency>
+        -->
     </dependencies>
 
     <build>
