@@ -10,6 +10,7 @@ import edu.gla.kail.ad.core.Log.Slot;
 import edu.gla.kail.ad.core.Log.SystemAct;
 
 import java.time.Instant;
+import java.util.concurrent.TimeUnit;
 
 
 /**
@@ -42,9 +43,6 @@ class DummyAgent implements AgentInterface {
                                 .setValue("SlotValue set by DummyBuilder").build())
                         .build())
                 .build();
-        // System.out.println
-        // ("------------------------------------------------------------------\n\nDummy agent
-        // response: \n\n:" + responseLog.toString());
         return responseLog;
     }
 }
