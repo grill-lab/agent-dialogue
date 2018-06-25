@@ -16,10 +16,16 @@ message InteractionRequest {
 }
 
 message InteractionResponse {
+    enum MessageStatus {
+        NONSET = 0;
+        SUCCESSFUL = 1;
+        ERROR = 2;
+    }
     string response_id = 1; // The ID assigned by the Agent.
     google.protobuf.Timestamp time = 2; // The time of the creation of the response.
     string client_id = 3; // The ID of the client the request is sent from.
     repeated OutputInteraction interaction = 4;
+    MessageStatus message_status = 7; // The status of the message received from the agent-dialogue-core.
 }
 
 enum InteractionType {

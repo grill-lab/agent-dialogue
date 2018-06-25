@@ -59,7 +59,7 @@ public class DialogflowAgentTest {
     @After
     public void cleanUp() {
         try {
-            TimeUnit.SECONDS.sleep((long) 0.4);
+            _sessionsClient.shutdown();
         } catch (Exception e) {
         }
     }

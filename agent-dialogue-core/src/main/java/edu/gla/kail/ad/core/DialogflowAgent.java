@@ -14,6 +14,7 @@ import edu.gla.kail.ad.Client.InputInteraction;
 import edu.gla.kail.ad.Client.InteractionType;
 import edu.gla.kail.ad.Client.OutputInteraction;
 import edu.gla.kail.ad.core.Log.ResponseLog;
+import edu.gla.kail.ad.core.Log.ResponseLog.MessageStatus;
 import edu.gla.kail.ad.core.Log.ResponseLog.ServiceProvider;
 import edu.gla.kail.ad.core.Log.Slot;
 import edu.gla.kail.ad.core.Log.SystemAct;
@@ -32,6 +33,7 @@ import static edu.gla.kail.ad.core.DialogflowAgentAuthorizationSingleton
  * The responses from agent is added to the log.
  * The request sent to the agent are validated. (There are no invalid characters which can crash
  * dialogflow)
+ * // TODO(Adam) Use shutdown() methof for closing _sessionClient stream.
  */
 public class DialogflowAgent implements AgentInterface {
     // The SessionsClient and SessionName are needed for the Dialogflow interaction.
@@ -167,6 +169,9 @@ public class DialogflowAgent implements AgentInterface {
     }
 
     /**
+     * TODO(Adam): set the Message_status value of the ResponseLog, when the message is somewhat
+     * unsuccessful.
+     *
      * @throws IllegalArgumentException - The exception is being thrown when the type of the
      *         interaction requested is not recognised or supported.
      */
@@ -217,6 +222,6 @@ public class DialogflowAgent implements AgentInterface {
         // System.out.println
         // ("------------------------------------------------------------------\n\n Dialogflow
         // response: \n\n" + responseLogBuilder.build().toString());
-        return responseLogBuilder.build();
+        return responseLogBuilder.setMessageStatus(MessageStatus.SUCCESSFUL).build();
     }
 }
