@@ -9,6 +9,9 @@ import edu.gla.kail.ad.Client.InteractionType;
 import edu.gla.kail.ad.Client.OutputInteraction;
 import edu.gla.kail.ad.core.Log.RequestLog;
 import edu.gla.kail.ad.core.Log.ResponseLog;
+import io.reactivex.Completable;
+import io.reactivex.Observable;
+import io.reactivex.schedulers.Schedulers;
 
 import java.io.IOException;
 import java.time.Instant;
@@ -172,9 +175,39 @@ public class DialogAgentManager {
         // Store the responses from the agents in a list.
         List<ResponseLog> listOfResponseLogs = new ArrayList();
         InputInteraction inputInteraction = requestLog.getInteraction();
-        for (AgentInterface agent : _agents) {
-            listOfResponseLogs.add(agent.getResponseFromAgent(inputInteraction));
-        }
+
+/*
+        // Get responses the agents using RxJava asynchronously.
+        Observable.from(_agents)
+                .subscribe(
+                        agent -> {
+                            try {
+                                ResponseLog responseLog = agent.getResponseFromAgent
+                                        (inputInteraction);
+                                listOfResponseLogs.add(responseLog);
+                            } catch (Exception exception) {
+                                listOfResponseLogs.add(ResponseLog.newBuilder()
+                                        .setMessageStatus(MessageStatus.UNSUCCESFUL)
+                                        .setErrorMessage(exception.getMessage())
+                                        .build());
+                            }
+                        },
+                        // TODO(Adam): Implemnt these methods.
+                        error -> System.out.println("Something went wrong" + error.getMessage()),
+                        () -> System.out.println("This observable is finished"));
+*/
+
+        Observable<AgentInterface> agentInterfaceObservable = Observable.fromIterable(_agents);
+
+        agentInterfaceObservable.flatMap(agentObservable -> Observable.just(agentObservable)
+                .subscribeOn(Schedulers.computation())
+                .map(agent -> {
+                        return agent.getResponseFromAgent(inputInteraction);})
+                )
+                .subscribe(responses -> listOfResponseLogs.add(responses) );
+        System.out.println("Currently handled request for: " + inputInteraction.getText());
+        // TODO(Adam) Remove when the log saving is implemented. Currently we can see the output.
+        listOfResponseLogs.forEach(System.out::println);
         return listOfResponseLogs;
     }
 
