@@ -10,7 +10,6 @@ import edu.gla.kail.ad.Client.OutputInteraction;
 import edu.gla.kail.ad.core.Log.RequestLog;
 import edu.gla.kail.ad.core.Log.ResponseLog;
 import edu.gla.kail.ad.core.Log.ResponseLog.MessageStatus;
-import edu.gla.kail.ad.core.Log.ResponseLog.ServiceProvider;
 import io.reactivex.Observable;
 import io.reactivex.schedulers.Schedulers;
 
@@ -176,7 +175,8 @@ public class DialogAgentManager {
                         .getNano())
                 .build();
 
-        // Save data from InteractionRequest to RequestLog.
+        // Save data from InteractionRequest to RequestLog. TODO(Adam): This part may be
+        // redundant. The implementation of storing logs should clarify this.
         RequestLog requestLog = RequestLog.newBuilder()
                 .setRequestId(getRandomID())
                 .setTime(timestamp)
@@ -198,8 +198,9 @@ public class DialogAgentManager {
                 -> Observable
                 .just(agentObservable)
                 .subscribeOn(Schedulers.computation())
+                .take(1, TimeUnit.SECONDS) // TODO(Adam): not sure if that's what we want.
                 .map(agent -> {
-                    return callForResponseAngValidate(agent, inputInteraction);
+                    return callForResponseAndValidate(agent, inputInteraction);
                 })
         ).toList().blockingGet()); // TODO(Adam): Check if blockingGet and the entire code throws
         // exceptions!
@@ -208,23 +209,29 @@ public class DialogAgentManager {
     private List<ResponseLog> synchronousAgentCaller(InputInteraction inputInteraction) {
         List<ResponseLog> listOfResponseLogs = new ArrayList();
         for (AgentInterface agent : _agents) {
-            listOfResponseLogs.add(callForResponseAngValidate(agent, inputInteraction));
+            listOfResponseLogs.add(callForResponseAndValidate(agent, inputInteraction));
         }
         return listOfResponseLogs;
     }
 
-    private ResponseLog callForResponseAngValidate(AgentInterface agent, InputInteraction
+    private ResponseLog callForResponseAndValidate(AgentInterface agent, InputInteraction
             inputInteraction) {
         // TODO(Adam): Add a timeout if the agent is not responding for x seconds
         try {
             ResponseLog responseLog = checkNotNull(agent.getResponseFromAgent(inputInteraction),
                     "The response from Agent was null!");
-            return (agent.getResponseFromAgent(inputInteraction));
+            return responseLog;
         } catch (Exception exception) {
             return ResponseLog.newBuilder()
                     .setMessageStatus(MessageStatus.UNSUCCESFUL)
                     .setErrorMessage(exception.getMessage())
                     .setServiceProvider(agent.getServiceProvider())
+                    .setTime(Timestamp.newBuilder()
+                            .setSeconds(Instant.now()
+                                    .getEpochSecond())
+                            .setNanos(Instant.now()
+                                    .getNano())
+                            .build())
                     .build();
         }
     }
