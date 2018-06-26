@@ -19,6 +19,7 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -214,6 +215,7 @@ public class DialogAgentManager {
 
     private ResponseLog callForResponseAngValidate(AgentInterface agent, InputInteraction
             inputInteraction) {
+        // TODO(Adam): Add a timeout if the agent is not responding for x seconds
         try {
             ResponseLog responseLog = checkNotNull(agent.getResponseFromAgent(inputInteraction),
                     "The response from Agent was null!");
@@ -242,7 +244,7 @@ public class DialogAgentManager {
                 return responseLog;
             }
         }
-        throw new Exception("Non of the passed responses had a successful call to the agent.");
+        throw new Exception("None of the passed responses had a successful call to the agent.");
     }
 
     // TODO(Adam): store the conversation in the log as a single Turn
