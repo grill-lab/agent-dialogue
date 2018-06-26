@@ -5,6 +5,7 @@ import com.google.protobuf.Timestamp;
 import edu.gla.kail.ad.Client.InputInteraction;
 import edu.gla.kail.ad.Client.InteractionRequest;
 import edu.gla.kail.ad.Client.InteractionType;
+import edu.gla.kail.ad.core.Log.ResponseLog.ServiceProvider;
 
 import java.io.File;
 import java.nio.charset.StandardCharsets;
@@ -45,12 +46,24 @@ public class DialogAgentManagerTestMain {
                             ArrayList();
                     dialogflowProjectIdAndJsonKeyFileList.add(Tuple.of(projectIdAndJsonKey[1],
                             projectIdAndJsonKey[2]));
-                    _configurationTuples.add(new ConfigurationTuple(SupportedAgentTypes.DIALOGFLOW,
+                    _configurationTuples.add(new ConfigurationTuple(ServiceProvider.DIALOGFLOW,
                             dialogflowProjectIdAndJsonKeyFileList));
                     break;
                 case "DummyAgent":
-                    _configurationTuples.add(new ConfigurationTuple(SupportedAgentTypes
+                    _configurationTuples.add(new ConfigurationTuple(ServiceProvider
                             .DUMMYAGENT, null));
+                    break;
+                case "FailingExceptionDummyAgent":
+                    _configurationTuples.add(new ConfigurationTuple(ServiceProvider
+                            .FAILINGEXCEPTIONDUMMYAGENT, null));
+                    break;
+                case "FailingNullDummyAgent":
+                    _configurationTuples.add(new ConfigurationTuple(ServiceProvider
+                            .FAILINGNULLDUMMYAGENT, null));
+                    break;
+                case "FailingTimeDummyAgent":
+                    _configurationTuples.add(new ConfigurationTuple(ServiceProvider
+                            .FAILINGTIMEDUMMYAGENT, null));
                     break;
                 default:
                     throw new IllegalArgumentException("The name of the agent is not correctly " +

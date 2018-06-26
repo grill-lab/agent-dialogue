@@ -5,6 +5,7 @@ import com.google.protobuf.Timestamp;
 import edu.gla.kail.ad.Client.InputInteraction;
 import edu.gla.kail.ad.Client.InteractionRequest;
 import edu.gla.kail.ad.Client.InteractionType;
+import edu.gla.kail.ad.core.Log.ResponseLog.ServiceProvider;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -28,8 +29,8 @@ import static org.junit.Assert.fail;
 // TODO(Adam): Restructure the majority of the class!
 @RunWith(JUnit4.class)
 public class DialogflowAgentManagerTest {
-    DialogAgentManager _dialogAgentManager;
     static List<ConfigurationTuple> _configurationTuples;
+    DialogAgentManager _dialogAgentManager;
     InteractionRequest _interactionRequest;
 
     @BeforeClass
@@ -55,12 +56,24 @@ public class DialogflowAgentManagerTest {
                             ArrayList();
                     dialogflowProjectIdAndJsonKeyFileList.add(Tuple.of(projectIdAndJsonKey[1],
                             projectIdAndJsonKey[2]));
-                    _configurationTuples.add(new ConfigurationTuple(SupportedAgentTypes
+                    _configurationTuples.add(new ConfigurationTuple(ServiceProvider
                             .DIALOGFLOW, dialogflowProjectIdAndJsonKeyFileList));
                     break;
                 case "DummyAgent":
-                    _configurationTuples.add(new ConfigurationTuple(SupportedAgentTypes
+                    _configurationTuples.add(new ConfigurationTuple(ServiceProvider
                             .DUMMYAGENT, null));
+                    break;
+                case "FailingExceptionDummyAgent":
+                    _configurationTuples.add(new ConfigurationTuple(ServiceProvider
+                            .FAILINGEXCEPTIONDUMMYAGENT, null));
+                    break;
+                case "FailingNullDummyAgent":
+                    _configurationTuples.add(new ConfigurationTuple(ServiceProvider
+                            .FAILINGNULLDUMMYAGENT, null));
+                    break;
+                case "FailingTimeDummyAgent":
+                    _configurationTuples.add(new ConfigurationTuple(ServiceProvider
+                            .FAILINGTIMEDUMMYAGENT, null));
                     break;
                 default:
                     fail("The name of the agent is not correctly formatted or the agent type: " +

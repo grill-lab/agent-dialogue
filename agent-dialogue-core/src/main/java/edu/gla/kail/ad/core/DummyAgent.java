@@ -10,7 +10,6 @@ import edu.gla.kail.ad.core.Log.Slot;
 import edu.gla.kail.ad.core.Log.SystemAct;
 
 import java.time.Instant;
-import java.util.concurrent.TimeUnit;
 
 
 /**
@@ -24,6 +23,11 @@ class DummyAgent implements AgentInterface {
             .setNanos(Instant.now()
                     .getNano())
             .build();
+
+    @Override
+    public ServiceProvider getServiceProvider() {
+        return ServiceProvider.DUMMYAGENT;
+    }
 
     @Override
     public ResponseLog getResponseFromAgent(InputInteraction inputInteraction) {

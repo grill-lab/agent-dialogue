@@ -2,6 +2,7 @@ package edu.gla.kail.ad.core;
 
 import edu.gla.kail.ad.Client.InputInteraction;
 import edu.gla.kail.ad.core.Log.ResponseLog;
+import edu.gla.kail.ad.core.Log.ResponseLog.ServiceProvider;
 
 import java.util.concurrent.TimeUnit;
 
@@ -11,6 +12,11 @@ import java.util.concurrent.TimeUnit;
  * TODO(Adam): Delete after testing is done!
  */
 public class FailingTimeDummyAgent implements AgentInterface {
+    @Override
+    public ServiceProvider getServiceProvider() {
+        return ServiceProvider.FAILINGTIMEDUMMYAGENT;
+    }
+
     @Override
     public ResponseLog getResponseFromAgent(InputInteraction inputInteraction) throws Exception {
         ResponseLog responseLog = null;

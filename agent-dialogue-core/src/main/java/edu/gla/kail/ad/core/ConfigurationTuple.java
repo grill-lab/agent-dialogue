@@ -1,5 +1,7 @@
 package edu.gla.kail.ad.core;
 
+import edu.gla.kail.ad.core.Log.ResponseLog.ServiceProvider;
+
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Objects;
@@ -13,22 +15,22 @@ import static com.google.common.base.Preconditions.checkNotNull;
  */
 public final class ConfigurationTuple<T> {
     // The type of the particular agent.
-    private SupportedAgentTypes _agentType;
+    private ServiceProvider _agentType;
     // List of configuration objects specific to the type of agent.
     private List<T> _agentSpecificData;
 
     /**
-     * @param supportedAgentTypes - The type of the agent.
+     * @param serviceProvider - The type of the agent.
      * @param agentSpecificData - A list of generic type objects, that stores the data
      *         required by a particular agent.
      */
-    public ConfigurationTuple(SupportedAgentTypes supportedAgentTypes, @Nullable List<T>
+    public ConfigurationTuple(ServiceProvider serviceProvider, @Nullable List<T>
             agentSpecificData) {
-        _agentType = checkNotNull(supportedAgentTypes, "The name of the service is null");
+        _agentType = checkNotNull(serviceProvider, "The name of the service is null");
         _agentSpecificData = agentSpecificData;
     }
 
-    public SupportedAgentTypes get_agentType() {
+    public ServiceProvider get_agentType() {
         return _agentType;
     }
 

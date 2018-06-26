@@ -2,11 +2,17 @@ package edu.gla.kail.ad.core;
 
 import edu.gla.kail.ad.Client.InputInteraction;
 import edu.gla.kail.ad.core.Log.ResponseLog;
+import edu.gla.kail.ad.core.Log.ResponseLog.ServiceProvider;
 
 /**
  * Agent interface is a common interface to different dialogue framework implementations.
  */
 interface AgentInterface {
+    ServiceProvider serviceProvider = null;
+
+
+    ServiceProvider getServiceProvider(); // Return the service provider type of the instance.
+
     /**
      * Return a response for a formatted request.
      *

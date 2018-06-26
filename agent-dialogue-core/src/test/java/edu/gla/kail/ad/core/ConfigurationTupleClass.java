@@ -1,5 +1,6 @@
 package edu.gla.kail.ad.core;
 
+import edu.gla.kail.ad.core.Log.ResponseLog.ServiceProvider;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
@@ -20,35 +21,35 @@ public class ConfigurationTupleClass {
 
     @Test
     public void testDialogflowTupleWithNullList() {
-        ConfigurationTuple configurationTuple = new ConfigurationTuple(SupportedAgentTypes
+        ConfigurationTuple configurationTuple = new ConfigurationTuple(ServiceProvider
                 .DIALOGFLOW, null);
     }
 
     @Test
     public void testGetTypeDialogflow() {
-        ConfigurationTuple configurationTuple = new ConfigurationTuple(SupportedAgentTypes
+        ConfigurationTuple configurationTuple = new ConfigurationTuple(ServiceProvider
                 .DIALOGFLOW, null);
         assertSame("ConfigurationTuple DIALOGFLOW type specified during the initialization is not" +
                         " the same as the type returned by get_agentType() method.",
-                SupportedAgentTypes.DIALOGFLOW, configurationTuple.get_agentType());
+                ServiceProvider.DIALOGFLOW, configurationTuple.get_agentType());
 
     }
 
     @Test
     public void testGetListDialogflow() {
         List list = new ArrayList();
-        ConfigurationTuple configurationTuple = new ConfigurationTuple(SupportedAgentTypes
+        ConfigurationTuple configurationTuple = new ConfigurationTuple(ServiceProvider
                 .DIALOGFLOW, list);
         assertTrue("ConfigurationTuple's agentSpecificData (empty ArrayList), for DIALOGFLOW " +
                         "type, is not equal to the one returned by get_agentSpecificData() method.",
                 list.equals(configurationTuple.get_agentType()));
         list = new LinkedList();
-        configurationTuple = new ConfigurationTuple(SupportedAgentTypes.DIALOGFLOW, list);
+        configurationTuple = new ConfigurationTuple(ServiceProvider.DIALOGFLOW, list);
         assertTrue("ConfigurationTuple's agentSpecificData (empty LinkedList), for DIALOGFLOW " +
                         "type, is not equal to the one returned by get_agentSpecificData() method.",
                 list.equals(configurationTuple.get_agentType()));
         list.add("Testing text");
-        configurationTuple = new ConfigurationTuple(SupportedAgentTypes.DIALOGFLOW, list);
+        configurationTuple = new ConfigurationTuple(ServiceProvider.DIALOGFLOW, list);
         assertTrue("ConfigurationTuple's agentSpecificData (LinkedList with one String entry), " +
                         "for DIALOGFLOW type, is not equal to the one returned by " +
                         "get_agentSpecificData() method.",
@@ -59,9 +60,9 @@ public class ConfigurationTupleClass {
     public void testEqualsMethod() {
         List list = new ArrayList();
         list.add("Testing text");
-        ConfigurationTuple configurationTuple1 = new ConfigurationTuple(SupportedAgentTypes
+        ConfigurationTuple configurationTuple1 = new ConfigurationTuple(ServiceProvider
                 .DIALOGFLOW, list);
-        ConfigurationTuple configurationTuple2 = new ConfigurationTuple(SupportedAgentTypes
+        ConfigurationTuple configurationTuple2 = new ConfigurationTuple(ServiceProvider
                 .DIALOGFLOW, list);
         assertTrue("The ConfigurationTuple's equals method doesn't work correctly.",
                 configurationTuple1.equals(configurationTuple2));

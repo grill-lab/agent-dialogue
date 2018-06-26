@@ -59,6 +59,11 @@ public class DialogflowAgent implements AgentInterface {
         setUpAgent(tupleOfProjectIdAndAuthorizationFile);
     }
 
+    @Override
+    public ServiceProvider getServiceProvider() {
+        return ServiceProvider.DIALOGFLOW;
+    }
+
     /**
      * Create the SessionClients and SessionNames for the agent which project ID and Service Account
      * key file directory.
