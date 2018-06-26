@@ -10,6 +10,7 @@ import edu.gla.kail.ad.Client.OutputInteraction;
 import edu.gla.kail.ad.core.Log.RequestLog;
 import edu.gla.kail.ad.core.Log.ResponseLog;
 import edu.gla.kail.ad.core.Log.ResponseLog.MessageStatus;
+import edu.gla.kail.ad.core.Log.ResponseLog.ServiceProvider;
 import io.reactivex.Observable;
 import io.reactivex.schedulers.Schedulers;
 
@@ -127,8 +128,17 @@ public class DialogAgentManager {
                     }
                     _agents.add(new DialogflowAgent(_sessionId, agentSpecificData.get(0)));
                     break;
-                case DUMMYAGENT:
+                case DUMMYAGENT: // TODO(ADAM): Delete these agents after testing is done.
                     _agents.add(new DummyAgent());
+                    break;
+                case FAILINGEXCEPTIONDUMMYAGENT:
+                    _agents.add(new FailingExceptionDummyAgent());
+                    break;
+                case FAILINGNULLDUMMYAGENT:
+                    _agents.add(new FailingNullDummyAgent());
+                    break;
+                case FAILINGTIMEDUMMYAGENT:
+                    _agents.add(new FailingTimeDummyAgent());
                     break;
                 default:
                     throw new IllegalArgumentException("The type of the agent provided " +
@@ -183,40 +193,41 @@ public class DialogAgentManager {
     private List<ResponseLog> asynchronousAgentCaller(InputInteraction inputInteraction) {
         // Get responses the agents using RxJava asynchronously.
         Observable<AgentInterface> agentInterfaceObservable = Observable.fromIterable(_agents);
-        List<ResponseLog> listOfResponseLogs = (agentInterfaceObservable.flatMap(agentObservable
+        return (agentInterfaceObservable.flatMap(agentObservable
                 -> Observable
                 .just(agentObservable)
                 .subscribeOn(Schedulers.computation())
                 .map(agent -> {
-                    try {
-                        return agent.getResponseFromAgent(inputInteraction);
-                    } catch (Exception exception) {
-                        return ResponseLog.newBuilder()
-                                .setMessageStatus(MessageStatus.UNSUCCESFUL)
-                                .setErrorMessage(exception.getMessage())
-                                .build();
-                    }
+                    return callForResponseAngValidate(agent, inputInteraction);
                 })
         ).toList().blockingGet()); // TODO(Adam): Check if blockingGet and the entire code throws
         // exceptions!
-        return listOfResponseLogs;
     }
 
     private List<ResponseLog> synchronousAgentCaller(InputInteraction inputInteraction) {
         List<ResponseLog> listOfResponseLogs = new ArrayList();
         for (AgentInterface agent : _agents) {
-            try {
-                listOfResponseLogs.add(agent.getResponseFromAgent(inputInteraction));
-            } catch (Exception exception) {
-                listOfResponseLogs.add(ResponseLog.newBuilder()
-                        .setMessageStatus(MessageStatus.UNSUCCESFUL)
-                        .setErrorMessage(exception.getMessage())
-                        .build());
-            }
+            listOfResponseLogs.add(callForResponseAngValidate(agent, inputInteraction));
         }
         return listOfResponseLogs;
     }
 
+    private ResponseLog callForResponseAngValidate(AgentInterface agent, InputInteraction
+            inputInteraction) {
+        try {
+            ResponseLog responseLog = checkNotNull(agent.getResponseFromAgent(inputInteraction),
+                    "The response from Agent was null!");
+            return (agent.getResponseFromAgent(inputInteraction));
+        } catch (Exception exception) {
+            return ResponseLog.newBuilder()
+                    .setMessageStatus(MessageStatus.UNSUCCESFUL)
+                    .setErrorMessage(exception.getMessage())
+                    .setServiceProvider(agent.getServiceProvider())
+                    .build();
+        }
+    }
+
+    // Choose the response.
     public ResponseLog chooseOneResponse(List<ResponseLog> responses) throws Exception {
         if (checkNotNull(responses, "The list passed to the chooseOneResponse function is not " +
                 "initialized!").isEmpty()) {

@@ -4,7 +4,7 @@ import com.google.cloud.Tuple;
 import edu.gla.kail.ad.core.ConfigurationTuple;
 import edu.gla.kail.ad.core.DialogAgentManager;
 import edu.gla.kail.ad.core.DialogAgentManagerTestMain;
-import edu.gla.kail.ad.core.SupportedAgentTypes;
+import edu.gla.kail.ad.core.Log.ResponseLog.ServiceProvider;
 
 import java.io.File;
 import java.io.IOException;
@@ -72,7 +72,8 @@ final class DialogAgentManagerSingleton {
             ioException.printStackTrace();
             lines = null;
         }
-        checkNotNull(lines, "Reading the file with ProjectIds and Json Authrisation file locations failed!");
+        checkNotNull(lines, "Reading the file with ProjectIds and Json Authrisation file " +
+                "locations failed!");
         for (String line : lines) {
             String[] projectIdAndJsonKey = line.split(",");
             switch (projectIdAndJsonKey[0]) {
@@ -81,12 +82,24 @@ final class DialogAgentManagerSingleton {
                             ArrayList();
                     dialogflowProjectIdAndJsonKeyFileList.add(Tuple.of(projectIdAndJsonKey[1],
                             projectIdAndJsonKey[2]));
-                    configurationTuples.add(new ConfigurationTuple(SupportedAgentTypes.DIALOGFLOW,
+                    configurationTuples.add(new ConfigurationTuple(ServiceProvider.DIALOGFLOW,
                             dialogflowProjectIdAndJsonKeyFileList));
                     break;
                 case "DummyAgent":
-                    configurationTuples.add(new ConfigurationTuple(SupportedAgentTypes
+                    configurationTuples.add(new ConfigurationTuple(ServiceProvider
                             .DUMMYAGENT, null));
+                    break;
+                case "FailingExceptionDummyAgent":
+                    configurationTuples.add(new ConfigurationTuple(ServiceProvider
+                            .FAILINGEXCEPTIONDUMMYAGENT, null));
+                    break;
+                case "FailingNullDummyAgent":
+                    configurationTuples.add(new ConfigurationTuple(ServiceProvider
+                            .FAILINGNULLDUMMYAGENT, null));
+                    break;
+                case "FailingTimeDummyAgent":
+                    configurationTuples.add(new ConfigurationTuple(ServiceProvider
+                            .FAILINGTIMEDUMMYAGENT, null));
                     break;
                 default:
                     throw new IllegalArgumentException("The name of the agent is not correctly " +
