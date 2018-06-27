@@ -12,7 +12,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <javaVersion>1.8</javaVersion>
         <!-- to be changed later on to the main class -->
-        <mainClass>edu.gla.kail.ad.service.AgentDialogueClient</mainClass>
+        <mainClass>edu.gla.kail.ad.service.AgentDialogueClientService</mainClass>
         <protobuf.version>3.5.1</protobuf.version>
         <protoc.version>3.5.1-1</protoc.version>
         <os-maven-plugin.version>1.6.0</os-maven-plugin.version>
