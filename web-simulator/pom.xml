@@ -21,12 +21,13 @@
     </properties>
 
     <dependencies>
+        <!-- Got that from agent-dialogue-core dependency
         <dependency>
             <groupId>com.google.protobuf</groupId>
             <artifactId>protobuf-java</artifactId>
             <version>${protobuf.version}</version>
         </dependency>
-        <dependency>
+          <dependency>
             <groupId>io.grpc</groupId>
             <artifactId>grpc-netty</artifactId>
             <version>${grpc.version}</version>
@@ -56,6 +57,13 @@
             <artifactId>junit</artifactId>
             <version>${junit.version}</version>
             <scope>test</scope>
+        </dependency>
+        -->
+        <dependency>
+            <groupId>agent-dialogue</groupId>
+            <artifactId>agent-dialogue-core</artifactId>
+            <version>0.1-SNAPSHOT</version>
+            <scope>compile</scope>
         </dependency>
     </dependencies>
 
