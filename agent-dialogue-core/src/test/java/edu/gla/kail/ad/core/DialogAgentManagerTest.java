@@ -28,7 +28,7 @@ import static org.junit.Assert.fail;
 
 // TODO(Adam): Restructure the majority of the class!
 @RunWith(JUnit4.class)
-public class DialogflowAgentManagerTest {
+public class DialogAgentManagerTest {
     static List<ConfigurationTuple> _configurationTuples;
     DialogAgentManager _dialogAgentManager;
     InteractionRequest _interactionRequest;

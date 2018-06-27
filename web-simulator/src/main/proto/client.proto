@@ -6,6 +6,7 @@ option java_package = "edu.gla.kail.ad";
 
 import "google/protobuf/timestamp.proto";
 
+
 // This protobuffer is used for storing the data that is being obtained from the client
 // and that is being sent back to the client.
 
@@ -16,7 +17,7 @@ message InteractionRequest {
 }
 
 message InteractionResponse {
-    enum MessageStatus {
+    enum ClientMessageStatus {
         NONSET = 0;
         SUCCESSFUL = 1;
         ERROR = 2;
@@ -25,7 +26,8 @@ message InteractionResponse {
     google.protobuf.Timestamp time = 2; // The time of the creation of the response.
     string client_id = 3; // The ID of the client the request is sent from.
     repeated OutputInteraction interaction = 4;
-    MessageStatus message_status = 7; // The status of the message received from the agent-dialogue-core.
+    ClientMessageStatus message_status = 5; // The status of the message received from the agent-dialogue-core.
+    string error_message = 6;
 }
 
 enum InteractionType {
