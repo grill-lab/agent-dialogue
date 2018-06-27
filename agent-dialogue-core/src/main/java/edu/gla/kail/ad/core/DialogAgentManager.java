@@ -70,7 +70,7 @@ public class DialogAgentManager {
      */
     public InteractionResponse getResponseFromAgentAsInteractionResponse(InteractionRequest
                                                                                  interactionRequest) {
-        InteractionResponse interactionResponse = InteractionResponse.newBuilder()
+        return InteractionResponse.newBuilder()
                 .setResponseId("Setting response Id was successful")
                 .setTime(Timestamp.newBuilder()
                         .setSeconds(Instant.now()
@@ -85,7 +85,6 @@ public class DialogAgentManager {
                         .addAction("Adding OutputInteraction Action was successful")
                         .build())
                 .build();
-        return interactionResponse;
     }
 
     /**
@@ -124,6 +123,8 @@ public class DialogAgentManager {
         _agents = new ArrayList();
         for (ConfigurationTuple configurationTuple : configurationTuples) {
             switch (configurationTuple.get_agentType()) {
+                case NOTSET:
+                    break;
                 case DIALOGFLOW:
                     List<Tuple> agentSpecificData = checkNotNull(configurationTuple
                             .get_agentSpecificData(), "The Dialogflow specific data is null!");
@@ -165,10 +166,8 @@ public class DialogAgentManager {
      *         the interaction from a client.
      * @return List<ResponseLog> - The list of responses of all agents set up on the
      *         setUpAgents(...) method call.
-     * @throws IllegalArgumentException, Exception
      */
-    public List<ResponseLog> getResponsesFromAgents(InteractionRequest interactionRequest) throws
-            IllegalArgumentException, Exception {
+    public List<ResponseLog> getResponsesFromAgents(InteractionRequest interactionRequest) {
         if (checkNotNull(_agents, "Agents are not set up! Use the method" +
                 " setUpAgents() first.").isEmpty()) {
             throw new IllegalArgumentException("The list of agents is empty!");
@@ -197,6 +196,14 @@ public class DialogAgentManager {
         return listOfResponseLogs;
     }
 
+    /**
+     * Return the responses by calling agents asynchronously.
+     *
+     * @param inputInteraction - The a data structure (implemented in log .proto) holding
+     *         the interaction input sent to the agent.
+     * @return List<ResponseLog> - The list of responses of all agents set up on the
+     *         setUpAgents(...) method call.
+     */
     private List<ResponseLog> asynchronousAgentCaller(InputInteraction inputInteraction) {
         // Get responses the agents using RxJava asynchronously.
         Observable<AgentInterface> agentInterfaceObservable = Observable.fromIterable(_agents);
@@ -212,6 +219,14 @@ public class DialogAgentManager {
         ).toList().blockingGet());
     }
 
+    /**
+     * Return the responses by calling agents synchronously.
+     *
+     * @param inputInteraction - The a data structure (implemented in log .proto) holding
+     *         the interaction input sent to the agent.
+     * @return List<ResponseLog> - The list of responses of all agents set up on the
+     *         setUpAgents(...) method call.
+     */
     private List<ResponseLog> synchronousAgentCaller(InputInteraction inputInteraction) {
         List<ResponseLog> listOfResponseLogs = new ArrayList();
         for (AgentInterface agent : _agents) {
@@ -220,6 +235,15 @@ public class DialogAgentManager {
         return listOfResponseLogs;
     }
 
+    /**
+     * Return a valid response from an agent within a set time period or return and unsuccessful
+     * response.
+     *
+     * @param agent - The agent which
+     * @param inputInteraction - The a data structure (implemented in log .proto) holding
+     *         the interaction input sent to the agent.
+     * @return ResponseLog - Response from the agent or unsuccessful reponse.
+     */
     private ResponseLog callForResponseAndValidate(AgentInterface agent, InputInteraction
             inputInteraction) {
         // TODO(Adam): Repeat a call if unsuccessful?
@@ -290,6 +314,7 @@ public class DialogAgentManager {
                     .build();
         }*/
     }
+
 
     // Choose the response.
     public ResponseLog chooseOneResponse(List<ResponseLog> responses) throws Exception {
