@@ -57,7 +57,8 @@ final class DialogAgentManagerSingleton {
      * TODO(Adam): Delete this funtion after the database with agents is set up.
      *
      * @return List<ConfigurationTuple> - the tuples used to set up agents
-     * @throws IOException
+     * @throws NullPointerException - Throw when the file with ProjectIds and Json
+     *         Authorisation file is not accessible.
      */
     private static List<ConfigurationTuple> supportingFunctionToBeDeleted() {
         List<ConfigurationTuple> configurationTuples = new ArrayList();
@@ -72,7 +73,7 @@ final class DialogAgentManagerSingleton {
             ioException.printStackTrace();
             lines = null;
         }
-        checkNotNull(lines, "Reading the file with ProjectIds and Json Authrisation file " +
+        checkNotNull(lines, "Reading the file with ProjectIds and Json Authorisation file " +
                 "locations failed!");
         for (String line : lines) {
             String[] projectIdAndJsonKey = line.split(",");

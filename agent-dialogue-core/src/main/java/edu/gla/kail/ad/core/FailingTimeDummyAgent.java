@@ -8,7 +8,7 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * This is a dummy agent created for testing purposes.
- * Returns null ResponseLog after 10 seconds of waiting.
+ * Waits infinitely (through infinite loop).
  * TODO(Adam): Delete after testing is done!
  */
 public class FailingTimeDummyAgent implements AgentInterface {

@@ -88,7 +88,7 @@ public class DialogflowAgent implements AgentInterface {
      *
      * @param inputInteraction - A data structure (implemented in log.proto) holding the
      *         incoming interaction that is being sent to an agent.
-     * @throws IllegalArgumentException
+     * @throws IllegalArgumentException - Thrown when the input is invalid.
      */
     private void validateInputInteraction(InputInteraction inputInteraction) throws
             IllegalArgumentException {
