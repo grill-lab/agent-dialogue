@@ -5,13 +5,19 @@ import edu.gla.kail.ad.Client.InputInteraction;
 import edu.gla.kail.ad.Client.InteractionRequest;
 import edu.gla.kail.ad.Client.InteractionResponse;
 import edu.gla.kail.ad.Client.InteractionType;
+import edu.gla.kail.ad.core.Log.LogEntry;
+import edu.gla.kail.ad.core.Log.Turn;
 import edu.gla.kail.ad.service.AgentDialogueGrpc.AgentDialogueBlockingStub;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 import io.grpc.StatusRuntimeException;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 public class AgentDialogueClientService {
@@ -86,6 +92,40 @@ public class AgentDialogueClientService {
         }
     }
 
+    /**
+     * Replay the conversation with agents.
+     * Return the OutputStream of the conversation.
+     *
+     * @param inputStream - InputStream created from the log file.
+     * @param clientId - The string identifying the client.
+     * @return OutputStream - The outputStream of the Logfile created by replaying conversation.
+     *         TODO(Jeff): Is it what we want as a return value?
+     * @throws Exception - Throw when the provided InputStream is invalid or
+     *         getInteractionResponse throws error.
+     */
+    public OutputStream replayConversation(InputStream inputStream, String clientId) throws
+            Exception {
+        LogEntry logEntry;
+        List<InteractionResponse> listOfInteractionResponses = new ArrayList();
+        try {
+            logEntry = LogEntry.parseFrom(inputStream);
+        } catch (IOException iOException) {
+            throw new Exception("Provided InputStream is not valid! Error message: " +
+                    iOException.getMessage());
+        }
+        for (Turn turn : logEntry.getTurnList()) {
+            InteractionRequest interactionRequest = InteractionRequest.newBuilder()
+                    .setTime(Timestamp.newBuilder()
+                            .setSeconds(Instant.now()
+                                    .getEpochSecond())
+                            .setNanos(Instant.now()
+                                    .getNano())
+                            .build())
+                    .setClientId(clientId)
+                    .setInteraction(turn.getRequestLog().getInteraction()).build();
+            listOfInteractionResponses.add(getInteractionResponse(interactionRequest));
+        }
 
-    public OutputStream replayConversation
+        throw new Exception("Return not implemented yet!");
+    }
 }
