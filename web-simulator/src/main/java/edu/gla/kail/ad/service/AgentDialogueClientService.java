@@ -13,17 +13,17 @@ import io.grpc.StatusRuntimeException;
 import java.time.Instant;
 import java.util.concurrent.TimeUnit;
 
-public class AgentDialogueClient {
+public class AgentDialogueClientService {
     private final ManagedChannel _channel;
     private final AgentDialogueBlockingStub _blockingStub; // RPC will wait for the server to
     // respond; return response or raise an exception
 
-    public AgentDialogueClient(String host, int port) {
+    public AgentDialogueClientService(String host, int port) {
         this(ManagedChannelBuilder.forAddress(host, port).usePlaintext()); // usePlainText
         // skips negation: true
     }
 
-    public AgentDialogueClient(ManagedChannelBuilder<?> channelBuilder) {
+    public AgentDialogueClientService(ManagedChannelBuilder<?> channelBuilder) {
         _channel = channelBuilder.build();
         _blockingStub = AgentDialogueGrpc.newBlockingStub(_channel);
     }
@@ -48,7 +48,7 @@ public class AgentDialogueClient {
                         .addAction("Action set by client")
                         .build())
                 .build();
-        AgentDialogueClient client = new AgentDialogueClient("localhost", 8080);
+        AgentDialogueClientService client = new AgentDialogueClientService("localhost", 8080);
         try {
             InteractionResponse interactionResponse = client.getInteractionResponse
                     (interactionRequest);
