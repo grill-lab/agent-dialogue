@@ -316,7 +316,13 @@ public class DialogAgentManager {
     }
 
 
-    // Choose the response.
+    /**
+     * Choose the response from the list obtained from all the agents.
+     *
+     * @param responses - The list of ResponseLog responses obtained from agents.
+     * @return ResponseLog - One of the responses chosen using specified ranking/choosing method.
+     * @throws Exception - Throw when the list is not initialized or empty.
+     */
     public ResponseLog chooseOneResponse(List<ResponseLog> responses) throws Exception {
         if (checkNotNull(responses, "The list passed to the chooseOneResponse function is not " +
                 "initialized!").isEmpty()) {
@@ -325,13 +331,29 @@ public class DialogAgentManager {
         return chooseFirstValidResponse(responses);
     }
 
-    public ResponseLog chooseFirstValidResponse(List<ResponseLog> responses) throws Exception {
+    /**
+     * Choose the first successful response.
+     *
+     * @param responses - The list of ResponseLog responses obtained from agents.
+     * @return ResponseLog - The first successful response or unsuccessful response if none of the
+     *         provided responses were successful.
+     */
+    public ResponseLog chooseFirstValidResponse(List<ResponseLog> responses) {
         for (ResponseLog responseLog : responses) {
             if (responseLog.getMessageStatus() == MessageStatus.SUCCESSFUL) {
                 return responseLog;
             }
         }
-        throw new Exception("None of the passed responses had a successful call to the agent.");
+        return ResponseLog.newBuilder()
+                .setMessageStatus(MessageStatus.UNSUCCESFUL)
+                .setErrorMessage("None of the passed responses had a successful call to the agent.")
+                .setTime(Timestamp.newBuilder()
+                        .setSeconds(Instant.now()
+                                .getEpochSecond())
+                        .setNanos(Instant.now()
+                                .getNano())
+                        .build())
+                .build();
     }
 
     // TODO(Adam): store the conversation in the log as a single Turn
