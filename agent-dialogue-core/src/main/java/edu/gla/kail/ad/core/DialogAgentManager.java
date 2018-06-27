@@ -7,11 +7,15 @@ import edu.gla.kail.ad.Client.InteractionRequest;
 import edu.gla.kail.ad.Client.InteractionResponse;
 import edu.gla.kail.ad.Client.InteractionType;
 import edu.gla.kail.ad.Client.OutputInteraction;
+import edu.gla.kail.ad.core.Log.LogEntry;
+import edu.gla.kail.ad.core.Log.LogEntryOrBuilder;
 import edu.gla.kail.ad.core.Log.RequestLog;
 import edu.gla.kail.ad.core.Log.ResponseLog;
 import edu.gla.kail.ad.core.Log.ResponseLog.Builder;
 import edu.gla.kail.ad.core.Log.ResponseLog.MessageStatus;
 import edu.gla.kail.ad.core.Log.ResponseLogOrBuilder;
+import edu.gla.kail.ad.core.Log.Turn;
+import edu.gla.kail.ad.core.Log.TurnOrBuilder;
 import io.reactivex.Observable;
 import io.reactivex.schedulers.Schedulers;
 
@@ -52,12 +56,15 @@ public class DialogAgentManager {
     // Session ID is a unique identifier of a session which is assigned by the method
     // startSession() called by DialogAgentManager constructor.
     private String _sessionId;
+    // One LogEntry is stored per session.
+    private LogEntryOrBuilder _logEntryBuilder;
 
     /**
      * Create a unique session ID generated with startSession() method.
      */
     public DialogAgentManager() {
         startSession();
+        _logEntryBuilder = LogEntry.newBuilder();
     }
 
     /**
@@ -94,7 +101,11 @@ public class DialogAgentManager {
         _sessionId = getRandomID();
     }
 
+    /**
+     * Called before the end of the session to store the log in the file.
+     */
     public void endSession() {
+        // ((LogEntry.Builder) _logEntryBuilder).build().writeTo();
         // TODO(Adam): Creation of configuration file - to be done later on.
         // TODO(Adam): Updating/Saving to the log file?
     }
@@ -158,21 +169,14 @@ public class DialogAgentManager {
     }
 
     /**
-     * Get Request from Client and convert it to the RequestLog.
-     * Return the list of responses for a given request.
-     * TODO(Adam): Maybe store the logs after each conversation; need to decide later on.
+     * Take the request from the service and send back chosen response.
+     * Add the Turn to the LogEntry stored within the instance.
      *
-     * @param interactionRequest - The a data structure (implemented in log.proto) holding
-     *         the interaction from a client.
-     * @return List<ResponseLog> - The list of responses of all agents set up on the
-     *         setUpAgents(...) method call.
+     * @param interactionRequest - The request sent by the client.
+     * @return ResponseLog - The response chosen with a particular method from the list of responses
+     *         obtained by calling all the agents.
      */
-    public List<ResponseLog> getResponsesFromAgents(InteractionRequest interactionRequest) {
-        if (checkNotNull(_agents, "Agents are not set up! Use the method" +
-                " setUpAgents() first.").isEmpty()) {
-            throw new IllegalArgumentException("The list of agents is empty!");
-        }
-
+    public ResponseLog getResponse(InteractionRequest interactionRequest) throws Exception {
         Timestamp timestamp = Timestamp.newBuilder()
                 .setSeconds(Instant.now()
                         .getEpochSecond())
@@ -180,17 +184,42 @@ public class DialogAgentManager {
                         .getNano())
                 .build();
 
-        // Save data from InteractionRequest to RequestLog. TODO(Adam): This part may be
-        // redundant. The implementation of storing logs should clarify this.
         RequestLog requestLog = RequestLog.newBuilder()
                 .setRequestId(getRandomID())
                 .setTime(timestamp)
                 .setClientId(interactionRequest.getClientId())
                 .setInteraction(interactionRequest.getInteraction()).build();
 
-        InputInteraction inputInteraction = requestLog.getInteraction();
-        List<ResponseLog> listOfResponseLogs = asynchronousAgentCaller(inputInteraction);
+        List<ResponseLog> responses = getResponsesFromAgents(interactionRequest.getInteraction());
+        ResponseLog chosenResponse = chooseOneResponse(responses); // This may throw exception.
+        // TODO(Adam): Maybe do sth with it?
+        TurnOrBuilder turnBuilder = Turn.newBuilder()
+                .setRequestLog(requestLog)
+                .setResponseLog(chosenResponse);
+        for (ResponseLog response : responses) {
+            ((Turn.Builder) turnBuilder).addCandidateResponse(response);
+        }
+        Turn turn = ((Turn.Builder) turnBuilder).build();
+        ((LogEntry.Builder) _logEntryBuilder).addTurn(turn);
+        return chosenResponse;
+    }
 
+    /**
+     * Get Request from Client and convert it to the RequestLog.
+     * Return the list of responses for a given request.
+     * TODO(Adam): Maybe store the logs after each conversation; need to decide later on.
+     *
+     * @param inputInteraction - The a data structure (implemented in log.proto) holding
+     *         the interaction input passed to agents.
+     * @return List<ResponseLog> - The list of responses of all agents set up on the
+     *         setUpAgents(...) method call.
+     */
+    private List<ResponseLog> getResponsesFromAgents(InputInteraction inputInteraction) {
+        if (checkNotNull(_agents, "Agents are not set up! Use the method" +
+                " setUpAgents() first.").isEmpty()) {
+            throw new IllegalArgumentException("The list of agents is empty!");
+        }
+        List<ResponseLog> listOfResponseLogs = asynchronousAgentCaller(inputInteraction);
         // TODO(Adam) Remove when the log saving is implemented. Currently we can see the output.
         listOfResponseLogs.forEach(System.out::println);
         return listOfResponseLogs;
@@ -205,10 +234,8 @@ public class DialogAgentManager {
      *         setUpAgents(...) method call.
      */
     private List<ResponseLog> asynchronousAgentCaller(InputInteraction inputInteraction) {
-        // Get responses the agents using RxJava asynchronously.
         Observable<AgentInterface> agentInterfaceObservable = Observable.fromIterable(_agents);
-        return (agentInterfaceObservable.flatMap(agentObservable
-                -> Observable
+        return (agentInterfaceObservable.flatMap(agentObservable -> Observable
                 .just(agentObservable)
                 .subscribeOn(Schedulers.computation())
                 .take(20, TimeUnit.SECONDS) // Take only the observable emitted (completed)
@@ -323,7 +350,7 @@ public class DialogAgentManager {
      * @return ResponseLog - One of the responses chosen using specified ranking/choosing method.
      * @throws Exception - Throw when the list is not initialized or empty.
      */
-    public ResponseLog chooseOneResponse(List<ResponseLog> responses) throws Exception {
+    private ResponseLog chooseOneResponse(List<ResponseLog> responses) throws Exception {
         if (checkNotNull(responses, "The list passed to the chooseOneResponse function is not " +
                 "initialized!").isEmpty()) {
             throw new IllegalArgumentException("The list of responses is empty!");
@@ -338,7 +365,7 @@ public class DialogAgentManager {
      * @return ResponseLog - The first successful response or unsuccessful response if none of the
      *         provided responses were successful.
      */
-    public ResponseLog chooseFirstValidResponse(List<ResponseLog> responses) {
+    private ResponseLog chooseFirstValidResponse(List<ResponseLog> responses) {
         for (ResponseLog responseLog : responses) {
             if (responseLog.getMessageStatus() == MessageStatus.SUCCESSFUL) {
                 return responseLog;
