@@ -120,7 +120,7 @@ public class DialogAgentManagerTestMain {
                             .setDeviceType(deviceType)
                             .setLanguageCode(languageCode))
                     .build();
-            dialogAgentManager.getResponsesFromAgents(interactionRequest);
+            dialogAgentManager.getResponse(interactionRequest);
             System.out.println("TESTING CLASS OUTPUT: FINISHED HANDLING THE REQUEST FOR: " + line
                     + "\n");
         }

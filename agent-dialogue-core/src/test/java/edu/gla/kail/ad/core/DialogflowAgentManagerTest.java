@@ -132,7 +132,7 @@ public class DialogflowAgentManagerTest {
     @Test
     public void testGetResponsesFromAgents() {
         try {
-            _dialogAgentManager.getResponsesFromAgents(_interactionRequest);
+            _dialogAgentManager.getResponse(_interactionRequest);
         } catch (Exception exception) {
             fail("Getting responses from Agents was unsuccessful.");
         }
