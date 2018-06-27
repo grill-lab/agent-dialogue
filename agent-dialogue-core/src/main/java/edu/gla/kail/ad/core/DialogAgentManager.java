@@ -9,7 +9,9 @@ import edu.gla.kail.ad.Client.InteractionType;
 import edu.gla.kail.ad.Client.OutputInteraction;
 import edu.gla.kail.ad.core.Log.RequestLog;
 import edu.gla.kail.ad.core.Log.ResponseLog;
+import edu.gla.kail.ad.core.Log.ResponseLog.Builder;
 import edu.gla.kail.ad.core.Log.ResponseLog.MessageStatus;
+import edu.gla.kail.ad.core.Log.ResponseLogOrBuilder;
 import io.reactivex.Observable;
 import io.reactivex.schedulers.Schedulers;
 
@@ -18,6 +20,10 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -198,12 +204,12 @@ public class DialogAgentManager {
                 -> Observable
                 .just(agentObservable)
                 .subscribeOn(Schedulers.computation())
-                .take(1, TimeUnit.SECONDS) // TODO(Adam): not sure if that's what we want.
+                .take(20, TimeUnit.SECONDS) // Take only the observable emitted (completed)
+                // within specified time.
                 .map(agent -> {
                     return callForResponseAndValidate(agent, inputInteraction);
                 })
-        ).toList().blockingGet()); // TODO(Adam): Check if blockingGet and the entire code throws
-        // exceptions!
+        ).toList().blockingGet());
     }
 
     private List<ResponseLog> synchronousAgentCaller(InputInteraction inputInteraction) {
@@ -216,7 +222,56 @@ public class DialogAgentManager {
 
     private ResponseLog callForResponseAndValidate(AgentInterface agent, InputInteraction
             inputInteraction) {
-        // TODO(Adam): Add a timeout if the agent is not responding for x seconds
+        // TODO(Adam): Repeat a call if unsuccessful?
+        Callable<ResponseLog> callableCallForResponseAndValidate = () -> {
+            try {
+                ResponseLog responseLog = checkNotNull(agent.getResponseFromAgent(inputInteraction),
+                        "The response from Agent was null!");
+                return responseLog;
+            } catch (Exception exception) {
+                return ResponseLog.newBuilder()
+                        .setMessageStatus(MessageStatus.UNSUCCESFUL)
+                        .setErrorMessage(exception.getMessage())
+                        .setServiceProvider(agent.getServiceProvider())
+                        .setTime(Timestamp.newBuilder()
+                                .setSeconds(Instant.now()
+                                        .getEpochSecond())
+                                .setNanos(Instant.now()
+                                        .getNano())
+                                .build())
+                        .build();
+            }
+        };
+
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        Future<ResponseLog> future = executor.submit(callableCallForResponseAndValidate);
+        ResponseLog responseLog;
+        try {
+            responseLog = future.get(5, TimeUnit.SECONDS);
+        } catch (Exception exception) {
+            future.cancel(true); // Cancel and send a thread interrupt.
+            ResponseLogOrBuilder responseLogBuilder = ResponseLog.newBuilder()
+                    .setMessageStatus(MessageStatus.UNSUCCESFUL)
+                    .setServiceProvider(agent.getServiceProvider())
+                    .setTime(Timestamp.newBuilder()
+                            .setSeconds(Instant.now()
+                                    .getEpochSecond())
+                            .setNanos(Instant.now()
+                                    .getNano())
+                            .build());
+            if (exception.getMessage() == null) {
+                ((Builder) responseLogBuilder).setErrorMessage(exception.toString());
+            } else {
+                ((Builder) responseLogBuilder).setErrorMessage(exception.getMessage());
+            }
+            responseLog = ((Builder) responseLogBuilder).build();
+        } finally {
+            executor.shutdownNow();
+        }
+        return responseLog;
+
+/*      TODO(Adam): Delete once received confirmation from Jeff.
+        TODO(Jeff): Check if the entire method is ok.
         try {
             ResponseLog responseLog = checkNotNull(agent.getResponseFromAgent(inputInteraction),
                     "The response from Agent was null!");
@@ -233,7 +288,7 @@ public class DialogAgentManager {
                                     .getNano())
                             .build())
                     .build();
-        }
+        }*/
     }
 
     // Choose the response.
