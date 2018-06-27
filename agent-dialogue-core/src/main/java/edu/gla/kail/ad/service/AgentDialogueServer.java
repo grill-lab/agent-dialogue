@@ -1,14 +1,19 @@
 package edu.gla.kail.ad.service;
 
 
+import com.google.protobuf.Timestamp;
 import edu.gla.kail.ad.Client.InteractionRequest;
 import edu.gla.kail.ad.Client.InteractionResponse;
+import edu.gla.kail.ad.Client.InteractionResponse.ClientMessageStatus;
 import edu.gla.kail.ad.core.DialogAgentManager;
+import edu.gla.kail.ad.core.Log.ResponseLog;
+import edu.gla.kail.ad.core.Log.ResponseLog.MessageStatus;
 import io.grpc.Server;
 import io.grpc.ServerBuilder;
 import io.grpc.stub.StreamObserver;
 
 import java.io.IOException;
+import java.time.Instant;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -114,10 +119,34 @@ public class AgentDialogueServer {
             }
             checkNotNull(dialogAgentManager, "The initialization of the dialogAgentManager " +
                     "failed!");
-            responseObserver.onNext(dialogAgentManager.getResponseFromAgentAsInteractionResponse
-                    (interactionRequest)); // TODO(Adam): Use the dialogAgentManager
-            // .chooseOneResponse(dialogAgentManager.getResponsesFromAgents(interactionRequest))
-            // instead
+            ResponseLog response;
+            InteractionResponse interactionResponse;
+            Timestamp timestamp = Timestamp.newBuilder()
+                    .setSeconds(Instant.now()
+                            .getEpochSecond())
+                    .setNanos(Instant.now()
+                            .getNano())
+                    .build();
+            try {
+                response = dialogAgentManager.getResponseFromAgentAsInteractionResponse
+                        (interactionRequest); // TODO(Adam): Use the dialogAgentManager
+                // .chooseOneResponse(dialogAgentManager.getResponsesFromAgents(interactionRequest))
+                // instead
+
+                interactionResponse = InteractionResponse.newBuilder()
+                        .setResponseId(response.getResponseId())
+                        .setTime(timestamp)
+                        .setClientId(response.getClientId())
+                        .setMessageStatus(ClientMessageStatus.SUCCESSFUL)
+                        .build();
+            } catch (Exception exception) {
+                interactionResponse = InteractionResponse.newBuilder()
+                        .setMessageStatus(InteractionResponse.ClientMessageStatus.ERROR)
+                        .setErrorMessage(exception.getMessage())
+                        .setTime(timestamp)
+                        .build();
+            }
+            responseObserver.onNext(interactionResponse);
             responseObserver.onCompleted();
         }
     }

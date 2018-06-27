@@ -4,7 +4,6 @@ import com.google.cloud.Tuple;
 import com.google.protobuf.Timestamp;
 import edu.gla.kail.ad.Client.InputInteraction;
 import edu.gla.kail.ad.Client.InteractionRequest;
-import edu.gla.kail.ad.Client.InteractionResponse;
 import edu.gla.kail.ad.Client.InteractionType;
 import edu.gla.kail.ad.Client.OutputInteraction;
 import edu.gla.kail.ad.core.Log.LogEntry;
@@ -13,7 +12,10 @@ import edu.gla.kail.ad.core.Log.RequestLog;
 import edu.gla.kail.ad.core.Log.ResponseLog;
 import edu.gla.kail.ad.core.Log.ResponseLog.Builder;
 import edu.gla.kail.ad.core.Log.ResponseLog.MessageStatus;
+import edu.gla.kail.ad.core.Log.ResponseLog.ServiceProvider;
 import edu.gla.kail.ad.core.Log.ResponseLogOrBuilder;
+import edu.gla.kail.ad.core.Log.Slot;
+import edu.gla.kail.ad.core.Log.SystemAct;
 import edu.gla.kail.ad.core.Log.Turn;
 import edu.gla.kail.ad.core.Log.TurnOrBuilder;
 import io.reactivex.Observable;
@@ -75,9 +77,10 @@ public class DialogAgentManager {
      * @return interactionResponse - dummy instance of InteractionResponse created for testing
      *         output.
      */
-    public InteractionResponse getResponseFromAgentAsInteractionResponse(InteractionRequest
-                                                                                 interactionRequest) {
-        return InteractionResponse.newBuilder()
+    public ResponseLog getResponseFromAgentAsInteractionResponse(InteractionRequest
+                                                                         interactionRequest) {
+        return ResponseLog.newBuilder()
+                .setMessageStatus(MessageStatus.SUCCESSFUL)
                 .setResponseId("Setting response Id was successful")
                 .setTime(Timestamp.newBuilder()
                         .setSeconds(Instant.now()
@@ -86,11 +89,19 @@ public class DialogAgentManager {
                                 .getNano())
                         .build())
                 .setClientId("Setting Client Id was successful")
-                .addInteraction(OutputInteraction.newBuilder()
-                        .setType(InteractionType.TEXT)
-                        .setText("Setting OutputInteraction text was succrssful")
-                        .addAction("Adding OutputInteraction Action was successful")
-                        .build())
+                .setServiceProvider(ServiceProvider.NOTSET)
+                .setRawResponse("RawRespose set by getResponseFromAgentAsInteractionResponse " +
+                        "function of DialogAgentManager.")
+                .addAction(SystemAct.newBuilder()
+                        .setAction("The name of the action we get from the Agent's API.")
+                        .setInteraction(OutputInteraction.newBuilder()
+                                .setType(InteractionType.TEXT)
+                                .setText("Setting OutputInteraction text was succrssful")
+                                .addAction("Adding OutputInteraction Action was successful")
+                                .build())
+                        .addSlot(Slot.newBuilder()
+                                .setName("Name of slot set by getRespo...")
+                                .setValue("Value set by getRespo...").build()).build())
                 .build();
     }
 
@@ -201,6 +212,8 @@ public class DialogAgentManager {
         }
         Turn turn = ((Turn.Builder) turnBuilder).build();
         ((LogEntry.Builder) _logEntryBuilder).addTurn(turn);
+        // TODO(Adam): Add writing turns to the file - storing as a log.
+
         return chosenResponse;
     }
 
@@ -238,7 +251,7 @@ public class DialogAgentManager {
         return (agentInterfaceObservable.flatMap(agentObservable -> Observable
                 .just(agentObservable)
                 .subscribeOn(Schedulers.computation())
-                .take(20, TimeUnit.SECONDS) // Take only the observable emitted (completed)
+                .take(5, TimeUnit.SECONDS) // Take only the observable emitted (completed)
                 // within specified time.
                 .map(agent -> {
                     return callForResponseAndValidate(agent, inputInteraction);
@@ -320,9 +333,9 @@ public class DialogAgentManager {
             executor.shutdownNow();
         }
         return responseLog;
-
-/*      TODO(Adam): Delete once received confirmation from Jeff.
-        TODO(Jeff): Check if the entire method is ok.
+/*
+      // TODO(Adam): Delete once received confirmation from Jeff.
+      // TODO(Jeff): Check if the entire method is ok.
         try {
             ResponseLog responseLog = checkNotNull(agent.getResponseFromAgent(inputInteraction),
                     "The response from Agent was null!");
