@@ -82,12 +82,7 @@ public class DialogAgentManager {
         return ResponseLog.newBuilder()
                 .setMessageStatus(MessageStatus.SUCCESSFUL)
                 .setResponseId("Setting response Id was successful")
-                .setTime(Timestamp.newBuilder()
-                        .setSeconds(Instant.now()
-                                .getEpochSecond())
-                        .setNanos(Instant.now()
-                                .getNano())
-                        .build())
+                .setTime(getCurrentTimeStamp())
                 .setClientId("Setting Client Id was successful")
                 .setServiceProvider(ServiceProvider.NOTSET)
                 .setRawResponse("RawRespose set by getResponseFromAgentAsInteractionResponse " +
@@ -188,16 +183,9 @@ public class DialogAgentManager {
      *         obtained by calling all the agents.
      */
     public ResponseLog getResponse(InteractionRequest interactionRequest) throws Exception {
-        Timestamp timestamp = Timestamp.newBuilder()
-                .setSeconds(Instant.now()
-                        .getEpochSecond())
-                .setNanos(Instant.now()
-                        .getNano())
-                .build();
-
         RequestLog requestLog = RequestLog.newBuilder()
                 .setRequestId(getRandomID())
-                .setTime(timestamp)
+                .setTime(getCurrentTimeStamp())
                 .setClientId(interactionRequest.getClientId())
                 .setInteraction(interactionRequest.getInteraction()).build();
 
@@ -317,12 +305,7 @@ public class DialogAgentManager {
             ResponseLogOrBuilder responseLogBuilder = ResponseLog.newBuilder()
                     .setMessageStatus(MessageStatus.UNSUCCESFUL)
                     .setServiceProvider(agent.getServiceProvider())
-                    .setTime(Timestamp.newBuilder()
-                            .setSeconds(Instant.now()
-                                    .getEpochSecond())
-                            .setNanos(Instant.now()
-                                    .getNano())
-                            .build());
+                    .setTime(getCurrentTimeStamp());
             if (exception.getMessage() == null) {
                 ((Builder) responseLogBuilder).setErrorMessage(exception.toString());
             } else {
@@ -345,12 +328,7 @@ public class DialogAgentManager {
                     .setMessageStatus(MessageStatus.UNSUCCESFUL)
                     .setErrorMessage(exception.getMessage())
                     .setServiceProvider(agent.getServiceProvider())
-                    .setTime(Timestamp.newBuilder()
-                            .setSeconds(Instant.now()
-                                    .getEpochSecond())
-                            .setNanos(Instant.now()
-                                    .getNano())
-                            .build())
+                    .setTime(getCurrentTimeStamp())
                     .build();
         }*/
     }
@@ -387,12 +365,16 @@ public class DialogAgentManager {
         return ResponseLog.newBuilder()
                 .setMessageStatus(MessageStatus.UNSUCCESFUL)
                 .setErrorMessage("None of the passed responses had a successful call to the agent.")
-                .setTime(Timestamp.newBuilder()
-                        .setSeconds(Instant.now()
-                                .getEpochSecond())
-                        .setNanos(Instant.now()
-                                .getNano())
-                        .build())
+                .setTime(getCurrentTimeStamp())
+                .build();
+    }
+
+    private Timestamp getCurrentTimeStamp() {
+        return Timestamp.newBuilder()
+                .setSeconds(Instant.now()
+                        .getEpochSecond())
+                .setNanos(Instant.now()
+                        .getNano())
                 .build();
     }
 
