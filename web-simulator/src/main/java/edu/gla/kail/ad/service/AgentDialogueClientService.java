@@ -10,6 +10,7 @@ import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 import io.grpc.StatusRuntimeException;
 
+import java.io.OutputStream;
 import java.time.Instant;
 import java.util.concurrent.TimeUnit;
 
@@ -84,4 +85,7 @@ public class AgentDialogueClientService {
             throw new Exception("Error occured: " + e.getStatus());
         }
     }
+
+
+    public OutputStream replayConversation
 }
