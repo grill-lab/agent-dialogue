@@ -1,13 +1,17 @@
 package edu.gla.kail.ad.core;
 
 import com.google.cloud.Tuple;
+import com.google.cloud.dialogflow.v2beta1.AudioEncoding;
 import com.google.cloud.dialogflow.v2beta1.Context;
+import com.google.cloud.dialogflow.v2beta1.DetectIntentRequest;
 import com.google.cloud.dialogflow.v2beta1.DetectIntentResponse;
+import com.google.cloud.dialogflow.v2beta1.InputAudioConfig;
 import com.google.cloud.dialogflow.v2beta1.QueryInput;
 import com.google.cloud.dialogflow.v2beta1.QueryResult;
 import com.google.cloud.dialogflow.v2beta1.SessionName;
 import com.google.cloud.dialogflow.v2beta1.SessionsClient;
 import com.google.cloud.dialogflow.v2beta1.TextInput;
+import com.google.protobuf.ByteString;
 import com.google.protobuf.Timestamp;
 import com.google.protobuf.Value;
 import edu.gla.kail.ad.Client.InputInteraction;
@@ -138,7 +142,7 @@ public class DialogflowAgent implements AgentInterface {
      *         Dialogflow.
      * @throws IllegalArgumentException
      */
-    private QueryInput provideQuery(InputInteraction inputInteraction) {
+    private DetectIntentResponse detectIntentResponseMethod(InputInteraction inputInteraction) {
         validateInputInteraction(inputInteraction);
         // Get a response from a Dialogflow agent for a particular request (inputInteraction type).
         switch (inputInteraction.getType()) {
@@ -146,17 +150,22 @@ public class DialogflowAgent implements AgentInterface {
                 TextInput.Builder textInput = TextInput.newBuilder().setText(inputInteraction
                         .getText())
                         .setLanguageCode(inputInteraction.getLanguageCode());
-                return QueryInput.newBuilder().setText(textInput).build();
+                return _sessionsClient.detectIntent(_session, QueryInput.newBuilder().setText(textInput).build());
             case AUDIO:
-//                    InputAudioConfig inputAudioConfig = InputAudioConfig.newBuilder()
-//                            .setLanguageCode(inputInteraction.getLanguageCode())
-//                            .setAudioEncoding() // Needs an argument AudioEncoding
-//                            .setSampleRateHertz() // Needs an argument int32
-//                            .build();
-//                    return QueryInput.newBuilder().setAudioConfig(inputAudioConfig).build();
-                throw new IllegalArgumentException("The AUDIO method for DialogFlow is not " +
-                        "yet supported" +
-                        "."); // TODO(Adam): implement;
+                // AudioEncoding and sampleRateHertz hardcoded for simplicity, prone to changes.
+                AudioEncoding audioEncoding = AudioEncoding.AUDIO_ENCODING_LINEAR_16;
+                int sampleRateHertz = 16000;
+                    InputAudioConfig inputAudioConfig = InputAudioConfig.newBuilder()
+                            .setLanguageCode(inputInteraction.getLanguageCode())
+                            .setAudioEncoding(audioEncoding)
+                            .setSampleRateHertz(sampleRateHertz)
+                            .build();
+                    byte[] inputAudio = inputInteraction.getAudioBytes().getBytes();
+                return _sessionsClient.detectIntent(DetectIntentRequest.newBuilder()
+                        .setSession(_session.toString())
+                        .setQueryInput(QueryInput.newBuilder().setAudioConfig(inputAudioConfig).build())
+                        .setInputAudio(ByteString.copyFrom(inputAudio))
+                        .build());
             case ACTION:
 //                    EventInput eventInput = EventInput.newBuilder()
 //                            .setLanguageCode(inputInteraction.getLanguageCode())
@@ -183,10 +192,8 @@ public class DialogflowAgent implements AgentInterface {
     @Override
     public ResponseLog getResponseFromAgent(InputInteraction inputInteraction) throws
             IllegalArgumentException {
-        QueryInput queryInput = provideQuery(inputInteraction);
-        // Set up Dialogflow classes' instances used for obtaining the response.
         // TODO(Adam): What do do her when things go wrong?  Handle RPC errors?  Throw an exception?
-        DetectIntentResponse response = _sessionsClient.detectIntent(_session, queryInput);
+        DetectIntentResponse response = detectIntentResponseMethod(inputInteraction);
         QueryResult queryResult = response.getQueryResult();
 
         Timestamp timestamp = Timestamp.newBuilder()
