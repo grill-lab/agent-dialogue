@@ -43,13 +43,14 @@ import static com.google.common.base.Preconditions.checkNotNull;
  *
  * Instruction of usage:
  * 1) Set up the Dialog agents using setUpAgents method.
- * 2) Call the getResponseFromAgent for required inputs.
- * 3) Use ranking method. TODO(Adam): further part needs to be implemented
+ * 2) Call the getResponseFromAgent for passed input.
+ * 3)
+ * TODO(Adam): further part needs to be implemented
  *
  * Example usage :
  * DialogAgentManager dialogAgentManager = new DialogAgentManager();
  * dialogAgentManager.setUpAgents(_configurationTuples);
- * dialogAgentManager.getResponsesFromAgents(interactionRequest);
+ * dialogAgentManager.getResponse(interactionRequest);
  **/
 
 public class DialogAgentManager {
@@ -128,6 +129,7 @@ public class DialogAgentManager {
 
     /**
      * Set up (e.g. authenticate) all agents and store them to the list of agents.
+     * TODO(Jeff): What to do when sb calls this function a couple of times? Each time setting up agents? Make the function private?
      *
      * @param configurationTuples - The list stores the entities of ConfigurationTuple,
      *         which holds data required by each agent.
@@ -190,8 +192,7 @@ public class DialogAgentManager {
                 .setInteraction(interactionRequest.getInteraction()).build();
 
         List<ResponseLog> responses = getResponsesFromAgents(interactionRequest.getInteraction());
-        ResponseLog chosenResponse = chooseOneResponse(responses); // This may throw exception.
-        // TODO(Adam): Maybe do sth with it?
+        ResponseLog chosenResponse = chooseOneResponse(responses); // TODO(Jeff): This may throw exception. Should I leave the error and propagate to higher levels, or do something here?
         TurnOrBuilder turnBuilder = Turn.newBuilder()
                 .setRequestLog(requestLog)
                 .setResponseLog(chosenResponse);
@@ -241,9 +242,7 @@ public class DialogAgentManager {
                 .subscribeOn(Schedulers.computation())
                 .take(5, TimeUnit.SECONDS) // Take only the observable emitted (completed)
                 // within specified time.
-                .map(agent -> {
-                    return callForResponseAndValidate(agent, inputInteraction);
-                })
+                .map(agent -> callForResponseAndValidate(agent, inputInteraction))
         ).toList().blockingGet());
     }
 
@@ -274,12 +273,11 @@ public class DialogAgentManager {
      */
     private ResponseLog callForResponseAndValidate(AgentInterface agent, InputInteraction
             inputInteraction) {
-        // TODO(Adam): Repeat a call if unsuccessful?
+        // TODO(Jeff): Resend a call if unsuccessful?
         Callable<ResponseLog> callableCallForResponseAndValidate = () -> {
             try {
-                ResponseLog responseLog = checkNotNull(agent.getResponseFromAgent(inputInteraction),
+                return checkNotNull(agent.getResponseFromAgent(inputInteraction),
                         "The response from Agent was null!");
-                return responseLog;
             } catch (Exception exception) {
                 return ResponseLog.newBuilder()
                         .setMessageStatus(MessageStatus.UNSUCCESFUL)

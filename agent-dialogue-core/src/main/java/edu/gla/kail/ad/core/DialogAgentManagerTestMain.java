@@ -7,7 +7,6 @@ import edu.gla.kail.ad.Client.InteractionRequest;
 import edu.gla.kail.ad.Client.InteractionType;
 import edu.gla.kail.ad.core.Log.ResponseLog.ServiceProvider;
 
-import java.io.File;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -25,8 +24,7 @@ public class DialogAgentManagerTestMain {
 
     /**
      * Add ConfigurationTuples to the _configurationTuples. This is just for testing purposes
-     * TODO(Adam): implement the System.get.property("user.dir"); File_check if exists()
-     * file.mkDirsc).
+     * TODO(Adam): File_check if exists() file.mkDirsc).
      *
      * @param fileDirectory - It specifies the directory of the file with data used to set
      *         up agents. Each line has one agent entry, which specified agent type parameters
@@ -82,13 +80,9 @@ public class DialogAgentManagerTestMain {
         // the client.
         String languageCode = "en-US";
         String deviceType = "iPhone Google Assistant";
-        File currentClassPathFile = new File(DialogAgentManagerTestMain.class.getProtectionDomain()
-                .getCodeSource().getLocation().getPath()).getParentFile();
-        String testTextFileDirectory = currentClassPathFile.getParent() +
-                "/src/main/resources/TestTextFiles/";
-        String logFileDirectory = currentClassPathFile.getParent() +
-                "/src/main/resources/LogFiles/"; // TODO (Adam) Is this line needed?
-
+        String currentClassPathFile = System.getProperty("user.dir");
+        String testTextFileDirectory = currentClassPathFile +
+                "/agent-dialogue-core/src/main/resources/TestTextFiles/";
         String nameOfTestedFile = "SampleConversation.txt";
         String nameOfFileWithProjectIdAndKeysLocations = "ProjectIdAndJsonKeyFileLocations.txt";
 
@@ -109,7 +103,6 @@ public class DialogAgentManagerTestMain {
         Path path = Paths.get(testTextFileDirectory + nameOfTestedFile);
         List<String> lines = Files.readAllLines(path, StandardCharsets.UTF_8);
         for (String line : lines) {
-            // TODO(Adam) delete print statements - however, this is testing class
             System.out.println("TESTING CLASS OUTPUT: CURRENTLY HANDLING THE REQUEST FOR: " + line);
             InteractionRequest interactionRequest = InteractionRequest.newBuilder()
                     .setTime(timestamp)
