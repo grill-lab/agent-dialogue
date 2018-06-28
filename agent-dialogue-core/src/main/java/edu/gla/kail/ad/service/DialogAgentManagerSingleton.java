@@ -3,10 +3,8 @@ package edu.gla.kail.ad.service;
 import com.google.cloud.Tuple;
 import edu.gla.kail.ad.core.ConfigurationTuple;
 import edu.gla.kail.ad.core.DialogAgentManager;
-import edu.gla.kail.ad.core.DialogAgentManagerTestMain;
 import edu.gla.kail.ad.core.Log.ResponseLog.ServiceProvider;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -34,7 +32,7 @@ final class DialogAgentManagerSingleton {
      *         with every request.
      * @return DialogAgentManager - The instance of DialogAgentManager used for particular session
      *         (currently client).
-     * @throws IOException
+     * @throws IOException - Thrown when setting up the agents is unsuccessful.
      */
     static synchronized DialogAgentManager getDialogAgentManager(String clientId) throws
             IOException {
@@ -54,7 +52,7 @@ final class DialogAgentManagerSingleton {
      * The supporting method used for the purposes of testing.
      * When the database with the list of available agents is set up, this method should be
      * deleted.
-     * TODO(Adam): Delete this funtion after the database with agents is set up.
+     * TODO(Adam): Delete this method after the database with agents is set up.
      *
      * @return List<ConfigurationTuple> - the tuples used to set up agents
      * @throws NullPointerException - Throw when the file with ProjectIds and Json
@@ -62,10 +60,10 @@ final class DialogAgentManagerSingleton {
      */
     private static List<ConfigurationTuple> supportingFunctionToBeDeleted() {
         List<ConfigurationTuple> configurationTuples = new ArrayList();
-        File currentClassPathFile = new File(DialogAgentManagerTestMain.class.getProtectionDomain()
-                .getCodeSource().getLocation().getPath()).getParentFile();
-        Path path = Paths.get(currentClassPathFile.getParent() +
-                "/src/main/resources/TestTextFiles/ProjectIdAndJsonKeyFileLocations.txt");
+        String currentClassPathFile = System.getProperty("user.dir");
+        Path path = Paths.get(currentClassPathFile +
+                "/agent-dialogue-core/src/main/resources/TestTextFiles" +
+                "/ProjectIdAndJsonKeyFileLocations.txt");
         List<String> lines;
         try {
             lines = Files.readAllLines(path, StandardCharsets.UTF_8);
