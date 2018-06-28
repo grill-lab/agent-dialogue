@@ -17,7 +17,7 @@ import java.time.Instant;
  * Returns valid inputInteraction.
  */
 class DummyAgent implements AgentInterface {
-    Timestamp timestamp = Timestamp.newBuilder()
+    private Timestamp timestamp = Timestamp.newBuilder()
             .setSeconds(Instant.now()
                     .getEpochSecond())
             .setNanos(Instant.now()
@@ -31,7 +31,7 @@ class DummyAgent implements AgentInterface {
 
     @Override
     public ResponseLog getResponseFromAgent(InputInteraction inputInteraction) {
-        ResponseLog responseLog = ResponseLog.newBuilder()
+        return ResponseLog.newBuilder()
                 .setResponseId("ResponseId set by DummyBuilder")
                 .setTime(timestamp)
                 .setClientId("ClientId set by DummyBuilder")
@@ -47,6 +47,5 @@ class DummyAgent implements AgentInterface {
                                 .setValue("SlotValue set by DummyBuilder").build())
                         .build())
                 .build();
-        return responseLog;
     }
 }

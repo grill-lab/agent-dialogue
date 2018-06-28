@@ -19,7 +19,6 @@ public class FailingTimeDummyAgent implements AgentInterface {
 
     @Override
     public ResponseLog getResponseFromAgent(InputInteraction inputInteraction) throws Exception {
-        ResponseLog responseLog = null;
         while (true) {
             TimeUnit.SECONDS.sleep(10);
         }

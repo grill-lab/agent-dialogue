@@ -59,15 +59,14 @@ public final class DialogflowAgentAuthorizationSingleton {
         CredentialsProvider credentialsProvider = FixedCredentialsProvider.create(
                 (ServiceAccountCredentials.fromStream(new FileInputStream(jsonKeyFileLocation))));
         SessionsSettings sessionsSettings = SessionsSettings.newBuilder().setCredentialsProvider
-                (credentialsProvider).build(); // TODO(Adam) - handle the error given by this
-        // method, when the authorization fails.
+                (credentialsProvider).build(); // TODO(Adam): Handle the error, when the
+        // authorization fails. What to do then though?
         _sessionsClient = SessionsClient.create(sessionsSettings);
     }
 
     /**
-     * Thread safe method, verifying the existence of an instance of
-     * DialogflowAgentAuthorizationSingleton
-     * corresponding to a passed tuple, which returns the Tuple of projectID and SessionClient.
+     * Thread safe method, providing a Tuple of projectID and SessionClient corresponding to the
+     * passed-input tuple.
      *
      * @param tupleOfProjectIdAndAuthenticationFile - A tuple specific for DialogflowAgent.
      *         It holds the project ID of a particular agent and the directory location of the file

@@ -31,13 +31,13 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import static edu.gla.kail.ad.core.DialogflowAgentAuthorizationSingleton
         .getProjectIdAndSessionsClient;
 
-
 /**
- * A class used to talk to Dialogflow agents.
- * The responses from agent is added to the log.
- * The request sent to the agent are validated. (There are no invalid characters which can crash
- * dialogflow)
- * // TODO(Adam) Use shutdown() methof for closing _sessionClient stream.
+ * This class is initialized once per session per agent. (Thus different sessions have different
+ * instances for the same agent.)
+ * The request sent to the agent is validated. (There are no invalid characters which can make
+ * dialogflow throw errors.)
+ * // TODO(Adam) Use shutdown() method for closing _sessionClient stream? If so, where: here or in
+ * DialogflowAgentAuthorizationSingleton?
  */
 public class DialogflowAgent implements AgentInterface {
     // The SessionsClient and SessionName are needed for the Dialogflow interaction.
@@ -140,7 +140,6 @@ public class DialogflowAgent implements AgentInterface {
      *         incoming interaction that is being sent to an agent.
      * @return queryInput - A data structure which holds the query that needs to be send to
      *         Dialogflow.
-     * @throws IllegalArgumentException
      */
     private DetectIntentResponse detectIntentResponseMethod(InputInteraction inputInteraction) {
         validateInputInteraction(inputInteraction);
@@ -150,49 +149,51 @@ public class DialogflowAgent implements AgentInterface {
                 TextInput.Builder textInput = TextInput.newBuilder().setText(inputInteraction
                         .getText())
                         .setLanguageCode(inputInteraction.getLanguageCode());
-                return _sessionsClient.detectIntent(_session, QueryInput.newBuilder().setText(textInput).build());
+                return _sessionsClient.detectIntent(_session, QueryInput.newBuilder().setText
+                        (textInput).build());
             case AUDIO:
                 // AudioEncoding and sampleRateHertz hardcoded for simplicity, prone to changes.
                 AudioEncoding audioEncoding = AudioEncoding.AUDIO_ENCODING_LINEAR_16;
                 int sampleRateHertz = 16000;
-                    InputAudioConfig inputAudioConfig = InputAudioConfig.newBuilder()
-                            .setLanguageCode(inputInteraction.getLanguageCode())
-                            .setAudioEncoding(audioEncoding)
-                            .setSampleRateHertz(sampleRateHertz)
-                            .build();
-                    byte[] inputAudio = inputInteraction.getAudioBytes().getBytes();
+                InputAudioConfig inputAudioConfig = InputAudioConfig.newBuilder()
+                        .setLanguageCode(inputInteraction.getLanguageCode())
+                        .setAudioEncoding(audioEncoding)
+                        .setSampleRateHertz(sampleRateHertz)
+                        .build();
+                byte[] inputAudio = inputInteraction.getAudioBytes().getBytes();
                 return _sessionsClient.detectIntent(DetectIntentRequest.newBuilder()
                         .setSession(_session.toString())
-                        .setQueryInput(QueryInput.newBuilder().setAudioConfig(inputAudioConfig).build())
+                        .setQueryInput(QueryInput.newBuilder().setAudioConfig(inputAudioConfig)
+                                .build())
                         .setInputAudio(ByteString.copyFrom(inputAudio))
                         .build());
             case ACTION:
-//                    EventInput eventInput = EventInput.newBuilder()
-//                            .setLanguageCode(inputInteraction.getLanguageCode())
-//                            .setName() // Needs an argument String
-//                            .setParameters() // Optional, needs a Struct
-//                            .build();
-//                    return QueryInput.newBuilder().setEvent(eventInput).build();
+//                EventInput eventInput = EventInput.newBuilder()
+//                        .setLanguageCode(inputInteraction.getLanguageCode())
+//                        .setName() // Needs an argument String
+//                        .setParameters(Struct.newBuilder().) // Optional, needs a Struct
+//                        .build();
+//                return _sessionsClient.detectIntent(_session, QueryInput.newBuilder().setEvent
+//                        (eventInput).build());
                 throw new IllegalArgumentException("The ACTION method for DialogFlow is not" +
                         " yet supported" +
                         "."); // TODO(Adam): implement;
-            default: // TODO(Adam): Can be delited, as we validate the inputInteraction in a
-                // separate method.
+            default:
                 throw new IllegalArgumentException("Unrecognised interaction type.");
         }
     }
 
     /**
-     * TODO(Adam): set the Message_status value of the ResponseLog, when the message is somewhat
-     * unsuccessful.
-     *
      * @throws IllegalArgumentException - The exception is being thrown when the type of the
      *         interaction requested is not recognised or supported.
      */
     @Override
     public ResponseLog getResponseFromAgent(InputInteraction inputInteraction) throws
             IllegalArgumentException {
-        // TODO(Adam): What do do her when things go wrong?  Handle RPC errors?  Throw an exception?
+        // TODO(Jeff): What do do her when things go wrong?  Handle RPC errors?  Throw an
+        // exception? or leave it for higher levels to catch exception and return as unsuccessful
+        // response.
+
         DetectIntentResponse response = detectIntentResponseMethod(inputInteraction);
         QueryResult queryResult = response.getQueryResult();
 
