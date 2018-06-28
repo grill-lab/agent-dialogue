@@ -13,14 +13,67 @@
         <javaVersion>1.8</javaVersion>
         <!-- to be changed later on to the main class -->
         <mainClass>edu.gla.kail.ad.service.AgentDialogueClientService</mainClass>
+        <os-maven-plugin.version>1.6.0</os-maven-plugin.version>
+        <kotlin.version>1.2.50</kotlin.version>
+        <agent-dialogue-core.version>0.1-SNAPSHOT</agent-dialogue-core.version>
+        <ktor.version>0.9.3</ktor.version>
         <protobuf.version>3.5.1</protobuf.version>
         <protoc.version>3.5.1-1</protoc.version>
-        <os-maven-plugin.version>1.6.0</os-maven-plugin.version>
         <grpc.version>1.12.0</grpc.version>
         <junit.version>4.12</junit.version>
     </properties>
 
+    <repositories>
+        <repository>
+            <id>ktor</id>
+            <url>http://dl.bintray.com/kotlin/ktor</url>
+        </repository>
+        <repository>
+            <id>kotlinx</id>
+            <url>http://dl.bintray.com/kotlin/kotlinx</url>
+        </repository>
+        <repository>
+            <id>jcenter</id>
+            <url>http://jcenter.bintray.com</url>
+        </repository>
+        <repository>
+            <id>kotlin-eap</id>
+            <url>https://dl.bintray.com/kotlin/kotlin-eap</url>
+        </repository>
+    </repositories>
+
     <dependencies>
+        <dependency>
+            <groupId>org.jetbrains.kotlin</groupId>
+            <artifactId>kotlin-frontend-plugin</artifactId>
+            <version>0.0.30</version>
+        </dependency>
+        <dependency>
+            <groupId>io.ktor</groupId>
+            <artifactId>ktor-server-core</artifactId>
+            <version>${ktor.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.ktor</groupId>
+            <artifactId>ktor-server-netty</artifactId>
+            <version>${ktor.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.ktor</groupId>
+            <artifactId>ktor-server-jetty</artifactId>
+            <version>${ktor.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>agent-dialogue</groupId>
+            <artifactId>agent-dialogue-core</artifactId>
+            <version>${agent-dialogue-core.version}</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.jetbrains.kotlin</groupId>
+            <artifactId>kotlin-stdlib</artifactId>
+            <version>${kotlin.version}</version>
+        </dependency>
         <!-- Got that from agent-dialogue-core dependency
         <dependency>
             <groupId>com.google.protobuf</groupId>
@@ -59,15 +112,10 @@
             <scope>test</scope>
         </dependency>
         -->
-        <dependency>
-            <groupId>agent-dialogue</groupId>
-            <artifactId>agent-dialogue-core</artifactId>
-            <version>0.1-SNAPSHOT</version>
-            <scope>compile</scope>
-        </dependency>
     </dependencies>
 
     <build>
+        <sourceDirectory>${project.basedir}/src/main/kotlin</sourceDirectory>
         <resources>
             <resource>
                 <directory>src/main/proto</directory>
@@ -82,6 +130,33 @@
         </extensions>
         <plugins>
             <!-- this is entirely to set the java version -->
+            <plugin>
+                <artifactId>kotlin-maven-plugin</artifactId>
+                <groupId>org.jetbrains.kotlin</groupId>
+                <version>${kotlin.version}</version>
+                <executions>
+                    <execution>
+                        <id>compile</id>
+                        <goals> <goal>compile</goal> </goals>
+                        <configuration>
+                            <sourceDirs>
+                                <sourceDir>${project.basedir}/src/main/kotlin</sourceDir>
+                                <sourceDir>${project.basedir}/src/main/java</sourceDir>
+                            </sourceDirs>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>test-compile</id>
+                        <goals> <goal>test-compile</goal> </goals>
+                        <configuration>
+                            <sourceDirs>
+                                <sourceDir>${project.basedir}/src/test/kotlin</sourceDir>
+                                <sourceDir>${project.basedir}/src/test/java</sourceDir>
+                            </sourceDirs>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.5.1</version>
@@ -162,7 +237,7 @@
                     </execution>
                 </executions>
             </plugin>
+
         </plugins>
     </build>
-
 </project>
