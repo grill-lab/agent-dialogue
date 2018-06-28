@@ -92,6 +92,8 @@ public class AgentDialogueClientService {
         }
     }
 
+
+    // TODO(Adam): add the method to service.proto!
     /**
      * Replay the conversation with agents.
      * Return the OutputStream of the conversation.
@@ -113,6 +115,8 @@ public class AgentDialogueClientService {
             throw new Exception("Provided InputStream is not valid! Error message: " +
                     iOException.getMessage());
         }
+        // TODO(Adam): Implement sending requests at specified rate (e.g. e per second, or one
+        // query every 2 sec, or min 2 sec between queries, etc.)
         for (Turn turn : logEntry.getTurnList()) {
             InteractionRequest interactionRequest = InteractionRequest.newBuilder()
                     .setTime(Timestamp.newBuilder()
