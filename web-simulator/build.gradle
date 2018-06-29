@@ -11,11 +11,14 @@ sourceCompatibility = 1.8
 repositories {
     mavenCentral()
     mavenLocal()
+    maven {
+        url uri('/Users/Adam/Documents/Internship/GitHub/agent-dialogue/agent-dialogue-core')
+    }
 }
 
 dependencies {
     compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
-    compile project(':agent-dialogue-core')
+    compile 'agent-dialogue:agent-dialogue-core:0.1-SNAPSHOT'
     testCompile group: 'junit', name: 'junit', version: '4.12'
 }
 
