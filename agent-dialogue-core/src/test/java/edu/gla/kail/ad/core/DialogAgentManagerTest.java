@@ -107,14 +107,6 @@ public class DialogAgentManagerTest {
                 .build();
     }
 
-    /**
-     * Test the dummy method.
-     */
-    @Test
-    public void testGetResponseFromAgentAsInteractionResponse() {
-        assertTrue("The response from the dummy function is not valid", _dialogAgentManager
-                .getResponseFromAgentAsInteractionResponse(_interactionRequest).isInitialized());
-    }
 
     /**
      * Test if agents are being set up from the provided configurationTuple.

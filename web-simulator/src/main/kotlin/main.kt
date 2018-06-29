@@ -1,3 +1,4 @@
+/*
 // only for testing!
 
 import com.google.api.client.json.Json
@@ -51,4 +52,4 @@ fun createStylesheetLink(filePath: String): Element {
     return style
 }
 
-external fun alert(message: Any?): Unit
+external fun alert(message: Any?): Unit*/
