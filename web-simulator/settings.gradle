@@ -1,0 +1,5 @@
+rootProject.name = 'web-simulator'
+include 'backend'
+include 'frontend'
+include ':agent-dialogue-core'
+project(':agent-dialogue').projectDir = new File(settingsDir, '../agent-dialogue-core')

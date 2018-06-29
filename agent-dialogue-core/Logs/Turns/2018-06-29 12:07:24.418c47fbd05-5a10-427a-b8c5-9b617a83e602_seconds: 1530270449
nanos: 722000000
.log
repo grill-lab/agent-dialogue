@@ -1,58 +1,0 @@
-
-Â
-$d2baba8a-118d-4905-85e7-cca839961371Ì•ÿŸÄÈ¿\ *≈response_id: "d2baba8a-118d-4905-85e7-cca839961371"
-query_result {
-  query_text: "Sample text"
-  action: "input.unknown"
-  parameters {
-  }
-  all_required_params_present: true
-  fulfillment_text: "Sorry, I don\342\200\231t know how to help with that. Try saying, \342\200\234tell me a quote\342\200\235!"
-  fulfillment_messages {
-    text {
-      text: "Sorry, I don\342\200\231t know how to help with that. Try saying, \342\200\234tell me a quote\342\200\235!"
-    }
-  }
-  intent {
-    name: "projects/myquotemaster-13899/agent/intents/d18c7e90-08a6-4d5b-a77f-db70e4d4a3b3"
-    display_name: "Default Fallback Intent"
-  }
-  intent_detection_confidence: 1.0
-  diagnostic_info {
-  }
-  language_code: "en-us"
-}
-2d
-input.unknownS
-OSorry, I don‚Äôt know how to help with that. Try saying, ‚Äútell me a quote‚Äù! 8Ü
-;2018-06-29 12:07:24.43580663762-041b-484b-8fa4-400eba81c2bfÏ•ÿŸ¿•∂œRandom Client ID"'
-Sample text *iPhone whatever2en-USÍ
-ResponseId set by DummyBuilderÏ•ÿŸÄèÖÕClientId set by DummyBuilder *RawResponse set by DummyBuilder2y
-Action set by DummyBuilder
-Text set by DummyBuilder =
-SlotName set by DummyBuilderSlotValue set by DummyBuilder5Ï•ÿŸÄ˚∆“ 8B!The response from Agent was null!Â
-$d2baba8a-118d-4905-85e7-cca839961371Ì•ÿŸÄÈ¿\ *≈response_id: "d2baba8a-118d-4905-85e7-cca839961371"
-query_result {
-  query_text: "Sample text"
-  action: "input.unknown"
-  parameters {
-  }
-  all_required_params_present: true
-  fulfillment_text: "Sorry, I don\342\200\231t know how to help with that. Try saying, \342\200\234tell me a quote\342\200\235!"
-  fulfillment_messages {
-    text {
-      text: "Sorry, I don\342\200\231t know how to help with that. Try saying, \342\200\234tell me a quote\342\200\235!"
-    }
-  }
-  intent {
-    name: "projects/myquotemaster-13899/agent/intents/d18c7e90-08a6-4d5b-a77f-db70e4d4a3b3"
-    display_name: "Default Fallback Intent"
-  }
-  intent_detection_confidence: 1.0
-  diagnostic_info {
-  }
-  language_code: "en-us"
-}
-2d
-input.unknownS
-OSorry, I don‚Äôt know how to help with that. Try saying, ‚Äútell me a quote‚Äù! 8AÌ•ÿŸ¿ˆ˜] 8B.This exception is thrown for testing purposes.2Ò•ÿŸÄŒ‰Õ 8Bjava.lang.InterruptedException
