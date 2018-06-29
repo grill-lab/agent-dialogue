@@ -1,4 +1,5 @@
 //Main.kt
+// only for testing!
 import com.google.gson.Gson
 import io.ktor.application.call
 import io.ktor.http.ContentType
