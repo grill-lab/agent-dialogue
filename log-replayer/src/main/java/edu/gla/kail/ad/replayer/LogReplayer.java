@@ -69,13 +69,14 @@ public class LogReplayer {
             System.out.println("Enter the path of the log file you want to read (LogEntry) or " +
                     "type \"q\" to exit: ");
             String providedLogEntryDirectory = scanner.nextLine();
-            if (providedLogEntryDirectory == "q") {
+            if (providedLogEntryDirectory.equals("q")) {
                 System.out.println("Bye bye!");
                 System.exit(0);
             }
             directory = new File(providedLogEntryDirectory);
             if (!directory.exists()) {
-                System.out.println("The provided path to the log file is invalid, try again!!");
+                System.out.println("The provided path to the log file is invalid:\n" + directory
+                        .toString() + "\nTry again!!");
             } else {
                 break;
             }
@@ -86,7 +87,8 @@ public class LogReplayer {
             System.out.println("The following turns were successfully stored in the Log " +
                     "directory:\n\n" + interactionResponses.toString());
         } catch (Exception exception) {
-            System.out.println("Something went wrong. Error message:\n" + exception.getMessage());
+            System.out.println("Something went wrong. Error message:\n" + exception.getMessage()
+                    + "\n" + exception.getStackTrace());
         } finally {
             client.shutdown();
         }
