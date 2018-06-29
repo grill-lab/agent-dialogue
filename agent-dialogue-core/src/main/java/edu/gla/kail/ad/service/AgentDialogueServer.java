@@ -13,6 +13,7 @@ import io.grpc.stub.StreamObserver;
 
 import java.io.IOException;
 import java.time.Instant;
+import java.util.stream.Collectors;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -126,16 +127,14 @@ public class AgentDialogueServer {
                             .getNano())
                     .build();
             try {
-                response = dialogAgentManager.getResponseFromAgentAsInteractionResponse
-                        (interactionRequest); // TODO(Adam): Use the dialogAgentManager
-                // .chooseOneResponse(dialogAgentManager.getResponsesFromAgents(interactionRequest))
-                // instead
-
+                response = dialogAgentManager.getResponse(interactionRequest);
                 interactionResponse = InteractionResponse.newBuilder()
                         .setResponseId(response.getResponseId())
                         .setTime(timestamp)
                         .setClientId(response.getClientId())
                         .setMessageStatus(ClientMessageStatus.SUCCESSFUL)
+                        .addAllInteraction(response.getActionList().stream().map(action -> action
+                                .getInteraction()).collect(Collectors.toList()))
                         .build();
             } catch (Exception exception) {
                 interactionResponse = InteractionResponse.newBuilder()

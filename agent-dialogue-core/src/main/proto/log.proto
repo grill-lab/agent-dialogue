@@ -58,7 +58,6 @@ message SystemAct {
     repeated Slot slot = 3; // The parameters that are passed by the Agent.
 }
 
-
 message Slot {
     string name = 1; // E.g. name = "author",
     string value = 2; // E.g. value = "Ada Lovelace"

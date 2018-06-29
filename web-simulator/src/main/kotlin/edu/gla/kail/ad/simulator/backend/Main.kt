@@ -1,3 +1,4 @@
+/*
 //Main.kt
 // only for testing!
 import com.google.gson.Gson
@@ -29,4 +30,4 @@ fun main(args: Array<String>) {
     }.start(wait = true)
 }
 
-data class Entry(val message: String)
+data class Entry(val message: String)*/

@@ -4,18 +4,13 @@ import com.google.cloud.Tuple;
 import com.google.protobuf.Timestamp;
 import edu.gla.kail.ad.Client.InputInteraction;
 import edu.gla.kail.ad.Client.InteractionRequest;
-import edu.gla.kail.ad.Client.InteractionType;
-import edu.gla.kail.ad.Client.OutputInteraction;
 import edu.gla.kail.ad.core.Log.LogEntry;
 import edu.gla.kail.ad.core.Log.LogEntryOrBuilder;
 import edu.gla.kail.ad.core.Log.RequestLog;
 import edu.gla.kail.ad.core.Log.ResponseLog;
 import edu.gla.kail.ad.core.Log.ResponseLog.Builder;
 import edu.gla.kail.ad.core.Log.ResponseLog.MessageStatus;
-import edu.gla.kail.ad.core.Log.ResponseLog.ServiceProvider;
 import edu.gla.kail.ad.core.Log.ResponseLogOrBuilder;
-import edu.gla.kail.ad.core.Log.Slot;
-import edu.gla.kail.ad.core.Log.SystemAct;
 import edu.gla.kail.ad.core.Log.Turn;
 import edu.gla.kail.ad.core.Log.TurnOrBuilder;
 import io.reactivex.Observable;
@@ -74,37 +69,6 @@ public class DialogAgentManager {
         _logEntryBuilder = LogEntry.newBuilder();
         directoryExistsOrCreate(System.getProperty("user.dir") + "/Logs");
         _LOGSTORAGEDIRECTORY = System.getProperty("user.dir") + "/Logs";
-    }
-
-    /**
-     * Method used for testing the server.
-     * TODO(Adam): Delete after testing is done.
-     *
-     * @param interactionRequest - interactionRequest sent by the client.
-     * @return interactionResponse - dummy instance of InteractionResponse created for testing
-     *         output.
-     */
-    public ResponseLog getResponseFromAgentAsInteractionResponse(InteractionRequest
-                                                                         interactionRequest) {
-        return ResponseLog.newBuilder()
-                .setMessageStatus(MessageStatus.SUCCESSFUL)
-                .setResponseId("Setting response Id was successful")
-                .setTime(getCurrentTimeStamp())
-                .setClientId("Setting Client Id was successful")
-                .setServiceProvider(ServiceProvider.NOTSET)
-                .setRawResponse("RawRespose set by getResponseFromAgentAsInteractionResponse " +
-                        "function of DialogAgentManager.")
-                .addAction(SystemAct.newBuilder()
-                        .setAction("The name of the action we get from the Agent's API.")
-                        .setInteraction(OutputInteraction.newBuilder()
-                                .setType(InteractionType.TEXT)
-                                .setText("Setting OutputInteraction text was succrssful")
-                                .addAction("Adding OutputInteraction Action was successful")
-                                .build())
-                        .addSlot(Slot.newBuilder()
-                                .setName("Name of slot set by getRespo...")
-                                .setValue("Value set by getRespo...").build()).build())
-                .build();
     }
 
     /**
@@ -243,7 +207,6 @@ public class DialogAgentManager {
     /**
      * Get Request from Client and convert it to the RequestLog.
      * Return the list of responses for a given request.
-     * TODO(Adam): Maybe store the logs after each conversation; need to decide later on.
      *
      * @param inputInteraction - The a data structure (implemented in log.proto) holding
      *         the interaction input passed to agents.
@@ -307,7 +270,7 @@ public class DialogAgentManager {
      */
     private ResponseLog callForResponseAndValidate(AgentInterface agent, InputInteraction
             inputInteraction) {
-        // TODO(Jeff): Resend a call if unsuccessful?
+        // TODO(Adam): Resend a call if unsuccessful? To be done later on.
         Callable<ResponseLog> callableCallForResponseAndValidate = () -> {
             try {
                 return checkNotNull(agent.getResponseFromAgent(inputInteraction),
@@ -409,6 +372,4 @@ public class DialogAgentManager {
                         .getNano())
                 .build();
     }
-
-    // TODO(Adam): store the conversation in the log as a single Turn
 }
