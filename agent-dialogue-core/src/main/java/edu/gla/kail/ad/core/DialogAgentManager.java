@@ -21,7 +21,10 @@ import edu.gla.kail.ad.core.Log.TurnOrBuilder;
 import io.reactivex.Observable;
 import io.reactivex.schedulers.Schedulers;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
@@ -54,6 +57,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
  **/
 
 public class DialogAgentManager {
+    private String _LOGSTORAGEDIRECTORY;
     // List of instances of used Dialog agents.
     private List<AgentInterface> _agents;
     // Session ID is a unique identifier of a session which is assigned by the method
@@ -68,6 +72,8 @@ public class DialogAgentManager {
     public DialogAgentManager() {
         startSession();
         _logEntryBuilder = LogEntry.newBuilder();
+        directoryExistsOrCreate(System.getProperty("user.dir") + "/Logs");
+        _LOGSTORAGEDIRECTORY = System.getProperty("user.dir") + "/Logs";
     }
 
     /**
@@ -109,12 +115,21 @@ public class DialogAgentManager {
     }
 
     /**
-     * Called before the end of the session to store the log in the file.
+     * Called before the end of the session to store the log.
+     * ?? and configuration of the DialogAgentManager ??
+     *
+     * @throws IOException - Exception is never throwns as the directory is validated by
+     *         directoryExistsOrCreate method.
      */
-    public void endSession() {
-        // ((LogEntry.Builder) _logEntryBuilder).build().writeTo();
+    public void endSession() throws IOException {
+        // Store the LogEntry in the log.
+        String logEntryPath = _LOGSTORAGEDIRECTORY + "/LogEntries";
+        directoryExistsOrCreate(logEntryPath);
+        OutputStream outputStream = new FileOutputStream(logEntryPath + "/" + _sessionId + ".log");
+        ((LogEntry.Builder) _logEntryBuilder).build().writeTo(outputStream);
+        outputStream.close();
+
         // TODO(Adam): Creation of configuration file - to be done later on.
-        // TODO(Adam): Updating/Saving to the log file?
     }
 
     /**
@@ -129,7 +144,8 @@ public class DialogAgentManager {
 
     /**
      * Set up (e.g. authenticate) all agents and store them to the list of agents.
-     * TODO(Jeff): What to do when sb calls this function a couple of times? Each time setting up agents? Make the function private?
+     * TODO(Jeff): What to do when sb calls this function a couple of times? Each time setting up
+     * agents? Make the function private?
      *
      * @param configurationTuples - The list stores the entities of ConfigurationTuple,
      *         which holds data required by each agent.
@@ -179,6 +195,7 @@ public class DialogAgentManager {
     /**
      * Take the request from the service and send back chosen response.
      * Add the Turn to the LogEntry stored within the instance.
+     * Store the turn in the logfile
      *
      * @param interactionRequest - The request sent by the client.
      * @return ResponseLog - The response chosen with a particular method from the list of responses
@@ -192,7 +209,8 @@ public class DialogAgentManager {
                 .setInteraction(interactionRequest.getInteraction()).build();
 
         List<ResponseLog> responses = getResponsesFromAgents(interactionRequest.getInteraction());
-        ResponseLog chosenResponse = chooseOneResponse(responses); // TODO(Jeff): This may throw exception. Should I leave the error and propagate to higher levels, or do something here?
+        ResponseLog chosenResponse = chooseOneResponse(responses); // TODO(Jeff): This may throw
+        // exception. Should I leave the error and propagate to higher levels, or do something here?
         TurnOrBuilder turnBuilder = Turn.newBuilder()
                 .setRequestLog(requestLog)
                 .setResponseLog(chosenResponse);
@@ -201,9 +219,25 @@ public class DialogAgentManager {
         }
         Turn turn = ((Turn.Builder) turnBuilder).build();
         ((LogEntry.Builder) _logEntryBuilder).addTurn(turn);
-        // TODO(Adam): Add writing turns to the file - storing as a log.
 
+        // Store the turn in the log file.
+        String logTurnPath = _LOGSTORAGEDIRECTORY + "/Turns";
+        directoryExistsOrCreate(logTurnPath);
+        OutputStream outputStream = new FileOutputStream(logTurnPath + "/" + _sessionId
+                + "_" + getCurrentTimeStamp() + ".log");
+        turn.writeTo(outputStream);
+        outputStream.close();
         return chosenResponse;
+    }
+
+    /**
+     * Validate whether the directory exists and if not, then create it.
+     */
+    public void directoryExistsOrCreate(String path) {
+        File directory = new File(path);
+        if (!directory.exists()) {
+            directory.mkdir();
+        }
     }
 
     /**
