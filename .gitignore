@@ -1,6 +1,7 @@
 # User-specific stuff
 .idea
 .iml
+.bat
 /agent-dialogue-core/dependency-reduced-pom.xml
 /agent-dialogue-core/target/
 /agent-dialogue-core/agent-dialogue-core.iml
