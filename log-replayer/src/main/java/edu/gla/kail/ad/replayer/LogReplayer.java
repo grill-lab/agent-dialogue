@@ -1,10 +1,8 @@
 package edu.gla.kail.ad.replayer;
 
 import com.google.protobuf.Timestamp;
-import edu.gla.kail.ad.Client.InputInteraction;
 import edu.gla.kail.ad.Client.InteractionRequest;
 import edu.gla.kail.ad.Client.InteractionResponse;
-import edu.gla.kail.ad.Client.InteractionType;
 import edu.gla.kail.ad.core.Log.LogEntry;
 import edu.gla.kail.ad.core.Log.Turn;
 import edu.gla.kail.ad.service.AgentDialogueGrpc;
@@ -13,12 +11,17 @@ import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 import io.grpc.StatusRuntimeException;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
+import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 
@@ -28,48 +31,75 @@ import java.util.concurrent.TimeUnit;
  */
 public class LogReplayer {
     private final ManagedChannel _channel;
-    private final AgentDialogueBlockingStub _blockingStub; // RPC will wait for the server to
-    // respond; return response or raise an exception
+    // RPC will wait for the server to respond; return response or raise an exception.
+    private final AgentDialogueBlockingStub _blockingStub;
+    // The string identifying the client.
+    private String _clientId;
+    // Directory to the folder with logs.
+    private String _LOGSTORAGEDIRECTORY;
+
 
     public LogReplayer(String host, int port) {
-        this(ManagedChannelBuilder.forAddress(host, port).usePlaintext()); // usePlainText
-        // skips negation: true
+        this(ManagedChannelBuilder.forAddress(host, port).usePlaintext());
     }
 
     public LogReplayer(ManagedChannelBuilder<?> channelBuilder) {
         _channel = channelBuilder.build();
         _blockingStub = AgentDialogueGrpc.newBlockingStub(_channel);
+        _clientId = generateClientId();
+
+        // Hardcoded directory path.
+        File directory = new File(System.getProperty("user.dir") + "/Logs/Replayer");
+        if (!directory.exists()) {
+            directory.mkdir();
+        }
+        _LOGSTORAGEDIRECTORY = directory.toString();
     }
 
     /**
      * Created for testing purposes.
+     *
+     * @throws InterruptedException
      */
-    public static void main(String[] args) throws Exception {
-        InteractionRequest interactionRequest = InteractionRequest.newBuilder()
-                .setClientId("ClientID set by client")
-                .setTime(Timestamp.newBuilder()
-                        .setSeconds(Instant.now()
-                                .getEpochSecond())
-                        .setNanos(Instant.now()
-                                .getNano())
-                        .build())
-                .setInteraction(InputInteraction.newBuilder()
-                        .setText("Text set by client")
-                        .setType(InteractionType.TEXT)
-                        .setLanguageCode("en-US")
-                        .setDeviceType("DeviceType set by client")
-                        .addAction("Action set by client")
-                        .build())
-                .build();
+    public static void main(String[] args) throws InterruptedException {
         LogReplayer client = new LogReplayer("localhost", 8080);
+        File directory;
+        Scanner scanner = new Scanner(System.in);
+        while (true) {
+            System.out.println("Enter the path of the log file you want to read (LogEntry) or " +
+                    "type \"q\" to exit: ");
+            String providedLogEntryDirectory = scanner.nextLine();
+            if (providedLogEntryDirectory == "q") {
+                System.out.println("Bye bye!");
+                System.exit(0);
+            }
+            directory = new File(providedLogEntryDirectory);
+            if (!directory.exists()) {
+                System.out.println("The provided path to the log file is invalid, try again!!");
+            } else {
+                break;
+            }
+        }
         try {
-            InteractionResponse interactionResponse = client.getInteractionResponse
-                    (interactionRequest);
-
-            System.out.println(interactionResponse.toString());
+            InputStream inputStream = new FileInputStream(directory);
+            List<InteractionResponse> interactionResponses = client.replayConversation(inputStream);
+            System.out.println("The following turns were successfully stored in the Log " +
+                    "directory:\n\n" + interactionResponses.toString());
+        } catch (Exception exception) {
+            System.out.println("Something went wrong. Error message:\n" + exception.getMessage());
         } finally {
             client.shutdown();
         }
+    }
+
+    /**
+     * Return random, unique Id.
+     * TODO(Jeff): What method should we implement?
+     *
+     * @return random clientId
+     */
+    private String generateClientId() {
+        return "LogReplayer_" + UUID.randomUUID().toString();
     }
 
     /**
@@ -83,11 +113,12 @@ public class LogReplayer {
 
     /**
      * Get one response from the agents
+     *
      * @param interactionRequest - The request sent to the Agent Dialog Manager.
      * @return interactionResponse - The response from an Agent chosen by DialogAgentManager.
-     * @throws Exception
+     * @throws Exception - Throw when certain time of waiting for the repsonse passes.
      */
-    public InteractionResponse getInteractionResponse(InteractionRequest interactionRequest)
+    private InteractionResponse getInteractionResponse(InteractionRequest interactionRequest)
             throws Exception {
         InteractionResponse interactionResponse;
         try {
@@ -99,18 +130,17 @@ public class LogReplayer {
         }
     }
 
-
     /**
      * Replay the conversation with agents.
-     * Return the OutputStream of the conversation.
+     * Store all the responses in Log files.
+     * Return the the list of responses.
      *
      * @param inputStream - InputStream created from the log file.
-     * @param clientId - The string identifying the client.
      * @return OutputStream - The outputStream of the Logfile created by replaying conversation.
      * @throws Exception - Throw when the provided InputStream is invalid or
      *         getInteractionResponse throws error.
      */
-    public OutputStream replayConversation(InputStream inputStream, String clientId) throws
+    private List<InteractionResponse> replayConversation(InputStream inputStream) throws
             Exception {
         LogEntry logEntry;
         List<InteractionResponse> listOfInteractionResponses = new ArrayList();
@@ -125,16 +155,18 @@ public class LogReplayer {
         for (Turn turn : logEntry.getTurnList()) {
             InteractionRequest interactionRequest = InteractionRequest.newBuilder()
                     .setTime(Timestamp.newBuilder()
-                            .setSeconds(Instant.now()
-                                    .getEpochSecond())
-                            .setNanos(Instant.now()
-                                    .getNano())
+                            .setSeconds(Instant.now().getEpochSecond())
+                            .setNanos(Instant.now().getNano())
                             .build())
-                    .setClientId(clientId)
+                    .setClientId(_clientId)
                     .setInteraction(turn.getRequestLog().getInteraction()).build();
-            listOfInteractionResponses.add(getInteractionResponse(interactionRequest));
+            InteractionResponse interactionResponse = getInteractionResponse(interactionRequest);
+            listOfInteractionResponses.add(interactionResponse);
+            OutputStream outputStream = new FileOutputStream(_LOGSTORAGEDIRECTORY + "/" +
+                    logEntry.getSessionId() + "_" + Instant.now().toString() + ".log");
+            interactionRequest.writeTo(outputStream);
+            outputStream.close();
         }
-
-        throw new Exception("Return not implemented yet!");
+        return listOfInteractionResponses;
     }
 }
