@@ -8,6 +8,8 @@
 /web-simulator/target/
 /web-simulator/dependency-reduced-pom.xml
 /web-simulator/web-simulator.iml
-/agent-dliaogue.iml
-/.idea/
 /Logs/
+/log-replayer/src/main/resources/
+/log-replayer/log-replayer.iml
+/log-replayer/target/
+/log-replayer/dependency-reduced-pom.xml
