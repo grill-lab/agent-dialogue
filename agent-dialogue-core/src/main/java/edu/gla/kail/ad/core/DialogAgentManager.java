@@ -4,15 +4,9 @@ import com.google.cloud.Tuple;
 import com.google.protobuf.Timestamp;
 import edu.gla.kail.ad.Client.InputInteraction;
 import edu.gla.kail.ad.Client.InteractionRequest;
-import edu.gla.kail.ad.core.Log.LogEntry;
-import edu.gla.kail.ad.core.Log.LogEntryOrBuilder;
-import edu.gla.kail.ad.core.Log.RequestLog;
-import edu.gla.kail.ad.core.Log.ResponseLog;
+import edu.gla.kail.ad.core.Log.*;
 import edu.gla.kail.ad.core.Log.ResponseLog.Builder;
 import edu.gla.kail.ad.core.Log.ResponseLog.MessageStatus;
-import edu.gla.kail.ad.core.Log.ResponseLogOrBuilder;
-import edu.gla.kail.ad.core.Log.Turn;
-import edu.gla.kail.ad.core.Log.TurnOrBuilder;
 import io.reactivex.Observable;
 import io.reactivex.schedulers.Schedulers;
 
@@ -24,11 +18,7 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -38,13 +28,13 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * Conversation management includes handling session state, including starting sessions (assigning
  * session IDs), as well as request identifiers. It also handles serialization of conversation log
  * data.
- *
+ * <p>
  * Instruction of usage:
  * 1) Set up the Dialog agents using setUpAgents method.
  * 2) Call the getResponseFromAgent for passed input.
  * 3)
  * TODO(Adam): further part needs to be implemented
- *
+ * <p>
  * Example usage :
  * DialogAgentManager dialogAgentManager = new DialogAgentManager();
  * dialogAgentManager.setUpAgents(_configurationTuples);
@@ -84,7 +74,7 @@ public class DialogAgentManager {
      * ?? and configuration of the DialogAgentManager ??
      *
      * @throws IOException - Exception is never throwns as the directory is validated by
-     *         directoryExistsOrCreate method.
+     *                     directoryExistsOrCreate method.
      */
     public void endSession() throws IOException {
         // Store the LogEntry in the log.
@@ -113,10 +103,10 @@ public class DialogAgentManager {
      * agents? Make the function private?
      *
      * @param configurationTuples - The list stores the entities of ConfigurationTuple,
-     *         which holds data required by each agent.
+     *                            which holds data required by each agent.
      * @throws IllegalArgumentException - Raised by _agents.add(new
-     *         DialogflowAgent(_sessionId, agentSpecificData.get(0)));
-     * @throws IOException, IllegalArgumentException
+     *                                  DialogflowAgent(_sessionId, agentSpecificData.get(0)));
+     * @throws IOException,             IllegalArgumentException
      */
     public void setUpAgents(List<ConfigurationTuple> configurationTuples) throws
             IllegalArgumentException, IOException {
@@ -164,7 +154,7 @@ public class DialogAgentManager {
      *
      * @param interactionRequest - The request sent by the client.
      * @return ResponseLog - The response chosen with a particular method from the list of responses
-     *         obtained by calling all the agents.
+     * obtained by calling all the agents.
      */
     public ResponseLog getResponse(InteractionRequest interactionRequest) throws Exception {
         RequestLog requestLog = RequestLog.newBuilder()
@@ -186,9 +176,10 @@ public class DialogAgentManager {
         ((LogEntry.Builder) _logEntryBuilder).addTurn(turn);
 
         // Store the turn in the log file.
-        String logTurnPath = _LOGSTORAGEDIRECTORY + "/Turns/" + _sessionId;
+        String logTurnPath = _LOGSTORAGEDIRECTORY + "/Turns";
         directoryExistsOrCreate(logTurnPath);
-        OutputStream outputStream = new FileOutputStream(logTurnPath + "/" + getCurrentTimeStamp() + ".log");
+        OutputStream outputStream = new FileOutputStream(logTurnPath + "/" + _sessionId +
+                getCurrentTimeStamp() + ".log");
         turn.writeTo(outputStream);
         outputStream.close();
         return chosenResponse;
@@ -209,9 +200,9 @@ public class DialogAgentManager {
      * Return the list of responses for a given request.
      *
      * @param inputInteraction - The a data structure (implemented in log.proto) holding
-     *         the interaction input passed to agents.
+     *                         the interaction input passed to agents.
      * @return List<ResponseLog> - The list of responses of all agents set up on the
-     *         setUpAgents(...) method call.
+     * setUpAgents(...) method call.
      */
     private List<ResponseLog> getResponsesFromAgents(InputInteraction inputInteraction) {
         if (checkNotNull(_agents, "Agents are not set up! Use the method" +
@@ -228,9 +219,9 @@ public class DialogAgentManager {
      * Return the responses by calling agents asynchronously.
      *
      * @param inputInteraction - The a data structure (implemented in log .proto) holding
-     *         the interaction input sent to the agent.
+     *                         the interaction input sent to the agent.
      * @return List<ResponseLog> - The list of responses of all agents set up on the
-     *         setUpAgents(...) method call.
+     * setUpAgents(...) method call.
      */
     private List<ResponseLog> asynchronousAgentCaller(InputInteraction inputInteraction) {
         Observable<AgentInterface> agentInterfaceObservable = Observable.fromIterable(_agents);
@@ -247,9 +238,9 @@ public class DialogAgentManager {
      * Return the responses by calling agents synchronously.
      *
      * @param inputInteraction - The a data structure (implemented in log .proto) holding
-     *         the interaction input sent to the agent.
+     *                         the interaction input sent to the agent.
      * @return List<ResponseLog> - The list of responses of all agents set up on the
-     *         setUpAgents(...) method call.
+     * setUpAgents(...) method call.
      */
     private List<ResponseLog> synchronousAgentCaller(InputInteraction inputInteraction) {
         List<ResponseLog> listOfResponseLogs = new ArrayList();
@@ -263,9 +254,9 @@ public class DialogAgentManager {
      * Return a valid response from an agent within a set time period or return and unsuccessful
      * response.
      *
-     * @param agent - The agent which
+     * @param agent            - The agent which
      * @param inputInteraction - The a data structure (implemented in log .proto) holding
-     *         the interaction input sent to the agent.
+     *                         the interaction input sent to the agent.
      * @return ResponseLog - Response from the agent or unsuccessful reponse.
      */
     private ResponseLog callForResponseAndValidate(AgentInterface agent, InputInteraction
@@ -349,7 +340,7 @@ public class DialogAgentManager {
      *
      * @param responses - The list of ResponseLog responses obtained from agents.
      * @return ResponseLog - The first successful response or unsuccessful response if none of the
-     *         provided responses were successful.
+     * provided responses were successful.
      */
     private ResponseLog chooseFirstValidResponse(List<ResponseLog> responses) {
         for (ResponseLog responseLog : responses) {
