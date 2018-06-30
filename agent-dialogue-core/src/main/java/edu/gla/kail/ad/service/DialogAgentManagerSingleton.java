@@ -19,33 +19,33 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * Class used to hold the instances of DialogAgentManager, which are unique for every session.
- * The current version creates unique DialogAgentManager for every client, not every session!
+ * The current version creates unique DialogAgentManager for every user, not every session!
  */
 final class DialogAgentManagerSingleton {
-    // The map of clientId and the DialogAgentManager instances assigned to each session
-    // (currently client).
+    // The map of userID and the DialogAgentManager instances assigned to each session
+    // (currently user).
     private static Map<String, DialogAgentManager> _initializedManagers = new HashMap();
     private static DialogAgentManagerSingleton _instance;
 
     /**
-     * @param clientId - The identification String ClientID, which is sent by each client
+     * @param userID - The identification String userID, which is sent by each user
      *         with every request.
      * @return DialogAgentManager - The instance of DialogAgentManager used for particular session
-     *         (currently client).
+     *         (currently user).
      * @throws IOException - Thrown when setting up the agents is unsuccessful.
      */
-    static synchronized DialogAgentManager getDialogAgentManager(String clientId) throws
+    static synchronized DialogAgentManager getDialogAgentManager(String userID) throws
             IOException {
         if (_instance == null) {
             _instance = new DialogAgentManagerSingleton();
         }
-        if (!_initializedManagers.containsKey(clientId)) {
+        if (!_initializedManagers.containsKey(userID)) {
             DialogAgentManager dialogAgentManager = new DialogAgentManager();
             dialogAgentManager.setUpAgents(supportingFunctionToBeDeleted()); // TODO(Adam): Add a
             // functionality to setting up agents from the database
-            _initializedManagers.put(clientId, dialogAgentManager);
+            _initializedManagers.put(userID, dialogAgentManager);
         }
-        return _initializedManagers.get(clientId);
+        return _initializedManagers.get(userID);
     }
 
     /**

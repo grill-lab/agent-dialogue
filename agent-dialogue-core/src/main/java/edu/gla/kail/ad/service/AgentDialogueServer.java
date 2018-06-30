@@ -86,7 +86,7 @@ public class AgentDialogueServer {
     }
 
     /**
-     * Serves the requests from clients.
+     * Serves the requests from clients/users.
      * TODO(Adam): check if the class and the gRPC server are thread safe.
      */
     static class AgentDialogueService extends AgentDialogueGrpc.AgentDialogueImplBase {
@@ -96,22 +96,19 @@ public class AgentDialogueServer {
          * a dummy method for testing purposes.
          *
          * @param interactionRequest - The instance of InteractionRequest passed by the
-         *         client to the agents.
-         * @param responseObserver - The instance, which is used to pass the instance of
-         *         InteractionResponse with the response from the agents.
+         *                           user/client to the agents.
+         * @param responseObserver   - The instance, which is used to pass the instance of
+         *                           InteractionResponse with the response from the agents.
          */
         @Override
         public void getResponseFromAgents(InteractionRequest interactionRequest,
                                           StreamObserver<InteractionResponse> responseObserver) {
-            if (checkNotNull(interactionRequest.getClientId(), "The interactionRequest that have " +
-                    "been sent doesn't have ClientID!").isEmpty()) {
-                throw new IllegalArgumentException("The interactionRequest that have been has " +
-                        "empty ClientID!");
-            }
+            checkNotNull(interactionRequest.getUserID(), "The interactionRequest that have " +
+                    "been sent doesn't have userID!");
             DialogAgentManager dialogAgentManager;
             try {
                 dialogAgentManager = DialogAgentManagerSingleton
-                        .getDialogAgentManager(interactionRequest.getClientId());
+                        .getDialogAgentManager(interactionRequest.getUserID());
             } catch (IOException ioException) {
                 ioException.printStackTrace();
                 dialogAgentManager = null;
@@ -132,6 +129,7 @@ public class AgentDialogueServer {
                         .setResponseId(response.getResponseId())
                         .setTime(timestamp)
                         .setClientId(response.getClientId())
+                        .setUserID(interactionRequest.getUserID())
                         .setMessageStatus(ClientMessageStatus.SUCCESSFUL)
                         .addAllInteraction(response.getActionList().stream().map(action -> action
                                 .getInteraction()).collect(Collectors.toList()))

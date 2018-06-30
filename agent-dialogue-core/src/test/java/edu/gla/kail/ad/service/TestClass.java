@@ -2,6 +2,7 @@ package edu.gla.kail.ad.service;
 
 import com.google.protobuf.Timestamp;
 import com.google.protobuf.util.JsonFormat;
+import edu.gla.kail.ad.Client;
 import edu.gla.kail.ad.Client.InputInteraction;
 import edu.gla.kail.ad.Client.InteractionRequest;
 import edu.gla.kail.ad.Client.InteractionResponse;
@@ -27,7 +28,7 @@ public class TestClass {
         urlc.setRequestProperty("Content-Type", "application/x-protobuf");
 
         InteractionRequest interactionRequest = InteractionRequest.newBuilder()
-                .setClientId("Random Client ID")
+                .setClientId(Client.ClientId.EXTERNAL_APPLICATION)
                 .setTime(Timestamp.newBuilder()
                         .setSeconds(Instant.now()
                                 .getEpochSecond())

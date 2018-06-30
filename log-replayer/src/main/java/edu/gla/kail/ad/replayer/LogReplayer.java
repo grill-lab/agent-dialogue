@@ -1,6 +1,7 @@
 package edu.gla.kail.ad.replayer;
 
 import com.google.protobuf.Timestamp;
+import edu.gla.kail.ad.Client;
 import edu.gla.kail.ad.Client.InteractionRequest;
 import edu.gla.kail.ad.Client.InteractionResponse;
 import edu.gla.kail.ad.core.Log.LogEntry;
@@ -34,7 +35,7 @@ public class LogReplayer {
     // RPC will wait for the server to respond; return response or raise an exception.
     private final AgentDialogueBlockingStub _blockingStub;
     // The string identifying the client.
-    private String _clientId;
+    private String _userId;
     // Directory to the folder with logs.
     private String _LOGSTORAGEDIRECTORY;
 
@@ -46,7 +47,7 @@ public class LogReplayer {
     public LogReplayer(ManagedChannelBuilder<?> channelBuilder) {
         _channel = channelBuilder.build();
         _blockingStub = AgentDialogueGrpc.newBlockingStub(_channel);
-        _clientId = generateClientId();
+        _userId = generateUserId();
 
         // Hardcoded directory path.
         File directory = new File(System.getProperty("user.dir") + "/Logs/Replayer");
@@ -100,7 +101,7 @@ public class LogReplayer {
      *
      * @return random clientId
      */
-    private String generateClientId() {
+    private String generateUserId() {
         return "LogReplayer_" + UUID.randomUUID().toString();
     }
 
@@ -160,7 +161,8 @@ public class LogReplayer {
                             .setSeconds(Instant.now().getEpochSecond())
                             .setNanos(Instant.now().getNano())
                             .build())
-                    .setClientId(_clientId)
+                    .setUserID(_userId)
+                    .setClientId(Client.ClientId.LOG_REPLAYER)
                     .setInteraction(turn.getRequestLog().getInteraction()).build();
             InteractionResponse interactionResponse = getInteractionResponse(interactionRequest);
             listOfInteractionResponses.add(interactionResponse);
