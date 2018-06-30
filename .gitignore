@@ -18,3 +18,5 @@
 /web-simulator/gradlew.bat
 */Logs
 /Logs/
+/web-simulator/build/
+/web-simulator/backend/build/
