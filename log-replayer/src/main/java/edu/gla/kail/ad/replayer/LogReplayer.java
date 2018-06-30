@@ -146,7 +146,7 @@ public class LogReplayer {
     private List<InteractionResponse> replayConversation(InputStream inputStream) throws
             Exception {
         LogEntry logEntry;
-        List<InteractionResponse> listOfInteractionResponses = new ArrayList();
+        List<InteractionResponse> listOfInteractionResponses = new ArrayList<>();
         try {
             logEntry = LogEntry.parseFrom(inputStream);
         } catch (IOException iOException) {
