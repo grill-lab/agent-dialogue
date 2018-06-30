@@ -16,6 +16,10 @@ repositories {
     jcenter()
     maven { url "https://dl.bintray.com/kotlin/kotlinx" }
     maven { url "https://dl.bintray.com/kotlin/ktor" }
+    mavenLocal()
+    maven {
+        url uri('/Users/Adam/Documents/Internship/GitHub/agent-dialogue')
+    }
 }
 
 dependencies {
@@ -24,6 +28,9 @@ dependencies {
     compile "org.jetbrains.ktor:ktor-jetty:$ktor_version"
     compile "org.jetbrains.ktor:ktor-netty:$ktor_version"
     compile group: 'com.google.code.gson', name: 'gson', version: '2.3.1'
+    implementation fileTree(dir: '/Users/Adam/Documents/Internship/GitHub/agent-dialogue/targ', include: ['*.jar'])
+    compile files("/Users/Adam/Documents/Internship/GitHub/agent-dialogue/target/classes")
+    compile files("/Users/Adam/Documents/Internship/GitHub/agent-dialogue/target/libs")
     testCompile group: 'junit', name: 'junit', version: '4.12'
 }
 
