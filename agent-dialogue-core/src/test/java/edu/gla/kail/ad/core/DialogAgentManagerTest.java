@@ -2,6 +2,7 @@ package edu.gla.kail.ad.core;
 
 import com.google.cloud.Tuple;
 import com.google.protobuf.Timestamp;
+import edu.gla.kail.ad.Client;
 import edu.gla.kail.ad.Client.InputInteraction;
 import edu.gla.kail.ad.Client.InteractionRequest;
 import edu.gla.kail.ad.Client.InteractionType;
@@ -91,7 +92,7 @@ public class DialogAgentManagerTest {
             fail("Setting up agents was unsuccessful");
         }
         _interactionRequest = InteractionRequest.newBuilder()
-                .setClientId("Random Client ID")
+                .setClientId(Client.ClientId.EXTERNAL_APPLICATION)
                 .setTime(Timestamp.newBuilder()
                         .setSeconds(Instant.now()
                                 .getEpochSecond())

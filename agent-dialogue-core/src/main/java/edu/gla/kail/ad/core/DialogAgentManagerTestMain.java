@@ -2,6 +2,7 @@ package edu.gla.kail.ad.core;
 
 import com.google.cloud.Tuple;
 import com.google.protobuf.Timestamp;
+import edu.gla.kail.ad.Client;
 import edu.gla.kail.ad.Client.InputInteraction;
 import edu.gla.kail.ad.Client.InteractionRequest;
 import edu.gla.kail.ad.Client.InteractionType;
@@ -14,7 +15,6 @@ import java.nio.file.Paths;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 /**
  * Class for testing the functionality.
@@ -27,10 +27,11 @@ public class DialogAgentManagerTestMain {
      * TODO(Adam): File_check if exists() file.mkDirsc).
      *
      * @param fileDirectory - It specifies the directory of the file with data used to set
-     *         up agents. Each line has one agent entry, which specified agent type parameters
-     *         required by this agent separated with ",".
+     *                      up agents. Each line has one agent entry, which specified agent type
+     *                      parameters
+     *                      required by this agent separated with ",".
      * @throws Exception - It is thrown when the given type name of the agent is not
-     *         correctly formatted or the agent type is not supported yet.
+     *                   correctly formatted or the agent type is not supported yet.
      */
     private static void readProjectIdAndKeyFileToHashMap(String fileDirectory) throws Exception {
         _configurationTuples = new ArrayList();
@@ -71,10 +72,6 @@ public class DialogAgentManagerTestMain {
         }
     }
 
-    private static String getRandomNumberAsString() {
-        return UUID.randomUUID().toString();
-    }
-
     public static void main(String[] args) throws Exception {
         // Different parameters required by the agents and proto buffers, that would be passed by
         // the client.
@@ -106,7 +103,7 @@ public class DialogAgentManagerTestMain {
             System.out.println("TESTING CLASS OUTPUT: CURRENTLY HANDLING THE REQUEST FOR: " + line);
             InteractionRequest interactionRequest = InteractionRequest.newBuilder()
                     .setTime(timestamp)
-                    .setClientId(getRandomNumberAsString())
+                    .setClientId(Client.ClientId.EXTERNAL_APPLICATION)
                     .setInteraction(InputInteraction.newBuilder()
                             .setType(InteractionType.TEXT)
                             .setText(line)

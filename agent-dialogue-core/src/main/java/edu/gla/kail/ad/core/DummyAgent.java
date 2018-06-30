@@ -1,6 +1,7 @@
 package edu.gla.kail.ad.core;
 
 import com.google.protobuf.Timestamp;
+import edu.gla.kail.ad.Client;
 import edu.gla.kail.ad.Client.InputInteraction;
 import edu.gla.kail.ad.Client.InteractionType;
 import edu.gla.kail.ad.Client.OutputInteraction;
@@ -34,7 +35,7 @@ class DummyAgent implements AgentInterface {
         return ResponseLog.newBuilder()
                 .setResponseId("ResponseId set by DummyBuilder")
                 .setTime(timestamp)
-                .setClientId("ClientId set by DummyBuilder")
+                .setClientId(Client.ClientId.EXTERNAL_APPLICATION)
                 .setServiceProvider(ServiceProvider.DUMMYAGENT)
                 .setRawResponse("RawResponse set by DummyBuilder")
                 .addAction(SystemAct.newBuilder()

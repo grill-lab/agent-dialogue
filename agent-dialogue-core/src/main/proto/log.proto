@@ -24,7 +24,7 @@ message Turn {
 message RequestLog {
     string request_id = 1; // The ID which is being assigned by DialogAgentManager.
     google.protobuf.Timestamp time = 2; // The time the request was created.
-    string client_id = 3; // The ID of the client the request is sent from.
+    ClientId client_id = 3; // The ID of the client the request is sent from.
     InputInteraction interaction = 4; // The request we get from the client.
 }
 
@@ -44,7 +44,7 @@ message ResponseLog {
     }
     string response_id = 1; // The response ID obtained from the Agent.
     google.protobuf.Timestamp time = 2; // The time the response was created.
-    string client_id = 3; // The ID of the client the request is sent from.
+    ClientId client_id = 3; // The ID of the client the request is sent from.
     ServiceProvider service_provider = 4;
     string raw_response = 5; // The raw response in e.g. JSON format obtained from the Agent.
     repeated SystemAct action = 6; // The actions sent in the response from the Agent.
