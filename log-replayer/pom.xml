@@ -34,7 +34,6 @@
     </dependencies>
 
     <build>
-
         <extensions>
             <extension>
                 <groupId>kr.motd.maven</groupId>
