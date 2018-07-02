@@ -49,15 +49,12 @@ public class DialogAgentManager {
     // Session ID is a unique identifier of a session which is assigned by the method
     // startSession() called by DialogAgentManager constructor.
     private String _sessionId;
-    // One LogEntry is stored per session.
-    private LogEntryOrBuilder _logEntryBuilder;
 
     /**
      * Create a unique session ID generated with startSession() method.
      */
     public DialogAgentManager() {
         startSession();
-        _logEntryBuilder = LogEntry.newBuilder();
         directoryExistsOrCreate(System.getProperty("user.dir") + "/Logs");
         _LOGSTORAGEDIRECTORY = System.getProperty("user.dir") + "/Logs";
     }
@@ -77,13 +74,6 @@ public class DialogAgentManager {
      *                     directoryExistsOrCreate method.
      */
     public void endSession() throws IOException {
-        // Store the LogEntry in the log.
-        String logEntryPath = _LOGSTORAGEDIRECTORY + "/LogEntries";
-        directoryExistsOrCreate(logEntryPath);
-        OutputStream outputStream = new FileOutputStream(logEntryPath + "/" + _sessionId + ".log");
-        ((LogEntry.Builder) _logEntryBuilder).build().writeTo(outputStream);
-        outputStream.close();
-
         // TODO(Adam): Creation of configuration file - to be done later on.
     }
 
@@ -149,7 +139,6 @@ public class DialogAgentManager {
 
     /**
      * Take the request from the service and send back chosen response.
-     * Add the Turn to the LogEntry stored within the instance.
      * Store the turn in the logfile
      *
      * @param interactionRequest - The request sent by the client.
@@ -173,7 +162,6 @@ public class DialogAgentManager {
             ((Turn.Builder) turnBuilder).addCandidateResponse(response);
         }
         Turn turn = ((Turn.Builder) turnBuilder).build();
-        ((LogEntry.Builder) _logEntryBuilder).addTurn(turn);
 
         // Store the turn in the log file.
         String logTurnPath = _LOGSTORAGEDIRECTORY + "/Turns";
