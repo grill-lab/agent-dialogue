@@ -44,14 +44,14 @@ public final class LogEntryManager {
             mapOfTurns.get(turn.getSessionId()).add(turn);
         }
 
-        // Write all the turns to separate LogEntry Files.
+        // Write all the turns to separate LogEntry files.
         directoryExistsOrCreate(writeDirectory);
         for (List<Turn> listOfTurns : mapOfTurns.values()) {
             LogEntryOrBuilder logEntryOrBuilder = LogEntry.newBuilder().setSessionId(listOfTurns
                     .get(0).getSessionId());
             listOfTurns.sort((turn1, turn2) -> turn1.getRequestLog().getTime().getSeconds() >
-                    turn2.getRequestLog().getTime().getSeconds() ? 1 : -1);
-
+                    turn2.getRequestLog().getTime().getSeconds() ? 1 : turn1.getRequestLog()
+                    .getTime().getNanos() > turn2.getRequestLog().getTime().getNanos() ? 1 : -1);
             for (Turn turn : listOfTurns) {
                 ((Builder) logEntryOrBuilder).addTurn(turn);
             }

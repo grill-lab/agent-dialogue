@@ -18,20 +18,18 @@ import java.util.Map;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
- * Class used to hold the instances of DialogAgentManager, which are unique for every session.
- * The current version creates unique DialogAgentManager for every user, not every session!
+ * Class used to hold the instances of DialogAgentManager for each session ID
+ * over certain period of time after the last activity, which are unique for every session.
  */
 final class DialogAgentManagerSingleton {
-    // The map of userID and the DialogAgentManager instances assigned to each session
-    // (currently user).
+    // The map of userID and the DialogAgentManager instances assigned to each user.
     private static Map<String, DialogAgentManager> _initializedManagers = new HashMap<>();
     private static DialogAgentManagerSingleton _instance;
 
     /**
      * @param userID - The identification String userID, which is sent by each user
      *         with every request.
-     * @return DialogAgentManager - The instance of DialogAgentManager used for particular session
-     *         (currently user).
+     * @return DialogAgentManager - The instance of DialogAgentManager used for particular session.
      * @throws IOException - Thrown when setting up the agents is unsuccessful.
      */
     static synchronized DialogAgentManager getDialogAgentManager(String userID) throws
@@ -42,7 +40,7 @@ final class DialogAgentManagerSingleton {
         if (!_initializedManagers.containsKey(userID)) {
             DialogAgentManager dialogAgentManager = new DialogAgentManager();
             dialogAgentManager.setUpAgents(supportingFunctionToBeDeleted()); // TODO(Adam): Add a
-            // functionality to setting up agents from the database
+            // functionality to setting up agents from the database once we have it.
             _initializedManagers.put(userID, dialogAgentManager);
         }
         return _initializedManagers.get(userID);
