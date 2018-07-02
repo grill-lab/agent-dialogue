@@ -1,6 +1,7 @@
 package edu.gla.kail.ad.service;
 
 import com.google.protobuf.Timestamp;
+import edu.gla.kail.ad.Client;
 import edu.gla.kail.ad.Client.InputInteraction;
 import edu.gla.kail.ad.Client.InteractionRequest;
 import edu.gla.kail.ad.Client.InteractionResponse;
@@ -32,7 +33,7 @@ public class AgentDialogueClientService {
      */
     public static void main(String[] args) throws Exception {
         InteractionRequest interactionRequest = InteractionRequest.newBuilder()
-                .setClientId("ClientID set by client")
+                .setClientId(Client.ClientId.WEB_SIMULATOR)
                 .setTime(Timestamp.newBuilder()
                         .setSeconds(Instant.now()
                                 .getEpochSecond())
