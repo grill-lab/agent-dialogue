@@ -40,7 +40,7 @@ message ResponseLog {
     enum MessageStatus {
         NONSET = 0;
         SUCCESSFUL = 1;
-        UNSUCCESFUL = 2;
+        UNSUCCESSFUL = 2;
     }
     string response_id = 1; // The response ID obtained from the Agent.
     google.protobuf.Timestamp time = 2; // The time the response was created.

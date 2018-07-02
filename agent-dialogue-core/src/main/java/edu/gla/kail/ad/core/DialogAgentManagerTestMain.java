@@ -34,7 +34,7 @@ public class DialogAgentManagerTestMain {
      *                   correctly formatted or the agent type is not supported yet.
      */
     private static void readProjectIdAndKeyFileToHashMap(String fileDirectory) throws Exception {
-        _configurationTuples = new ArrayList();
+        _configurationTuples = new ArrayList<>();
         Path path = Paths.get(fileDirectory);
         List<String> lines = Files.readAllLines(path, StandardCharsets.UTF_8);
         for (String line : lines) {
@@ -42,26 +42,26 @@ public class DialogAgentManagerTestMain {
             switch (projectIdAndJsonKey[0]) {
                 case "Dialogflow":
                     List<Tuple<String, String>> dialogflowProjectIdAndJsonKeyFileList = new
-                            ArrayList();
+                            ArrayList<>();
                     dialogflowProjectIdAndJsonKeyFileList.add(Tuple.of(projectIdAndJsonKey[1],
                             projectIdAndJsonKey[2]));
-                    _configurationTuples.add(new ConfigurationTuple(ServiceProvider.DIALOGFLOW,
+                    _configurationTuples.add(new ConfigurationTuple<>(ServiceProvider.DIALOGFLOW,
                             dialogflowProjectIdAndJsonKeyFileList));
                     break;
                 case "DummyAgent":
-                    _configurationTuples.add(new ConfigurationTuple(ServiceProvider
+                    _configurationTuples.add(new ConfigurationTuple<>(ServiceProvider
                             .DUMMYAGENT, null));
                     break;
                 case "FailingExceptionDummyAgent":
-                    _configurationTuples.add(new ConfigurationTuple(ServiceProvider
+                    _configurationTuples.add(new ConfigurationTuple<>(ServiceProvider
                             .FAILINGEXCEPTIONDUMMYAGENT, null));
                     break;
                 case "FailingNullDummyAgent":
-                    _configurationTuples.add(new ConfigurationTuple(ServiceProvider
+                    _configurationTuples.add(new ConfigurationTuple<>(ServiceProvider
                             .FAILINGNULLDUMMYAGENT, null));
                     break;
                 case "FailingTimeDummyAgent":
-                    _configurationTuples.add(new ConfigurationTuple(ServiceProvider
+                    _configurationTuples.add(new ConfigurationTuple<>(ServiceProvider
                             .FAILINGTIMEDUMMYAGENT, null));
                     break;
                 default:

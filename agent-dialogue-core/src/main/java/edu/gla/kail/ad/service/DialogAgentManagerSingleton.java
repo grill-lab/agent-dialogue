@@ -24,7 +24,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 final class DialogAgentManagerSingleton {
     // The map of userID and the DialogAgentManager instances assigned to each session
     // (currently user).
-    private static Map<String, DialogAgentManager> _initializedManagers = new HashMap();
+    private static Map<String, DialogAgentManager> _initializedManagers = new HashMap<>();
     private static DialogAgentManagerSingleton _instance;
 
     /**
@@ -59,7 +59,7 @@ final class DialogAgentManagerSingleton {
      *         Authorisation file is not accessible.
      */
     private static List<ConfigurationTuple> supportingFunctionToBeDeleted() {
-        List<ConfigurationTuple> configurationTuples = new ArrayList();
+        List<ConfigurationTuple> configurationTuples = new ArrayList<>();
         String currentClassPathFile = System.getProperty("user.dir");
         Path path = Paths.get(currentClassPathFile +
                 "/agent-dialogue-core/src/main/resources/TestTextFiles" +
@@ -78,26 +78,26 @@ final class DialogAgentManagerSingleton {
             switch (projectIdAndJsonKey[0]) {
                 case "Dialogflow":
                     List<Tuple<String, String>> dialogflowProjectIdAndJsonKeyFileList = new
-                            ArrayList();
+                            ArrayList<>();
                     dialogflowProjectIdAndJsonKeyFileList.add(Tuple.of(projectIdAndJsonKey[1],
                             projectIdAndJsonKey[2]));
-                    configurationTuples.add(new ConfigurationTuple(ServiceProvider.DIALOGFLOW,
+                    configurationTuples.add(new ConfigurationTuple<>(ServiceProvider.DIALOGFLOW,
                             dialogflowProjectIdAndJsonKeyFileList));
                     break;
                 case "DummyAgent":
-                    configurationTuples.add(new ConfigurationTuple(ServiceProvider
+                    configurationTuples.add(new ConfigurationTuple<>(ServiceProvider
                             .DUMMYAGENT, null));
                     break;
                 case "FailingExceptionDummyAgent":
-                    configurationTuples.add(new ConfigurationTuple(ServiceProvider
+                    configurationTuples.add(new ConfigurationTuple<>(ServiceProvider
                             .FAILINGEXCEPTIONDUMMYAGENT, null));
                     break;
                 case "FailingNullDummyAgent":
-                    configurationTuples.add(new ConfigurationTuple(ServiceProvider
+                    configurationTuples.add(new ConfigurationTuple<>(ServiceProvider
                             .FAILINGNULLDUMMYAGENT, null));
                     break;
                 case "FailingTimeDummyAgent":
-                    configurationTuples.add(new ConfigurationTuple(ServiceProvider
+                    configurationTuples.add(new ConfigurationTuple<>(ServiceProvider
                             .FAILINGTIMEDUMMYAGENT, null));
                     break;
                 default:
