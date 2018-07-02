@@ -10,7 +10,6 @@ import edu.gla.kail.ad.core.Log.ResponseLog.MessageStatus;
 import io.reactivex.Observable;
 import io.reactivex.schedulers.Schedulers;
 
-import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -42,21 +41,18 @@ import static com.google.common.base.Preconditions.checkNotNull;
  **/
 
 public class DialogAgentManager {
-    // Directory to the folder with logs.
-    private String _LOGSTORAGEDIRECTORY;
     // List of instances of used Dialog agents.
     private List<AgentInterface> _agents;
     // Session ID is a unique identifier of a session which is assigned by the method
     // startSession() called by DialogAgentManager constructor.
     private String _sessionId;
+    private LogTurnManagerSingleton _logTurnManagerSingleton;
 
     /**
      * Create a unique session ID generated with startSession() method.
      */
     public DialogAgentManager() {
         startSession();
-        directoryExistsOrCreate(System.getProperty("user.dir") + "/Logs");
-        _LOGSTORAGEDIRECTORY = System.getProperty("user.dir") + "/Logs";
     }
 
     /**
@@ -64,14 +60,11 @@ public class DialogAgentManager {
      */
     private void startSession() {
         _sessionId = generateRandomID();
+        _logTurnManagerSingleton = LogTurnManagerSingleton.getLogTurnManagerSingleton();
     }
 
     /**
-     * Called before the end of the session to store the log.
-     * ?? and configuration of the DialogAgentManager ??
-     *
-     * @throws IOException - Exception is never throwns as the directory is validated by
-     *                     directoryExistsOrCreate method.
+     * Called before the end of the session to store and configuration of the DialogAgentManager ??
      */
     public void endSession() throws IOException {
         // TODO(Adam): Creation of configuration file - to be done later on.
@@ -164,23 +157,8 @@ public class DialogAgentManager {
         Turn turn = ((Turn.Builder) turnBuilder).build();
 
         // Store the turn in the log file.
-        String logTurnPath = _LOGSTORAGEDIRECTORY + "/Turns";
-        directoryExistsOrCreate(logTurnPath);
-        OutputStream outputStream = new FileOutputStream(logTurnPath + "/" + _sessionId +
-                getCurrentTimeStamp() + ".log");
-        turn.writeTo(outputStream);
-        outputStream.close();
+        _logTurnManagerSingleton.addTurn(turn);
         return chosenResponse;
-    }
-
-    /**
-     * Validate whether the directory exists and if not, then create it.
-     */
-    public void directoryExistsOrCreate(String path) {
-        File directory = new File(path);
-        if (!directory.exists()) {
-            directory.mkdir();
-        }
     }
 
     /**
