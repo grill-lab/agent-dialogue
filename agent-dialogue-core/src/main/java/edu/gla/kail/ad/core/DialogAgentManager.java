@@ -110,7 +110,7 @@ public class DialogAgentManager {
      */
     public void setUpAgents(List<ConfigurationTuple> configurationTuples) throws
             IllegalArgumentException, IOException {
-        _agents = new ArrayList();
+        _agents = new ArrayList<>();
         for (ConfigurationTuple configurationTuple : configurationTuples) {
             switch (configurationTuple.get_agentType()) {
                 case NOTSET:
@@ -243,7 +243,7 @@ public class DialogAgentManager {
      * setUpAgents(...) method call.
      */
     private List<ResponseLog> synchronousAgentCaller(InputInteraction inputInteraction) {
-        List<ResponseLog> listOfResponseLogs = new ArrayList();
+        List<ResponseLog> listOfResponseLogs = new ArrayList<>();
         for (AgentInterface agent : _agents) {
             listOfResponseLogs.add(callForResponseAndValidate(agent, inputInteraction));
         }
@@ -268,7 +268,7 @@ public class DialogAgentManager {
                         "The response from Agent was null!");
             } catch (Exception exception) {
                 return ResponseLog.newBuilder()
-                        .setMessageStatus(MessageStatus.UNSUCCESFUL)
+                        .setMessageStatus(MessageStatus.UNSUCCESSFUL)
                         .setErrorMessage(exception.getMessage())
                         .setServiceProvider(agent.getServiceProvider())
                         .setTime(Timestamp.newBuilder()
@@ -289,7 +289,7 @@ public class DialogAgentManager {
         } catch (Exception exception) {
             future.cancel(true); // Cancel and send a thread interrupt.
             ResponseLogOrBuilder responseLogBuilder = ResponseLog.newBuilder()
-                    .setMessageStatus(MessageStatus.UNSUCCESFUL)
+                    .setMessageStatus(MessageStatus.UNSUCCESSFUL)
                     .setServiceProvider(agent.getServiceProvider())
                     .setTime(getCurrentTimeStamp());
             if (exception.getMessage() == null) {
@@ -311,7 +311,7 @@ public class DialogAgentManager {
             return responseLog;
         } catch (Exception exception) {
             return ResponseLog.newBuilder()
-                    .setMessageStatus(MessageStatus.UNSUCCESFUL)
+                    .setMessageStatus(MessageStatus.UNSUCCESSFUL)
                     .setErrorMessage(exception.getMessage())
                     .setServiceProvider(agent.getServiceProvider())
                     .setTime(getCurrentTimeStamp())
@@ -349,7 +349,7 @@ public class DialogAgentManager {
             }
         }
         return ResponseLog.newBuilder()
-                .setMessageStatus(MessageStatus.UNSUCCESFUL)
+                .setMessageStatus(MessageStatus.UNSUCCESSFUL)
                 .setErrorMessage("None of the passed responses had a successful call to the agent.")
                 .setTime(getCurrentTimeStamp())
                 .build();

@@ -79,7 +79,7 @@ public final class DialogflowAgentAuthorizationSingleton {
     static synchronized Tuple<String, SessionsClient> getProjectIdAndSessionsClient
     (Tuple<String, String> tupleOfProjectIdAndAuthenticationFile) throws IOException {
         if (_agentAuthorizationInstances == null) {
-            _agentAuthorizationInstances = new HashMap();
+            _agentAuthorizationInstances = new HashMap<>();
         }
         if (!_agentAuthorizationInstances.containsKey(tupleOfProjectIdAndAuthenticationFile)) {
             _agentAuthorizationInstances.put(tupleOfProjectIdAndAuthenticationFile, new
