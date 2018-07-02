@@ -1,6 +1,11 @@
 package edu.gla.kail.ad.service;
 
 import com.google.cloud.Tuple;
+import com.google.common.cache.CacheBuilder;
+import com.google.common.cache.CacheLoader;
+import com.google.common.cache.LoadingCache;
+import com.google.common.cache.RemovalListener;
+import com.google.common.cache.RemovalNotification;
 import edu.gla.kail.ad.core.ConfigurationTuple;
 import edu.gla.kail.ad.core.DialogAgentManager;
 import edu.gla.kail.ad.core.Log.ResponseLog.ServiceProvider;
@@ -11,9 +16,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -22,28 +27,55 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * over certain period of time after the last activity, which are unique for every session.
  */
 final class DialogAgentManagerSingleton {
-    // The map of userID and the DialogAgentManager instances assigned to each user.
-    private static Map<String, DialogAgentManager> _initializedManagers = new HashMap<>();
     private static DialogAgentManagerSingleton _instance;
+    private static int _MAX_NUMBER_OF_SIMULTANEOUS_CONVERSATIONS = 10;
+    private static int _SESSION_TIMEOUT_IN_MINUTES = 10;
+
+    // The cache mapping userID and the DialogAgentManager instances assigned to each user.
+    private static LoadingCache<String, DialogAgentManager> _initializedManagers = CacheBuilder
+            .newBuilder()
+            .maximumSize(_MAX_NUMBER_OF_SIMULTANEOUS_CONVERSATIONS)
+            .expireAfterAccess(_SESSION_TIMEOUT_IN_MINUTES, TimeUnit.MINUTES)
+            .removalListener(new RemovalListener<String, DialogAgentManager>() {
+                public void onRemoval(RemovalNotification<String, DialogAgentManager> removal) {
+                    removal.getValue().endSession();
+                }
+            })
+            .build(
+                    new CacheLoader<String, DialogAgentManager>() {
+                        public DialogAgentManager load(String key) throws IOException {
+                            DialogAgentManager dialogAgentManager = new DialogAgentManager();
+                            dialogAgentManager.setUpAgents(supportingFunctionToBeDeleted());
+                            // TODO(Adam): Add a functionality to setting up agents from the
+                            // database once we have it.
+                            return dialogAgentManager;
+                        }
+                    });
+
 
     /**
-     * @param userID - The identification String userID, which is sent by each user
+     * @param userId - The identification String userID, which is sent by each user
      *         with every request.
      * @return DialogAgentManager - The instance of DialogAgentManager used for particular session.
-     * @throws IOException - Thrown when setting up the agents is unsuccessful.
+     * @throws ExecutionException - Thrown when setting up the agents is unsuccessful.
      */
-    static synchronized DialogAgentManager getDialogAgentManager(String userID) throws
-            IOException {
+    static synchronized DialogAgentManager getDialogAgentManager(String userId) throws
+            ExecutionException {
         if (_instance == null) {
             _instance = new DialogAgentManagerSingleton();
         }
-        if (!_initializedManagers.containsKey(userID)) {
-            DialogAgentManager dialogAgentManager = new DialogAgentManager();
-            dialogAgentManager.setUpAgents(supportingFunctionToBeDeleted()); // TODO(Adam): Add a
-            // functionality to setting up agents from the database once we have it.
-            _initializedManagers.put(userID, dialogAgentManager);
-        }
-        return _initializedManagers.get(userID);
+        return _initializedManagers.get(userId);
+    }
+
+    /**
+     * Delete the instance of DialogAgentManager for the session corresponding to passed userID.
+     *
+     * @param userId - The identification String userID, which is sent by each user
+     *         with every request.
+     */
+    static synchronized boolean deleteDialogAgentManager(String userId) {
+        _initializedManagers.invalidate(userId);
+        return true;
     }
 
     /**
@@ -105,8 +137,5 @@ final class DialogAgentManagerSingleton {
             }
         }
         return configurationTuples;
-
     }
-
-
 }

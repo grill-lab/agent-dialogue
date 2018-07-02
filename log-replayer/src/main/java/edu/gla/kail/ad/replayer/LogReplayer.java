@@ -37,7 +37,7 @@ public class LogReplayer {
     // The string identifying the client.
     private String _userId;
     // Directory to the folder with logs.
-    private String _LOGSTORAGEDIRECTORY;
+    private String _LOG_STORAGE_DIRECTORY;
 
 
     public LogReplayer(String host, int port) {
@@ -54,7 +54,7 @@ public class LogReplayer {
         if (!directory.exists()) {
             directory.mkdir();
         }
-        _LOGSTORAGEDIRECTORY = directory.toString();
+        _LOG_STORAGE_DIRECTORY = directory.toString();
     }
 
     /**
@@ -166,7 +166,7 @@ public class LogReplayer {
                     .setInteraction(turn.getRequestLog().getInteraction()).build();
             InteractionResponse interactionResponse = getInteractionResponse(interactionRequest);
             listOfInteractionResponses.add(interactionResponse);
-            OutputStream outputStream = new FileOutputStream(_LOGSTORAGEDIRECTORY + "/" +
+            OutputStream outputStream = new FileOutputStream(_LOG_STORAGE_DIRECTORY + "/" +
                     logEntry.getSessionId() + "_" + Instant.now().toString() + ".log");
             interactionRequest.writeTo(outputStream);
             outputStream.close();
