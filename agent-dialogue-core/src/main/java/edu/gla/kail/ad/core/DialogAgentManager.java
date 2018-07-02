@@ -150,6 +150,7 @@ public class DialogAgentManager {
         // exception. Should I leave the error and propagate to higher levels, or do something here?
         TurnOrBuilder turnBuilder = Turn.newBuilder()
                 .setRequestLog(requestLog)
+                .setSessionId(_sessionId)
                 .setResponseLog(chosenResponse);
         for (ResponseLog response : responses) {
             ((Turn.Builder) turnBuilder).addCandidateResponse(response);

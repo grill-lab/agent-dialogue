@@ -1,15 +1,18 @@
 package edu.gla.kail.ad.core;
 
+import com.google.protobuf.Timestamp;
 import edu.gla.kail.ad.core.Log.Turn;
+import org.joda.time.DateTime;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.time.Instant;
 
 /**
  * Manage turns and store them in the output stream.
- * TODO(Adam): Imlement the use of LogStash, or maybe log4j, or make this thread safe.
+ * TODO(Adam): Implement the use of LogStash, or maybe log4j, or make this thread safe.
  * TODO(Adam): Setting log storage directory to be changed to a different directory/database.
  */
 public final class LogTurnManagerSingleton {
@@ -27,12 +30,12 @@ public final class LogTurnManagerSingleton {
             // Directory to the folder with logs.
             String logTurnPath = System.getProperty("user.dir") + "/Logs/DailyTurns";
             directoryExistsOrCreate(logTurnPath);
+            logTurnPath += DateTime.now().toString();
             try {
                 _outputStream = new FileOutputStream(logTurnPath);
-            } catch (Exception exception) {
+            } catch (IOException exception) {
                 exception.getMessage();
             }
-
         }
         return _instance;
     }
