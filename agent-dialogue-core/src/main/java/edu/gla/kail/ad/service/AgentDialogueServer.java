@@ -13,6 +13,7 @@ import io.grpc.stub.StreamObserver;
 
 import java.io.IOException;
 import java.time.Instant;
+import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -90,15 +91,28 @@ public class AgentDialogueServer {
      * TODO(Adam): check if the class and the gRPC server are thread safe.
      */
     static class AgentDialogueService extends AgentDialogueGrpc.AgentDialogueImplBase {
+        @Override
+        public void endSession(UserID userId, StreamObserver<UserID> responseObserver) {
+            if (checkNotNull(userId.getUserId(), "The UserID that have " +
+                    "been sent is null!").isEmpty()) {
+                throw new IllegalArgumentException("The provided userID is empty!");
+            }
+            boolean deletingWasSuccessful = DialogAgentManagerSingleton.deleteDialogAgentManager
+                    (userId.getUserId());
+            responseObserver.onNext(userId.toBuilder().setActiveSession(!deletingWasSuccessful)
+                    .build());
+            responseObserver.onCompleted();
+        }
+
         /**
          * Sends the request to the agents and retrieves the chosen response.
          * TODO(Adam): Right now the method uses getResponseFromAgentAsInteractionResponse, which is
          * a dummy method for testing purposes.
          *
          * @param interactionRequest - The instance of InteractionRequest passed by the
-         *                           user/client to the agents.
-         * @param responseObserver   - The instance, which is used to pass the instance of
-         *                           InteractionResponse with the response from the agents.
+         *         user/client to the agents.
+         * @param responseObserver - The instance, which is used to pass the instance of
+         *         InteractionResponse with the response from the agents.
          */
         @Override
         public void getResponseFromAgents(InteractionRequest interactionRequest,
@@ -109,8 +123,9 @@ public class AgentDialogueServer {
             try {
                 dialogAgentManager = DialogAgentManagerSingleton
                         .getDialogAgentManager(interactionRequest.getUserID());
-            } catch (IOException ioException) {
-                ioException.printStackTrace();
+            } catch (ExecutionException executionException) {
+                // TODO(Adam): Handle this.
+                executionException.printStackTrace();
                 dialogAgentManager = null;
             }
             checkNotNull(dialogAgentManager, "The initialization of the dialogAgentManager " +

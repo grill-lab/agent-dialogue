@@ -66,7 +66,7 @@ public class DialogAgentManager {
     /**
      * Called before the end of the session to store and configuration of the DialogAgentManager ??
      */
-    public void endSession() throws IOException {
+    public void endSession() {
         // TODO(Adam): Creation of configuration file - to be done later on.
     }
 
