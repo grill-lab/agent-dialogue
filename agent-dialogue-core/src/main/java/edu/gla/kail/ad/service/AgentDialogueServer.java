@@ -123,9 +123,8 @@ public class AgentDialogueServer {
             try {
                 dialogAgentManager = DialogAgentManagerSingleton
                         .getDialogAgentManager(interactionRequest.getUserID());
-            } catch (ExecutionException executionException) {
-                // TODO(Adam): Handle this.
-                executionException.printStackTrace();
+            } catch (Exception exception) {
+                exception.printStackTrace();
                 dialogAgentManager = null;
             }
             checkNotNull(dialogAgentManager, "The initialization of the dialogAgentManager " +
