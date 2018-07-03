@@ -29,7 +29,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 final class DialogAgentManagerSingleton {
     private static DialogAgentManagerSingleton _instance;
     private static int _MAX_NUMBER_OF_SIMULTANEOUS_CONVERSATIONS = 10;
-    private static int _SESSION_TIMEOUT_IN_MINUTES = 10;
+    private static int _SESSION_TIMEOUT_IN_MINUTES = 5;
 
     // The cache mapping userID and the DialogAgentManager instances assigned to each user.
     private static LoadingCache<String, DialogAgentManager> _initializedManagers = CacheBuilder
@@ -57,12 +57,16 @@ final class DialogAgentManagerSingleton {
      * @param userId - The identification String userID, which is sent by each user
      *         with every request.
      * @return DialogAgentManager - The instance of DialogAgentManager used for particular session.
-     * @throws ExecutionException - Thrown when setting up the agents is unsuccessful.
+     * @throws ExecutionException - Thrown when setting up the agents is unsuccessful or max
+     *         number of ongoing conversations has been reached.
      */
-    static synchronized DialogAgentManager getDialogAgentManager(String userId) throws
-            ExecutionException {
+    static synchronized DialogAgentManager getDialogAgentManager(String userId) throws Exception {
         if (_instance == null) {
             _instance = new DialogAgentManagerSingleton();
+        }
+        if (_initializedManagers.size() == _MAX_NUMBER_OF_SIMULTANEOUS_CONVERSATIONS) {
+            throw new Exception("The maximum number of conversations have been reached - wait " +
+                    "some time or quit coversations on other user accounts.");
         }
         return _initializedManagers.get(userId);
     }

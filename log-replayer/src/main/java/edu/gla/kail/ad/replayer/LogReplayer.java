@@ -20,6 +20,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Scanner;
 import java.util.UUID;
@@ -31,6 +32,10 @@ import java.util.concurrent.TimeUnit;
  * °A lot of code is repeated in AgentDialogueClientService in web-simulator client.
  */
 public class LogReplayer {
+    private final String _AVAILABLE_COMMANDS = "Available commands:" +
+            "\nq - Exit the application and stop all processes." +
+            "\nn - Add a path to the log file to be processed and process it." +
+            "\nw - Wait for the application to finish processing all the requests and then quit.\n";
     private final ManagedChannel _channel;
     // RPC will wait for the server to respond; return response or raise an exception.
     private final AgentDialogueBlockingStub _blockingStub;
@@ -38,6 +43,8 @@ public class LogReplayer {
     private String _userId;
     // Directory to the folder with logs.
     private String _LOG_STORAGE_DIRECTORY;
+    // Queue holding conversations to be assigned to different threads.
+    private LinkedList<LogEntry> logEntryQueue = new LinkedList<>();
 
 
     public LogReplayer(String host, int port) {
@@ -62,38 +69,62 @@ public class LogReplayer {
      *
      * @throws InterruptedException
      */
-    public static void main(String[] args) throws InterruptedException {
+    public static void main(String[] args) throws Exception {
         LogReplayer client = new LogReplayer("localhost", 8080);
         File directory;
         Scanner scanner = new Scanner(System.in);
+        System.out.println("Hi, I'm the log replayer. How can I help you?\n" + client
+                ._AVAILABLE_COMMANDS);
         while (true) {
-            System.out.println("Enter the path of the log file you want to read (LogEntry) or " +
-                    "type \"q\" to exit: ");
-            String providedLogEntryDirectory = scanner.nextLine();
-            if (providedLogEntryDirectory.equals("q")) {
-                System.out.println("Bye bye!");
-                System.exit(0);
+            String command = scanner.nextLine();
+            switch (command) {
+                case "q":
+                    System.out.println("Bye bye!");
+                    System.exit(0);
+                case "n":
+                    System.out.println("Type the path to the logEntry file: ");
+                    String providedLogEntryDirectory = scanner.nextLine();
+                    directory = new File(providedLogEntryDirectory);
+                    if (!directory.exists()) {
+                        System.out.println("The provided path to the log file is invalid:\n" +
+                                directory.toString() + "\nTry again!!");
+                    } else {
+                        client.startReplayerThread(directory, client);
+                        break;
+                    }
+                case "w":
+                    // TODO(Adam): Implement!
+                default:
+                    System.out.println("Unrecognised command, try again!\n" + client
+                            ._AVAILABLE_COMMANDS);
             }
-            directory = new File(providedLogEntryDirectory);
-            if (!directory.exists()) {
-                System.out.println("The provided path to the log file is invalid:\n" + directory
-                        .toString() + "\nTry again!!");
-            } else {
-                break;
-            }
+
         }
+
+    }
+
+    /**
+     * Create new threads for running requests.ū
+     *
+     * @param directoryFile - the File with the LogEntry we want to replay.
+     * @param client - the Instance of LogReplayer which we are currently using.
+     * @throws Exception - When something goes wrong.
+     */
+    private void startReplayerThread(File directoryFile, LogReplayer client) throws Exception {
+        // TODO(Adam): Implement this!
         try {
-            InputStream inputStream = new FileInputStream(directory);
+            InputStream inputStream = new FileInputStream(directoryFile);
             List<InteractionResponse> interactionResponses = client.replayConversation(inputStream);
             System.out.println("The following turns were successfully stored in the Log " +
                     "directory:\n\n" + interactionResponses.toString());
         } catch (Exception exception) {
-            System.out.println("Something went wrong. Error message:\n" + exception.getMessage()
+            throw new Exception("Something went wrong. Error message:\n" + exception.getMessage()
                     + "\n" + exception.getStackTrace());
         } finally {
             client.shutdown();
         }
     }
+
 
     /**
      * Return random, unique Id.
