@@ -18,13 +18,15 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.charset.Charset;
 import java.time.Instant;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Scanner;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 
 
 /**
@@ -32,19 +34,28 @@ import java.util.concurrent.TimeUnit;
  * °A lot of code is repeated in AgentDialogueClientService in web-simulator client.
  */
 public class LogReplayer {
-    private final String _AVAILABLE_COMMANDS = "Available commands:" +
-            "\nq - Exit the application and stop all processes." +
-            "\nn - Add a path to the log file to be processed and process it." +
-            "\nw - Wait for the application to finish processing all the requests and then quit.\n";
     private final ManagedChannel _channel;
+    private final String _AVAILABLE_COMMANDS = "\nAvailable commands:\n" +
+            "\nquit - Exit the application and stop all processes." +
+            "\nnew - Add a path to the log file to be processed and process it." +
+            "\nwait - Wait for the application to finish processing all the requests and then " +
+            "quit." +
+            "\nnumber - Get the number of logReplayer threads currently running." +
+            "\nhelp - Get the available commands list.";
     // RPC will wait for the server to respond; return response or raise an exception.
     private final AgentDialogueBlockingStub _blockingStub;
-    // The string identifying the client.
-    private String _userId;
+    // True if the user wants to wait for all the threads to finish and then quit.
+    boolean _quit = false;
     // Directory to the folder with logs.
     private String _LOG_STORAGE_DIRECTORY;
+    // Maximum number of conversations (LogEntry replays) happening at any given time.
+    private int _MAXIMUM_NUMBER_OF_ONGOING_CONVERSATIONS = 5;
+    // The string identifying the client.
+    private String _userId;
     // Queue holding conversations to be assigned to different threads.
-    private LinkedList<LogEntry> logEntryQueue = new LinkedList<>();
+    private ConcurrentLinkedQueue<File> _logEntryFilePathQueue = new ConcurrentLinkedQueue<>();
+    // The number of threads currently processing LogEntry file and getting responses from agents.
+    private AtomicInteger _numberOfThreadsRunning = new AtomicInteger(0);
 
 
     public LogReplayer(String host, int port) {
@@ -66,63 +77,119 @@ public class LogReplayer {
 
     /**
      * Created for testing purposes.
-     *
-     * @throws InterruptedException
      */
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) {
         LogReplayer client = new LogReplayer("localhost", 8080);
-        File directory;
-        Scanner scanner = new Scanner(System.in);
-        System.out.println("Hi, I'm the log replayer. How can I help you?\n" + client
-                ._AVAILABLE_COMMANDS);
-        while (true) {
-            String command = scanner.nextLine();
-            switch (command) {
-                case "q":
-                    System.out.println("Bye bye!");
-                    System.exit(0);
-                case "n":
-                    System.out.println("Type the path to the logEntry file: ");
-                    String providedLogEntryDirectory = scanner.nextLine();
-                    directory = new File(providedLogEntryDirectory);
-                    if (!directory.exists()) {
-                        System.out.println("The provided path to the log file is invalid:\n" +
-                                directory.toString() + "\nTry again!!");
-                    } else {
-                        client.startReplayerThread(directory, client);
+
+        // Thread running as 'frontend' - collects the input from user.
+        Runnable userInterfaceRunnable = () -> {
+            File directory;
+            Scanner scanner = new Scanner(System.in);
+            System.out.println("Hi, I'm the log replayer. How can I help you?\n" + client
+                    ._AVAILABLE_COMMANDS);
+            while (true) {
+                String command = scanner.nextLine();
+                switch (command) {
+                    case "help":
+                        System.out.println(client._AVAILABLE_COMMANDS);
                         break;
-                    }
-                case "w":
-                    // TODO(Adam): Implement!
-                default:
-                    System.out.println("Unrecognised command, try again!\n" + client
-                            ._AVAILABLE_COMMANDS);
+                    case "quit":
+                        System.out.println("Bye bye!");
+                        System.exit(0);
+                    case "new":
+                        System.out.println("Type the path to the logEntry file: ");
+                        String providedLogEntryDirectory = scanner.nextLine();
+                        directory = new File(providedLogEntryDirectory);
+                        if (!directory.exists()) {
+                            System.out.println("The provided path to the log file is invalid:\n" +
+                                    directory.toString() + "\nTry again!\n");
+                        } else {
+                            client._logEntryFilePathQueue.add(directory);
+                        }
+                        break;
+                    case "wait":
+                        client._quit = true;
+                        System.out.println("The application will quit once all the requests are " +
+                                "processed. In the meantime you can still interact with the " +
+                                "applciation.\nCurrent number of running threads: " + client
+                                ._numberOfThreadsRunning.get());
+                        break;
+                    case "number":
+                        System.out.println("The number of logReplayer threads currently running: " +
+                                "" + client._numberOfThreadsRunning.get());
+                        break;
+                    default:
+                        System.out.println("Unrecognised command, try again!\n" + client
+                                ._AVAILABLE_COMMANDS);
+                }
+                System.out.println("Enter a command or type 'help' to get the list of commands: ");
             }
+        };
 
-        }
-
+        // Thread running as 'backend' - takes requests from the queue at given rate.
+        Runnable queueCheckerRunnable = () -> {
+            while (true) {
+                if (client._quit && client._numberOfThreadsRunning.get() == 0) {
+                    System.out.println("All the threads have finished running!\nBye bye!");
+                    System.exit(0);
+                }
+                try {
+                    // Sleep call makes the queueCheckerRunnable run requests at given rate (time
+                    // period).
+                    TimeUnit.SECONDS.sleep(1);
+                    if (!client._logEntryFilePathQueue.isEmpty() && client
+                            ._numberOfThreadsRunning.get() <= client
+                            ._MAXIMUM_NUMBER_OF_ONGOING_CONVERSATIONS) {
+                        File logEntryFilePath = client._logEntryFilePathQueue.poll();
+                        client.startReplayerThread(logEntryFilePath, client);
+                    }
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                    System.exit(0);
+                }
+            }
+        };
+        new Thread(queueCheckerRunnable).start();
+        new Thread(userInterfaceRunnable).start();
     }
 
     /**
-     * Create new threads for running requests.ū
+     * Create new threads for running requests.
+     * Update the _numberOfThreadsRunning.
      *
      * @param directoryFile - the File with the LogEntry we want to replay.
      * @param client - the Instance of LogReplayer which we are currently using.
-     * @throws Exception - When something goes wrong.
      */
-    private void startReplayerThread(File directoryFile, LogReplayer client) throws Exception {
-        // TODO(Adam): Implement this!
-        try {
-            InputStream inputStream = new FileInputStream(directoryFile);
-            List<InteractionResponse> interactionResponses = client.replayConversation(inputStream);
-            System.out.println("The following turns were successfully stored in the Log " +
-                    "directory:\n\n" + interactionResponses.toString());
-        } catch (Exception exception) {
-            throw new Exception("Something went wrong. Error message:\n" + exception.getMessage()
-                    + "\n" + exception.getStackTrace());
-        } finally {
-            client.shutdown();
-        }
+    private void startReplayerThread(File directoryFile, LogReplayer client) {
+        Runnable singularDialogManagerThread = () -> {
+            client._numberOfThreadsRunning.incrementAndGet();
+            try {
+                InputStream inputStream = new FileInputStream(directoryFile);
+                List<InteractionResponse> interactionResponses = client.replayConversation
+                        (inputStream);
+                System.out.println("The following turns were successfully stored in the Log " +
+                        "directory:\n\n" + interactionResponses.toString());
+            } catch (Exception exception) {
+                try {
+                    OutputStream outputStream = new FileOutputStream(_LOG_STORAGE_DIRECTORY +
+                            "/ERROR_" + Instant.now().toString() + ".log");
+                    outputStream.write(("Something went wrong for the file: " + directoryFile
+                            .toString() + ". Error message:\n" + exception.getMessage() + "\n" +
+                            exception.getStackTrace()).getBytes(Charset.forName("UTF-8")));
+                    outputStream.close();
+                } catch (Exception internalException) {
+                    // TODO(Adam): Rethink this part.
+                    // TODO(Jeff): What to do then?
+                    System.out.println("Something went wrong for the file: " + directoryFile
+                            .toString() + ". Error message:\n" + exception.getMessage() + "\n" +
+                            exception.getStackTrace());
+                    System.exit(0);
+                }
+            } finally {
+                client._numberOfThreadsRunning.decrementAndGet();
+            }
+        };
+        new Thread(singularDialogManagerThread).start();
     }
 
 
@@ -184,8 +251,7 @@ public class LogReplayer {
             throw new Exception("Provided InputStream is not valid! Error message: " +
                     iOException.getMessage());
         }
-        // TODO(Adam): Implement sending requests at specified rate (e.g. e per second, or one
-        // query every 2 sec, or min 2 sec between queries, etc.)
+
         for (Turn turn : logEntry.getTurnList()) {
             InteractionRequest interactionRequest = InteractionRequest.newBuilder()
                     .setTime(Timestamp.newBuilder()
