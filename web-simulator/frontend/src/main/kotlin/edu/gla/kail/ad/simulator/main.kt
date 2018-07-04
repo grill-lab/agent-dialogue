@@ -1,11 +1,11 @@
-/*
 // only for testing!
 
-import com.google.api.client.json.Json
 import org.w3c.dom.Element
+import org.w3c.dom.HTMLInputElement
+import org.w3c.dom.HTMLTextAreaElement
 import org.w3c.dom.events.Event
-import org.w3c.dom.html.HTMLInputElement
-import org.w3c.dom.html.HTMLTextAreaElement
+import org.w3c.dom.get
+import org.w3c.xhr.XMLHttpRequest
 import kotlin.browser.document
 import kotlin.browser.window
 import kotlin.js.Json
@@ -35,7 +35,7 @@ fun fetch(count: String): Unit {
         println(text)
         val objArray  = JSON.parse<Array<Json>>(text)
         val textarea = document.getElementById("textarea_id") as HTMLTextAreaElement
-        textarea.value = ""
+        textarea.value = "knkjk"
         objArray.forEach {
             val message = it["message"]
             textarea.value += "$message\n"
@@ -52,4 +52,4 @@ fun createStylesheetLink(filePath: String): Element {
     return style
 }
 
-external fun alert(message: Any?): Unit*/
+external fun alert(message: Any?): Unit

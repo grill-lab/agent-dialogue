@@ -1,15 +1,14 @@
-/*
-//Main.kt
-// only for testing!
+// Main.kt
+// Only here for testing
 import com.google.gson.Gson
-import io.ktor.application.call
-import io.ktor.http.ContentType
-import io.ktor.response.header
-import io.ktor.response.respondText
-import io.ktor.routing.get
-import io.ktor.routing.routing
-import io.ktor.server.engine.embeddedServer
-import io.ktor.server.netty.Netty
+
+import org.jetbrains.ktor.host.embeddedServer
+import org.jetbrains.ktor.http.ContentType
+import org.jetbrains.ktor.netty.Netty
+import org.jetbrains.ktor.response.header
+import org.jetbrains.ktor.response.respondText
+import org.jetbrains.ktor.routing.get
+import org.jetbrains.ktor.routing.routing
 
 fun main(args: Array<String>) {
     embeddedServer(Netty, 8080) {
@@ -30,4 +29,4 @@ fun main(args: Array<String>) {
     }.start(wait = true)
 }
 
-data class Entry(val message: String)*/
+data class Entry(val message: String)
