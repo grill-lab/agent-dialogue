@@ -1,9 +1,15 @@
-
 # User-specific stuff
-.idea
-src/main/resources/
-src/test/
-target/
-dependency-reduced-pom.xml
-agent-dialogue.iml
-.iml
+*.idea
+*.iml
+*.bat
+*Logs/
+*build/
+*out/
+*target/
+*/gradlew
+*/gradle
+*/.gradle
+/agent-dialogue-core/dependency-reduced-pom.xml
+/agent-dialogue-core/src/main/resources/
+/log-replayer/src/main/resources/
+/log-replayer/dependency-reduced-pom.xml
