@@ -11,14 +11,5 @@ class MainApplication : ApplicationBase() {
     override fun start(state: Map<String, Any>) {
         view = WebLinesView(document.getElementById("lines")!!, document.getElementById("addForm")!!)
         presenter = LinesPresenter(view)
-
-        state["lines"]?.let { linesState ->
-            @Suppress("UNCHECKED_CAST")
-            presenter.restore(linesState as Array<String>)
-        }
     }
-
-    override fun dispose() = mapOf(
-            "lines" to presenter.dispose()
-    )
 }

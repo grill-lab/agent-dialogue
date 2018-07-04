@@ -1,21 +1,14 @@
 package edu.gla.kail.ad.simulator
 
-import edu.gla.kail.ad.simulator.ApplicationBase
-import edu.gla.kail.ad.simulator.module
-import kotlin.browser.*
-import kotlin.dom.*
+import kotlin.browser.document
+import kotlin.dom.hasClass
+
 
 fun main(args: Array<String>) {
     var application: ApplicationBase? = null
 
     val state: dynamic = module.hot?.let { hot ->
-        hot.accept()
-
-        hot.dispose { data ->
-            data.appState = application?.dispose()
-            application = null
-        }
-
+        hot.accept() // get the data from
         hot.data
     }
 
