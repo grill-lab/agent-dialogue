@@ -5,7 +5,7 @@ import kotlin.dom.hasClass
 
 
 fun main(args: Array<String>) {
-    var application: ApplicationBase? = null
+    var application: MainApplication?
 
     val state: dynamic = module.hot?.let { hot ->
         hot.accept() // get the data from
@@ -20,7 +20,7 @@ fun main(args: Array<String>) {
     }
 }
 
-fun start(state: dynamic): ApplicationBase? {
+fun start(state: dynamic): MainApplication? {
     if (document.body?.hasClass("testApp") ?: false) {
         val application = MainApplication()
 

@@ -1,6 +1,6 @@
 package edu.gla.kail.ad.simulator
 
-class LinesPresenter(override val view: LinesView) : Presenter<LinesView> {
+class LinesPresenter(val view: LinesView) {
     init {
         view.presenter = this
     }
