@@ -6,7 +6,6 @@ import org.w3c.dom.HTMLInputElement
 import org.w3c.dom.events.Event
 import org.w3c.dom.events.KeyboardEvent
 import kotlin.browser.document
-import kotlin.dom.clear
 
 
 class WebLinesView(val linesHolder: Element, formRoot: Element) : LinesView {
@@ -23,8 +22,8 @@ class WebLinesView(val linesHolder: Element, formRoot: Element) : LinesView {
     }
 
     private val inputHandler: (Event) -> Unit = { e ->
-        if (e is KeyboardEvent && e.keyCode == 13) {
-            presenter.addButtonClicked()
+        if (e is KeyboardEvent && e.keyCode == 13) { // If user pressed enter == 13.
+            presenter.addButtonClicked() // Call method of LinesPresenter class.
         }
     }
 
@@ -34,11 +33,9 @@ class WebLinesView(val linesHolder: Element, formRoot: Element) : LinesView {
 
     override var inputText: String
         get() = input.value
-        set(newValue) { input.value = newValue }
-
-    override fun focusInput() {
-        input.focus()
-    }
+        set(newValue) {
+            input.value = newValue
+        }
 
     override fun addLine(lineText: String) {
         document.createElement("p").apply {
@@ -48,21 +45,8 @@ class WebLinesView(val linesHolder: Element, formRoot: Element) : LinesView {
         }
     }
 
-    override fun clearLines() {
-        linesHolder.clear()
-    }
-
-    override fun dispose() {
-        unregister()
-    }
-
     private fun register() {
         addButton.addEventListener("click", buttonHandler)
         input.addEventListener("keypress", inputHandler)
-    }
-
-    private fun unregister() {
-        addButton.removeEventListener("click", buttonHandler)
-        input.removeEventListener("keypress", inputHandler)
     }
 }

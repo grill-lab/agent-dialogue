@@ -1,11 +1,11 @@
 package edu.gla.kail.ad.simulator
 
-class LinesPresenter(override val view: LinesView) : Presenter<LinesView, Array<String>> {
+class LinesPresenter(override val view: LinesView) : Presenter<LinesView> {
     init {
         view.presenter = this
     }
 
-    private val lines = mutableListOf<String>()
+    private val lines = mutableListOf<String>() // Stores lines with user input.
 
     fun addButtonClicked() {
         val lineText = view.inputText
@@ -13,21 +13,7 @@ class LinesPresenter(override val view: LinesView) : Presenter<LinesView, Array<
         lines.add(lineText)
         view.addLine(lineText)
 
-        view.inputText = ""
-        view.focusInput()
+        view.inputText = "Text present in inputText field"
     }
 
-    override fun dispose(): Array<String> {
-        view.dispose()
-        return lines.toTypedArray()
-    }
-
-    override fun restore(state: Array<String>) {
-        lines.addAll(state)
-
-        view.clearLines()
-        state.forEach { line ->
-            view.addLine(line)
-        }
-    }
 }
