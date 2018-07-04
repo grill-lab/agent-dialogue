@@ -21,10 +21,10 @@ repositories {
 }
 
 dependencies {
-    compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
-    compile "org.jetbrains.ktor:ktor-core:$ktor_version"
-    compile "org.jetbrains.ktor:ktor-jetty:$ktor_version"
-    compile "org.jetbrains.ktor:ktor-netty:$ktor_version"
+    compile group: "org.jetbrains.kotlin", name: "kotlin-stdlib-jdk8", version: "$kotlin_version"
+    compile group: "org.jetbrains.ktor", name: "ktor-core", version: "$ktor_version"
+    compile group: "org.jetbrains.ktor", name: "ktor-jetty", version: "$ktor_version"
+    compile group: "org.jetbrains.ktor", name: "ktor-netty", version: "$ktor_version"
     compile group: 'com.google.code.gson', name: 'gson', version: '2.3.1'
     compile files("/Users/Adam/Documents/Internship/GitHub/agent-dialogue/agent-dialogue" +
             "-core/target/classes")
