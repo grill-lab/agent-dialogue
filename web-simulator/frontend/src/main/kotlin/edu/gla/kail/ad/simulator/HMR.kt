@@ -1,5 +1,7 @@
 package edu.gla.kail.ad.simulator
 
+
+// external - declaration is written in pure JavaScript
 external val module: Module
 
 external interface Module {
@@ -7,7 +9,7 @@ external interface Module {
 }
 
 external interface Hot {
-    val data: dynamic
+    val data: dynamic // dynamic - used for working with JS
 
     fun accept()
     fun accept(dependency: String, callback: () -> Unit)

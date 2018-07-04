@@ -1,9 +1,13 @@
 package edu.gla.kail.ad.simulator
 
-import org.w3c.dom.*
-import org.w3c.dom.events.*
-import kotlin.browser.*
-import kotlin.dom.*
+import org.w3c.dom.Element
+import org.w3c.dom.HTMLButtonElement
+import org.w3c.dom.HTMLInputElement
+import org.w3c.dom.events.Event
+import org.w3c.dom.events.KeyboardEvent
+import kotlin.browser.document
+import kotlin.dom.clear
+
 
 class WebLinesView(val linesHolder: Element, formRoot: Element) : LinesView {
     lateinit override var presenter: LinesPresenter
@@ -20,7 +24,7 @@ class WebLinesView(val linesHolder: Element, formRoot: Element) : LinesView {
 
     private val inputHandler: (Event) -> Unit = { e ->
         if (e is KeyboardEvent && e.keyCode == 13) {
-            presenter.inputEnterPressed()
+            presenter.addButtonClicked()
         }
     }
 
