@@ -17,10 +17,6 @@ class LinesPresenter(override val view: LinesView) : Presenter<LinesView, Array<
         view.focusInput()
     }
 
-    fun inputEnterPressed() {
-        addButtonClicked()
-    }
-
     override fun dispose(): Array<String> {
         view.dispose()
         return lines.toTypedArray()
