@@ -47,12 +47,11 @@ public class AgentDialogueClientService {
                         .setDeviceType("DeviceType set by client")
                         .addAction("Action set by client")
                         .build())
+                .setUserID("UserId set by Client")
                 .build();
         AgentDialogueClientService client = new AgentDialogueClientService("localhost", 8080);
         try {
-            InteractionResponse interactionResponse = client.getInteractionResponse
-                    (interactionRequest);
-
+            InteractionResponse interactionResponse = client.getInteractionResponse(interactionRequest);
             System.out.println(interactionResponse.toString());
         } finally {
             client.shutdown();
@@ -69,40 +68,6 @@ public class AgentDialogueClientService {
     }
 
     /**
-     * Method created for testing the kotlin frontend.
-     *
-     * @param textInput
-     * @return
-     * @throws Exception
-     */
-    public String getStringResponse(String textInput) throws Exception {
-        InteractionRequest interactionRequest = InteractionRequest.newBuilder()
-                .setClientId(Client.ClientId.WEB_SIMULATOR)
-                .setTime(Timestamp.newBuilder()
-                        .setSeconds(Instant.now()
-                                .getEpochSecond())
-                        .setNanos(Instant.now()
-                                .getNano())
-                        .build())
-                .setInteraction(InputInteraction.newBuilder()
-                        .setText("Text set by client")
-                        .setType(InteractionType.TEXT)
-                        .setLanguageCode("en-US")
-                        .setDeviceType("DeviceType set by client")
-                        .addAction("Action set by client")
-                        .build())
-                .build();
-        InteractionResponse interactionResponse;
-        try {
-            interactionResponse = _blockingStub.getResponseFromAgents(interactionRequest);
-            return interactionResponse.getInteraction(0).getText();
-        } catch (StatusRuntimeException e) {
-            e.printStackTrace();
-            throw new Exception("Error occured: " + e.getStatus());
-        }
-    }
-
-    /**
      * @param interactionRequest - The request sent to the Agent Dialog Manager.
      * @return interactionResponse - The response from an Agent chosen by DialogAgentManager.
      * @throws Exception
@@ -115,7 +80,7 @@ public class AgentDialogueClientService {
             return interactionResponse;
         } catch (StatusRuntimeException e) {
             e.printStackTrace();
-            throw new Exception("Error occured: " + e.getStatus());
+            throw new Exception("Error occured: " + e.getStatus() + e.getMessage());
         }
     }
 }
