@@ -4,6 +4,7 @@ import kotlin.browser.document
 import kotlin.dom.hasClass
 
 fun main(args: Array<String>) {
+    
     var application: MainApplication?
 
     if (document.body != null) {
@@ -20,7 +21,7 @@ fun start(): MainApplication? {
 
         @Suppress("UnsafeCastFromDynamic")
         application.start()
-        
+
         return application
     } else {
         return null

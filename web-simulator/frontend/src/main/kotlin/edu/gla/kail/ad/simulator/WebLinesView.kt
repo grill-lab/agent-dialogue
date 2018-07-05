@@ -9,17 +9,7 @@ import kotlin.browser.document
 
 
 class WebLinesView(val linesHolder: Element, formRoot: Element) {
-    var presenter: WebLinesView
-
-    init {
-        presenter = this
-    }
-
-    fun addButtonClicked() {
-        this.addLine(this.inputText)
-
-        this.inputText = "Text present in inputText field"
-    }
+    var presenter: WebLinesView = this
 
     @Suppress("UNCHECKED_CAST_TO_NATIVE_INTERFACE")
     private val input = formRoot.querySelector("input") as HTMLInputElement
@@ -38,7 +28,8 @@ class WebLinesView(val linesHolder: Element, formRoot: Element) {
     }
 
     init {
-        register()
+        addButton.addEventListener("click", buttonHandler)
+        input.addEventListener("keypress", inputHandler)
     }
 
     var inputText: String
@@ -47,16 +38,13 @@ class WebLinesView(val linesHolder: Element, formRoot: Element) {
             input.value = newValue
         }
 
-    fun addLine(lineText: String) {
+    fun addButtonClicked() {
+        var inputTextString = this.inputText
         document.createElement("p").apply {
-            textContent = " + " + lineText
-
+            textContent = " + " + inputTextString
             linesHolder.appendChild(this)
         }
-    }
 
-    private fun register() {
-        addButton.addEventListener("click", buttonHandler)
-        input.addEventListener("keypress", inputHandler)
+        this.inputText = "Text present in inputText field"
     }
 }
