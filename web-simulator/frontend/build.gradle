@@ -4,12 +4,15 @@ buildscript {
 
     repositories {
         jcenter()
+        maven { url "https://dl.bintray.com/kotlin/kotlinx" }
+        maven { url "https://dl.bintray.com/kotlin/ktor" }
         maven { url 'https://dl.bintray.com/kotlin/kotlin-eap' }
     }
 
     dependencies {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath "org.jetbrains.kotlin:kotlin-frontend-plugin:$kotlin_plugin"
+        classpath "org.jetbrains.ktor:ktor-core:0.4.0"
     }
 }
 
@@ -21,10 +24,14 @@ apply plugin: 'kotlin-dce-js'
 apply plugin: 'org.jetbrains.kotlin.frontend'
 
 repositories {
+    maven { url "https://dl.bintray.com/kotlin/kotlinx" }
+    maven { url "https://dl.bintray.com/kotlin/ktor" }
     jcenter()
 }
 
 dependencies {
+    implementation project(":backend")
+    compile project(":backend")
     compile "org.jetbrains.kotlin:kotlin-stdlib-js:$kotlin_version"
     testCompile "org.jetbrains.kotlin:kotlin-test-js:$kotlin_version"
 }

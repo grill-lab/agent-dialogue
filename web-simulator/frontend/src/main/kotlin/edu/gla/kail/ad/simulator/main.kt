@@ -14,9 +14,10 @@ fun main(args: Array<String>) {
 fun start(): WebLinesView? {
     if (document.body?.hasClass("agentDialogue") ?: false) {
         @Suppress("UnsafeCastFromDynamic")
+        WebLinesView(document.getElementById("conversation")!!, document.getElementById("requestInput")!!)
+        @Suppress("UnsafeCastFromDynamic")
         return WebLinesView(document.getElementById("lines")!!, document.getElementById("addForm")!!)
-    } else {
-        return null
     }
+    return null
 }
 
