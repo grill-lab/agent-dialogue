@@ -4,13 +4,10 @@ import kotlin.browser.document
 import kotlin.dom.hasClass
 
 fun main(args: Array<String>) {
-    var view: WebLinesView?
-
     if (document.body != null) {
-        view = start()
+        start()
     } else {
-        view = null
-        document.addEventListener("DOMContentLoaded", { view = start() })
+        document.addEventListener("DOMContentLoaded", { start() })
     }
 }
 
