@@ -4,25 +4,20 @@ import kotlin.browser.document
 import kotlin.dom.hasClass
 
 fun main(args: Array<String>) {
-    
-    var application: MainApplication?
+    var view: WebLinesView?
 
     if (document.body != null) {
-        application = start()
+        view = start()
     } else {
-        application = null
-        document.addEventListener("DOMContentLoaded", { application = start() })
+        view = null
+        document.addEventListener("DOMContentLoaded", { view = start() })
     }
 }
 
-fun start(): MainApplication? {
-    if (document.body?.hasClass("testApp") ?: false) {
-        val application = MainApplication()
-
+fun start(): WebLinesView? {
+    if (document.body?.hasClass("agentDialogue") ?: false) {
         @Suppress("UnsafeCastFromDynamic")
-        application.start()
-
-        return application
+        return WebLinesView(document.getElementById("lines")!!, document.getElementById("addForm")!!)
     } else {
         return null
     }
