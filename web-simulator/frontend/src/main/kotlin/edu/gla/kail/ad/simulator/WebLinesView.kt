@@ -8,8 +8,18 @@ import org.w3c.dom.events.KeyboardEvent
 import kotlin.browser.document
 
 
-class WebLinesView(val linesHolder: Element, formRoot: Element) : LinesView {
-    lateinit override var presenter: LinesPresenter
+class WebLinesView(val linesHolder: Element, formRoot: Element) {
+    var presenter: WebLinesView
+
+    init {
+        presenter = this
+    }
+
+    fun addButtonClicked() {
+        this.addLine(this.inputText)
+
+        this.inputText = "Text present in inputText field"
+    }
 
     @Suppress("UNCHECKED_CAST_TO_NATIVE_INTERFACE")
     private val input = formRoot.querySelector("input") as HTMLInputElement
@@ -31,13 +41,13 @@ class WebLinesView(val linesHolder: Element, formRoot: Element) : LinesView {
         register()
     }
 
-    override var inputText: String
+    var inputText: String
         get() = input.value
         set(newValue) {
             input.value = newValue
         }
 
-    override fun addLine(lineText: String) {
+    fun addLine(lineText: String) {
         document.createElement("p").apply {
             textContent = " + " + lineText
 
