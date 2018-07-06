@@ -65,7 +65,7 @@ class Styles : Stylesheet() {
         val heading by cssclass()
 
         // Define colors
-        val mainColor = c("#bdbd22")
+        val mainColor = c("#ffa21d")
     }
 
     init {
