@@ -15,8 +15,6 @@ import tornadofx.constraintsForRow
 import tornadofx.field
 import tornadofx.fieldset
 import tornadofx.form
-import tornadofx.getToggleGroup
-import tornadofx.getValue
 import tornadofx.gridpane
 import tornadofx.label
 import tornadofx.radiobutton
@@ -50,14 +48,6 @@ class SimulatorView : View() {
         constraintsForColumn(1).percentWidth = 25.0
 
     }
-
-
-    /*gridpane() {
-        rowConstraints.add(0, RowConstraints(100.toDouble()))
-        children.add(0, TopView().root)
-    }*/
-
-
 }
 
 
@@ -81,7 +71,6 @@ class InputView : View() {
         form {
             fieldset("Input field", labelPosition = Orientation.HORIZONTAL) {
                 field("Chat with agents") {
-
                     textarea {
                         prefRowCount = _inputBoxRowNumber.toInt()
                         bind(userInput)
@@ -96,7 +85,7 @@ class InputView : View() {
                                 System.out.println(userInput.getValue())
                                 System.out.println(OptionsView().language.getValue())
                                 // call the function you want to use
-                                userInput = SimpleStringProperty("")
+                                userInput.set("")
                             } ui {
                                 // apply the result when the process is do e
 //                                loadedText -> dwadaw.text = loadedText
@@ -118,12 +107,17 @@ class OptionsView : View() {
     override val root = vbox {
         vbox {
             label("Language")
-            radiobutton("English - US", toggleGroup, "en-US") {
-                bind(language)
+            radiobutton("English - US", toggleGroup) {
+                action {
+                    language.set("en-US")
+                }
             }
-            radiobutton("English - GB", toggleGroup, "en-GB")
+            radiobutton("English - GB", toggleGroup)
             {
-                bind(language)
+                action {
+                    language.set("en-GB")
+                    System.out.println("this is gb!")
+                }
             }
         }
     }
