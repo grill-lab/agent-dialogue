@@ -27,16 +27,10 @@ enum ClientId {
 }
 
 message InteractionRequest {
-    enum InteractionStatus {
-        NONSET = 0;
-        COMPLETE = 1;
-        IN_PROGRESS = 2;
-    }
     google.protobuf.Timestamp time = 1; // The time of the creation of the request
     ClientId client_id = 2; // The ID of the client the request is sent from.
     InputInteraction interaction = 3;
     string userID = 4;
-    InteractionStatus interaction_status = 5;
 }
 
 message InteractionResponse {

@@ -92,3 +92,41 @@ class Styles : Stylesheet() {
 }
 
 fun main(args: Array<String>) = Application.launch(SimulatorInterfaceApp::class.java)
+
+fun interactionResponseTextExtractor(interactionResponse: InteractionResponse) =
+        """
+<div class="agentResponse">
+    <div class="rowOfTableResponses">
+        <table class="table">
+            <tbody>
+                <tr> <td>Response ID: </td> <td>${interactionResponse.responseId}</td> </tr>
+                <tr> <td>Time: </td> <td>${interactionResponse.time}</td> </tr>
+                <tr> <td>Client ID: </td> <td>${interactionResponse.clientId}</td> </tr>
+                <tr> <td>User ID: </td> <td>${interactionResponse.userID}</td> </tr>
+                <tr> <td>Message Status: </td> <td>${interactionResponse.messageStatus}</td> </tr>
+                <tr> <td>Optional Error message: </td> <td>${interactionResponse.errorMessage}</td> </tr>
+                <tr> <td>Response: </td> <td>${interactionResponse.interactionList}</td> </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+"""
+
+
+fun interactionResponseView(responses: List<InteractionResponse>) =
+        """
+<html>
+    <head>
+        <title>Responses</title>
+    </head>
+    <body>
+        <div class="container">
+            <div class="row">
+                <div class="responses_all">
+                    ${responses.map { interactionResponseTextExtractor(it) }.joinToString("\n")}
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
+"""
