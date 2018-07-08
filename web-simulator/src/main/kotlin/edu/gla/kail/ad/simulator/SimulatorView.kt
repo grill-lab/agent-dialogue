@@ -2,7 +2,6 @@ package edu.gla.kail.ad.simulator
 
 import edu.gla.kail.ad.Client.ClientTurn
 import javafx.beans.property.SimpleListProperty
-import javafx.beans.property.SimpleStringProperty
 import javafx.geometry.Orientation
 import javafx.scene.control.ToggleGroup
 import javafx.scene.layout.Priority
@@ -28,15 +27,19 @@ import tornadofx.vgrow
  * Contains a hierarchy of Nodes
  */
 class SimulatorView : View() {
-    val clientTurns = SimpleListProperty<ClientTurn>()
+    val _clientTurns = SimpleListProperty<ClientTurn>()
+    var _topView = TopView()
+    var _chatView = ChatView()
+    var _inputView = TextInputView()
+    var _optionsView = OptionsView()
     override val root = gridpane {
         isGridLinesVisible = false
 
-        addRow(0, TopView().root)
-        addRow(2, ChatView().root)
-        addRow(4, InputView().root)
+        addRow(0, _topView.root)
+        addRow(2, _chatView.root)
+        addRow(4, _inputView.root)
 
-        addColumn(1, OptionsView().root)
+        addColumn(1, _optionsView.root)
         addRow(6)
         constraintsForRow(0).percentHeight = 3.0
         constraintsForRow(1).percentHeight = 5.0
@@ -46,7 +49,6 @@ class SimulatorView : View() {
         constraintsForColumn(0).percentWidth = 75.0
         constraintsForRow(6).percentHeight = 25.0
         constraintsForColumn(1).percentWidth = 25.0
-
     }
 }
 
@@ -63,9 +65,8 @@ class ChatView : View() {
 }
 
 
-class InputView : View() {
+class TextInputView : View() {
     private val _inputBoxRowNumber: Double = 5.toDouble()
-    var userInput = SimpleStringProperty("")
 
     override val root = vbox {
         form {
@@ -73,7 +74,7 @@ class InputView : View() {
                 field("Chat with agents") {
                     textarea {
                         prefRowCount = _inputBoxRowNumber.toInt()
-                        bind(userInput)
+                        bind(conversationStateHolder._userInput)
                     }
 
                     button("Send") {
@@ -82,12 +83,10 @@ class InputView : View() {
                         minWidth = 55.toDouble()
                         action {
                             runAsync {
-                                System.out.println(userInput.getValue())
-                                System.out.println(OptionsView().language.getValue())
-                                // call the function you want to use
-                                userInput.set("")
+                                // Call the function you want to use.
+                                conversationStateHolder._userInput.set("")
                             } ui {
-                                // apply the result when the process is do e
+                                // Apply the result when the process is do e.
 //                                loadedText -> dwadaw.text = loadedText
                             }
                         }
@@ -102,21 +101,19 @@ class InputView : View() {
 
 
 class OptionsView : View() {
-    var language = SimpleStringProperty("en-US")
     private val toggleGroup = ToggleGroup()
     override val root = vbox {
         vbox {
             label("Language")
             radiobutton("English - US", toggleGroup) {
                 action {
-                    language.set("en-US")
+                    conversationStateHolder._language.set("en-US")
                 }
             }
             radiobutton("English - GB", toggleGroup)
             {
                 action {
-                    language.set("en-GB")
-                    System.out.println("this is gb!")
+                    conversationStateHolder._language.set("en-GB")
                 }
             }
         }
