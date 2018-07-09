@@ -1,11 +1,13 @@
 package edu.gla.kail.ad.simulator
 
 import edu.gla.kail.ad.service.AgentDialogueClientService
-import javafx.beans.property.SimpleListProperty
 import javafx.beans.property.SimpleStringProperty
 import javafx.collections.FXCollections
 import javafx.collections.FXCollections.observableArrayList
-import tornadofx.bind
+import javafx.collections.FXCollections.synchronizedObservableList
+import tornadofx.ItemViewModel
+import tornadofx.getProperty
+import tornadofx.property
 
 
 /**
@@ -21,10 +23,7 @@ object conversationStateHolder {
     val _client: AgentDialogueClientService = AgentDialogueClientService("localhost", 8080)
     // List of messages in the proto format.
     // A pending message is equal to: "...".
-    var _listOfProtoMessages = observableArrayList<Any>()
+    var _protoMessages = synchronizedObservableList(observableArrayList<Any>())
     // List of messages typed and displayed to the user.
-    var _listOfInterfaceMessages = observableArrayList<String>()
-    
+    var _interfaceMessages = synchronizedObservableList(observableArrayList<String>())
 }
-
-

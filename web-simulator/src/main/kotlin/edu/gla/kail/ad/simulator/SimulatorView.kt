@@ -1,11 +1,13 @@
 package edu.gla.kail.ad.simulator
 
+
 import javafx.geometry.Orientation
 import javafx.scene.control.ToggleGroup
 import javafx.scene.layout.Priority
 import tornadofx.View
 import tornadofx.action
 import tornadofx.bind
+import tornadofx.bindSelected
 import tornadofx.button
 import tornadofx.constraintsForColumn
 import tornadofx.constraintsForRow
@@ -59,8 +61,8 @@ class TopView : View() {
 class ChatView : View() {
     override val root = listview<String> {
         label("Chat with agents.")
+        items = conversationStateHolder._interfaceMessages
         // TODO(Adam): Implement this view!
-        items = conversationStateHolder._listOfInterfaceMessages
     }
 }
 
@@ -87,10 +89,10 @@ class TextInputView : View() {
                             runAsync {
                                 // TODO(Adam): Call the function you want to use.
                                 getResponseFromTextInput(conversationStateHolder._userTextInput.get())
-                            } ui {
+                            } /*ui {
                                 // TODO(Adam): Apply the result when the process is do e.
-                                // loadedText -> dwadaw.text = loadedText
-                            }
+                                // loadedText -> do sth
+                            }*/
                         }
                         vgrow = Priority.ALWAYS
                     }
