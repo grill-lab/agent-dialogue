@@ -1,7 +1,5 @@
 package edu.gla.kail.ad.simulator
 
-import edu.gla.kail.ad.Client.ClientTurn
-import javafx.beans.property.SimpleListProperty
 import javafx.geometry.Orientation
 import javafx.scene.control.ToggleGroup
 import javafx.scene.layout.Priority
@@ -27,7 +25,6 @@ import tornadofx.vgrow
  * Contains a hierarchy of Nodes
  */
 class SimulatorView : View() {
-    val _clientTurns = SimpleListProperty<ClientTurn>()
     var _topView = TopView()
     var _chatView = ChatView()
     var _inputView = TextInputView()
@@ -64,7 +61,9 @@ class ChatView : View() {
     }
 }
 
-
+/**
+ * View holding text input box.
+ */
 class TextInputView : View() {
     private val _inputBoxRowNumber: Double = 5.toDouble()
 
@@ -74,7 +73,7 @@ class TextInputView : View() {
                 field("Chat with agents") {
                     textarea {
                         prefRowCount = _inputBoxRowNumber.toInt()
-                        bind(conversationStateHolder._userInput)
+                        bind(conversationStateHolder._userTextInput)
                     }
 
                     button("Send") {
@@ -84,7 +83,7 @@ class TextInputView : View() {
                         action {
                             runAsync {
                                 // Call the function you want to use.
-                                conversationStateHolder._userInput.set("")
+                                conversationStateHolder._userTextInput.set("")
                             } ui {
                                 // Apply the result when the process is do e.
 //                                loadedText -> dwadaw.text = loadedText
@@ -99,7 +98,9 @@ class TextInputView : View() {
     }
 }
 
-
+/**
+ * View holding available options, such as language, etc.
+ */
 class OptionsView : View() {
     private val toggleGroup = ToggleGroup()
     override val root = vbox {
