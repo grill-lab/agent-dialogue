@@ -6,9 +6,47 @@ import edu.gla.kail.ad.Client.InputInteraction
 import edu.gla.kail.ad.Client.InputInteractionOrBuilder
 import edu.gla.kail.ad.Client.InteractionRequest
 import edu.gla.kail.ad.Client.InteractionRequestOrBuilder
-import edu.gla.kail.ad.Client.InteractionType.TEXT
+import edu.gla.kail.ad.Client.InteractionResponse
+import edu.gla.kail.ad.Client.InteractionResponse.ClientMessageStatus
+import edu.gla.kail.ad.Client.InteractionType
+import edu.gla.kail.ad.Client.OutputInteraction
 import java.time.Instant
 
+
+fun getResponseFromTextInput(textInput: String) {
+    var interactionRequest = getInteractionRequestFromText(textInput)
+    conversationStateHolder._listOfMessages.add(Pair(textInput, interactionRequest))
+    
+    var responsePair = Pair("...", Any())
+    conversationStateHolder._listOfMessages.add(responsePair)
+    
+    var interactionResponse = conversationStateHolder._client
+            .getInteractionResponse(getInteractionRequestFromText(textInput))
+    responsePair = handleResponse(interactionResponse) // TODO(Adam): Check if the responsePair
+    // in the list is changed when the response pair is updated here!
+}
+
+fun handleResponse(interactionResponse: InteractionResponse): Pair<String, Any> {
+    when (interactionResponse.messageStatus) {
+        ClientMessageStatus.ERROR -> Pair(interactionResponse.errorMessage, interactionResponse)
+        ClientMessageStatus.SUCCESSFUL -> {
+            var outputInteractionList = interactionResponse.interactionList
+            for (outputInteraction in outputInteractionList) {
+            
+            }
+        }
+        else -> Pair("There was an error, contact the developer: " + interactionResponse.toString(),
+                interactionResponse)
+    }
+}
+
+fun handleOutputInteraction(outputInteraction: OutputInteraction) {
+    when (outputInteraction.type) {
+        InteractionType.TEXT -> sda;
+        // TODO(Adam): Implement handling audio and action output.
+    }
+    
+}
 
 fun getInteractionRequestFromText(textInput: String): InteractionRequest {
     return (getInteractionRequest((getInputInteractionBuilder() as InputInteraction.Builder)
