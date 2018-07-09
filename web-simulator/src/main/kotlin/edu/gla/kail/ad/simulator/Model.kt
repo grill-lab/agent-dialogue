@@ -16,14 +16,15 @@ import java.time.Instant
  * Get response from agents and update conversationStateHolder when the textInput is passed from the user.
  */
 fun getResponseFromTextInput(textInput: String) {
+    conversationStateHolder._userTextInput.set("")
+    conversationStateHolder._listOfInterfaceMessages.add("...")
     var interactionRequest = getInteractionRequestFromText(textInput)
-    conversationStateHolder._listOfMessages.add(Pair(textInput, interactionRequest))
-    val pendingPair = Pair("...", Any())
-    conversationStateHolder._listOfMessages.add(pendingPair)
+    conversationStateHolder._listOfProtoMessages.add(interactionRequest)
+    
     var interactionResponse = conversationStateHolder._client
             .getInteractionResponse(getInteractionRequestFromText(textInput))
     handleResponse(interactionResponse)
-    conversationStateHolder._listOfMessages.remove(pendingPair) // TODO(Adam): check if this works properly.
+    conversationStateHolder._listOfInterfaceMessages.remove("...")
 }
 
 /**
@@ -33,16 +34,20 @@ fun getResponseFromTextInput(textInput: String) {
 fun handleResponse(interactionResponse: InteractionResponse) {
     when (interactionResponse.messageStatus) {
         ClientMessageStatus.ERROR -> {
-            conversationStateHolder._listOfMessages.add(Pair(interactionResponse.errorMessage, interactionResponse))
+            conversationStateHolder._listOfProtoMessages.add(interactionResponse)
+            conversationStateHolder._listOfInterfaceMessages.add(interactionResponse.errorMessage)
         }
         ClientMessageStatus.SUCCESSFUL -> {
             var outputInteractionList = interactionResponse.interactionList
+            conversationStateHolder._listOfProtoMessages.add(interactionResponse)
             for (outputInteraction in outputInteractionList) {
-                handleOutputInteraction(outputInteraction, interactionResponse)
+                handleOutputInteraction(outputInteraction)
             }
         }
         else -> {
-            conversationStateHolder._listOfMessages.add(Pair("There was an error, contact the developer: " + interactionResponse.toString(), interactionResponse))
+            conversationStateHolder._listOfProtoMessages.add(interactionResponse)
+            conversationStateHolder._listOfInterfaceMessages.add("There was an error, contact the " +
+                    "developer: " + interactionResponse.toString())
         }
     }
 }
@@ -50,10 +55,10 @@ fun handleResponse(interactionResponse: InteractionResponse) {
 /**
  * Handle single outputInteraction (passed from outputInteractionList obtained from InteractionRequest).
  */
-fun handleOutputInteraction(outputInteraction: OutputInteraction, interactionResponse: InteractionResponse) {
+fun handleOutputInteraction(outputInteraction: OutputInteraction) {
     when (outputInteraction.type) {
         InteractionType.TEXT -> {
-            conversationStateHolder._listOfMessages.add(Pair(outputInteraction.text, interactionResponse))
+            conversationStateHolder._listOfInterfaceMessages.add(outputInteraction.text)
         }
     // TODO(Adam): Implement handling audio and action output.
         InteractionType.ACTION -> {
