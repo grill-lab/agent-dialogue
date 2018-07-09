@@ -3,6 +3,7 @@ package edu.gla.kail.ad.simulator
 import edu.gla.kail.ad.service.AgentDialogueClientService
 import javafx.beans.property.SimpleListProperty
 import javafx.beans.property.SimpleStringProperty
+import tornadofx.bind
 
 
 /**

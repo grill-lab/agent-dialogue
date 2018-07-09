@@ -1,12 +1,15 @@
 package edu.gla.kail.ad.simulator
 
+import javafx.beans.property.SimpleListProperty
 import javafx.geometry.Orientation
 import javafx.scene.control.ToggleGroup
 import javafx.scene.layout.Priority
+import org.jetbrains.ktor.util.cast
 import tornadofx.View
 import tornadofx.action
 import tornadofx.bind
 import tornadofx.button
+import tornadofx.checkbox
 import tornadofx.constraintsForColumn
 import tornadofx.constraintsForRow
 import tornadofx.field
@@ -14,6 +17,7 @@ import tornadofx.fieldset
 import tornadofx.form
 import tornadofx.gridpane
 import tornadofx.label
+import tornadofx.listview
 import tornadofx.radiobutton
 import tornadofx.textarea
 import tornadofx.vbox
@@ -31,11 +35,11 @@ class SimulatorView : View() {
     var _optionsView = OptionsView()
     override val root = gridpane {
         isGridLinesVisible = false
-
+        
         addRow(0, _topView.root)
         addRow(2, _chatView.root)
         addRow(4, _inputView.root)
-
+        
         addColumn(1, _optionsView.root)
         addRow(6)
         constraintsForRow(0).percentHeight = 3.0
@@ -56,8 +60,11 @@ class TopView : View() {
 
 
 class ChatView : View() {
-    override val root = vbox {
+    override val root = listview<String> {
         label("Chat with agents.")
+        var listOfMessages = conversationStateHolder._listOfMessages.forEach{ pair -> pair.first }.cast(SimpleListProperty<String>()::class)
+        items = listOfMessages
+        // TODO(Adam): Implement this view!
     }
 }
 
@@ -66,7 +73,7 @@ class ChatView : View() {
  */
 class TextInputView : View() {
     private val _inputBoxRowNumber: Double = 5.toDouble()
-
+    
     override val root = vbox {
         form {
             fieldset("Input field", labelPosition = Orientation.HORIZONTAL) {
@@ -75,18 +82,18 @@ class TextInputView : View() {
                         prefRowCount = _inputBoxRowNumber.toInt()
                         bind(conversationStateHolder._userTextInput)
                     }
-
+                    
                     button("Send") {
                         prefHeight = _inputBoxRowNumber * 20.2
                         prefWidth = 55.toDouble()
                         minWidth = 55.toDouble()
                         action {
                             runAsync {
-                                // Call the function you want to use.
+                                // TODO(Adam): Call the function you want to use.
                                 conversationStateHolder._userTextInput.set("")
                             } ui {
-                                // Apply the result when the process is do e.
-//                                loadedText -> dwadaw.text = loadedText
+                                // TODO(Adam): Apply the result when the process is do e.
+                                // loadedText -> dwadaw.text = loadedText
                             }
                         }
                         vgrow = Priority.ALWAYS
@@ -110,6 +117,7 @@ class OptionsView : View() {
                 action {
                     conversationStateHolder._language.set("en-US")
                 }
+                isSelected = true
             }
             radiobutton("English - GB", toggleGroup)
             {
@@ -119,7 +127,7 @@ class OptionsView : View() {
             }
         }
     }
-
+    
 }
 
 
