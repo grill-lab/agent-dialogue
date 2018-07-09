@@ -1,15 +1,12 @@
 package edu.gla.kail.ad.simulator
 
-import javafx.beans.property.SimpleListProperty
 import javafx.geometry.Orientation
 import javafx.scene.control.ToggleGroup
 import javafx.scene.layout.Priority
-import org.jetbrains.ktor.util.cast
 import tornadofx.View
 import tornadofx.action
 import tornadofx.bind
 import tornadofx.button
-import tornadofx.checkbox
 import tornadofx.constraintsForColumn
 import tornadofx.constraintsForRow
 import tornadofx.field
@@ -62,9 +59,8 @@ class TopView : View() {
 class ChatView : View() {
     override val root = listview<String> {
         label("Chat with agents.")
-        var listOfMessages = conversationStateHolder._listOfMessages.forEach{ pair -> pair.first }.cast(SimpleListProperty<String>()::class)
-        items = listOfMessages
         // TODO(Adam): Implement this view!
+        items = conversationStateHolder._listOfInterfaceMessages
     }
 }
 
@@ -90,7 +86,7 @@ class TextInputView : View() {
                         action {
                             runAsync {
                                 // TODO(Adam): Call the function you want to use.
-                                conversationStateHolder._userTextInput.set("")
+                                getResponseFromTextInput(conversationStateHolder._userTextInput.get())
                             } ui {
                                 // TODO(Adam): Apply the result when the process is do e.
                                 // loadedText -> dwadaw.text = loadedText
