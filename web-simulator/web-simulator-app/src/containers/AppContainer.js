@@ -1,6 +1,10 @@
+'use strict';
+
 import React, {Component} from 'react';
 import '../resources/css/AppCointainer.css';
 import Agent_logo from '../resources/images/Agent_logo.jpg'
+import AppView from '../views/AppView';
+import {Container} from 'flux/utils';
 
 class AppContainer extends Component {
     render() {
