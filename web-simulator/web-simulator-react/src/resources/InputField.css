@@ -1,0 +1,14 @@
+.input-box {
+    text-align: center;
+}
+
+.input-field {
+    width: 900px;
+    height: 30px;
+    font-size: 14px;
+}
+
+.submit-button {
+    width: 100px;
+    padding: 10px;
+}
