@@ -1,19 +1,18 @@
 'use strict';
 
 import WebSimulatorActionTypes from './WebSimulatorActionTypes';
-
-import TodoDispatcher from './TodoDispatcher'; //TODO
+import WebSimulatorDispatcher from './WebSimulatorDispatcher';
 
 const Actions = {
     sendRequest(text) {
-        TodoDispatcher.dispatch({ //TODO
+        WebSimulatorDispatcher.dispatch({
             type: WebSimulatorActionTypes.SEND_REQUEST,
             text,
         });
     },
 
     setLanguage(text) {
-        TodoDispatcher.dispatch({ //TODO
+        WebSimulatorDispatcher.dispatch({
             type: WebSimulatorActionTypes.SET_LANGUAGE,
             text,
         });
