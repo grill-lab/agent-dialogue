@@ -24,6 +24,7 @@ public class JavaScriptLinker extends HttpServlet {
             ("localhost", 8080);
 
     public static synchronized AgentDialogueClientService getClient() {
+        System.out.print("working");
         return _client;
     }
 
