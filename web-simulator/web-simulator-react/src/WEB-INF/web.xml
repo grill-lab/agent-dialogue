@@ -13,7 +13,7 @@
     </servlet>
     <servlet-mapping>
         <servlet-name>JavaScriptLinker</servlet-name>
-        <url-pattern>/JavaScriptLinker/*</url-pattern>
+        <url-pattern>/main.java.JavaScriptLinker/*</url-pattern>
 
     </servlet-mapping>
 </web-app>

@@ -1,4 +1,4 @@
-package edu.gla.kail.ad.service;
+package main.java;
 
 import com.google.protobuf.Timestamp;
 import edu.gla.kail.ad.Client;
@@ -6,6 +6,7 @@ import edu.gla.kail.ad.Client.InputInteraction;
 import edu.gla.kail.ad.Client.InteractionRequest;
 import edu.gla.kail.ad.Client.InteractionResponse;
 import edu.gla.kail.ad.Client.InteractionType;
+import edu.gla.kail.ad.service.AgentDialogueGrpc;
 import edu.gla.kail.ad.service.AgentDialogueGrpc.AgentDialogueBlockingStub;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;

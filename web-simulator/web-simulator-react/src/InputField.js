@@ -27,9 +27,9 @@ class InputField extends Component {
 
 
         axios.post(`JavaScriptLinker`, {utteranceRequest}).then(function (response) {
-            alert('aiiiiii: ' + (response));
+            alert('aiiiiii111: ' + (response) + document.URL.toString());
         }).catch(function (error) {
-            alert('aiiiiii: ' + (error));
+            alert('aiiiiii: ' + (error) + document.URL.toString());
         });
 
 

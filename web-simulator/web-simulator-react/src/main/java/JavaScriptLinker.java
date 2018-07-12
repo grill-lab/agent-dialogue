@@ -1,3 +1,5 @@
+package main.java;
+
 import com.google.protobuf.Timestamp;
 import edu.gla.kail.ad.Client.InputInteraction;
 import edu.gla.kail.ad.Client.InteractionRequest;
@@ -16,12 +18,12 @@ import java.util.List;
 
 import static edu.gla.kail.ad.Client.ClientId.WEB_SIMULATOR;
 
-@WebServlet("/JavaScriptLinker")
+@WebServlet("/main.java.JavaScriptLinker")
 public class JavaScriptLinker extends HttpServlet {
-    private static edu.gla.kail.ad.service.AgentDialogueClientService _client = new edu.gla.kail.ad.service.AgentDialogueClientService
+    private static main.java.AgentDialogueClientService _client = new main.java.AgentDialogueClientService
             ("localhost", 8080);
 
-    public static synchronized edu.gla.kail.ad.service.AgentDialogueClientService getClient() {
+    public static synchronized main.java.AgentDialogueClientService getClient() {
         System.out.print("working");
         return _client;
     }
