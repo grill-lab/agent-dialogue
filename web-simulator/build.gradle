@@ -11,7 +11,13 @@ group 'agent-dialogue'
 version '0.1-SNAPSHOT'
 
 sourceCompatibility = 1.8
-
+sourceSets {
+    main {
+        java {
+            srcDirs = ['web-simulator-react/src']
+        }
+    }
+}
 repositories {
     jcenter()
     mavenCentral()
