@@ -24,27 +24,12 @@ class InputField extends Component {
             textInput: this.state.textInput,
             language: this.state.language // TODO(Adam): implement this one.
         };
-        alert('Before: ' + this.state.textInput);
+
         axios.post(`javascriptlinker`, {utteranceRequest});
 
-        $.ajax({
-            type: 'POST',
-            url: '/javascriptlinker',
-            data: utteranceRequest
-        })
-            .done(function(utteranceRequest) {
-                self.clearForm()
-            })
-            .fail(function(jqXhr) {
-                console.log('failed to register');
-            });
 
         alert('After: ' + this.state.language);
-        /* .then(TODO(Adam): do the magic with handling the response.
-        res => {
-            console.log(res);
-            console.log(res.data);
-            })*/
+
         event.preventDefault();
     }
 
