@@ -16,6 +16,7 @@ class InputField extends Component {
 
     handleSubmit(event) {
         // TODO(Adam): implement sending request!
+
         event.preventDefault();
     }
 
