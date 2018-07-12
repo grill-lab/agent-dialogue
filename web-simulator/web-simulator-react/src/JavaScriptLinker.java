@@ -1,5 +1,3 @@
-package edu.gla.kail.ad.service;
-
 import com.google.protobuf.Timestamp;
 import edu.gla.kail.ad.Client.InputInteraction;
 import edu.gla.kail.ad.Client.InteractionRequest;
@@ -18,12 +16,12 @@ import java.util.List;
 
 import static edu.gla.kail.ad.Client.ClientId.WEB_SIMULATOR;
 
-@WebServlet("/java_script_linker_servlet/*")
+@WebServlet("/JavaScriptLinker")
 public class JavaScriptLinker extends HttpServlet {
-    private static AgentDialogueClientService _client = new AgentDialogueClientService
+    private static edu.gla.kail.ad.service.AgentDialogueClientService _client = new edu.gla.kail.ad.service.AgentDialogueClientService
             ("localhost", 8080);
 
-    public static synchronized AgentDialogueClientService getClient() {
+    public static synchronized edu.gla.kail.ad.service.AgentDialogueClientService getClient() {
         System.out.print("working");
         return _client;
     }
@@ -31,6 +29,14 @@ public class JavaScriptLinker extends HttpServlet {
 
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws
             IOException {
+        System.out.println("Java Script Linker called successfully!");
+        response.setCharacterEncoding("UTF-8");
+        response.setContentType("text/html");
+        response.getWriter().write("There was a fatal");
+        return;
+
+        // TODO delete
+/*
         System.out.println("Java Script Linker called successfully!");
         response.setCharacterEncoding("UTF-8");
         response.setContentType("text/html");
@@ -44,7 +50,7 @@ public class JavaScriptLinker extends HttpServlet {
         } catch (Exception e) {
             response.getWriter().write("There was a fatal error!\n" + e.getMessage() + "\n\n" +
                     e.getStackTrace());
-        }
+        }*/
     }
 
     public void doGet(HttpServletRequest request, HttpServletResponse response)

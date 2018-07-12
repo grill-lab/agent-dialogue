@@ -25,7 +25,13 @@ class InputField extends Component {
             language: this.state.language // TODO(Adam): implement this one.
         };
 
-        axios.post(`javascriptlinker`, {utteranceRequest});
+
+        axios.post(`JavaScriptLinker`, {utteranceRequest}).then(function (response) {
+            alert('aiiiiii: ' + (response));
+        }).catch(function (error) {
+            alert('aiiiiii: ' + (error));
+        });
+
 
 
         alert('After: ' + this.state.language);
