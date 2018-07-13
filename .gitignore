@@ -15,3 +15,5 @@
 /log-replayer/dependency-reduced-pom.xml
 /simulator/target/
 /simulator/dependency-reduced-pom.xml
+/simulator/package-lock.json
+/simulator/node_modules/
