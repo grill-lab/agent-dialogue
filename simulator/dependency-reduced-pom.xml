@@ -101,7 +101,7 @@
   </dependencies>
   <properties>
     <junit.version>4.12</junit.version>
-    <jetty-maven.version>9.4.11.v20180605</jetty-maven.version>
+    <jetty-maven.version>9.0.4.v20130625</jetty-maven.version>
     <grpc.version>1.12.0</grpc.version>
     <agent-dialogue-core.version>0.1-SNAPSHOT</agent-dialogue-core.version>
     <mainClass>edu.gla.kail.ad.service.AgentDialogueClientService</mainClass>

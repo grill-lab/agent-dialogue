@@ -30,10 +30,10 @@ public class JavaScriptLinker extends HttpServlet {
 
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws
             IOException {
-        System.out.println("Java Script Linker called successfully!");
+        System.out.println("\n\n\nresponse: " + request.getParameter("textInput"));
         response.setCharacterEncoding("UTF-8");
         response.setContentType("text/html");
-        response.getWriter().write("dwadawd");
+        response.getWriter().write(request.getParameter("textInput"));
         /*
         InteractionRequest interactionRequest = getInteractionRequestFromText(request.getHeader
                 ("textInput"), request.getHeader("language"));
