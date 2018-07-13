@@ -1,0 +1,30 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset = "utf-8">
+    <title>Agent Dialogue Web Simulator</title>
+    <script src = "http://code.jquery.com/jquery-latest.min.js"></script>
+    <script src = "js/send_ajax_function.js"></script>
+</head>
+
+<body>
+    
+    <h1>Send and receive request<br></h1>
+    
+    <div class = "textInput">
+        <div>
+            <span>Chat with agents</span>
+            <input id = "message" name = "message" type = "text" placeholder = "User input...">
+        </div>
+        <p>
+            <button class = "button" type = "button" onclick = "sendAjax()">Test</button>
+        </p>
+    </div>
+    
+    <div id = "output">
+        <tr>
+            <th>Message</th>
+        </tr>
+    </div>
+</body>
+</html>
