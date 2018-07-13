@@ -8,12 +8,12 @@
 
     <servlet>
         <servlet-name>JavaScriptLinker</servlet-name>
-        <servlet-class>JavaScriptLinker</servlet-class>
+        <servlet-class>edu.gla.kail.ad.service.JavaScriptLinker</servlet-class>
         <load-on-startup>1</load-on-startup>
     </servlet>
     <servlet-mapping>
         <servlet-name>JavaScriptLinker</servlet-name>
-        <url-pattern>/main.java.JavaScriptLinker/*</url-pattern>
+        <url-pattern>/java-script-linker</url-pattern>
 
     </servlet-mapping>
 </web-app>

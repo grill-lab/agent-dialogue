@@ -25,8 +25,10 @@ class InputField extends Component {
             language: this.state.language // TODO(Adam): implement this one.
         };
 
+        var Float = Java.type("java.awt.geom.Arc2D$Float");
+        importPackage('./main/java/edu/gla/kail/ad/service')
 
-        axios.post(`JavaScriptLinker`, {utteranceRequest}).then(function (response) {
+        axios.post(`java-script-linker`, {utteranceRequest}).then(function (response) {
             alert('aiiiiii111: ' + (response) + document.URL.toString());
         }).catch(function (error) {
             alert('aiiiiii: ' + (error) + document.URL.toString());
