@@ -1,14 +1,18 @@
 function sendRequestToServlet() {
     var textInput = $('#message').val();
+    var language = $('input[name=language]:checked', '#language-fieldset').val();
+    alert(language);
     $('#message').val("");
+    $("#output").append($('<div id="request"/>').append(textInput));
 
     $.ajax({
         url: "java-script-linker",
         type: 'POST',
         dataType: 'text',
-        data: {textInput: textInput},
+        data: {textInput: textInput,
+        language: language},
         success: function (data) {
-            $("#output").append($('<tr/>')
+            $("#output").append($('<div id="response">-  </div>')
                 .append(data)
             );
         },

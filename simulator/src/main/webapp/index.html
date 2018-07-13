@@ -17,21 +17,32 @@
         </header>
     </div>
     
+    <div class = "options">
+        <h2>Options</h2>
+            <form id="language-fieldset">
+                <legend>Language: </legend>
+                <label for="radio-1">English - US</label>
+                <input type="radio" name="language" id="radio-1" value="en-US">
+                <label for="radio-2">English - UK</label>
+                <input type="radio" name="language" id="radio-2" value="en-UK">
+            </form>
+        <br>
+    </div>
+    
     <div class = "text-input">
         <div>
-            <span>Chat with agents</span>
+            <h2>Chat with agents</h2>
             <input id = "message" name = "message" type = "text" placeholder = "Type message...">
         </div>
         <p>
-            <button class = "submit-button" type = "button" onclick = "sendRequestToServlet()">Test</button>
+            <button class = "submit-button" type = "button" onclick = "sendRequestToServlet()">
+                Submit
+            </button>
         </p>
     </div>
     
     <div id = "output">
-        <h2 class = "App">ChatBox</h2>
-        <tr>
-            <th></th>
-        </tr>
+        <h2>ChatBox</h2>
     </div>
 </body>
 </html>

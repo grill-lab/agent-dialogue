@@ -49,7 +49,7 @@ public class AgentDialogueClientService {
                         .build())
                 .setUserID("UserId set by Client")
                 .build();
-        AgentDialogueClientService client = new AgentDialogueClientService("localhost", 8080);
+        AgentDialogueClientService client = new AgentDialogueClientService("localhost", 8070);
         try {
             InteractionResponse interactionResponse = client.getInteractionResponse(interactionRequest);
             System.out.println(interactionResponse.toString());

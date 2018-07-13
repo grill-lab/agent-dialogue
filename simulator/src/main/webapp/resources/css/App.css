@@ -37,3 +37,29 @@ body {
     width: 100px;
     padding: 10px;
 }
+
+#output {
+    text-align: center;
+    width: 75%;
+    position: center;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#request {
+    text-align: right;
+}
+
+#response {
+    text-align: left;
+}
+
+.options {
+    text-align: center;
+    width: auto;
+}
+
+#language-fieldset {
+    margin-left: auto;
+    margin-right: auto;
+}
