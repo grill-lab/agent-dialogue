@@ -13,3 +13,5 @@
 /agent-dialogue-core/src/main/resources/
 /log-replayer/src/main/resources/
 /log-replayer/dependency-reduced-pom.xml
+/simulator/target/
+/simulator/dependency-reduced-pom.xml

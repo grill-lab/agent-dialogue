@@ -7,6 +7,7 @@
     <groupId>agent-dialogue</groupId>
     <artifactId>simulator</artifactId>
     <version>0.1-SNAPSHOT</version>
+    <packaging>jar</packaging>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -20,6 +21,7 @@
         <protobuf.version>3.5.1</protobuf.version>
         <protoc.version>3.5.1-1</protoc.version>
         <grpc.version>1.12.0</grpc.version>
+        <jetty-maven.version>9.0.4.v20130625</jetty-maven.version>
     </properties>
 
 
@@ -35,6 +37,11 @@
             <artifactId>javax.servlet-api</artifactId>
             <version>4.0.1</version>
             <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>jetty-maven-plugin</artifactId>
+            <version>${jetty-maven.version}</version>
         </dependency>
     </dependencies>
 
@@ -127,6 +134,11 @@
                         </goals>
                     </execution>
                 </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.eclipse.jetty</groupId>
+                <artifactId>jetty-maven-plugin</artifactId>
+                <version>${jetty-maven.version}</version>
             </plugin>
         </plugins>
     </build>
