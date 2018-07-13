@@ -9,8 +9,10 @@ function sendRequestToServlet() {
         url: "java-script-linker",
         type: 'POST',
         dataType: 'text',
-        data: {textInput: textInput,
-        language: language},
+        data: {
+            textInput: textInput,
+            language: language
+        },
         success: function (data) {
             $("#output").append($('<div id="response">-  </div>')
                 .append(data)
