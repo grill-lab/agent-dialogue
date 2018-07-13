@@ -30,7 +30,6 @@ public class JavaScriptLinker extends HttpServlet {
 
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws
             IOException {
-        System.out.println("\n\n\nresponse: " + request.getParameter("textInput"));
         response.setCharacterEncoding("UTF-8");
         response.setContentType("text/html");
         response.getWriter().write(request.getParameter("textInput"));

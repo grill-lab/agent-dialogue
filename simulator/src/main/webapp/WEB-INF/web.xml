@@ -10,6 +10,8 @@
     <display-name>Agent Dialogue Web Simulator</display-name>
     <welcome-file-list>
         <welcome-file>index.html</welcome-file>
+        <welcome-file>resources/css/App.css</welcome-file>
+        <welcome-file>resources/css/InputField.css</welcome-file>
     </welcome-file-list>
 
 
