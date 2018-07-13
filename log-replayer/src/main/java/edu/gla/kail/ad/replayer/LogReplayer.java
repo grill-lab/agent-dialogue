@@ -79,7 +79,7 @@ public class LogReplayer {
      * Created for testing purposes.
      */
     public static void main(String[] args) {
-        LogReplayer client = new LogReplayer("localhost", 8080);
+        LogReplayer client = new LogReplayer("localhost", 8070);
 
         // Thread running as 'frontend' - collects the input from user.
         Runnable userInterfaceRunnable = () -> {

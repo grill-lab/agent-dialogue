@@ -21,7 +21,7 @@ import static edu.gla.kail.ad.Client.ClientId.WEB_SIMULATOR;
 @WebServlet("/java-script-linker")
 public class JavaScriptLinker extends HttpServlet {
     private static AgentDialogueClientService _client = new AgentDialogueClientService
-            ("localhost", 8080);
+            ("localhost", 8070);
 
     public static synchronized AgentDialogueClientService getClient() {
         return _client;
@@ -32,10 +32,9 @@ public class JavaScriptLinker extends HttpServlet {
             IOException {
         response.setCharacterEncoding("UTF-8");
         response.setContentType("text/html");
-        response.getWriter().write(request.getParameter("textInput"));
-        /*
-        InteractionRequest interactionRequest = getInteractionRequestFromText(request.getHeader
-                ("textInput"), request.getHeader("language"));
+        //response.getWriter().write(request.getParameter("textInput"));
+
+        InteractionRequest interactionRequest = getInteractionRequestFromText(request.getParameter("textInput"), request.getParameter("language"));
         InteractionResponse interactionResponse;
         try {
             interactionResponse = _client.getInteractionResponse(interactionRequest);
@@ -43,7 +42,7 @@ public class JavaScriptLinker extends HttpServlet {
         } catch (Exception e) {
             response.getWriter().write("There was a fatal error!\n" + e.getMessage() + "\n\n" +
                     e.getStackTrace());
-        }*/
+        }
     }
 
     public void doGet(HttpServletRequest request, HttpServletResponse response)

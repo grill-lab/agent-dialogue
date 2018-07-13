@@ -41,8 +41,8 @@ public class AgentDialogueServer {
     }
 
     public static void main(String[] args) throws IOException, InterruptedException {
-        // Using the default port 8080.
-        AgentDialogueServer server = new AgentDialogueServer(8080);
+        // Using the default port 8070.
+        AgentDialogueServer server = new AgentDialogueServer(8070);
         server.start();
         server.blockUntilShutdown();
     }
