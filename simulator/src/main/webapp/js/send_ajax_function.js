@@ -1,11 +1,12 @@
-function sendAjax() {
+function sendRequestToServlet() {
     var textInput = $('#message').val();
+    $('#message').val("");
 
     $.ajax({
         url: "java-script-linker",
         type: 'POST',
         dataType: 'text',
-        data: { textInput: textInput},
+        data: {textInput: textInput},
         success: function (data) {
             $("#output").append($('<tr/>')
                 .append(data)
