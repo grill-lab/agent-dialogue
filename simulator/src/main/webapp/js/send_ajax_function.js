@@ -5,8 +5,7 @@ function sendAjax() {
         url: "java-script-linker",
         type: 'POST',
         dataType: 'text',
-        data: textInput,
-
+        data: { textInput: textInput},
         success: function (data) {
             $("#output").append($('<tr/>')
                 .append(data)
