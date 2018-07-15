@@ -13,7 +13,7 @@ let LANGUAGES = {
 };
 
 function populateLanguages() {
-    var $languageFieldset = $('<form id = "language-fieldset">');
+    var $languageFieldset = $('<form id = "language-fieldset">').append("<legend>Language:</legend>");
 
     for (var language in LANGUAGES) {
         var parameters = LANGUAGES[language];
