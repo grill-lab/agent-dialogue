@@ -4,26 +4,30 @@ body {
     font-family: sans-serif;
 }
 
-.App {
-    text-align: center;
-}
-
 .App-logo {
     margin-left: auto;
     margin-right: auto;
     float: left;
-    height: 90%;
+    height: 6vw;
 }
 
 .App-header {
     background-color: #ffcb95;
-    height: 100px;
-    padding: 20px;
-    color: white;
+    min-height: 40px;
+    height: 6vw;
+    padding: 10px;
 }
 
 .App-title {
-    font-size: 5vw;
+    font-size: 3vw;
+    min-font-size: 0.6 em;
+    font-family: Courier New;
+    text-align: center;
+}
+
+.main {
+    text-align: center;
+    overflow: auto;
 }
 
 .text-input {
@@ -31,8 +35,9 @@ body {
 }
 
 #message {
-    width: 900px;
-    height: 30px;
+    width: 90%;
+    word-wrap: break-word;
+    word-break: break-all;
     font-size: 14px;
 }
 
@@ -59,10 +64,42 @@ body {
 
 .options {
     text-align: center;
-    width: auto;
+    background-color: lightsalmon;
+    float: right;
+    width: 20%;
+    padding: 10px 15px;
+    margin-top: 7px;
 }
 
 #language-fieldset {
     margin-left: auto;
     margin-right: auto;
+}
+
+.main {
+    box-sizing: border-box;
+}
+
+.chat {
+    float: left;
+    width: 60%;
+    padding: 0 20px;
+    overflow: hidden;
+}
+
+@media only screen and (max-width:800px) {
+    /* Tablets */
+    .chat {
+        width: 80%;
+        padding: 0;
+    }
+    .right {
+        width: 100%;
+    }
+}
+@media only screen and (max-width:500px) {
+    /* Mobile devices. */
+    .menu, .main, .right {
+        width: 100%;
+    }
 }

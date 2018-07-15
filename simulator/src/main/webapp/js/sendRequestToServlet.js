@@ -1,8 +1,7 @@
 function sendRequestToServlet() {
-    var textInput = $('#message').val();
+    var textInput = $('textarea#message').val();
     var language = $('input[name=language]:checked', '#language-fieldset').val();
-    alert(language);
-    $('#message').val("");
+    $('textarea#message').val("");
     $("#output").append($('<div id="request"/>').append(textInput));
 
     $.ajax({

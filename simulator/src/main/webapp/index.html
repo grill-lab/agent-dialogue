@@ -1,5 +1,6 @@
 <!DOCTYPE HTML>
 <html>
+<meta name = "viewport" content = "width=device-width, initial-scale=1.0">
 <head>
     <meta charset = "utf-8">
     <title>Agent Dialogue Web Simulator</title>
@@ -17,24 +18,31 @@
         </header>
     </div>
     
-    <div class = "options">
-        <h2>Options</h2>
-    </div>
-    <br>
-    <div class = "text-input">
-        <div>
-            <h2>Chat with agents</h2>
-            <input id = "message" name = "message" type = "text" placeholder = "Type message...">
+    <div class = "main">
+        <div class = "options">
+            <h2>Options</h2>
         </div>
-        <p>
-            <button class = "submit-button" type = "button" onclick = "sendRequestToServlet()">
-                Submit
-            </button>
-        </p>
-    </div>
-    
-    <div id = "output">
-        <h2>ChatBox</h2>
+        <br>
+        <div class = "chat">
+            <div class = "text-input">
+                <div>
+                    <h2>Chat with agents</h2>
+                    <textarea id = "message" name = "message" type = "text"
+                              placeholder = "Type message..."
+                              wrap = "soft" rows = "3"></textarea>
+                </div>
+                <p>
+                    <button class = "submit-button" type = "button"
+                            onclick = "sendRequestToServlet()">
+                        Submit
+                    </button>
+                </p>
+            </div>
+            
+            <div id = "output">
+                <h2>ChatBox</h2>
+            </div>
+        </div>
     </div>
 </body>
 </html>
