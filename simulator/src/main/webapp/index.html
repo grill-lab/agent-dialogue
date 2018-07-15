@@ -5,11 +5,11 @@
     <title>Agent Dialogue Web Simulator</title>
     <link href = "resources/css/App.css" type = "text/css" rel = "stylesheet"/>
     <script src = "http://code.jquery.com/jquery-latest.min.js"></script>
-    <script src = "js/send_ajax_function.js"></script>
+    <script src = "js/sendRequestToServlet.js"></script>
+    <script src = "js/onLoad.js"></script>
 </head>
 
 <body>
-    
     <div class = "App">
         <header class = "App-header">
             <img src = "resources/img/Agent_logo.jpg" class = "App-logo" alt = "logo"/>
@@ -19,16 +19,8 @@
     
     <div class = "options">
         <h2>Options</h2>
-        <form id = "language-fieldset">
-            <legend>Language:</legend>
-            <label for = "radio-1">English - US</label>
-            <input type = "radio" name = "language" id = "radio-1" value = "en-US">
-            <label for = "radio-2">English - UK</label>
-            <input type = "radio" name = "language" id = "radio-2" value = "en-UK">
-        </form>
-        <br>
     </div>
-    
+    <br>
     <div class = "text-input">
         <div>
             <h2>Chat with agents</h2>
