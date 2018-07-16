@@ -19,9 +19,8 @@ function populateLanguages() {
     for (var language in LANGUAGES) {
         var parameters = LANGUAGES[language];
         var $label = $("<label for=" + parameters.value + ">").text(parameters.name);
-        var $input = $('<input type="radio">').attr({
+        var $input = $('<input type="radio" name="language">').attr({
             id: parameters.value,
-            name: parameters.name,
             value: parameters.value
         });
 
@@ -30,5 +29,6 @@ function populateLanguages() {
 
         $('.options').append($languageFieldset);
     }
+    $("#" + LANGUAGES.AMERICAN_ENGLISH.value).prop("checked", true);
 }
 

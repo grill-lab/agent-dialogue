@@ -17,15 +17,17 @@ function sendRequestToServlet() {
         },
         success: function (response) {
             $("#output").append($('<div id="response">-  </div>')
-                .append(response.getParameter("message"))
+                .append(response.message)
             );
-            requestDetails = response.getParameter("interactionRequest");
-            responseDetails = response.getParameter("interactionResponse");
+            requestDetails = response.interactionRequest;
+            responseDetails = response.interactionResponse;
         },
         error: function (data, status, error) {
             alert("Error data: " + data + "\nStatus: " + status + "\nError message:" + error);
+        },
+        complete: function () {
+            awaitingResponses -= 1;
+            $('#awaiting-responses').text(awaitingResponses);
         }
     });
-    awaitingResponses -=1;
-    $('#awaiting-responses').text(awaitingResponses);
 }
