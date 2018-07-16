@@ -8,12 +8,18 @@
     .right {
         width: 100%;
     }
+    .alert-details-button {
+        font-size: 2vw;
+    }
 }
 
 @media only screen and (max-width: 500px) {
     /* Mobile devices. */
-    .menu, .main, .right {
+    .main, .right {
         width: 100%;
+    }
+    .alert-details-button {
+        font-size: 2vw;
     }
 }
 
@@ -59,23 +65,32 @@ body {
     float: right;
     width: 35%;
 }
+.right * {
+    border-radius: 2vw;
+    margin: 7px;
+}
+
+.file-input {
+    background-color: lightsalmon;
+}
 
 .options {
     background-color: darksalmon;
-    border-radius: 2vw;
     padding: 10px 15px;
     margin-top: 7px;
 }
 
 .response-details {
     background-color: lightsalmon;
-    border-radius: 2vw;
     padding: 10px 15px;
     margin-top: 7px;
 }
 
-#response-details-json {
-
+.alert-details-button {
+    text-align: center;
+    width: 5vw;
+    min-width: 80px;
+    padding: 1vw;
 }
 
 #language-fieldset {
@@ -105,9 +120,8 @@ body {
 .submit-button {
     width: 5vw;
     min-width: 80px;
-    font-size: 0.8vw;
-    min-font-size: 20px;
     padding: 1vw;
+    border-radius: 2vw;
 }
 
 #output {

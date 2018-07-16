@@ -1,28 +1,31 @@
+var awaitingResponses = 0;
+
 function sendRequestToServlet() {
     var textInput = $('textarea#message').val();
     var language = $('input[name=language]:checked', '#language-fieldset').val();
     $('textarea#message').val("");
     $("#output").append($('<div id="request"/>').append(textInput));
-
+    awaitingResponses += 1;
+    $('#awaiting-responses').text(awaitingResponses);
     $.ajax({
         url: "java-script-linker",
         type: 'POST',
-        dataType: 'text',
+        dataType: 'json',
         data: {
             textInput: textInput,
             language: language
         },
-        success: function (data) {
+        success: function (response) {
             $("#output").append($('<div id="response">-  </div>')
-                .append(data)
+                .append(response.getParameter("message"))
             );
-            // TODO(Adam): Implement this.
-            $('#response-details-json').text("to be implemented");
+            requestDetails = response.getParameter("interactionRequest");
+            responseDetails = response.getParameter("interactionResponse");
         },
         error: function (data, status, error) {
             alert("Error data: " + data + "\nStatus: " + status + "\nError message:" + error);
-            // TODO(Adam): Implement this.
-            $('#response-details-json').text("to be implemented");
         }
     });
+    awaitingResponses -=1;
+    $('#awaiting-responses').text(awaitingResponses);
 }

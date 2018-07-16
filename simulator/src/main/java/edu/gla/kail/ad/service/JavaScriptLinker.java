@@ -1,5 +1,8 @@
 package edu.gla.kail.ad.service;
 
+import com.google.api.client.json.Json;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import com.google.protobuf.Timestamp;
 import edu.gla.kail.ad.Client.InputInteraction;
 import edu.gla.kail.ad.Client.InteractionRequest;
@@ -31,17 +34,23 @@ public class JavaScriptLinker extends HttpServlet {
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws
             IOException {
         response.setCharacterEncoding("UTF-8");
-        response.setContentType("text/html");
-        //response.getWriter().write(request.getParameter("textInput"));
+        response.setContentType("application/json");
+        JsonObject json = new JsonObject();
 
-        InteractionRequest interactionRequest = getInteractionRequestFromText(request.getParameter("textInput"), request.getParameter("language"));
+        InteractionRequest interactionRequest = getInteractionRequestFromText(request
+                .getParameter("textInput"), request.getParameter("language"));
+        json.addProperty("interactionRequest", interactionRequest.toString());
         InteractionResponse interactionResponse;
         try {
             interactionResponse = _client.getInteractionResponse(interactionRequest);
-            response.getWriter().write(handleResponse(interactionResponse));
+            json.addProperty("message", handleResponse(interactionResponse));
+            json.addProperty("interactionResponse", interactionResponse.toString());
+            response.getWriter().write(json.toString());
         } catch (Exception e) {
-            response.getWriter().write("There was a fatal error!\n" + e.getMessage() + "\n\n" +
-                    e.getStackTrace());
+            json.addProperty("message", "There was a fatal error!");
+            json.addProperty("interactionResponse", "There was a fatal error!\n" + e.getMessage()
+                    + "\n\n" + e.getStackTrace());
+            response.getWriter().write(json.toString());
         }
     }
 
