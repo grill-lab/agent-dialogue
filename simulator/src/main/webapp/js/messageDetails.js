@@ -2,9 +2,9 @@ var requestDetails;
 var responseDetails;
 
 function alertRequestDetails() {
-    alert(requestDetails)
+    alert(requestDetails);
 }
 
 function alertResponseDetails() {
-    alert(responseDetails)
+    alert(responseDetails);
 }
