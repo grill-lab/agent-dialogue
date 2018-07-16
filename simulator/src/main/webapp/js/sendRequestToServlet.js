@@ -2,7 +2,7 @@ var awaitingResponses = 0;
 
 function sendRequestToServlet() {
     var textInput = $('textarea#message').val();
-    var language = $('input[name=language]:checked', '#language-fieldset').val();
+    var language = $('input[name=language]:checked', '#language-form').val();
     $('textarea#message').val("");
     $("#output").append($('<div id="request"/>').append(textInput));
     awaitingResponses += 1;
@@ -19,6 +19,10 @@ function sendRequestToServlet() {
             $("#output").append($('<div id="response">-  </div>')
                 .append(response.message)
             );
+            if ($('input[name=rating-enabled]:checked', '#rating-options-form').val()) {
+                // TODO(Adam): Create a method to assigning rating id!
+                createRating("ratingId1");
+            }
             requestDetails = response.interactionRequest;
             responseDetails = response.interactionResponse;
         },
