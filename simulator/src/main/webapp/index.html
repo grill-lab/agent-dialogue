@@ -23,9 +23,25 @@
             <div class = "options">
                 <h3>Options</h3>
             </div>
+            <div class = "file-input">
+                <h3>Conversation replayer</h3>
+                <div>LogEntry file: <input type = "file" id = "log-entry" name = "log-entry"
+                                           accept = ".log"/></div>
+                <div>
+                    <button class = "replay-log-entry-button" type = "button"
+                            onclick = "replayLogEntry()">Replay Conversation
+                    </button>
+                </div>
+            </div>
             <div class = "response-details">
-                <h3>Response Details</h3>
-                <div id = "response-details-json"></div>
+                <h3>Message Details</h3>
+                <button class = "alert-details-button" type = "button"
+                        onclick = "alertRequestDetails()">Request details
+                </button>
+                <button class = "alert-details-button" type = "button"
+                        onclick = "alertResponseDetails()">Response details
+                </button>
+            
             </div>
         </div>
         <br>
@@ -42,6 +58,8 @@
                             onclick = "sendRequestToServlet()">
                         Submit
                     </button>
+                    <span>Number of pending responses: <span
+                            id = "awaiting-responses"></span></span>
                 </p>
             </div>
             
