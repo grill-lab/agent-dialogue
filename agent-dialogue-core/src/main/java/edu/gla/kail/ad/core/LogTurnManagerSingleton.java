@@ -26,7 +26,7 @@ public final class LogTurnManagerSingleton {
         if (_instance == null) {
             _instance = new LogTurnManagerSingleton();
             // Directory to the folder with logs.
-            String logTurnPath = System.getProperty("user.dir") + "/agent-dialogue-core/Logs/DailyTurns";
+            String logTurnPath = System.getProperty("user.dir") + "/Logs/DailyTurns";
             directoryExistsOrCreate(logTurnPath);
             logTurnPath += DateTime.now().toString();
             try {
