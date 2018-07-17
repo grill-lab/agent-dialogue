@@ -9,7 +9,7 @@ $(document).ready(function () {
     $('#message').keypress(function(keyPressed){
         if(keyPressed.which == 13 && !keyPressed.shiftKey){
             keyPressed.preventDefault();
-            sendRequestToServlet();
+            sendRequestToAgents();
         }
     });
 });

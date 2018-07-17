@@ -4,7 +4,7 @@ var awaitingResponses = 0;
  * Send message request to servlet when the Submit button is pressed.
  * Use AJAX.
  */
-function sendRequestToServlet() {
+function sendRequestToAgents() {
     let textInput = $('textarea#message').val();
     let language = $('input[name=language]:checked', '#language-form').val();
     let createRatingBool = $('input[name=rating-enabled]:checked', '#rating-options-form').val();
@@ -15,6 +15,7 @@ function sendRequestToServlet() {
     $.ajax({
         url: "java-script-linker",
         type: 'POST',
+        headers: {"Operation": "sendRequestToAgents"},
         dataType: 'json',
         data: {
             textInput: textInput,
@@ -38,4 +39,9 @@ function sendRequestToServlet() {
             $('#awaiting-responses').text(awaitingResponses);
         }
     });
+}
+
+
+function updateRating() {
+
 }
