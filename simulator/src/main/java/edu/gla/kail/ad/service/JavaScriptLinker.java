@@ -29,10 +29,42 @@ public class JavaScriptLinker extends HttpServlet {
             ("localhost", 8070);
 
     /**
-     * Hadgle POST request.
+     * Handle POST request.
      */
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws
             IOException {
+        switch (request.getHeader("Operation")) {
+            case "sendRequestToAgents":
+                sendRequestToAgents(request, response);
+                break;
+            case "updateRating":
+                updateRating(request, response);
+                break;
+            default:
+                JsonObject json = new JsonObject();
+                json.addProperty("message", "The Operation passed in the header is not supported.");
+                response.getWriter().write(json.toString());
+        }
+    }
+
+    /**
+     * Handle GET request.
+     */
+    public void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws IOException {
+        doPost(request, response);
+    }
+
+    private void updateRating(HttpServletRequest request, HttpServletResponse response) {
+
+    }
+
+
+    /**
+     * Send request to agent and write (return) JSON back with response and it's details.
+     */
+    private void sendRequestToAgents(HttpServletRequest request, HttpServletResponse response)
+            throws IOException {
         response.setCharacterEncoding("UTF-8");
         response.setContentType("application/json");
         JsonObject json = new JsonObject();
@@ -56,13 +88,6 @@ public class JavaScriptLinker extends HttpServlet {
         }
     }
 
-    /**
-     * Handle GET request.
-     */
-    public void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws IOException {
-        doPost(request, response);
-    }
 
     /**
      * Creates text presented to the used depending on the MessageStatus.

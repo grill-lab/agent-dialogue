@@ -31,9 +31,10 @@ body {
 
 .App-header {
     background-color: #ffcb95;
-    min-height: 40px;
     height: 6vw;
-    padding: 10px;
+    padding: 0.7vw;
+    padding-left: 1.4vw;
+    padding-right: 1.4vw;
 }
 
 .App-logo {
@@ -146,4 +147,8 @@ body {
     margin-left: auto;
     margin-right: auto;
     width: 3vw;
+}
+
+#rating-indicator {
+    margin: 0.4vw;
 }
