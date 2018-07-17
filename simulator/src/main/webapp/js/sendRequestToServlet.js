@@ -20,8 +20,7 @@ function sendRequestToServlet() {
                 .append(response.message)
             );
             if ($('input[name=rating-enabled]:checked', '#rating-options-form').val()) {
-                // TODO(Adam): Create a method to assigning rating id!
-                createRating("ratingId1");
+                createRating(response.responseId);
             }
             requestDetails = response.interactionRequest;
             responseDetails = response.interactionResponse;

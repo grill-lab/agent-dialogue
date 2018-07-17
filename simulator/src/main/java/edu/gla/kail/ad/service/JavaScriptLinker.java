@@ -1,7 +1,5 @@
 package edu.gla.kail.ad.service;
 
-import com.google.api.client.json.Json;
-import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.protobuf.Timestamp;
 import edu.gla.kail.ad.Client.InputInteraction;
@@ -21,16 +19,18 @@ import java.util.List;
 
 import static edu.gla.kail.ad.Client.ClientId.WEB_SIMULATOR;
 
+/**
+ * Connect to AgentDialogueClientService and therefore enable interaction with Agent Dialogue Core.
+ * Accessible from JavaScript, through RESTful calls.
+ */
 @WebServlet("/java-script-linker")
 public class JavaScriptLinker extends HttpServlet {
     private static AgentDialogueClientService _client = new AgentDialogueClientService
             ("localhost", 8070);
 
-    public static synchronized AgentDialogueClientService getClient() {
-        return _client;
-    }
-
-
+    /**
+     * Hadgle POST request.
+     */
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws
             IOException {
         response.setCharacterEncoding("UTF-8");
@@ -45,6 +45,7 @@ public class JavaScriptLinker extends HttpServlet {
             interactionResponse = _client.getInteractionResponse(interactionRequest);
             json.addProperty("message", handleResponse(interactionResponse));
             json.addProperty("interactionResponse", interactionResponse.toString());
+            json.addProperty("responseId", interactionResponse.getResponseId());
             response.getWriter().write(json.toString());
         } catch (Exception e) {
             json.addProperty("message", "There was a fatal error!");
@@ -54,29 +55,33 @@ public class JavaScriptLinker extends HttpServlet {
         }
     }
 
+    /**
+     * Handle GET request.
+     */
     public void doGet(HttpServletRequest request, HttpServletResponse response)
             throws IOException {
         doPost(request, response);
     }
 
-
-    // TODO(Adam): Restructure entire code below!
-
     /**
+     * Creates text presented to the used depending on the MessageStatus.
      *
+     * @param interactionResponse - The response obtained from agents.
+     * @return String - Either the interactions passed by the agent or error message.
+     * @throws Exception - Thrown when the MessageStatus is not recognised.
      */
     private String handleResponse(InteractionResponse interactionResponse) throws Exception {
         switch (interactionResponse.getMessageStatus()) {
             case ERROR:
                 return interactionResponse.getErrorMessage();
             case SUCCESSFUL:
-                String concatenatedResponses = "";
+                StringBuilder concatenatedResponses = new StringBuilder();
                 List<OutputInteraction> outputInteractionList = interactionResponse
                         .getInteractionList();
                 for (OutputInteraction outputInteraction : outputInteractionList) {
-                    concatenatedResponses += handleOutputInteraction(outputInteraction);
+                    concatenatedResponses.append(handleOutputInteraction(outputInteraction));
                 }
-                return concatenatedResponses;
+                return concatenatedResponses.toString();
             default:
                 return ("There was an error, contact the developer: " + interactionResponse
                         .toString());
