@@ -16,9 +16,8 @@ import java.util.concurrent.TimeUnit;
 
 public class AgentDialogueClientService {
     private final ManagedChannel _channel;
-    private final AgentDialogueBlockingStub _blockingStub; // RPC will wait for the server to
+    private final AgentDialogueBlockingStub _blockingStub; // gRPC will wait for the server to
     // respond; return response or raise an exception.
-    private LogManagerSingleton _logManagerSingleton;
 
     public AgentDialogueClientService(String host, int port) {
         this(ManagedChannelBuilder.forAddress(host, port).usePlaintext());
@@ -71,7 +70,6 @@ public class AgentDialogueClientService {
 
     /**
      * Get Interaction response.
-     * Store InteractionReqeust and InteractionResponse in the log.
      *
      * @param interactionRequest - The request sent to the Agent Dialog Manager.
      * @return interactionResponse - The response from an Agent chosen by DialogAgentManager.
@@ -79,11 +77,9 @@ public class AgentDialogueClientService {
      */
     public InteractionResponse getInteractionResponse(InteractionRequest interactionRequest)
             throws Exception {
-        //_logManagerSingleton.addInteraction(interactionRequest, null);
         InteractionResponse interactionResponse;
         try {
             interactionResponse = _blockingStub.getResponseFromAgents(interactionRequest);
-            //_logManagerSingleton.addInteraction(null, interactionResponse);
             return interactionResponse;
         } catch (StatusRuntimeException e) {
             e.printStackTrace();

@@ -46,7 +46,6 @@ message InteractionResponse {
     ClientMessageStatus message_status = 5; // The status of the message received from the agent-dialogue-core.
     string error_message = 6;
     string userID = 7;
-    int32 rating = 8;
 }
 
 enum InteractionType {
