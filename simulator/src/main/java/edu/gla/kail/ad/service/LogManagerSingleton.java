@@ -1,32 +1,34 @@
-package edu.gla.kail.ad.core;
+package edu.gla.kail.ad.service;
 
-import edu.gla.kail.ad.core.Log.Turn;
+import edu.gla.kail.ad.Client.InteractionRequest;
+import edu.gla.kail.ad.Client.InteractionResponse;
 import org.joda.time.DateTime;
 
+import javax.annotation.Nullable;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 
 /**
- * Manage turns and store them in the output stream.
+ * Manage Client interactions and store them in a certain directory/path.
  * TODO(Adam): Implement the use of LogStash, or maybe log4j, or make this thread safe.
  * TODO(Adam): Setting log storage directory to be changed to a different directory/database.
  */
-public final class LogTurnManagerSingleton {
-    private static LogTurnManagerSingleton _instance;
+public class LogManagerSingleton {
+    private static LogManagerSingleton _instance;
     private static OutputStream _outputStream;
 
     /**
      * Get instance of this class.
      *
-     * @return LogTurnManagerSingleton - An instance of the class itself.
+     * @return LogManagerSingleton - An instance of the class itself.
      */
-    static synchronized LogTurnManagerSingleton getLogTurnManagerSingleton() {
+    static synchronized LogManagerSingleton getLogManagerSingleton() {
         if (_instance == null) {
-            _instance = new LogTurnManagerSingleton();
+            _instance = new LogManagerSingleton();
             // Directory to the folder with logs.
-            String logTurnPath = System.getProperty("user.dir") + "/Logs/DailyTurns";
+            String logTurnPath = System.getProperty("user.dir") + "/Logs/client_interaction_logs";
             directoryExistsOrCreate(logTurnPath);
             logTurnPath += DateTime.now().toString();
             try {
@@ -48,16 +50,28 @@ public final class LogTurnManagerSingleton {
         }
     }
 
+
     /**
-     * Add the message (Turn) to the Output buffer.
+     * Add the interaction to the Output buffer. In case of null parameters, nothing happens.
      *
-     * @param turn - The instance of Turn from proto buffer to be saved.
+     * @param interactionRequest - The instance of interactionRequest from proto buffer to
+     *         be saved.
+     * @param interactionResponse - The instance of interactionResponse from proto buffer to
+     *         be saved.
      * @throws IOException - Thrown when... TODO
      */
-    public synchronized void addTurn(Turn turn) throws IOException {
+    public synchronized void addInteraction(@Nullable InteractionRequest interactionRequest,
+                                            @Nullable InteractionResponse interactionResponse)
+            throws IOException {
         // TODO(Adam): Handle the exception.
-        turn.writeDelimitedTo(_outputStream);
+        if (interactionRequest != null) {
+            interactionRequest.writeDelimitedTo(_outputStream);
+        }
+        if (interactionResponse != null) {
+            interactionResponse.writeDelimitedTo(_outputStream);
+        }
     }
+
 
     /**
      * Close the stream = save the file; set the instance to null.
@@ -69,4 +83,5 @@ public final class LogTurnManagerSingleton {
         _outputStream.close();
         _instance = null;
     }
+
 }
