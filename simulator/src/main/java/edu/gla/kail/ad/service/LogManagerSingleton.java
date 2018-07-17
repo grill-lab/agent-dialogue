@@ -34,7 +34,7 @@ public class LogManagerSingleton {
         if (_instance == null) {
             _instance = new LogManagerSingleton();
             // Directory to the folder with logs.
-            String logInteractionsPath = System.getProperty("user.dir") + "/Logs/interactions_logs";
+            String logInteractionsPath = System.getProperty("user.dir") + "/simulator/Logs/interactions_logs";
             directoryExistsOrCreate(logInteractionsPath);
             logInteractionsPath += DateTime.now().toString();
             try {
@@ -43,7 +43,7 @@ public class LogManagerSingleton {
                 exception.getMessage();
             }
 
-            String logRatingsPath = System.getProperty("user.dir") + "/Logs/ratings_logs";
+            String logRatingsPath = System.getProperty("user.dir") + "/simulator/Logs/ratings_logs";
             directoryExistsOrCreate(logRatingsPath);
             logRatingsPath += DateTime.now().toString();
             try {
@@ -61,7 +61,7 @@ public class LogManagerSingleton {
     private static void directoryExistsOrCreate(String path) {
         File directory = new File(path);
         if (!directory.exists()) {
-            directory.mkdir();
+            directory.mkdirs();
         }
     }
 

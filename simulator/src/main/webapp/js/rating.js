@@ -1,7 +1,7 @@
-let ratingScale = 5;
+let _ratingScale = 5;
 
-function updateRating(starNumber, ratingId) {
-    let $ratingDiv = $("#" + ratingId.toString());
+function updateRating(starNumber, responseId) {
+    let $ratingDiv = $("#" + responseId.toString());
     $.ajax({
         url: "java-script-linker",
         type: 'POST',
@@ -9,7 +9,11 @@ function updateRating(starNumber, ratingId) {
         dataType: 'json',
         data: {
             ratingScore: starNumber + 1,
-            ratingId: ratingId
+            responseId: responseId,
+            // TODO(Adam): Implement getting experimentId, utteranceID and requestId.
+            experimentId: "to be implemented",
+            utteranceId: "",
+            requestId: ""
         },
         success: function () {
             $ratingDiv.attr("value", starNumber + 1);
@@ -21,21 +25,21 @@ function updateRating(starNumber, ratingId) {
     });
 }
 
-function createRating(ratingId) {
-    let $rating = $('<div class = "rating" id = \"' + ratingId + '\"/>');
-    for (let numberOfStars = 0; numberOfStars < ratingScale; numberOfStars++) {
+function createRating(responseId) {
+    let $rating = $('<div class = "rating" id = \"' + responseId + '\"/>');
+    for (let numberOfStars = 0; numberOfStars < _ratingScale; numberOfStars++) {
         $rating.append("<img id='star-rating' src='../resources/img/star-regular.svg' " +
-            "onmouseover= \'selectStars(" + numberOfStars + ", \"" + ratingId + "\")\' " +
-            "onmouseout = \'deselectStars(\"" + ratingId + "\")\' " +
-            "onclick=\'updateRating(" + numberOfStars + ",\"" + ratingId + "\")\'/>");
+            "onmouseover= \'selectStars(" + numberOfStars + ", \"" + responseId + "\")\' " +
+            "onmouseout = \'deselectStars(\"" + responseId + "\")\' " +
+            "onclick=\'updateRating(" + numberOfStars + ",\"" + responseId + "\")\'/>");
     }
     $rating.append("<img id='rating-indicator' src='../resources/img/question-circle-solid.svg' />");
     $("#output").append($rating);
 }
 
 
-function selectStars(starNumber, ratingId) {
-    let $stars = $("#" + ratingId.toString()).find('img[id="star-rating"]');
+function selectStars(starNumber, responseId) {
+    let $stars = $("#" + responseId.toString()).find('img[id="star-rating"]');
     for (i = 0; i < $stars.length; i++) {
         if (i <= starNumber) {
             $stars[i].src = '../resources/img/star-solid.svg';
@@ -46,8 +50,8 @@ function selectStars(starNumber, ratingId) {
     }
 }
 
-function deselectStars(ratingId) {
-    let $ratingDiv = $("#" + ratingId.toString());
+function deselectStars(responseId) {
+    let $ratingDiv = $("#" + responseId.toString());
     let stars = $ratingDiv.find('img[id="star-rating"]');
     let ratingScore = 0;
     if ($($ratingDiv)[0].hasAttribute("value")) {

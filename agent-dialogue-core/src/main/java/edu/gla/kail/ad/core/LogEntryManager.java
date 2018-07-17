@@ -70,7 +70,7 @@ public final class LogEntryManager {
     private static void directoryExistsOrCreate(String path) {
         File directory = new File(path);
         if (!directory.exists()) {
-            directory.mkdir();
+            directory.mkdirs();
         }
     }
 
