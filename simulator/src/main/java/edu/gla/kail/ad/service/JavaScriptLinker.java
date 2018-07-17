@@ -47,10 +47,11 @@ public class JavaScriptLinker extends HttpServlet {
             json.addProperty("interactionResponse", interactionResponse.toString());
             json.addProperty("responseId", interactionResponse.getResponseId());
             response.getWriter().write(json.toString());
-        } catch (Exception e) {
+        } catch (Exception exception) {
             json.addProperty("message", "There was a fatal error!");
-            json.addProperty("interactionResponse", "There was a fatal error!\n" + e.getMessage()
-                    + "\n\n" + e.getStackTrace());
+            json.addProperty("interactionResponse", "There was a fatal error! More details under " +
+                    "\"Response details\".\n" + exception.getMessage() + "\n\n" + exception
+                    .getStackTrace());
             response.getWriter().write(json.toString());
         }
     }

@@ -79,11 +79,11 @@ public class AgentDialogueClientService {
      */
     public InteractionResponse getInteractionResponse(InteractionRequest interactionRequest)
             throws Exception {
-        _logManagerSingleton.addInteraction(interactionRequest, null);
+        //_logManagerSingleton.addInteraction(interactionRequest, null);
         InteractionResponse interactionResponse;
         try {
             interactionResponse = _blockingStub.getResponseFromAgents(interactionRequest);
-            _logManagerSingleton.addInteraction(null, interactionResponse);
+            //_logManagerSingleton.addInteraction(null, interactionResponse);
             return interactionResponse;
         } catch (StatusRuntimeException e) {
             e.printStackTrace();
