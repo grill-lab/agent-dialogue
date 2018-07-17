@@ -46,7 +46,6 @@ public class JavaScriptLinker extends HttpServlet {
                 updateRating(request, response);
                 break;
             default:
-                System.out.println("test");
                 JsonObject json = new JsonObject();
                 json.addProperty("message", "The Operation passed in the header is not supported.");
                 response.getWriter().write(json.toString());

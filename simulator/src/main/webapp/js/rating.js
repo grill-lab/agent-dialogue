@@ -6,7 +6,7 @@ function updateRating(starNumber, responseId) {
         url: "java-script-linker",
         type: 'POST',
         headers: {"Operation": "updateRating"},
-        dataType: 'json',
+        dataType: 'text',
         data: {
             ratingScore: starNumber + 1,
             responseId: responseId,
