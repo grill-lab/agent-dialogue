@@ -7,6 +7,7 @@ var awaitingResponses = 0;
 function sendRequestToServlet() {
     let textInput = $('textarea#message').val();
     let language = $('input[name=language]:checked', '#language-form').val();
+    let createRatingBool = $('input[name=rating-enabled]:checked', '#rating-options-form').val();
     $('textarea#message').val("");
     $("#output").append($('<div id="request"/>').append(textInput));
     awaitingResponses += 1;
@@ -23,7 +24,7 @@ function sendRequestToServlet() {
             $("#output").append($('<div id="response">-  </div>')
                 .append(response.message)
             );
-            if ($('input[name=rating-enabled]:checked', '#rating-options-form').val()) {
+            if (createRatingBool == "true") {
                 createRating(response.responseId);
             }
             requestDetails = response.interactionRequest;
@@ -38,15 +39,3 @@ function sendRequestToServlet() {
         }
     });
 }
-
-/**
- * When user presses "enter" in textarea, the request is being sent.
- */
-$(document).ready(function(){
-    $('#message').keypress(function(keyPressed){
-        if(keyPressed.which == 13 && !keyPressed.shiftKey){
-            keyPressed.preventDefault();
-            sendRequestToServlet();
-        }
-    });
-});
