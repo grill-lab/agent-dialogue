@@ -6,6 +6,7 @@ import edu.gla.kail.ad.Client.InputInteraction;
 import edu.gla.kail.ad.Client.InteractionRequest;
 import edu.gla.kail.ad.Client.InteractionRequestOrBuilder;
 import edu.gla.kail.ad.Client.InteractionResponse;
+import edu.gla.kail.ad.Client.InteractionResponse.ClientMessageStatus;
 import edu.gla.kail.ad.Client.InteractionType;
 import edu.gla.kail.ad.Client.OutputInteraction;
 
@@ -22,9 +23,13 @@ import static edu.gla.kail.ad.Client.ClientId.WEB_SIMULATOR;
 /**
  * Connect to AgentDialogueClientService and therefore enable interaction with Agent Dialogue Core.
  * Accessible from JavaScript, through RESTful calls.
+ * Responsible for storing logs.
+ * TODO(Adam): Store logs.
  */
 @WebServlet("/java-script-linker")
 public class JavaScriptLinker extends HttpServlet {
+    private static LogManagerSingleton _logManagerSingleton = LogManagerSingleton
+            .getLogManagerSingleton();
     private static AgentDialogueClientService _client = new AgentDialogueClientService
             ("localhost", 8070);
 
@@ -55,13 +60,19 @@ public class JavaScriptLinker extends HttpServlet {
         doPost(request, response);
     }
 
+    /**
+     * Add proto buffer for passed rating to the log.
+     *
+     * @param request
+     * @param response
+     */
     private void updateRating(HttpServletRequest request, HttpServletResponse response) {
-
+        _logManagerSingleton.addRating();
     }
-
 
     /**
      * Send request to agent and write (return) JSON back with response and it's details.
+     * Store request and response in log files.
      */
     private void sendRequestToAgents(HttpServletRequest request, HttpServletResponse response)
             throws IOException {
@@ -71,23 +82,28 @@ public class JavaScriptLinker extends HttpServlet {
 
         InteractionRequest interactionRequest = getInteractionRequestFromText(request
                 .getParameter("textInput"), request.getParameter("language"));
+        _logManagerSingleton.addInteraction(interactionRequest, null);
         json.addProperty("interactionRequest", interactionRequest.toString());
         InteractionResponse interactionResponse;
         try {
             interactionResponse = _client.getInteractionResponse(interactionRequest);
+            _logManagerSingleton.addInteraction(null, interactionResponse);
             json.addProperty("message", handleResponse(interactionResponse));
             json.addProperty("interactionResponse", interactionResponse.toString());
             json.addProperty("responseId", interactionResponse.getResponseId());
             response.getWriter().write(json.toString());
         } catch (Exception exception) {
+            interactionResponse = InteractionResponse.newBuilder()
+                    .setMessageStatus(ClientMessageStatus.ERROR)
+                    .setErrorMessage(exception.getMessage() + "\n\n" + exception.getStackTrace())
+                    .setTime(getTimeStamp())
+                    .build();
+            _logManagerSingleton.addInteraction(null, interactionResponse);
             json.addProperty("message", "There was a fatal error!");
-            json.addProperty("interactionResponse", "There was a fatal error! More details under " +
-                    "\"Response details\".\n" + exception.getMessage() + "\n\n" + exception
-                    .getStackTrace());
+            json.addProperty("interactionResponse", interactionResponse.toString());
             response.getWriter().write(json.toString());
         }
     }
-
 
     /**
      * Creates text presented to the used depending on the MessageStatus.
@@ -157,15 +173,18 @@ public class JavaScriptLinker extends HttpServlet {
         return InteractionRequest.newBuilder()
                 .setClientId(WEB_SIMULATOR)
                 .setUserID(returnUserName())
-                .setTime(Timestamp.newBuilder()
-                        .setSeconds(Instant.now()
-                                .getEpochSecond())
-                        .setNanos(Instant.now()
-                                .getNano())
-                        .build())
+                .setTime(getTimeStamp())
                 .setInteraction(inputInteraction);
     }
 
+    private Timestamp getTimeStamp() {
+        return Timestamp.newBuilder()
+                .setSeconds(Instant.now()
+                        .getEpochSecond())
+                .setNanos(Instant.now()
+                        .getNano())
+                .build();
+    }
 
     /**
      * Return the current user name.

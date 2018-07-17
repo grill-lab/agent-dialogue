@@ -8,10 +8,11 @@ import "google/protobuf/timestamp.proto";
 // TODO(Adam): The message implemented here should have enough data to be joined with AD core logs later on.
 
 message Rating {
-    string score = 1;
-    string utterance_id = 2;
-    string experiment_id = 3;
-    google.protobuf.Timestamp time = 4;
-    string request_id = 5;
-    string response_id = 6;
+    string experiment_id = 1;
+    string response_id = 2;
+    string utterance_id = 3;
+    string score = 4;
+    google.protobuf.Timestamp time = 5;
+    string request_id = 6;
+
 }

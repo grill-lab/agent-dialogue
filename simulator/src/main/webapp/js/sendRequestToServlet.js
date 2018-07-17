@@ -40,8 +40,3 @@ function sendRequestToAgents() {
         }
     });
 }
-
-
-function updateRating() {
-
-}
