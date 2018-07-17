@@ -28,6 +28,7 @@ function selectStars(starNumber, ratingId) {
 function deselectStars(ratingId) {
     let stars = $("#" + ratingId).find("img");
     for (i = 0; i < stars.length; i++) {
+        // TODO(Adam): .hasAttribute doesn't exist!
         if ($(stars[i]).hasAttribute("value")) {
             stars[i].src = '../resources/img/star-regular.svg';
         }

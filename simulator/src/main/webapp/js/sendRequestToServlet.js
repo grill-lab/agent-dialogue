@@ -1,8 +1,12 @@
 var awaitingResponses = 0;
 
+/**
+ * Send message request to servlet when the Submit button is pressed.
+ * Use AJAX.
+ */
 function sendRequestToServlet() {
-    var textInput = $('textarea#message').val();
-    var language = $('input[name=language]:checked', '#language-form').val();
+    let textInput = $('textarea#message').val();
+    let language = $('input[name=language]:checked', '#language-form').val();
     $('textarea#message').val("");
     $("#output").append($('<div id="request"/>').append(textInput));
     awaitingResponses += 1;
@@ -34,3 +38,15 @@ function sendRequestToServlet() {
         }
     });
 }
+
+/**
+ * When user presses "enter" in textarea, the request is being sent.
+ */
+$(document).ready(function(){
+    $('#message').keypress(function(keyPressed){
+        if(keyPressed.which == 13 && !keyPressed.shiftKey){
+            keyPressed.preventDefault();
+            sendRequestToServlet();
+        }
+    });
+});
