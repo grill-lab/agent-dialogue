@@ -1,4 +1,4 @@
-var awaitingResponses = 0;
+var _awaitingResponses = 0;
 
 /**
  * Send message request to servlet when the Submit button is pressed.
@@ -10,8 +10,8 @@ function sendRequestToAgents() {
     let createRatingBool = $('input[name=rating-enabled]:checked', '#rating-options-form').val();
     $('textarea#message').val("");
     $("#output").append($('<div id="request"/>').append(textInput));
-    awaitingResponses += 1;
-    $('#awaiting-responses').text(awaitingResponses);
+    _awaitingResponses += 1;
+    $('#awaiting-responses').text(_awaitingResponses);
     $.ajax({
         url: "java-script-linker",
         type: 'POST',
@@ -35,8 +35,8 @@ function sendRequestToAgents() {
             alert("Error data: " + data + "\nStatus: " + status + "\nError message:" + error);
         },
         complete: function () {
-            awaitingResponses -= 1;
-            $('#awaiting-responses').text(awaitingResponses);
+            _awaitingResponses -= 1;
+            $('#awaiting-responses').text(_awaitingResponses);
         }
     });
 }

@@ -68,9 +68,9 @@ public class LogReplayer {
         _userId = generateUserId();
 
         // Hardcoded directory path.
-        File directory = new File(System.getProperty("user.dir") + "/Logs/Replayer");
+        File directory = new File(System.getProperty("user.dir") + "/log-replayer/Logs/Replayer");
         if (!directory.exists()) {
-            directory.mkdir();
+            directory.mkdirs();
         }
         _LOG_STORAGE_DIRECTORY = directory.toString();
     }

@@ -46,6 +46,7 @@ public class JavaScriptLinker extends HttpServlet {
                 updateRating(request, response);
                 break;
             default:
+                System.out.println("test");
                 JsonObject json = new JsonObject();
                 json.addProperty("message", "The Operation passed in the header is not supported.");
                 response.getWriter().write(json.toString());
@@ -66,8 +67,11 @@ public class JavaScriptLinker extends HttpServlet {
      * @param request
      * @param response
      */
-    private void updateRating(HttpServletRequest request, HttpServletResponse response) {
-        _logManagerSingleton.addRating();
+    private void updateRating(HttpServletRequest request, HttpServletResponse response) throws
+            IOException {
+        _logManagerSingleton.addRating(request.getParameter("ratingScore"), request.getParameter
+                ("responseId"), request.getParameter("experimentId"), request.getParameter
+                ("utteranceId"), request.getParameter("requestId"));
     }
 
     /**
