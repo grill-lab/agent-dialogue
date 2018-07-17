@@ -71,8 +71,10 @@ body {
     margin: 7px;
 }
 
-.file-input {
+.conversation-replayer {
     background-color: lightsalmon;
+    padding: 10px 15px;
+    margin-top: 7px;
 }
 
 .options {
@@ -81,7 +83,7 @@ body {
     margin-top: 7px;
 }
 
-.response-details {
+.conversation-details {
     background-color: lightsalmon;
     padding: 10px 15px;
     margin-top: 7px;
