@@ -20,9 +20,15 @@
         <dialogflow.version>0.53.0-alpha</dialogflow.version>
         <junit.version>4.12</junit.version>
         <rxjava.version>1.3.4</rxjava.version>
+        <firebase-admin.version>6.2.0</firebase-admin.version>
     </properties>
 
     <dependencies>
+        <dependency>
+            <groupId>com.google.firebase</groupId>
+            <artifactId>firebase-admin</artifactId>
+            <version>${firebase-admin.version}</version>
+        </dependency>
         <dependency>
             <groupId>com.google.protobuf</groupId>
             <artifactId>protobuf-java</artifactId>
