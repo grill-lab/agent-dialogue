@@ -69,8 +69,7 @@ public class JavaScriptLinker extends HttpServlet {
     private void updateRating(HttpServletRequest request, HttpServletResponse response) throws
             IOException {
         _logManagerSingleton.addRating(request.getParameter("ratingScore"), request.getParameter
-                ("responseId"), request.getParameter("experimentId"), request.getParameter
-                ("utteranceId"), request.getParameter("requestId"));
+                ("responseId"), request.getParameter("experimentId"), request.getParameter("requestId"));
     }
 
     /**

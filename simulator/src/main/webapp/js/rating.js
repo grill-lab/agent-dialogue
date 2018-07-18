@@ -10,9 +10,8 @@ function updateRating(starNumber, responseId) {
         data: {
             ratingScore: starNumber + 1,
             responseId: responseId,
-            // TODO(Adam): Implement getting experimentId, utteranceID and requestId.
+            // TODO(Adam): Implement getting experimentId and requestId.
             experimentId: "to be implemented",
-            utteranceId: "",
             requestId: ""
         },
         success: function () {

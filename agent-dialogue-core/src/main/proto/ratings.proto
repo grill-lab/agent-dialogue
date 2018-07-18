@@ -10,9 +10,7 @@ import "google/protobuf/timestamp.proto";
 message Rating {
     string experiment_id = 1;
     string response_id = 2;
-    string utterance_id = 3;
-    string score = 4;
-    google.protobuf.Timestamp time = 5;
-    string request_id = 6;
-
+    string score = 3;
+    google.protobuf.Timestamp time = 4;
+    string request_id = 5;
 }
