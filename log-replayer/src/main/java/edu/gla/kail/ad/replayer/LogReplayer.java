@@ -32,7 +32,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 /**
  * Responsible for replaying the conversation from the LogEntry file.
  * °A lot of code is repeated in AgentDialogueClientService in web-simulator client.
- * TODO(Adam): Change log replayer.
+ * TODO(Adam): Change log replayer - reading one file with multiple conversations = multiple
+ * LogEntries.
  */
 public class LogReplayer {
     private final ManagedChannel _channel;
