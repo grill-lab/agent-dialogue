@@ -51,7 +51,7 @@ public class LogManagerSingleton {
             try {
                 // TODO(Adam): Change it.
                 InputStream serviceAccount = new FileInputStream
-                        ("/Users/Adam/Documents/Internship/agentdialogue-72c1853e868d.json");
+                        ("/Users/Adam/Documents/Internship/agentdialogue-2cd4b-firebase-adminsdk-z39zw-4d5427d1fc.json");
                 credentials = GoogleCredentials.fromStream(serviceAccount);
             } catch (Exception e) {
                 credentials = null;
@@ -115,10 +115,11 @@ public class LogManagerSingleton {
         if (interactionRequest != null) {
             interactionRequest.writeDelimitedTo(_interactionsOutputStream);
             DocumentReference docRef = _database.collection("clientInteractionRequest").document
-                    (interactionRequest.getTime().toString());
+                    (interactionRequest.getTime().getSeconds() + "_" + interactionRequest.getTime().getNanos());
             Map<String, Object> data = new HashMap<>();
 
             data.put("client_id", interactionRequest.getClientIdValue());
+            data.put("time", interactionRequest.getTime().toString());
             data.put("userID", interactionRequest.getUserID());
             data.put("interaction_type", interactionRequest.getInteraction().getTypeValue());
             data.put("interaction_device_type", interactionRequest.getInteraction().getDeviceType
@@ -135,10 +136,11 @@ public class LogManagerSingleton {
         } else if (interactionResponse != null) {
             interactionResponse.writeDelimitedTo(_interactionsOutputStream);
             DocumentReference docRef = _database.collection("clientInteractionResponse").document
-                    (interactionResponse.getTime().toString());
+                    (interactionResponse.getTime().getSeconds() + "_" + interactionResponse.getTime().getNanos());
             Map<String, Object> data = new HashMap<>();
 
             data.put("response_id", interactionResponse.getResponseId());
+            data.put("time", interactionResponse.getTime().toString());
             data.put("client_id", interactionResponse.getClientIdValue());
             data.put("message_status", interactionResponse.getMessageStatusValue());
             data.put("error_message", interactionResponse.getErrorMessage());
@@ -157,6 +159,7 @@ public class LogManagerSingleton {
                 counter++;
             }
         }
+        _interactionsOutputStream.flush();
     }
 
 
@@ -187,12 +190,14 @@ public class LogManagerSingleton {
         }
         Rating rating = ((Builder) ratingOrBuilder).build();
         rating.writeDelimitedTo(_ratingsOutputStream);
+        _ratingsOutputStream.flush();
 
         DocumentReference docRef = _database.collection("clientRatings").document
-                (rating.getTime().toString());
+                (rating.getTime().getSeconds() + "_" + rating.getTime().getNanos());
         Map<String, Object> data = new HashMap<>();
 
         data.put("experiment_id", rating.getExperimentId());
+        data.put("time", rating.getTime().toString());
         data.put("response_id", rating.getResponseId());
         data.put("score", rating.getScore());
         data.put("request_id", rating.getRequestId());

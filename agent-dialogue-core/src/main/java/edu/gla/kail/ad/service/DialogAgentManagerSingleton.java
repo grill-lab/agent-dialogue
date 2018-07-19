@@ -114,7 +114,7 @@ final class DialogAgentManagerSingleton {
                     List<Tuple<String, String>> dialogflowProjectIdAndJsonKeyFileList = new
                             ArrayList<>();
                     dialogflowProjectIdAndJsonKeyFileList.add(Tuple.of(projectIdAndJsonKey[1],
-                            projectIdAndJsonKey[2]));
+                            currentClassPathFile + projectIdAndJsonKey[2]));
                     configurationTuples.add(new ConfigurationTuple<>(ServiceProvider.DIALOGFLOW,
                             dialogflowProjectIdAndJsonKeyFileList));
                     break;
