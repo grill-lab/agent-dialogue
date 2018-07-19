@@ -56,7 +56,7 @@ public class DialogAgentManagerTest {
                     List<Tuple<String, String>> dialogflowProjectIdAndJsonKeyFileList = new
                             ArrayList();
                     dialogflowProjectIdAndJsonKeyFileList.add(Tuple.of(projectIdAndJsonKey[1],
-                            projectIdAndJsonKey[2]));
+                            System.getProperty("user.dir") + projectIdAndJsonKey[2]));
                     _configurationTuples.add(new ConfigurationTuple(ServiceProvider
                             .DIALOGFLOW, dialogflowProjectIdAndJsonKeyFileList));
                     break;

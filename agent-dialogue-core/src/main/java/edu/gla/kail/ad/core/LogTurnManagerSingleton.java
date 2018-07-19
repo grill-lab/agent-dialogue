@@ -22,7 +22,7 @@ public final class LogTurnManagerSingleton {
      *
      * @return LogTurnManagerSingleton - An instance of the class itself.
      */
-    static synchronized LogTurnManagerSingleton getLogTurnManagerSingleton() {
+    public static synchronized LogTurnManagerSingleton getLogTurnManagerSingleton() {
         if (_instance == null) {
             _instance = new LogTurnManagerSingleton();
             // Directory to the folder with logs.
@@ -57,6 +57,7 @@ public final class LogTurnManagerSingleton {
     public synchronized void addTurn(Turn turn) throws IOException {
         // TODO(Adam): Handle the exception.
         turn.writeDelimitedTo(_outputStream);
+        _outputStream.flush();
     }
 
     /**
@@ -66,6 +67,7 @@ public final class LogTurnManagerSingleton {
      */
     public void saveAndExit() throws IOException {
         // TODO(Adam): Handle the exception.
+        // TODO(Adam): Code below is buggy - it can create issues. Resolve it!
         _outputStream.close();
         _instance = null;
     }

@@ -7,6 +7,7 @@ import edu.gla.kail.ad.Client.InteractionResponse;
 import edu.gla.kail.ad.Client.InteractionResponse.ClientMessageStatus;
 import edu.gla.kail.ad.core.DialogAgentManager;
 import edu.gla.kail.ad.core.Log.ResponseLog;
+import edu.gla.kail.ad.core.LogTurnManagerSingleton;
 import io.grpc.Server;
 import io.grpc.ServerBuilder;
 import io.grpc.stub.StreamObserver;
@@ -71,6 +72,11 @@ public class AgentDialogueServer {
      */
     public void shutDown() {
         if (_server != null) {
+            try {
+                LogTurnManagerSingleton.getLogTurnManagerSingleton().saveAndExit();
+            } catch (IOException exception) {
+                System.err.println("Unable to close output stream for log storing.");
+            }
             _server.shutdown();
         }
     }

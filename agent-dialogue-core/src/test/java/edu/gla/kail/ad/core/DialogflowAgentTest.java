@@ -16,6 +16,8 @@ import org.junit.runners.JUnit4;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
@@ -37,8 +39,10 @@ public class DialogflowAgentTest {
      */
     @Before
     public void setUp() {
-        _jsonKeyFileLocation = "/Users/Adam/Documents/Internship/myquotemaster-13899" +
-                "-04ed41718e57.json";
+        String currentClassPathFile = System.getProperty("user.dir");
+        Path path = Paths.get(currentClassPathFile +
+                "/src/main/resources/myquotemaster-13899-04ed41718e57.json");
+        _jsonKeyFileLocation = path.toString();
         _projectId = "myquotemaster-13899";
         _sessionId = (new java.sql.Timestamp(System.currentTimeMillis())).toString() + UUID
                 .randomUUID().toString();
