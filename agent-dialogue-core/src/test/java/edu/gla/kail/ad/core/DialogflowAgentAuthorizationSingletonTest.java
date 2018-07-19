@@ -27,8 +27,8 @@ public class DialogflowAgentAuthorizationSingletonTest {
      */
     @Before
     public void setUp() {
-        _jsonKeyFileLocation = "/Users/Adam/Documents/Internship/myquotemaster-13899" +
-                "-04ed41718e57.json";
+        _jsonKeyFileLocation = System.getProperty("user.dir") +
+                "/src/main/resources/myquotemaster-13899-04ed41718e57.json";
         _projectId = "myquotemaster-13899";
     }
 
