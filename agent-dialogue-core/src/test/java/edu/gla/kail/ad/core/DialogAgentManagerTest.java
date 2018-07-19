@@ -1,3 +1,4 @@
+/*
 package edu.gla.kail.ad.core;
 
 import com.google.cloud.Tuple;
@@ -36,12 +37,12 @@ public class DialogAgentManagerTest {
 
     @BeforeClass
     public static void setUpClass() {
-        File currentClassPathFile = new File(DialogAgentManagerTestMain.class.getProtectionDomain()
-                .getCodeSource().getLocation().getPath()).getParentFile();
-        String testTextFileDirectory = currentClassPathFile.getParent() +
-                "/src/main/resources/TestTextFiles/ProjectIdAndJsonKeyFileLocations.txt";
+        String currentClassPathFile = System.getProperty("user.dir");
+        String testTextFileDirectory = currentClassPathFile +
+                "/agent-dialogue-core/src/main/resources/TestTextFiles/ProjectIdAndJsonKeyFileLocations.txt";
         _configurationTuples = new ArrayList();
         Path path = Paths.get(testTextFileDirectory);
+        System.out.println(testTextFileDirectory);
         List<String> lines = null;
         try {
             lines = Files.readAllLines(path, StandardCharsets.UTF_8);
@@ -109,9 +110,11 @@ public class DialogAgentManagerTest {
     }
 
 
-    /**
+    */
+/**
      * Test if agents are being set up from the provided configurationTuple.
-     */
+     *//*
+
     @Test
     public void testSetUpAgents() {
         _dialogAgentManager = new DialogAgentManager();
@@ -132,3 +135,4 @@ public class DialogAgentManagerTest {
     }
 
 }
+*/
