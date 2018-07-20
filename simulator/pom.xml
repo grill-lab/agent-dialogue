@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
@@ -22,10 +22,23 @@
         <protoc.version>3.5.1-1</protoc.version>
         <grpc.version>1.12.0</grpc.version>
         <jetty-maven.version>9.0.4.v20130625</jetty-maven.version>
+        <java-servlet-api.version>4.0.1</java-servlet-api.version>
+        <dockerfile-maven.version>1.4.3</dockerfile-maven.version>
     </properties>
 
 
     <dependencies>
+        <dependency>
+            <groupId>agent-dialogue</groupId>
+            <artifactId>agent-dialogue-core</artifactId>
+            <version>0.1-SNAPSHOT</version>
+            <type>docker-info</type>
+        </dependency>
+        <dependency>
+            <groupId>com.spotify</groupId>
+            <artifactId>dockerfile-maven-plugin</artifactId>
+            <version>${dockerfile-maven.version}</version>
+        </dependency>
         <dependency>
             <groupId>agent-dialogue</groupId>
             <artifactId>agent-dialogue-core</artifactId>
@@ -35,7 +48,7 @@
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>javax.servlet-api</artifactId>
-            <version>4.0.1</version>
+            <version>${java-servlet-api.version}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -139,6 +152,28 @@
                 <groupId>org.eclipse.jetty</groupId>
                 <artifactId>jetty-maven-plugin</artifactId>
                 <version>${jetty-maven.version}</version>
+            </plugin>
+
+
+            <plugin>
+                <groupId>com.spotify</groupId>
+                <artifactId>dockerfile-maven-plugin</artifactId>
+                <version>${dockerfile-maven.version}</version>
+                <executions>
+                    <execution>
+                        <id>default</id>
+                        <goals>
+                            <goal>build</goal>
+                            <goal>push</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <tag>${project.version}</tag>
+                    <buildArgs>
+                        <JAR_FILE>${project.build.finalName}.jar</JAR_FILE>
+                    </buildArgs>
+                </configuration>
             </plugin>
         </plugins>
     </build>
