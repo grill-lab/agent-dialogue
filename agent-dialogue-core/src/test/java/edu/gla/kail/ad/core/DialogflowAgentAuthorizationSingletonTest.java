@@ -14,20 +14,30 @@ import org.junit.runners.JUnit4;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.nio.file.Paths;
 
 import static org.junit.Assert.fail;
 
 @RunWith(JUnit4.class)
 public class DialogflowAgentAuthorizationSingletonTest {
-    String _jsonKeyFileLocation;
-    String _projectId;
+    private String _jsonKeyFileLocation;
+    private String _projectId;
 
     /**
      * Set up _jsonKeyFileLocation and projectID for the myquotemaster-13899 project.
      */
     @Before
     public void setUp() {
-        _jsonKeyFileLocation = System.getProperty("user.dir") +
+        _jsonKeyFileLocation = Paths
+                .get(DialogflowAgentAuthorizationSingletonTest
+                        .class
+                        .getProtectionDomain()
+                        .getCodeSource()
+                        .getLocation()
+                        .getPath())
+                .getParent()
+                .getParent()
+                .toString() +
                 "/src/main/resources/myquotemaster-13899-04ed41718e57.json";
         _projectId = "myquotemaster-13899";
     }

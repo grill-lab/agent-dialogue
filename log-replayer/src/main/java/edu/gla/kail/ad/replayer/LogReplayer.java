@@ -4,6 +4,7 @@ import com.google.protobuf.Timestamp;
 import edu.gla.kail.ad.Client;
 import edu.gla.kail.ad.Client.InteractionRequest;
 import edu.gla.kail.ad.Client.InteractionResponse;
+import edu.gla.kail.ad.core.DialogAgentManagerTestMain;
 import edu.gla.kail.ad.core.Log.LogEntry;
 import edu.gla.kail.ad.core.Log.Turn;
 import edu.gla.kail.ad.service.AgentDialogueGrpc;
@@ -19,6 +20,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.charset.Charset;
+import java.nio.file.Paths;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
@@ -70,7 +72,16 @@ public class LogReplayer {
         _userId = generateUserId();
 
         // Hardcoded directory path.
-        File directory = new File(System.getProperty("user.dir") + "/Logs/Replayer");
+        File directory = new File(Paths
+                .get(LogReplayer
+                        .class
+                        .getProtectionDomain()
+                        .getCodeSource()
+                        .getLocation()
+                        .getPath())
+                .getParent()
+                .getParent()
+                .toString() + "/Logs/Replayer");
         if (!directory.exists()) {
             directory.mkdirs();
         }
@@ -229,7 +240,7 @@ public class LogReplayer {
             return interactionResponse;
         } catch (StatusRuntimeException e) {
             e.printStackTrace();
-            throw new Exception("Error occured: " + e.getStatus());
+            throw new Exception("Error occurred: " + e.getStatus());
         }
     }
 

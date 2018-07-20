@@ -21,17 +21,26 @@ import java.util.List;
  */
 public class DialogAgentManagerTestMain {
     private static List<ConfigurationTuple> _configurationTuples;
+    private static Path _projectCoreDir = Paths
+            .get(DialogAgentManagerTestMain
+                    .class
+                    .getProtectionDomain()
+                    .getCodeSource()
+                    .getLocation()
+                    .getPath())
+            .getParent()
+            .getParent();
 
     /**
      * Add ConfigurationTuples to the _configurationTuples. This is just for testing purposes
      * TODO(Adam): File_check if exists() file.mkDirsc).
      *
      * @param fileDirectory - It specifies the directory of the file with data used to set
-     *                      up agents. Each line has one agent entry, which specified agent type
-     *                      parameters
-     *                      required by this agent separated with ",".
+     *         up agents. Each line has one agent entry, which specified agent type
+     *         parameters
+     *         required by this agent separated with ",".
      * @throws Exception - It is thrown when the given type name of the agent is not
-     *                   correctly formatted or the agent type is not supported yet.
+     *         correctly formatted or the agent type is not supported yet.
      */
     private static void readProjectIdAndKeyFileToHashMap(String fileDirectory) throws Exception {
         _configurationTuples = new ArrayList<>();
@@ -44,7 +53,7 @@ public class DialogAgentManagerTestMain {
                     List<Tuple<String, String>> dialogflowProjectIdAndJsonKeyFileList = new
                             ArrayList<>();
                     dialogflowProjectIdAndJsonKeyFileList.add(Tuple.of(projectIdAndJsonKey[1],
-                            System.getProperty("user.dir") + projectIdAndJsonKey[2]));
+                            _projectCoreDir.toString() + projectIdAndJsonKey[2]));
                     _configurationTuples.add(new ConfigurationTuple<>(ServiceProvider.DIALOGFLOW,
                             dialogflowProjectIdAndJsonKeyFileList));
                     break;
@@ -77,9 +86,8 @@ public class DialogAgentManagerTestMain {
         // the client.
         String languageCode = "en-US";
         String deviceType = "iPhone Google Assistant";
-        String currentClassPathFile = System.getProperty("user.dir");
-        String testTextFileDirectory = currentClassPathFile +
-                "/agent-dialogue-core/src/main/resources/TestTextFiles/";
+        String testTextFileDirectory = _projectCoreDir +
+                "/src/main/resources/TestTextFiles/";
         String nameOfTestedFile = "SampleConversation.txt";
         String nameOfFileWithProjectIdAndKeysLocations = "ProjectIdAndJsonKeyFileLocations.txt";
 

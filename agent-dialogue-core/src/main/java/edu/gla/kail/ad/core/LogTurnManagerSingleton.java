@@ -7,6 +7,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.nio.file.Paths;
 
 /**
  * Manage turns and store them in the output stream.
@@ -26,7 +27,16 @@ public final class LogTurnManagerSingleton {
         if (_instance == null) {
             _instance = new LogTurnManagerSingleton();
             // Directory to the folder with logs.
-            String logTurnPath = System.getProperty("user.dir") + "/Logs/DailyTurns";
+            String logTurnPath = Paths
+                    .get(LogTurnManagerSingleton
+                            .class
+                            .getProtectionDomain()
+                            .getCodeSource()
+                            .getLocation()
+                            .getPath())
+                    .getParent()
+                    .getParent()
+                    .toString() + "/Logs/DailyTurns";
             directoryExistsOrCreate(logTurnPath);
             logTurnPath += DateTime.now().toString();
             try {

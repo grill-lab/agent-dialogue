@@ -19,7 +19,6 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.UUID;
-import java.util.concurrent.TimeUnit;
 
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
@@ -39,7 +38,17 @@ public class DialogflowAgentTest {
      */
     @Before
     public void setUp() {
-        String currentClassPathFile = System.getProperty("user.dir");
+        String currentClassPathFile = Paths
+                .get(DialogflowAgentTest
+                        .class
+                        .getProtectionDomain()
+                        .getCodeSource()
+                        .getLocation()
+                        .getPath())
+                .getParent()
+                .getParent()
+                .toString();
+
         Path path = Paths.get(currentClassPathFile +
                 "/src/main/resources/myquotemaster-13899-04ed41718e57.json");
         _jsonKeyFileLocation = path.toString();
