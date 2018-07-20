@@ -22,6 +22,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
@@ -38,6 +40,15 @@ public class LogManagerSingleton {
     private static OutputStream _interactionsOutputStream;
     private static OutputStream _ratingsOutputStream;
     private static Firestore _database;
+    private static Path _projectSimulatorPath = Paths
+            .get(LogManagerSingleton
+                    .class
+                    .getProtectionDomain()
+                    .getCodeSource()
+                    .getLocation()
+                    .getPath())
+            .getParent()
+            .getParent();
 
     /**
      * Get instance of this class.
@@ -49,15 +60,16 @@ public class LogManagerSingleton {
 
             GoogleCredentials credentials;
             try {
-                // TODO(Adam): Change it.
                 InputStream serviceAccount = new FileInputStream
-                        ("/Users/Adam/Documents/Internship/agentdialogue-2cd4b-firebase-adminsdk-z39zw-4d5427d1fc.json");
+                        (_projectSimulatorPath +
+                                "/src/main/resources/agentdialogue-2cd4b-firebase-adminsdk-z39zw" +
+                                "-4d5427d1fc.json");
                 credentials = GoogleCredentials.fromStream(serviceAccount);
             } catch (Exception e) {
                 credentials = null;
                 System.out.println();
             }
-            checkNotNull(credentials, "Credentials used to initialise firestore are null.");
+            checkNotNull(credentials, "Credentials used to initialise FireStore are null.");
             FirebaseOptions options = new FirebaseOptions.Builder()
                     .setCredentials(credentials)
                     .build();
@@ -68,7 +80,8 @@ public class LogManagerSingleton {
 
             _instance = new LogManagerSingleton();
             // Directory to the folder with logs.
-            String logInteractionsPath = System.getProperty("user.dir") + "/Logs/interactions_logs";
+            String logInteractionsPath = Paths
+                    .get(_projectSimulatorPath.toString() + "/Logs/interactions_logs").toString();
             directoryExistsOrCreate(logInteractionsPath);
             logInteractionsPath += DateTime.now().toString();
             try {
@@ -77,7 +90,8 @@ public class LogManagerSingleton {
                 exception.getMessage();
             }
 
-            String logRatingsPath = System.getProperty("user.dir") + "/Logs/ratings_logs";
+            String logRatingsPath = Paths
+                    .get(_projectSimulatorPath.toString() + "/Logs/ratings_logs").toString();
             directoryExistsOrCreate(logRatingsPath);
             logRatingsPath += DateTime.now().toString();
             try {
@@ -115,7 +129,8 @@ public class LogManagerSingleton {
         if (interactionRequest != null) {
             interactionRequest.writeDelimitedTo(_interactionsOutputStream);
             DocumentReference docRef = _database.collection("clientInteractionRequest").document
-                    (interactionRequest.getTime().getSeconds() + "_" + interactionRequest.getTime().getNanos());
+                    (interactionRequest.getTime().getSeconds() + "_" + interactionRequest.getTime
+                            ().getNanos());
             Map<String, Object> data = new HashMap<>();
 
             data.put("client_id", interactionRequest.getClientIdValue());
@@ -136,7 +151,8 @@ public class LogManagerSingleton {
         } else if (interactionResponse != null) {
             interactionResponse.writeDelimitedTo(_interactionsOutputStream);
             DocumentReference docRef = _database.collection("clientInteractionResponse").document
-                    (interactionResponse.getTime().getSeconds() + "_" + interactionResponse.getTime().getNanos());
+                    (interactionResponse.getTime().getSeconds() + "_" + interactionResponse
+                            .getTime().getNanos());
             Map<String, Object> data = new HashMap<>();
 
             data.put("response_id", interactionResponse.getResponseId());

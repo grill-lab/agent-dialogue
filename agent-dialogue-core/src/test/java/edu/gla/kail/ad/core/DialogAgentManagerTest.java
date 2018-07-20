@@ -1,4 +1,3 @@
-/*
 package edu.gla.kail.ad.core;
 
 import com.google.cloud.Tuple;
@@ -14,7 +13,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -24,25 +22,31 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 
 // TODO(Adam): Restructure the majority of the class!
 @RunWith(JUnit4.class)
 public class DialogAgentManagerTest {
-    static List<ConfigurationTuple> _configurationTuples;
-    DialogAgentManager _dialogAgentManager;
-    InteractionRequest _interactionRequest;
+    private static List<ConfigurationTuple> _configurationTuples;
+    private DialogAgentManager _dialogAgentManager;
+    private InteractionRequest _interactionRequest;
 
     @BeforeClass
     public static void setUpClass() {
-        String currentClassPathFile = System.getProperty("user.dir");
-        String testTextFileDirectory = currentClassPathFile +
-                "/agent-dialogue-core/src/main/resources/TestTextFiles/ProjectIdAndJsonKeyFileLocations.txt";
-        _configurationTuples = new ArrayList();
+        Path projectCoreDir = Paths
+                .get(DialogAgentManagerTest
+                        .class
+                        .getProtectionDomain()
+                        .getCodeSource()
+                        .getLocation()
+                        .getPath())
+                .getParent()
+                .getParent();
+        String testTextFileDirectory = projectCoreDir +
+                "/src/main/resources/TestTextFiles/ProjectIdAndJsonKeyFileLocations.txt";
+        _configurationTuples = new ArrayList<>();
         Path path = Paths.get(testTextFileDirectory);
-        System.out.println(testTextFileDirectory);
         List<String> lines = null;
         try {
             lines = Files.readAllLines(path, StandardCharsets.UTF_8);
@@ -55,9 +59,9 @@ public class DialogAgentManagerTest {
             switch (projectIdAndJsonKey[0]) {
                 case "Dialogflow":
                     List<Tuple<String, String>> dialogflowProjectIdAndJsonKeyFileList = new
-                            ArrayList();
+                            ArrayList<>();
                     dialogflowProjectIdAndJsonKeyFileList.add(Tuple.of(projectIdAndJsonKey[1],
-                            System.getProperty("user.dir") + projectIdAndJsonKey[2]));
+                            projectCoreDir + projectIdAndJsonKey[2]));
                     _configurationTuples.add(new ConfigurationTuple(ServiceProvider
                             .DIALOGFLOW, dialogflowProjectIdAndJsonKeyFileList));
                     break;
@@ -109,11 +113,9 @@ public class DialogAgentManagerTest {
                 .build();
     }
 
-
-    */
-/**
+    /**
      * Test if agents are being set up from the provided configurationTuple.
-     *//*
+     */
 
     @Test
     public void testSetUpAgents() {
@@ -135,4 +137,4 @@ public class DialogAgentManagerTest {
     }
 
 }
-*/
+

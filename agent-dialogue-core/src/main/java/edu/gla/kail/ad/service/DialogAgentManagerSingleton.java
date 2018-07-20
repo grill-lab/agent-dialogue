@@ -94,10 +94,17 @@ final class DialogAgentManagerSingleton {
      */
     private static List<ConfigurationTuple> supportingFunctionToBeDeleted() {
         List<ConfigurationTuple> configurationTuples = new ArrayList<>();
-        String currentClassPathFile = System.getProperty("user.dir");
-        Path path = Paths.get(currentClassPathFile +
-                "/agent-dialogue-core/src/main/resources/TestTextFiles" +
-                "/ProjectIdAndJsonKeyFileLocations.txt");
+        Path projectCoreDir = Paths
+                .get(DialogAgentManagerSingleton
+                        .class
+                        .getProtectionDomain()
+                        .getCodeSource()
+                        .getLocation()
+                        .getPath())
+                .getParent()
+                .getParent();
+        Path path = Paths.get(projectCoreDir +
+                "/src/main/resources/TestTextFiles/ProjectIdAndJsonKeyFileLocations.txt");
         List<String> lines;
         try {
             lines = Files.readAllLines(path, StandardCharsets.UTF_8);
@@ -114,7 +121,7 @@ final class DialogAgentManagerSingleton {
                     List<Tuple<String, String>> dialogflowProjectIdAndJsonKeyFileList = new
                             ArrayList<>();
                     dialogflowProjectIdAndJsonKeyFileList.add(Tuple.of(projectIdAndJsonKey[1],
-                            currentClassPathFile + projectIdAndJsonKey[2]));
+                            projectCoreDir + projectIdAndJsonKey[2]));
                     configurationTuples.add(new ConfigurationTuple<>(ServiceProvider.DIALOGFLOW,
                             dialogflowProjectIdAndJsonKeyFileList));
                     break;
