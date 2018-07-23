@@ -4,7 +4,8 @@
 <head>
     <meta charset = "utf-8">
     <title>Agent Dialogue Web Simulator</title>
-    <link href = "resources/css/App.css" type = "text/css" rel = "stylesheet"/>
+    <link href = "resources/css/App-index-interface.css" type = "text/css" rel = "stylesheet"/>
+    <link href = "resources/css/Header.css" type = "text/css" rel = "stylesheet"/>
     <script src = "http://code.jquery.com/jquery-latest.min.js"></script>
     <script src = "js/sendRequestToServlet.js"></script>
     <script src = "js/onLoad.js"></script>
@@ -14,11 +15,17 @@
 </head>
 
 <body>
-    <div class = "App">
+    <div>
         <header class = "App-header">
             <img src = "resources/img/Agent_logo.jpg" class = "App-logo" alt = "logo"/>
             <h1 class = "App-title">Agent Dialogue Web Simulator</h1>
         </header>
+        <div>
+            <ul class = "functionality-menu">
+                <li><a class = "active" href = "index.html">Home</a></li>
+                <li><a href = "offline-mt-rating.html">Offline MT Ratings</a></li>
+            </ul>
+        </div>
     </div>
     
     <div class = "main">

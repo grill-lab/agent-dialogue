@@ -23,34 +23,6 @@
     }
 }
 
-body {
-    margin: 0;
-    padding: 0;
-    font-family: sans-serif;
-}
-
-.App-header {
-    background-color: #ffcb95;
-    height: 6vw;
-    padding: 0.7vw;
-    padding-left: 1.4vw;
-    padding-right: 1.4vw;
-}
-
-.App-logo {
-    margin-left: auto;
-    margin-right: auto;
-    float: left;
-    height: 6vw;
-}
-
-.App-title {
-    font-size: 3vw;
-    min-font-size: 0.6em;
-    font-family: Courier New;
-    text-align: center;
-}
-
 .main {
     text-align: center;
     overflow: auto;

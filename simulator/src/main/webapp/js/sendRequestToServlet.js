@@ -13,7 +13,7 @@ function sendRequestToAgents() {
     _awaitingResponses += 1;
     $('#awaiting-responses').text(_awaitingResponses);
     $.ajax({
-        url: "java-script-linker",
+        url: "ad-client-service-servlet",
         type: 'POST',
         headers: {"Operation": "sendRequestToAgents"},
         dataType: 'json',

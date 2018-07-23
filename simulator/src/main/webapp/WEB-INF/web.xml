@@ -17,11 +17,20 @@
 
 
     <servlet>
-        <servlet-name>JavaScriptLinker</servlet-name>
-        <servlet-class>edu.gla.kail.ad.service.JavaScriptLinker</servlet-class>
+        <servlet-name>AdClientServiceServlet</servlet-name>
+        <servlet-class>edu.gla.kail.ad.service.AdClientServiceServlet</servlet-class>
     </servlet>
     <servlet-mapping>
-        <servlet-name>JavaScriptLinker</servlet-name>
-        <url-pattern>/java-script-linker</url-pattern>
+        <servlet-name>AdClientServiceServlet</servlet-name>
+        <url-pattern>/ad-client-service-servlet</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>OfflineMtRankingServlet</servlet-name>
+        <servlet-class>edu.gla.kail.ad.service.OfflineMtRankingServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>OfflineMtRankingServlet</servlet-name>
+        <url-pattern>/offline-mt-ranking-servlet</url-pattern>
     </servlet-mapping>
 </web-app>

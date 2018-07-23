@@ -103,6 +103,10 @@ public class LogManagerSingleton {
         return _instance;
     }
 
+    public static Firestore returnDatabase() {
+        return getLogManagerSingleton()._database;
+    }
+
     /**
      * Validate whether the directory exists and if not, then create it.
      */
@@ -128,13 +132,15 @@ public class LogManagerSingleton {
         // TODO(Adam): Handle the exception.
         if (interactionRequest != null) {
             interactionRequest.writeDelimitedTo(_interactionsOutputStream);
-            DocumentReference docRef = _database.collection("clientInteractionRequest").document
+            DocumentReference docRef = _database.collection("clientWebSimulator").document
+                    ("experimentalUi").collection("clientInteractionRequest").document
                     (interactionRequest.getTime().getSeconds() + "_" + interactionRequest.getTime
                             ().getNanos());
             Map<String, Object> data = new HashMap<>();
 
             data.put("client_id", interactionRequest.getClientIdValue());
-            data.put("time", interactionRequest.getTime().toString());
+            data.put("time_seconds", interactionRequest.getTime().getSeconds());
+            data.put("time_nanos", interactionRequest.getTime().getNanos());
             data.put("userID", interactionRequest.getUserID());
             data.put("interaction_type", interactionRequest.getInteraction().getTypeValue());
             data.put("interaction_device_type", interactionRequest.getInteraction().getDeviceType
@@ -150,13 +156,15 @@ public class LogManagerSingleton {
             docRef.set(data);
         } else if (interactionResponse != null) {
             interactionResponse.writeDelimitedTo(_interactionsOutputStream);
-            DocumentReference docRef = _database.collection("clientInteractionResponse").document
+            DocumentReference docRef = _database.collection("clientWebSimulator").document
+                    ("experimentalUi").collection("clientInteractionResponse").document
                     (interactionResponse.getTime().getSeconds() + "_" + interactionResponse
                             .getTime().getNanos());
             Map<String, Object> data = new HashMap<>();
 
             data.put("response_id", interactionResponse.getResponseId());
-            data.put("time", interactionResponse.getTime().toString());
+            data.put("time_seconds", interactionResponse.getTime().getSeconds());
+            data.put("time_nanos", interactionResponse.getTime().getNanos());
             data.put("client_id", interactionResponse.getClientIdValue());
             data.put("message_status", interactionResponse.getMessageStatusValue());
             data.put("error_message", interactionResponse.getErrorMessage());
@@ -208,12 +216,14 @@ public class LogManagerSingleton {
         rating.writeDelimitedTo(_ratingsOutputStream);
         _ratingsOutputStream.flush();
 
-        DocumentReference docRef = _database.collection("clientRatings").document
-                (rating.getTime().getSeconds() + "_" + rating.getTime().getNanos());
+        DocumentReference docRef = _database.collection("clientWebSimulator").document
+                ("experimentalUi").collection("clientRatings").document(rating.getTime()
+                .getSeconds() + "_" + rating.getTime().getNanos());
         Map<String, Object> data = new HashMap<>();
 
         data.put("experiment_id", rating.getExperimentId());
-        data.put("time", rating.getTime().toString());
+        data.put("time_seconds", rating.getTime().getSeconds());
+        data.put("time_nanos", rating.getTime().getNanos());
         data.put("response_id", rating.getResponseId());
         data.put("score", rating.getScore());
         data.put("request_id", rating.getRequestId());
@@ -231,6 +241,7 @@ public class LogManagerSingleton {
         // TODO(Adam): Handle the exception.
         _interactionsOutputStream.close();
         _instance = null;
+        _instance = LogManagerSingleton.getLogManagerSingleton();
     }
 
 }

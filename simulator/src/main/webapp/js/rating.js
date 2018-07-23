@@ -3,7 +3,7 @@ let _ratingScale = 5;
 function updateRating(starNumber, responseId) {
     let $ratingDiv = $("#" + responseId.toString());
     $.ajax({
-        url: "java-script-linker",
+        url: "ad-client-service-servlet",
         type: 'POST',
         headers: {"Operation": "updateRating"},
         dataType: 'text',
