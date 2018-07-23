@@ -26,8 +26,8 @@ import static edu.gla.kail.ad.Client.ClientId.WEB_SIMULATOR;
  * Responsible for storing logs.
  * TODO(Adam): Store logs.
  */
-@WebServlet("/java-script-linker")
-public class JavaScriptLinker extends HttpServlet {
+@WebServlet("/ad-client-service-servlet")
+public class AdClientServiceServlet extends HttpServlet {
     private static LogManagerSingleton _logManagerSingleton = LogManagerSingleton
             .getLogManagerSingleton();
     private static AgentDialogueClientService _client = new AgentDialogueClientService
@@ -69,7 +69,8 @@ public class JavaScriptLinker extends HttpServlet {
     private void updateRating(HttpServletRequest request, HttpServletResponse response) throws
             IOException {
         _logManagerSingleton.addRating(request.getParameter("ratingScore"), request.getParameter
-                ("responseId"), request.getParameter("experimentId"), request.getParameter("requestId"));
+                ("responseId"), request.getParameter("experimentId"), request.getParameter
+                ("requestId"));
     }
 
     /**

@@ -80,5 +80,6 @@ public final class LogTurnManagerSingleton {
         // TODO(Adam): Code below is buggy - it can create issues. Resolve it!
         _outputStream.close();
         _instance = null;
+        _instance = LogTurnManagerSingleton.getLogTurnManagerSingleton();
     }
 }
