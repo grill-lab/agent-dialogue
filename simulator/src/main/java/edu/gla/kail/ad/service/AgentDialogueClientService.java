@@ -20,7 +20,7 @@ public class AgentDialogueClientService {
     // respond; return response or raise an exception.
 
     public AgentDialogueClientService(String host, int port) {
-        this(ManagedChannelBuilder.forAddress(host, port).usePlaintext());
+        this(ManagedChannelBuilder.forAddress(host, port).usePlaintext(true));
     }
 
     public AgentDialogueClientService(ManagedChannelBuilder<?> channelBuilder) {
