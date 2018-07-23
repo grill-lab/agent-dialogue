@@ -6,6 +6,7 @@
     <title>Agent Dialogue Web Simulator</title>
     <link href = "resources/css/App-index-interface.css" type = "text/css" rel = "stylesheet"/>
     <link href = "resources/css/Header.css" type = "text/css" rel = "stylesheet"/>
+    <link href = "resources/css/offline-mt-rating.css" type = "text/css" rel = "stylesheet"/>
     <script src = "http://code.jquery.com/jquery-latest.min.js"></script>
     <script src = "js/test.js"></script>
 </head>
@@ -23,8 +24,31 @@
         </div>
     </div>
     
-    
-    
-    
+    <div class = "main">
+        <div class = "right">
+            <div class = "user-details-form">
+                <h3>Experiment details</h3>
+                <label for = "user-id">User ID:</label>
+                <input type = "text" placeholder = "Enter Username" name = "experiment-details"
+                       id = "user-id"/>
+                <br>
+                <label for = "experiment-id">Experiment ID:</label>
+                <input type = "text" placeholder = "Enter Username" name = "experiment-details"
+                       id = "experiment-id"/>
+                <br>
+                <button class = "submit-button" type = "button" onclick = "test()">Start Session
+                </button>
+            </div>
+            <div class = "options">
+                Current task ID: display only? dropdown menu?<br>
+                Current session id: display only<br>
+            </div>
+        </div>
+        <div class = "left">
+            Please enter User ID and Experiment ID.
+        </div>
+    </div>
+
+
 </body>
 </html>
