@@ -2,6 +2,8 @@ FROM openjdk:8
 
 RUN apt-get update && apt-get install -y maven
 
+COPY . /usr/src/app
+
 WORKDIR /code
 
 ADD . /code

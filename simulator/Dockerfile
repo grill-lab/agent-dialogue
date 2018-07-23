@@ -10,5 +10,5 @@ RUN ["mvn", "install"]
 
 EXPOSE 8070 8080
 
-CMD ["mvn jetty:run"]
+CMD ["mvn", "jetty:run"]
 
