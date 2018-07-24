@@ -3,40 +3,41 @@ $(document).ready(function () {
     if (userId != null) {
         document.getElementById("user").value = userId;
         $('#user-submit-button').text("Change username");
+        $.ajax({
+            url: "offline-mt-ranking-servlet",
+            type: 'POST',
+            headers: {"operation": "validateUser"},
+            dataType: 'text',
+            data: {
+                userId: userId
+            },
+            success: function (response) {
+                if (response == "false") {
+                    alert("The User Id is invalid.");
+                } else {
+                    alert(response + userId);
+                }
+            },
+            error: function (data, status, error) {
+                alert("Error data: " + data + "\nStatus: " + status + "\nError message:" + error);
+            },
+        });
     }
 
     // When user presses "enter" in userId field, the request is being sent.
     $('#user').keypress(function (keyPressed) {
         if (keyPressed.which == 13) {
             keyPressed.preventDefault();
-            startExperiment();
+            validateUser();
         }
     });
 });
 
-function startExperiment() {
+function validateUser() {
     let basicUrl = (new URL(document.location)).origin + (new URL(document.location)).pathname;
     userId = document.getElementById("user").value;
+    window.location.replace(basicUrl + "?user=" + userId);
 
-    $.ajax({
-        url: "offline-mt-ranking-servlet",
-        type: 'POST',
-        headers: {"operation": "startExperiment"},
-        dataType: 'text',
-        data: {
-            userId: userId
-        },
-        success: function (response) {
-            if (response == "false") {
-                alert("The User Id is invalid.")
-            } else {
-                window.location.replace(basicUrl + "?user=" + userId);
-            }
-        },
-        error: function (data, status, error) {
-            alert("Error data: " + data + "\nStatus: " + status + "\nError message:" + error);
-        },
-    });
 }
 
 function nextTask() {

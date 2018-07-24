@@ -15,13 +15,13 @@ import java.util.concurrent.ExecutionException;
 
 @WebServlet("/offline-mt-ranking-servlet")
 public class OfflineMtRankingServlet extends HttpServlet {
-    Firestore _database = LogManagerSingleton.returnDatabase();
+    private Firestore _database = LogManagerSingleton.returnDatabase();
 
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws
             IOException {
         String userId = request.getParameter("userId");
         switch (request.getHeader("operation")) {
-            case "startExperiment":
+            case "validateUser":
                 response.getWriter().write(verifyUser(userId).toString());
                 break;
             case "rateTask":
