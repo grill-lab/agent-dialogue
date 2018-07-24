@@ -5,7 +5,7 @@ function updateRating(starNumber, responseId) {
     $.ajax({
         url: "ad-client-service-servlet",
         type: 'POST',
-        headers: {"Operation": "updateRating"},
+        headers: {"operation": "updateRating"},
         dataType: 'text',
         data: {
             ratingScore: starNumber + 1,
