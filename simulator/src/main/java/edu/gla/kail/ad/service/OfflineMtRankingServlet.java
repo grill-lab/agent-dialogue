@@ -36,12 +36,16 @@ public class OfflineMtRankingServlet extends HttpServlet {
     }
 
     private Boolean verifyUser(String userId) {
+        if (userId == null || userId == "") {
+            return false;
+        }
         DocumentReference docRef = _database.collection("clientWebSimulator").document
                 ("agent-dialogue-experiments").collection("users").document(userId);
         ApiFuture<DocumentSnapshot> future = docRef.get();
         try {
             if (future.get().exists()) {
-                return true;}
+                return true;
+            }
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
         }
