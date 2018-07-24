@@ -38,7 +38,7 @@ public class AdClientServiceServlet extends HttpServlet {
      */
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws
             IOException {
-        switch (request.getHeader("Operation")) {
+        switch (request.getHeader("operation")) {
             case "sendRequestToAgents":
                 sendRequestToAgents(request, response);
                 break;

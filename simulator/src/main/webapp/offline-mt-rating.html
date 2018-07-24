@@ -8,7 +8,7 @@
     <link href = "resources/css/Header.css" type = "text/css" rel = "stylesheet"/>
     <link href = "resources/css/offline-mt-rating.css" type = "text/css" rel = "stylesheet"/>
     <script src = "http://code.jquery.com/jquery-latest.min.js"></script>
-    <script src = "js/test.js"></script>
+    <script src = "js/offlineMtRating.js"></script>
 </head>
 <body>
     <div>
@@ -28,15 +28,11 @@
         <div class = "right">
             <div class = "user-details-form">
                 <h3>Experiment details</h3>
-                <label for = "user-id">User ID:</label>
+                <label for = "user">User ID:</label>
                 <input type = "text" placeholder = "Enter Username" name = "experiment-details"
-                       id = "user-id"/>
+                       id = "user"/>
                 <br>
-                <label for = "experiment-id">Experiment ID:</label>
-                <input type = "text" placeholder = "Enter Username" name = "experiment-details"
-                       id = "experiment-id"/>
-                <br>
-                <button class = "submit-button" type = "button" onclick = "test()">Start Session
+                <button id = "user-submit-button" class = "submit-button" type = "button" onclick = "startExperiment()">Start Session
                 </button>
             </div>
             <div class = "options">
