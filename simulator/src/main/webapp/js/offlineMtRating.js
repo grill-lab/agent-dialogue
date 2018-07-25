@@ -2,6 +2,7 @@ var _maxTasksAssigned = 5;
 var _listOfTasks = null;
 var _tasksRating = {};
 var _ratingScaleOffline = 5;
+var _userId = null;
 
 $(document).ready(function () {
     // When user presses "enter" in userId field, the request is being sent.
@@ -12,11 +13,11 @@ $(document).ready(function () {
         }
     });
 
-    userId = (new URL(document.location)).searchParams.get("user");
-    if (userId != null) {
-        document.getElementById("user").value = userId;
+    _userId = (new URL(document.location)).searchParams.get("user");
+    if (_userId != null) {
+        document.getElementById("user").value = _userId;
         $('#user-submit-button').text("Change username");
-        validateUserAndStartExperiment(userId)
+        validateUserAndStartExperiment(_userId)
     }
 });
 
@@ -67,14 +68,15 @@ function loadTasks(userId) {
             let $tasks_list = $('.tasks-list');
             $tasks_list.innerText = "";
             for (let i = 0; i < _listOfTasks.length; i++) {
-                let $task = $("<span onclick=showTaskWithNumber(i)>").text("Task " + i + 1);
+                let $task = $("<span id = \'" + i + "\' onclick=\'showTaskWithNumber(" + i + ")\'>")
+                    .text("Task " + i + 1)
+                    .append("<img id='rating-indicator' src='../resources/img/question-circle-solid.svg' />");
                 $tasks_list.append($task).append("<br>");
                 _tasksRating[i] = 0;
             }
             $(".tasks-list-block").append("<button id = 'next-batch-button' class = 'submit-button' " +
-                "type = 'button' onclick = \'loadTasks(" + userId + "\")\'>").text("Next batch");
+                "type = 'button' onclick = \'loadTasks(" + userId + ")\'>").text("Next batch");
             if (_listOfTasks.length > 0) {
-
                 showTaskWithNumber(0);
             } else {
                 $tasks_list.innerText = "The are no more available tasks in the database.";
@@ -109,15 +111,28 @@ function showTaskWithNumber(taskNumber) {
     createMtRating(taskNumber);
 }
 
-function rateTask(taskNumber, rating) {
-    _tasksRating[taskNumber] = rating;
-    
-    // send a rating to servlet:
-    // Update user dabatase - remove task reference from user list
-    // update rating database
-    // update the view of rating starts
-    // update the list of tasks on right
-    // update rating reference list of a task
+function rateTask(taskNumber, starNumber) {
+    let $ratingDiv = $("#current-rating");
+    $.ajax({
+        url: "offline-mt-ranking-servlet",
+        type: 'POST',
+        headers: {"operation": "rateTask"},
+        dataType: 'text',
+        data: {
+            ratingScore: starNumber + 1,
+            userId: _userId,
+            taskId: _listOfTasks[taskNumber].taskId
+        },
+        success: function () {
+            _tasksRating[taskNumber] = rating;
+            $(".tasks-list").find('span[id="' + taskNumber + '"]')[0]
+                .find('img[id="rating-indicator"]')[0].src = '../resources/img/check-solid.svg';
+            $ratingDiv.find('img[id="rating-indicator"]')[0].src = '../resources/img/check-solid.svg';
+        },
+        error: function (data, status, error) {
+            alert("Error data: " + data + "\nStatus: " + status + "\nError message:" + error);
+        },
+    });
 }
 
 function createMtRating(taskNumber) {
@@ -125,9 +140,9 @@ function createMtRating(taskNumber) {
     let $rating = $('<div class = "rating" id = "current-rating">');
     for (let numberOfStars = 0; numberOfStars < _ratingScaleOffline; numberOfStars++) {
         $rating.append("<img id='star-rating' src='../resources/img/star-regular.svg' " +
-            "onmouseover= \'selectStars(" + numberOfStars + "\")\' " +
-            "onmouseout = \'deselectStars(" + numberOfStars + "\")\' " +
-            "onclick=\'rateTask(" + taskNumber + ",\"" + numberOfStars + "\")\'/>");
+            "onmouseover= \'selectStars(" + numberOfStars + ")\' " +
+            "onmouseout = \'deselectStars(" + numberOfStars + ")\' " +
+            "onclick=\'rateTask(" + taskNumber + ", " + numberOfStars + ")\' />");
     }
     $rating.append("<img id='rating-indicator' src='../resources/img/question-circle-solid.svg' />");
     $(".rating-interface-block").append($rating);
@@ -136,7 +151,7 @@ function createMtRating(taskNumber) {
 
 function selectStars(starNumber) {
     let $stars = $("#current-rating").find('img[id="star-rating"]');
-    for (i = 0; i < $stars.length; i++) {
+    for (let i = 0; i < $stars.length; i++) {
         if (i <= starNumber) {
             $stars[i].src = '../resources/img/star-solid.svg';
         }
@@ -149,7 +164,7 @@ function selectStars(starNumber) {
 function deselectStars(starNumber) {
     let $ratingDiv = $("#current-rating");
     let stars = $ratingDiv.find('img[id="star-rating"]');
-    for (i = 0; i < stars.length; i++) {
+    for (let i = 0; i < stars.length; i++) {
         if (i < _tasksRating[starNumber]) {
             stars[i].src = '../resources/img/star-solid.svg';
         }
