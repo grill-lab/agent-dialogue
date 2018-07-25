@@ -21,8 +21,11 @@ public class OfflineMtRankingServlet extends HttpServlet {
             IOException {
         String userId = request.getParameter("userId");
         switch (request.getHeader("operation")) {
-            case "validateUser":
+            case "validateUserAndStartExperiment":
                 response.getWriter().write(verifyUser(userId).toString());
+                break;
+            case "loadTasks":
+
                 break;
             case "rateTask":
                 break;
@@ -36,7 +39,7 @@ public class OfflineMtRankingServlet extends HttpServlet {
     }
 
     private Boolean verifyUser(String userId) {
-        if (userId == null || userId == "") {
+        if (userId == null || userId.equals("")) {
             return false;
         }
         DocumentReference docRef = _database.collection("clientWebSimulator").document
