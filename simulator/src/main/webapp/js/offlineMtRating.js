@@ -17,7 +17,7 @@ $(document).ready(function () {
     if (_userId != null) {
         document.getElementById("user").value = _userId;
         $('#user-submit-button').text("Change username");
-        validateUserAndStartExperiment(_userId)
+        validateUserAndStartExperiment()
     }
 });
 
@@ -27,22 +27,22 @@ function redirectToUserPage() {
     window.location.replace(basicUrl + "?user=" + userId);
 }
 
-function validateUserAndStartExperiment(userId) {
+function validateUserAndStartExperiment() {
     $.ajax({
         url: "offline-mt-ranking-servlet",
         type: 'POST',
         headers: {"operation": "validateUserAndStartExperiment"},
         dataType: 'text',
         data: {
-            userId: userId
+            userId: _userId
         },
         success: function (response) {
             if (response == "false") {
-                alert("The User Id: " + userId + " is invalid.");
+                alert("The User Id: " + _userId + " is invalid.");
                 $('.user-details-form').append($("<div>").text("INVALID USER ID"));
             }
-            else {
-                loadTasks(userId);
+            else if (response == "true") {
+                loadTasks(_userId);
             }
         },
         error: function (data, status, error) {
@@ -52,7 +52,7 @@ function validateUserAndStartExperiment(userId) {
 }
 
 
-function loadTasks(userId) {
+function loadTasks(_userId) {
     _tasksRating = {};
     $.ajax({
         url: "offline-mt-ranking-servlet",
@@ -60,7 +60,7 @@ function loadTasks(userId) {
         headers: {"operation": "loadTasks"},
         dataType: 'json',
         data: {
-            userId: userId,
+            userId: _userId,
             maxTasksAssigned: _maxTasksAssigned
         },
         success: function (response) {
@@ -75,7 +75,7 @@ function loadTasks(userId) {
                 _tasksRating[i] = 0;
             }
             $(".tasks-list-block").append("<button id = 'next-batch-button' class = 'submit-button' " +
-                "type = 'button' onclick = \'loadTasks(" + userId + ")\'>").text("Next batch");
+                "type = 'button' onclick = \'loadTasks(" + _userId + ")\'>").text("Next batch");
             if (_listOfTasks.length > 0) {
                 showTaskWithNumber(0);
             } else {
