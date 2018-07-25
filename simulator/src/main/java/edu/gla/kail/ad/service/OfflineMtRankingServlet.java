@@ -5,6 +5,7 @@ import com.google.api.core.ApiFuture;
 import com.google.cloud.firestore.DocumentReference;
 import com.google.cloud.firestore.DocumentSnapshot;
 import com.google.cloud.firestore.Firestore;
+import com.google.gson.JsonObject;
 
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -25,25 +26,42 @@ public class OfflineMtRankingServlet extends HttpServlet {
                 response.getWriter().write(verifyUser(userId).toString());
                 break;
             case "loadTasks":
-                //     check if the user has any tasks assigned,
-                //         not maxNum..:
-                //             assign more tasks
-                //     download assigned tasks
+                Integer maxTasksAssigned = Integer.valueOf(request.getParameter("maxTasksAssigned"));
+                response.getWriter().write(loadTasks(userId, maxTasksAssigned));
                 break;
             case "rateTask":
-                // send a rating to servlet:
-                // Update user dabatase - remove task reference from user list
-                // update rating database
-                // update rating reference list of a task in firestore
+                Integer ratingScore = Integer.valueOf(request.getParameter("ratingScore"));
+                String taskId = request.getParameter("taskId");
+                response.getWriter().write(rateTask(userId, ratingScore, taskId));
                 break;
             default:
-                System.out.println("well");
+                response.getWriter().write("false");
         }
     }
 
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         doPost(request, response);
     }
+
+    private String loadTasks(String userId, Integer maxTasksAssigned) {
+        JsonObject json = new JsonObject();
+        //     check if the user has any tasks assigned,
+        //         not maxNum..:
+        //             assign more tasks
+        //     download assigned tasks
+        return json.toString();
+    }
+    private String rateTask(String userId, Integer ratingScore, String taskId) {
+        JsonObject json = new JsonObject();
+        json.addProperty("sth", "value");
+        // send a rating to servlet:
+        // Update user dabatase - remove task reference from user list
+        // update rating database
+        // update rating reference list of a task in Firestore
+        return json.toString();
+    }
+
+
 
     private Boolean verifyUser(String userId) {
         if (userId == null || userId.equals("")) {
