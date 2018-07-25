@@ -64,6 +64,7 @@ function loadTasks(_userId) {
             maxTasksAssigned: _maxTasksAssigned
         },
         success: function (response) {
+            alert("success in loading tasks");
             _listOfTasks = response.tasks;
             let $tasks_list = $('.tasks-list');
             $tasks_list.innerText = "";
