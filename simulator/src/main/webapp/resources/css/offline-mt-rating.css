@@ -4,9 +4,23 @@
     margin-top: 7px;
 }
 
+.task-details {
+    background-color: darksalmon;
+    padding: 10px 15px;
+    margin-top: 7px;
+}
+
 .tasks-list-block {
     background-color: #e9b647;
     padding: 10px 15px;
     margin-top: 7px;
 
+}
+
+#rating-interface-block {
+    text-align: center;
+    width: 75%;
+    position: center;
+    margin-left: auto;
+    margin-right: auto;
 }

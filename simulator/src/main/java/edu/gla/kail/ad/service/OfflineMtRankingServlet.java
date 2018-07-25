@@ -25,7 +25,10 @@ public class OfflineMtRankingServlet extends HttpServlet {
                 response.getWriter().write(verifyUser(userId).toString());
                 break;
             case "loadTasks":
-
+                //     check if the user has any tasks assigned,
+                //         not maxNum..:
+                //             assign more tasks
+                //     download assigned tasks
                 break;
             case "rateTask":
                 break;
