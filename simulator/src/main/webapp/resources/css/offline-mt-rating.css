@@ -14,7 +14,13 @@
     background-color: #e9b647;
     padding: 10px 15px;
     margin-top: 7px;
+}
 
+#tasks-indicator {
+    text-align: center;
+    white-space: nowrap;
+    margin: auto;
+    width: 1.4vw;
 }
 
 #rating-interface-block {
@@ -23,4 +29,29 @@
     position: center;
     margin-left: auto;
     margin-right: auto;
+}
+
+
+.tasks-list-block li {
+    display:inline;
+    text-align: center;
+    margin: auto;
+    list-style-type: none;
+}
+
+.tasks-list-block li a {
+    display:inline-block;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+    list-style-type: none;
+}
+
+.tasks-list-block li a:hover:not(.active) {
+    background-color: #d57c1c;
+}
+
+.tasks-list-block .active {
+    background-color: #b71115;
 }

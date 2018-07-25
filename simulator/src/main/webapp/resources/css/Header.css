@@ -35,14 +35,14 @@ body {
     background-color: #ff6928;
 }
 
-li {
+.functionality-menu li {
     display:inline;
     text-align: center;
     margin: auto;
     list-style-type: none;
 }
 
-li a {
+.functionality-menu li a {
     display:inline-block;
     color: white;
     text-align: center;
@@ -51,10 +51,10 @@ li a {
     list-style-type: none;
 }
 
-li a:hover:not(.active) {
+.functionality-menu li a:hover:not(.active) {
     background-color: #f59024;
 }
 
-.active {
+.functionality-menu .active {
     background-color: #b71115;
 }

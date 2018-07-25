@@ -68,14 +68,14 @@ function loadTasks(_userId) {
             let $tasks_list = $('.tasks-list');
             $tasks_list.innerText = "";
             for (let i = 0; i < Object.keys(_listOfTasks).length; i++) {
-                let $task = $("<span id = \'" + i + "\' onclick=\'showTaskWithNumber(" + i + ")\'>")
-                    .text("Task " + i + 1)
-                    .append("<img id='rating-indicator' src='../resources/img/question-circle-solid.svg' />");
+                let $task = $("<a class = 'task-span' id = \'" + i + "\' onclick=\'showTaskWithNumber(" + i + ")\'>" +
+                    "Task " + i + 1 + " <img id='tasks-indicator' " +
+                    "src='../resources/img/question-circle-solid.svg' /></a>")
                 $tasks_list.append($task).append("<br>");
                 _tasksRating[i] = 0;
             }
             $(".tasks-list-block").append("<button id = 'next-batch-button' class = 'submit-button' " +
-                "type = 'button' onclick = \'loadTasks(" + _userId + ")\'>").text("Next batch");
+                "type = 'button' onclick = \'loadTasks(" + _userId + ")\'>Next Batch</button>");
             if (Object.keys(_listOfTasks).length > 0) {
                 showTaskWithNumber(0);
             } else {
@@ -91,7 +91,7 @@ function loadTasks(_userId) {
 function showTaskWithNumber(taskNumber) {
     let task = JSON.parse(_listOfTasks[taskNumber]);
     let $current_task_details = $("#current-task-details");
-    $current_task_details.innerText = "";
+    $current_task_details.empty();
     $current_task_details.append("<div>Client ID: " + task.clientId + "</div>");
     $current_task_details.append("<div>Device type: " + task.deviceType + "</div>");
     $current_task_details.append("<div>Language code: " + task.language_code + "</div>");
@@ -127,7 +127,7 @@ function rateTask(taskNumber, starNumber) {
         success: function () {
             _tasksRating[taskNumber] = rating;
             $(".tasks-list").find('span[id="' + taskNumber + '"]')[0]
-                .find('img[id="rating-indicator"]')[0].src = '../resources/img/check-solid.svg';
+                .find('img[id="tasks-indicator"]')[0].src = '../resources/img/check-solid.svg';
             $ratingDiv.find('img[id="rating-indicator"]')[0].src = '../resources/img/check-solid.svg';
         },
         error: function (data, status, error) {
