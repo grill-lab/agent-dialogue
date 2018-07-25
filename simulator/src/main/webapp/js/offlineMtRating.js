@@ -95,11 +95,11 @@ function showTaskWithNumber(taskNumber) {
     $current_task_details.append("<div>Client ID: " + task.clientId + "</div>");
     $current_task_details.append("<div>Device type: " + task.deviceType + "</div>");
     $current_task_details.append("<div>Language code: " + task.language_code + "</div>");
-    let $rating_interface_block = $(".rating-interface-block");
-    $rating_interface_block.innerText = "";
-    alert(task.turns);
-    let turns = task.turns;
-    for (let turn in turns) {
+    let $rating_interface_block = $("#rating-interface-block");
+    $rating_interface_block.empty();
+    let turns = JSON.parse(task.turns);
+    for (let i in Object.keys(turns)) {
+        let turn = JSON.parse(turns[i]);
         if (turn.request != null) {
             $rating_interface_block.append($('<div id="request"/>')
                 .append(turn.requestTime_seconds + "<br>" + turn.request));
@@ -146,7 +146,7 @@ function createMtRating(taskNumber) {
             "onclick=\'rateTask(" + taskNumber + ", " + numberOfStars + ")\' />");
     }
     $rating.append("<img id='rating-indicator' src='../resources/img/question-circle-solid.svg' />");
-    $(".rating-interface-block").append($rating);
+    $("#rating-interface-block").append($rating);
 }
 
 
