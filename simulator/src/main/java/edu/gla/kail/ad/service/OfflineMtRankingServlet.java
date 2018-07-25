@@ -1,14 +1,17 @@
 package edu.gla.kail.ad.service;
 
 
+import com.google.api.client.json.Json;
 import com.google.api.core.ApiFuture;
 import com.google.cloud.firestore.DocumentReference;
 import com.google.cloud.firestore.DocumentSnapshot;
 import com.google.cloud.firestore.Firestore;
 import com.google.cloud.firestore.QueryDocumentSnapshot;
 import com.google.cloud.firestore.QuerySnapshot;
+import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.protobuf.Timestamp;
+import org.json.JSONObject;
 
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -138,8 +141,9 @@ public class OfflineMtRankingServlet extends HttpServlet {
                 }
 
 
-                ArrayList<Object> listOfTasks = new ArrayList<>();
-                for (String taskId : listOfOpenTaskIds) {
+                JsonObject jsonOfTasks = new JsonObject();
+                for (Integer taskIndex = 0; taskIndex<listOfOpenTaskIds.size();taskIndex++) {
+                    String taskId = listOfOpenTaskIds.get(taskIndex);
                     Map<String, Object> taskMap = _database.collection("clientWebSimulator")
                             .document("agent-dialogue-experiments").collection("tasks").document
                                     (taskId).get().get().getData();
@@ -147,11 +151,15 @@ public class OfflineMtRankingServlet extends HttpServlet {
                     taskJson.addProperty("clientId", (String) taskMap.get("clientId"));
                     taskJson.addProperty("deviceType", (String) taskMap.get("deviceType"));
                     taskJson.addProperty("language_code", (String) taskMap.get("language_code"));
-                    taskJson.addProperty("turns", ((ArrayList<Object>) taskMap.get("turns"))
-                            .toString());
-                    listOfTasks.add(taskJson.toString());
+                    JsonObject jsonTurns = new JsonObject();
+                    ArrayList<Object> taskTurns = ((ArrayList<Object>) taskMap.get("turns"));
+                    for (Integer turnIndex = 0; turnIndex<taskTurns.size();turnIndex++) {
+                        jsonTurns.addProperty(turnIndex.toString(), (new Gson().toJson(taskTurns.get(turnIndex))));
+                    }
+                    taskJson.addProperty("turns", jsonTurns.toString());
+                    jsonOfTasks.addProperty(taskIndex.toString(), taskJson.toString());
                 }
-                json.addProperty("tasks", listOfTasks.toString());
+                json.addProperty("tasks", jsonOfTasks.toString());
             }
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
