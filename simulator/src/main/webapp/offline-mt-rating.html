@@ -36,11 +36,10 @@
                         onclick = "redirectToUserPage()">Start Session
                 </button>
             </div>
-            <div class = "options">
-                Current task ID: display only? dropdown menu?<br>
-                Current session id: display only<br>
-                Button for Next batch of tasks<br>
-                List of tasks and their completeness<br>
+            <div class = "task-details">
+                <h3>Task details</h3>
+                <div id = "current-task-details">
+                </div>
             </div>
             <div class = "tasks-list-block">
                 <h3>List of tasks</h3>
@@ -49,7 +48,9 @@
             </div>
         </div>
         <div class = "left">
-            Please enter User ID and Experiment ID to start the experiment.
+            <div id = "rating-interface-block">
+                <h2>Please enter User ID and Experiment ID to start the experiment.</h2>
+            </div>
         </div>
     </div>
 
