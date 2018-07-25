@@ -64,11 +64,10 @@ function loadTasks(_userId) {
             maxTasksAssigned: _maxTasksAssigned
         },
         success: function (response) {
-            alert("success in loading tasks");
-            _listOfTasks = response.tasks;
+            _listOfTasks = JSON.parse(response.tasks);
             let $tasks_list = $('.tasks-list');
             $tasks_list.innerText = "";
-            for (let i = 0; i < _listOfTasks.length; i++) {
+            for (let i = 0; i < Object.keys(_listOfTasks).length; i++) {
                 let $task = $("<span id = \'" + i + "\' onclick=\'showTaskWithNumber(" + i + ")\'>")
                     .text("Task " + i + 1)
                     .append("<img id='rating-indicator' src='../resources/img/question-circle-solid.svg' />");
@@ -77,7 +76,7 @@ function loadTasks(_userId) {
             }
             $(".tasks-list-block").append("<button id = 'next-batch-button' class = 'submit-button' " +
                 "type = 'button' onclick = \'loadTasks(" + _userId + ")\'>").text("Next batch");
-            if (_listOfTasks.length > 0) {
+            if (Object.keys(_listOfTasks).length > 0) {
                 showTaskWithNumber(0);
             } else {
                 $tasks_list.innerText = "The are no more available tasks in the database.";
@@ -90,14 +89,15 @@ function loadTasks(_userId) {
 }
 
 function showTaskWithNumber(taskNumber) {
-    let task = _listOfTasks[taskNumber];
+    let task = JSON.parse(_listOfTasks[taskNumber]);
     let $current_task_details = $("#current-task-details");
     $current_task_details.innerText = "";
-    $current_task_details.append("<div>").text("Client ID: " + task.clientId)
-        .append("<div>").text("Device type: " + task.deviceType)
-        .append("<div>").text("Language code: " + task.language_code);
+    $current_task_details.append("<div>Client ID: " + task.clientId + "</div>");
+    $current_task_details.append("<div>Device type: " + task.deviceType + "</div>");
+    $current_task_details.append("<div>Language code: " + task.language_code + "</div>");
     let $rating_interface_block = $(".rating-interface-block");
     $rating_interface_block.innerText = "";
+    alert(task.turns);
     let turns = task.turns;
     for (let turn in turns) {
         if (turn.request != null) {
