@@ -39,7 +39,7 @@ function createRating(responseId) {
 
 function selectStars(starNumber, responseId) {
     let $stars = $("#" + responseId.toString()).find('img[id="star-rating"]');
-    for (i = 0; i < $stars.length; i++) {
+    for (let i = 0; i < $stars.length; i++) {
         if (i <= starNumber) {
             $stars[i].src = '../resources/img/star-solid.svg';
         }
@@ -56,7 +56,7 @@ function deselectStars(responseId) {
     if ($($ratingDiv)[0].hasAttribute("value")) {
         ratingScore = $($ratingDiv)[0].getAttribute("value");
     }
-    for (i = 0; i < stars.length; i++) {
+    for (let i = 0; i < stars.length; i++) {
         if (i < ratingScore) {
             stars[i].src = '../resources/img/star-solid.svg';
         }

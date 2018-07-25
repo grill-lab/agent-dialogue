@@ -31,6 +31,10 @@ public class OfflineMtRankingServlet extends HttpServlet {
                 //     download assigned tasks
                 break;
             case "rateTask":
+                // send a rating to servlet:
+                // Update user dabatase - remove task reference from user list
+                // update rating database
+                // update rating reference list of a task in firestore
                 break;
             default:
                 System.out.println("well");
