@@ -17,6 +17,8 @@ import java.nio.file.Paths;
 public final class LogTurnManagerSingleton {
     private static LogTurnManagerSingleton _instance;
     private static OutputStream _outputStream;
+    private static String _logDailyTurnsPath;
+    private static String _currentDailyTurnPath;
 
     /**
      * Get instance of this class.
@@ -27,7 +29,7 @@ public final class LogTurnManagerSingleton {
         if (_instance == null) {
             _instance = new LogTurnManagerSingleton();
             // Directory to the folder with logs.
-            String logTurnPath = Paths
+            _logDailyTurnsPath = Paths
                     .get(LogTurnManagerSingleton
                             .class
                             .getProtectionDomain()
@@ -37,10 +39,10 @@ public final class LogTurnManagerSingleton {
                     .getParent()
                     .getParent()
                     .toString() + "/Logs/DailyTurns/";
-            directoryExistsOrCreate(logTurnPath);
-            logTurnPath += DateTime.now().toString();
+            directoryExistsOrCreate(_logDailyTurnsPath);
+            _currentDailyTurnPath = _logDailyTurnsPath + DateTime.now().toString();
             try {
-                _outputStream = new FileOutputStream(logTurnPath);
+                _outputStream = new FileOutputStream(_currentDailyTurnPath);
             } catch (IOException exception) {
                 exception.getMessage();
             }
@@ -79,6 +81,7 @@ public final class LogTurnManagerSingleton {
         // TODO(Adam): Handle the exception.
         // TODO(Adam): Code below is buggy - it can create issues. Resolve it!
         _outputStream.close();
+        LogEntryManager.segregateFiles(_currentDailyTurnPath, _logDailyTurnsPath);
         _instance = null;
         _instance = LogTurnManagerSingleton.getLogTurnManagerSingleton();
     }
