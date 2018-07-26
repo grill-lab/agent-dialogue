@@ -81,7 +81,7 @@ public class LogManagerSingleton {
             _instance = new LogManagerSingleton();
             // Directory to the folder with logs.
             String logInteractionsPath = Paths
-                    .get(_projectSimulatorPath.toString() + "/Logs/interactions_logs").toString();
+                    .get(_projectSimulatorPath.toString() + "/Logs/interactions_logs/").toString();
             directoryExistsOrCreate(logInteractionsPath);
             logInteractionsPath += DateTime.now().toString();
             try {
@@ -91,7 +91,7 @@ public class LogManagerSingleton {
             }
 
             String logRatingsPath = Paths
-                    .get(_projectSimulatorPath.toString() + "/Logs/ratings_logs").toString();
+                    .get(_projectSimulatorPath.toString() + "/Logs/ratings_logs/").toString();
             directoryExistsOrCreate(logRatingsPath);
             logRatingsPath += DateTime.now().toString();
             try {

@@ -36,7 +36,7 @@ public final class LogTurnManagerSingleton {
                             .getPath())
                     .getParent()
                     .getParent()
-                    .toString() + "/Logs/DailyTurns";
+                    .toString() + "/Logs/DailyTurns/";
             directoryExistsOrCreate(logTurnPath);
             logTurnPath += DateTime.now().toString();
             try {
