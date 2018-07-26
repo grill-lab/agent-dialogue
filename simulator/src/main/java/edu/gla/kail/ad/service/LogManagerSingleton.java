@@ -83,7 +83,7 @@ public class LogManagerSingleton {
             String logInteractionsPath = Paths
                     .get(_projectSimulatorPath.toString() + "/Logs/interactions_logs/").toString();
             directoryExistsOrCreate(logInteractionsPath);
-            logInteractionsPath += DateTime.now().toString();
+            logInteractionsPath += "/" + DateTime.now().toString();
             try {
                 _interactionsOutputStream = new FileOutputStream(logInteractionsPath);
             } catch (IOException exception) {
@@ -93,7 +93,7 @@ public class LogManagerSingleton {
             String logRatingsPath = Paths
                     .get(_projectSimulatorPath.toString() + "/Logs/ratings_logs/").toString();
             directoryExistsOrCreate(logRatingsPath);
-            logRatingsPath += DateTime.now().toString();
+            logRatingsPath += "/" + DateTime.now().toString();
             try {
                 _ratingsOutputStream = new FileOutputStream(logRatingsPath);
             } catch (IOException exception) {

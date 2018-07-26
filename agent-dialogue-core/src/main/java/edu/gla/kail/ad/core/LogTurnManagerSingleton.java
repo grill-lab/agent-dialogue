@@ -38,9 +38,9 @@ public final class LogTurnManagerSingleton {
                             .getPath())
                     .getParent()
                     .getParent()
-                    .toString() + "/Logs/DailyTurns/";
+                    .toString() + "/Logs/DailyTurns/" + DateTime.now().toLocalDate().toString() + "/";
             directoryExistsOrCreate(_logDailyTurnsPath);
-            _currentDailyTurnPath = _logDailyTurnsPath + DateTime.now().toString();
+            _currentDailyTurnPath = _logDailyTurnsPath + DateTime.now().toLocalDateTime().toString();
             try {
                 _outputStream = new FileOutputStream(_currentDailyTurnPath);
             } catch (IOException exception) {
