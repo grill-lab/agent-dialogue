@@ -1,7 +1,6 @@
 package edu.gla.kail.ad.service;
 
 
-import com.google.api.client.json.Json;
 import com.google.api.core.ApiFuture;
 import com.google.cloud.firestore.DocumentReference;
 import com.google.cloud.firestore.DocumentSnapshot;
@@ -11,7 +10,6 @@ import com.google.cloud.firestore.QuerySnapshot;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.protobuf.Timestamp;
-import org.json.JSONObject;
 
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -45,7 +43,10 @@ public class OfflineMtRankingServlet extends HttpServlet {
             case "rateTask":
                 Integer ratingScore = Integer.valueOf(request.getParameter("ratingScore"));
                 String taskId = request.getParameter("taskId");
-                response.getWriter().write(rateTask(userId, ratingScore, taskId));
+                Long startTime_seconds = Long.valueOf(request.getParameter
+                        ("startTime_seconds"));
+                Long endTime_seconds = Long.valueOf(request.getParameter("endTime_seconds"));
+                rateTask(userId, ratingScore, taskId, startTime_seconds, endTime_seconds);
                 break;
             default:
                 response.getWriter().write("false");
@@ -134,6 +135,7 @@ public class OfflineMtRankingServlet extends HttpServlet {
                         updatingHelperMap = new HashMap<>();
                         updatingHelperMap.put("ratingIds", ratingsIds);
                         taskDocRef.update(updatingHelperMap);
+                        allPossibleTasks.remove(newRatingTaskId);
                     }
                     // Get updated user document.
                     userData = userDocRef.get().get().getData();
@@ -142,7 +144,7 @@ public class OfflineMtRankingServlet extends HttpServlet {
 
 
                 JsonObject jsonOfTasks = new JsonObject();
-                for (Integer taskIndex = 0; taskIndex<listOfOpenTaskIds.size();taskIndex++) {
+                for (Integer taskIndex = 0; taskIndex < listOfOpenTaskIds.size(); taskIndex++) {
                     String taskId = listOfOpenTaskIds.get(taskIndex);
                     Map<String, Object> taskMap = _database.collection("clientWebSimulator")
                             .document("agent-dialogue-experiments").collection("tasks").document
@@ -150,11 +152,13 @@ public class OfflineMtRankingServlet extends HttpServlet {
                     JsonObject taskJson = new JsonObject();
                     taskJson.addProperty("clientId", (String) taskMap.get("clientId"));
                     taskJson.addProperty("deviceType", (String) taskMap.get("deviceType"));
+                    taskJson.addProperty("taskId", (String) taskMap.get("taskId"));
                     taskJson.addProperty("language_code", (String) taskMap.get("language_code"));
                     JsonObject jsonTurns = new JsonObject();
                     ArrayList<Object> taskTurns = ((ArrayList<Object>) taskMap.get("turns"));
-                    for (Integer turnIndex = 0; turnIndex<taskTurns.size();turnIndex++) {
-                        jsonTurns.addProperty(turnIndex.toString(), (new Gson().toJson(taskTurns.get(turnIndex))));
+                    for (Integer turnIndex = 0; turnIndex < taskTurns.size(); turnIndex++) {
+                        jsonTurns.addProperty(turnIndex.toString(), (new Gson().toJson(taskTurns
+                                .get(turnIndex))));
                     }
                     taskJson.addProperty("turns", jsonTurns.toString());
                     jsonOfTasks.addProperty(taskIndex.toString(), taskJson.toString());
@@ -168,18 +172,63 @@ public class OfflineMtRankingServlet extends HttpServlet {
     }
 
 
-    private String rateTask(String userId, Integer ratingScore, String taskId) {
-        JsonObject json = new JsonObject();
-        json.addProperty("sth", "value");
-        // send a rating to servlet:
-        // Update user dabatase - remove task reference from user list
-        // update rating database
-        // update rating reference list of a task in Firestore
-//        endTime_nanos
-//        endTime_seconds
-//        rating
-        // totalTime_seconds
-        return json.toString();
+    private void rateTask(String userId, Integer ratingScore, String taskId, Long
+            startTime_seconds, Long endTime_seconds) {
+        // Update rating in the ratings collection.
+        String ratingId = taskId + "_" + userId;
+        DocumentReference ratingDocRef = _database.collection("clientWebSimulator").document
+                ("agent-dialogue-experiments").collection("ratings").document(ratingId);
+        Map<String, Object> updateHelperMap = new HashMap<>();
+        updateHelperMap.put("ratingScore", ratingScore);
+        updateHelperMap.put("startTime_seconds", startTime_seconds);
+        updateHelperMap.put("endTime_seconds", endTime_seconds);
+        updateHelperMap.put("totalTime_seconds", endTime_seconds - startTime_seconds);
+        updateHelperMap.put("complete", true);
+        ratingDocRef.update(updateHelperMap);
+
+        // Update user database - remove task ID from list of open tasks in User document.
+        // Add rated task to the list of completed tasks.
+        DocumentReference userDocRef = _database.collection("clientWebSimulator").document
+                ("agent-dialogue-experiments").collection("users").document(userId);
+        try {
+            ArrayList<String> listOfOpenTaskIds = (ArrayList<String>) userDocRef.get().get()
+                    .getData().get("openTaskIds");
+            ArrayList<String> completedTaskIds = (ArrayList<String>) userDocRef.get().get()
+                    .getData().get("completedTaskIds");
+            updateHelperMap.clear();
+            if (listOfOpenTaskIds.remove(taskId)) {
+                updateHelperMap.put("openTaskIds", listOfOpenTaskIds);
+            }
+            if (!completedTaskIds.contains(taskId)) {
+                completedTaskIds.add(taskId);
+                updateHelperMap.put("completedTaskIds", completedTaskIds);
+            }
+            if (!updateHelperMap.isEmpty()) {
+                userDocRef.update(updateHelperMap);
+            }
+        } catch (InterruptedException | ExecutionException exception) {
+            // TODO(Adam): Handle this.
+        }
+
+        // Update task document
+        DocumentReference taskDocRef = _database.collection("clientWebSimulator").document
+                ("agent-dialogue-experiments").collection("tasks").document(taskId);
+        try {
+            ArrayList<String> listOfRatings = (ArrayList<String>) taskDocRef.get().get()
+                    .getData().get("ratingIds");
+            Long numberOfRemainingRatings = (Long) taskDocRef.get().get()
+                    .getData().get("numberOfRemainingRatings");
+            if (!listOfRatings.contains(ratingId)) {
+                listOfRatings.add(ratingId);
+                numberOfRemainingRatings -= 1;
+                updateHelperMap.clear();
+                updateHelperMap.put("ratingIds", listOfRatings);
+                updateHelperMap.put("numberOfRemainingRatings", numberOfRemainingRatings);
+                taskDocRef.update(updateHelperMap);
+            }
+        } catch (InterruptedException | ExecutionException exception) {
+            // TODO(Adam): Handle this.
+        }
     }
 
 

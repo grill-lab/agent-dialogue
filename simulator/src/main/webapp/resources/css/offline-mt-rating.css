@@ -4,6 +4,14 @@
     margin-top: 7px;
 }
 
+#user-submit-button {
+    width: 13vw;
+}
+
+#next-batch-button {
+    width: 9vw;
+}
+
 .task-details {
     background-color: darksalmon;
     padding: 10px 15px;
