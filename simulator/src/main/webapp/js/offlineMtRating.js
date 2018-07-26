@@ -66,18 +66,20 @@ function loadTasks(_userId) {
             maxTasksAssigned: _maxTasksAssigned
         },
         success: function (response) {
+            $(".tasks-list").empty();
+            $("#tasks-buttons").empty();
             _listOfTasks = JSON.parse(response.tasks);
             let $tasks_list = $('.tasks-list');
             $tasks_list.innerText = "";
             for (let i = 0; i < Object.keys(_listOfTasks).length; i++) {
                 let $task = $("<a class = 'task-a-element' id = \'" + i + "\' onclick=\'showTaskWithNumber(" + i + ")\'>" +
-                    "Task " + i + 1 + " <img id='tasks-indicator' " +
-                    "src='../resources/img/question-circle-solid.svg' /></a>")
+                    "Task " + i + " <img id='tasks-indicator' " +
+                    "src='../resources/img/question-circle-solid.svg' /></a>");
                 $tasks_list.append($task).append("<br>");
                 _tasksRating[i] = 0;
             }
-            $(".tasks-list-block").append("<button id = 'next-batch-button' class = 'submit-button' " +
-                "type = 'button' onclick = \'loadTasks(" + _userId + ")\'>Next Batch</button>");
+            $("#tasks-buttons").append("<button id = 'next-batch-button' class = 'submit-button' " +
+                "type = 'button' onclick = \'loadTasks(\"" + _userId + "\")\'>Next Batch</button>");
             if (Object.keys(_listOfTasks).length > 0) {
                 showTaskWithNumber(0);
             } else {
