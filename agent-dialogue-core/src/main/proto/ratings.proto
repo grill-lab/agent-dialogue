@@ -5,7 +5,6 @@ package edu.gla.kail.ad.eval;
 import "google/protobuf/timestamp.proto";
 
 // Protobuffer which enables storing user-ratings of provided responses.
-// TODO(Adam): The message implemented here should have enough data to be joined with AD core logs later on.
 
 message Rating {
     string experiment_id = 1;
