@@ -29,8 +29,8 @@ public final class LogTurnManagerSingleton {
         if (_instance == null) {
             _instance = new LogTurnManagerSingleton();
             // Directory to the folder with logs.
-            _logDailyTurnsPath = Paths
-                    .get(LogTurnManagerSingleton
+            _logDailyTurnsPath =
+                    /*Paths.get(LogTurnManagerSingleton
                             .class
                             .getProtectionDomain()
                             .getCodeSource()
@@ -38,7 +38,8 @@ public final class LogTurnManagerSingleton {
                             .getPath())
                     .getParent()
                     .getParent()
-                    .toString() + "/Logs/DailyTurns/" + DateTime.now().toLocalDate().toString() + "/";
+                    .toString()*/
+                           "/mnt/fileserver" + "/Logs/DailyTurns/" + DateTime.now().toLocalDate().toString() + "/";
             directoryExistsOrCreate(_logDailyTurnsPath);
             _currentDailyTurnPath = _logDailyTurnsPath + DateTime.now().toLocalDateTime().toString();
             try {
