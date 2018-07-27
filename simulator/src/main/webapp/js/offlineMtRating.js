@@ -66,11 +66,10 @@ function loadTasks(_userId) {
             maxTasksAssigned: _maxTasksAssigned
         },
         success: function (response) {
-            $(".tasks-list").empty();
             $("#tasks-buttons").empty();
             _listOfTasks = JSON.parse(response.tasks);
             let $tasks_list = $('.tasks-list');
-            $tasks_list.innerText = "";
+            $tasks_list.empty();
             for (let i = 0; i < Object.keys(_listOfTasks).length; i++) {
                 let $task = $("<a class = 'task-a-element' id = \'" + i + "\' onclick=\'showTaskWithNumber(" + i + ")\'>" +
                     "Task " + i + " <img id='tasks-indicator' " +
@@ -83,7 +82,7 @@ function loadTasks(_userId) {
             if (Object.keys(_listOfTasks).length > 0) {
                 showTaskWithNumber(0);
             } else {
-                $tasks_list.innerText = "The are no more available tasks in the database.";
+                $tasks_list.append("<a>The are no more available tasks in the database.</a>");
             }
         },
         error: function (data, status, error) {

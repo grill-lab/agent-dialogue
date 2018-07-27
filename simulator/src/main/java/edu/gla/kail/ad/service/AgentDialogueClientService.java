@@ -27,37 +27,7 @@ public class AgentDialogueClientService {
         _channel = channelBuilder.build();
         _blockingStub = AgentDialogueGrpc.newBlockingStub(_channel);
     }
-
-    /**
-     * Created for testing purposes.
-     */
-    public static void main(String[] args) throws Exception {
-        InteractionRequest interactionRequest = InteractionRequest.newBuilder()
-                .setClientId(Client.ClientId.WEB_SIMULATOR)
-                .setTime(Timestamp.newBuilder()
-                        .setSeconds(Instant.now()
-                                .getEpochSecond())
-                        .setNanos(Instant.now()
-                                .getNano())
-                        .build())
-                .setInteraction(InputInteraction.newBuilder()
-                        .setText("Text set by client")
-                        .setType(InteractionType.TEXT)
-                        .setLanguageCode("en-US")
-                        .setDeviceType("DeviceType set by client")
-                        .addAction("Action set by client")
-                        .build())
-                .setUserID("UserId set by Client")
-                .build();
-        AgentDialogueClientService client = new AgentDialogueClientService("localhost", 8070);
-        try {
-            InteractionResponse interactionResponse = client.getInteractionResponse
-                    (interactionRequest);
-            System.out.println(interactionResponse.toString());
-        } finally {
-            client.shutdown();
-        }
-    }
+    
 
     /**
      * Shut the channel down after specified number of seconds (5 in this case).
