@@ -27,7 +27,7 @@ public class AgentDialogueClientService {
         _channel = channelBuilder.build();
         _blockingStub = AgentDialogueGrpc.newBlockingStub(_channel);
     }
-    
+
 
     /**
      * Shut the channel down after specified number of seconds (5 in this case).

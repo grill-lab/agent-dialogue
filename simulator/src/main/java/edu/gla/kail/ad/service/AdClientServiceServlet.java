@@ -23,15 +23,13 @@ import static edu.gla.kail.ad.Client.ClientId.WEB_SIMULATOR;
 /**
  * Connect to AgentDialogueClientService and therefore enable interaction with Agent Dialogue Core.
  * Accessible from JavaScript, through RESTful calls.
- * Responsible for storing logs.
- * TODO(Adam): Store logs.
  */
 @WebServlet("/ad-client-service-servlet")
 public class AdClientServiceServlet extends HttpServlet {
     private static LogManagerSingleton _logManagerSingleton = LogManagerSingleton
             .getLogManagerSingleton();
     private static AgentDialogueClientService _client = new AgentDialogueClientService
-            ("localhost", 8070);
+            ("35.202.139.219", 70);
 
     /**
      * Handle POST request.

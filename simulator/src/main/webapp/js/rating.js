@@ -10,7 +10,7 @@ function updateRating(starNumber, responseId) {
         data: {
             ratingScore: starNumber + 1,
             responseId: responseId,
-            // TODO(Adam): Implement getting experimentId and requestId.
+            // TODO(Adam): Delete experimentId and requestId.
             experimentId: "to be implemented",
             requestId: ""
         },

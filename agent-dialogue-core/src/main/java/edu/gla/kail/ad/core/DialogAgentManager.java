@@ -82,8 +82,6 @@ public class DialogAgentManager {
 
     /**
      * Set up (e.g. authenticate) all agents and store them to the list of agents.
-     * TODO(Jeff): What to do when sb calls this function a couple of times? Each time setting up
-     * agents? Make the function private?
      *
      * @param configurationTuples - The list stores the entities of ConfigurationTuple,
      *                            which holds data required by each agent.
@@ -269,21 +267,6 @@ public class DialogAgentManager {
             executor.shutdownNow();
         }
         return responseLog;
-/*
-      // TODO(Adam): Delete once received confirmation from Jeff.
-      // TODO(Jeff): Check if the entire method is ok.
-        try {
-            ResponseLog responseLog = checkNotNull(agent.getResponseFromAgent(inputInteraction),
-                    "The response from Agent was null!");
-            return responseLog;
-        } catch (Exception exception) {
-            return ResponseLog.newBuilder()
-                    .setMessageStatus(MessageStatus.UNSUCCESSFUL)
-                    .setErrorMessage(exception.getMessage())
-                    .setServiceProvider(agent.getServiceProvider())
-                    .setTime(getCurrentTimeStamp())
-                    .build();
-        }*/
     }
 
 

@@ -33,7 +33,6 @@ public class DialogAgentManagerTestMain {
 
     /**
      * Add ConfigurationTuples to the _configurationTuples. This is just for testing purposes
-     * TODO(Adam): File_check if exists() file.mkDirsc).
      *
      * @param fileDirectory - It specifies the directory of the file with data used to set
      *         up agents. Each line has one agent entry, which specified agent type
