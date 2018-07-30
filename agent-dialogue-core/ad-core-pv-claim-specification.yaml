@@ -1,16 +1,16 @@
 apiVersion: v1
 kind: Pod
 metadata:
-  name: ad-core-server-pod
+  name: agent-dialogue-core
 spec:
   containers:
   - name: agent-dialogue-core  # container name
     image: agent-dialogue-core # image name
     volumeMounts:
-    - mountPath: /mnt/fileserver
-      name: mypvc
+    - mountPath: /mnt/adcoreserver
+      name: adcoreserver
   volumes:
-  - name: mypvc
+  - name: adcoreserver
     persistentVolumeClaim:
       claimName: fileserver-claim
       readOnly: false
