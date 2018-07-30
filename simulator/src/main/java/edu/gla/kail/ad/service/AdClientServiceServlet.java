@@ -29,7 +29,8 @@ public class AdClientServiceServlet extends HttpServlet {
     private static LogManagerSingleton _logManagerSingleton = LogManagerSingleton
             .getLogManagerSingleton();
     private static AgentDialogueClientService _client = new AgentDialogueClientService
-            ("35.202.139.219", 70);
+            ("localhost", 8070);
+    /*("35.184.165.93", 70);*/
 
     /**
      * Handle POST request.
@@ -100,7 +101,8 @@ public class AdClientServiceServlet extends HttpServlet {
                     .setTime(getTimeStamp())
                     .build();
             _logManagerSingleton.addInteraction(null, interactionResponse);
-            json.addProperty("message", "There was a fatal error!");
+            json.addProperty("message", "There was a fatal error! (Probably could not connect to " +
+                    "the server)");
             json.addProperty("interactionResponse", interactionResponse.toString());
             response.getWriter().write(json.toString());
         }
