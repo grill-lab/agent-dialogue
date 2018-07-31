@@ -192,7 +192,6 @@ public class FirestoreUploader {
 
     private static void handleUsers(BufferedReader tsvFileBufferedReader, ArrayList<String>
             arrayOfParameters) throws IOException {
-        // TODO(Adam): Implement.
         String nextRow;
         StringTokenizer stringTokenizer;
         try {
@@ -207,7 +206,7 @@ public class FirestoreUploader {
             stringTokenizer = new StringTokenizer(nextRow, "\t");
             Map<String, Object> updateHelperMap = new HashMap<>();
             ArrayList<String> dataArray = new ArrayList<String>();
-            while(stringTokenizer.hasMoreElements()){
+            while (stringTokenizer.hasMoreElements()) {
                 dataArray.add(stringTokenizer.nextElement().toString());
             }
             for (int i = 0; i < dataArray.size(); i++) {
@@ -223,9 +222,42 @@ public class FirestoreUploader {
         }
     }
 
+    /**
+     * This method only differs from handleUsers by lines:
+     *      .collection("experiments")
+     *      .document(updateHelperMap.get("experimentId").toString());
+     * Depending on future development of the program, these functions may be combined.
+     */
     private static void handleTasks(BufferedReader tsvFileBufferedReader, ArrayList<String>
-            arrayOfParameters) {
-        // TODO(Adam): Implement.
+            arrayOfParameters) throws IOException {
+        String nextRow;
+        StringTokenizer stringTokenizer;
+        try {
+            // Read third line where the data starts.
+            nextRow = tsvFileBufferedReader.readLine();
+        } catch (IOException exception) {
+            System.out.println("Could not read the tsv file data.\n" + exception.getMessage());
+            throw new IOException();
+        }
+
+        while (nextRow != null) {
+            stringTokenizer = new StringTokenizer(nextRow, "\t");
+            Map<String, Object> updateHelperMap = new HashMap<>();
+            ArrayList<String> dataArray = new ArrayList<String>();
+            while (stringTokenizer.hasMoreElements()) {
+                dataArray.add(stringTokenizer.nextElement().toString());
+            }
+            for (int i = 0; i < dataArray.size(); i++) {
+                updateHelperMap.put(arrayOfParameters.get(i), dataArray.get(i));
+            }
+            DocumentReference experimentDocRef = _database
+                    .collection("clientWebSimulator")
+                    .document("agent-dialogue-experiments")
+                    .collection("experiments")
+                    .document(updateHelperMap.get("experimentId").toString());
+            experimentDocRef.set(updateHelperMap);
+            nextRow = tsvFileBufferedReader.readLine();
+        }
     }
 
 
