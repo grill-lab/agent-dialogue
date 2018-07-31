@@ -14,7 +14,9 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 import java.util.StringTokenizer;
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -142,25 +144,34 @@ public class FirestoreUploader {
         try {
             BufferedReader tsvFileBufferedReader = new BufferedReader(new FileReader(tsvFile));
             String firstRow = tsvFileBufferedReader.readLine(); // Read first line.
-            StringTokenizer stringTokenizer = new StringTokenizer(firstRow,"\t");
+            StringTokenizer stringTokenizer = new StringTokenizer(firstRow, "\t");
             String indicator = (String) stringTokenizer.nextElement();
+
+            // Read parameters (keys) for the Firestore. Set tsvFileBufferedReader to third row.
+            stringTokenizer = new StringTokenizer(tsvFileBufferedReader.readLine(), "\t");
+            List<String> arrayOfParameters = new ArrayList<String>();
+            while (stringTokenizer.hasMoreElements()) {
+                arrayOfParameters.add(stringTokenizer.nextElement().toString());
+            }
+
+            // Execute depending on the content of the file.
             switch (indicator) {
                 case "experiments":
-                    handleExperiments(tsvFileBufferedReader);
+                    handleExperiments(tsvFileBufferedReader, arrayOfParameters);
                     break;
                 case "users":
-                    handleUsers(tsvFileBufferedReader);
+                    handleUsers(tsvFileBufferedReader, arrayOfParameters);
                     break;
                 case "tasks":
-                    handleTasks(tsvFileBufferedReader);
+                    handleTasks(tsvFileBufferedReader, arrayOfParameters);
                     break;
                 default:
                     System.out.println("Wrong data indicator: " + indicator);
                     throw new IOException();
             }
-
             System.out.println("The database was uploaded successfully with the following file: " +
                     "\n\n" + tsvFile.getAbsolutePath());
+            tsvFileBufferedReader.close();
         } catch (FileNotFoundException fileNotFoundException) {
             System.out.println("File could not be found: " + tsvFile.getAbsolutePath());
         } catch (IOException ioException) {
@@ -169,15 +180,61 @@ public class FirestoreUploader {
         }
     }
 
-    private static void handleExperiments(BufferedReader tsvFuleBufferedReader) {
+    private static void handleExperiments(BufferedReader tsvFileBufferedReader, ArrayList
+            arrayOfParameters) throws IOException {
         // TODO(Adam): Implement.
+        String nextRow;
+        StringTokenizer stringTokenizer;
+
+        try {
+            // Read third line where the data starts.
+            nextRow = tsvFileBufferedReader.readLine();
+        } catch (IOException exception) {
+            System.out.println("Could not read the tsv file data.\n" + exception.getMessage());
+            throw new IOException();
+        }
+
+        while (nextRow != null) {
+            stringTokenizer = new StringTokenizer(nextRow, "\t");
+            Map<String, Object> updateHelperMap = new HashMap<>();
+            List<String> dataArray = new ArrayList<String>();
+            while (stringTokenizer.hasMoreElements()) {
+                dataArray.add(stringTokenizer.nextElement().toString());
+            }
+
+
+            for (String item : dataArray) {
+                System.out.print(item + "  ");
+            }
+            System.out.println(); // Print the data line.
+            dataRow = TSVFile.readLine(); // Read next line of data.
+        }
     }
 
-    private static void handleUsers(BufferedReader tsvFuleBufferedReader) {
+    private static void handleUsers(BufferedReader tsvFileBufferedReader, ArrayList
+            arrayOfParameters) throws IOException {
         // TODO(Adam): Implement.
+        String nextRow;
+        StringTokenizer stringTokenizer;
+
+        try {
+            // Read third line where the data starts.
+            nextRow = tsvFileBufferedReader.readLine();
+        } catch (IOException exception) {
+            System.out.println("Could not read the tsv file data.\n" + exception.getMessage());
+            throw new IOException();
+        }
+        while (nextRow != null) {
+            stringTokenizer = new StringTokenizer(nextRow, "\t");
+            Map<String, Object> updateHelperMap = new HashMap<>();
+            List<String> dataArray = new ArrayList<String>();
+        }
+        
+
     }
 
-    private static void handleTasks(BufferedReader tsvFuleBufferedReader) {
+    private static void handleTasks(BufferedReader tsvFileBufferedReader, ArrayList
+            arrayOfParameters) {
         // TODO(Adam): Implement.
     }
 
