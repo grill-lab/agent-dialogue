@@ -188,6 +188,8 @@ public class FirestoreUploader {
     private static void handleExperiments(BufferedReader tsvFileBufferedReader, ArrayList<String>
             arrayOfParameters) throws IOException {
         // TODO(Adam): Implement.
+        // task id adding to experiment must be handled here
+        // numberOfRemainingRatings = number of ratings that are possible for an experiment in a particular task
     }
 
     private static void handleUsers(BufferedReader tsvFileBufferedReader, ArrayList<String>
