@@ -6,13 +6,18 @@ import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
 import com.google.firebase.cloud.FirestoreClient;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
-import java.util.concurrent.LinkedBlockingQueue;
+import java.util.StringTokenizer;
+import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.TimeUnit;
 
 public class FirestoreUploader {
@@ -26,7 +31,7 @@ public class FirestoreUploader {
 
     // True if the user wants to wait for all the threads to finish and then quit.
     private static boolean _quit = false;
-    private static LinkedBlockingQueue<File> _tsvFilePathQueue = new LinkedBlockingQueue<>();
+    private static ConcurrentLinkedQueue<File> _tsvFilePathQueue = new ConcurrentLinkedQueue<>();
     private static Firestore _database;
 
     // Thread running as 'frontend' - collect the input from user.
@@ -74,19 +79,18 @@ public class FirestoreUploader {
     // Thread running as 'backend' - takes requests from the queue at given rate.
     private static Runnable _queueCheckerRunnable = () -> {
         while (true) {
-            if (client._quit && client._numberOfThreadsRunning.get() == 0) {
+            if (_quit && _tsvFilePathQueue.size() == 0) {
                 System.out.println("All the threads have finished running!\nBye bye!");
                 System.exit(0);
             }
             try {
-                // Sleep call makes the queueCheckerRunnable run requests at given rate (time
-                // period).
-                TimeUnit.SECONDS.sleep(1);
-                if (!client._logEntryFilePathQueue.isEmpty() && client
-                        ._numberOfThreadsRunning.get() <= client
-                        ._MAXIMUM_NUMBER_OF_ONGOING_CONVERSATIONS) {
-                    File logEntryFilePath = client._logEntryFilePathQueue.poll();
-                    client.startReplayerThread(logEntryFilePath, client);
+                if (!_tsvFilePathQueue.isEmpty()) {
+                    File tsvFilePath = _tsvFilePathQueue.poll();
+                    updateTheDatabase(tsvFilePath);
+                } else {
+                    // Sleep call makes the queueCheckerRunnable run requests at given rate (time
+                    // period).
+                    TimeUnit.SECONDS.sleep(1);
                 }
             } catch (InterruptedException e) {
                 e.printStackTrace();
@@ -134,8 +138,51 @@ public class FirestoreUploader {
                 "you?\n" + _AVAILABLE_COMMANDS);
     }
 
+    private static void updateTheDatabase(File tsvFile) {
+        try {
+            BufferedReader tsvFileBufferedReader = new BufferedReader(new FileReader(tsvFile));
+            String firstRow = tsvFileBufferedReader.readLine(); // Read first line.
+            StringTokenizer stringTokenizer = new StringTokenizer(firstRow,"\t");
+            String indicator = (String) stringTokenizer.nextElement();
+            switch (indicator) {
+                case "experiments":
+                    handleExperiments(tsvFileBufferedReader);
+                    break;
+                case "users":
+                    handleUsers(tsvFileBufferedReader);
+                    break;
+                case "tasks":
+                    handleTasks(tsvFileBufferedReader);
+                    break;
+                default:
+                    System.out.println("Wrong data indicator: " + indicator);
+                    throw new IOException();
+            }
+
+            System.out.println("The database was uploaded successfully with the following file: " +
+                    "\n\n" + tsvFile.getAbsolutePath());
+        } catch (FileNotFoundException fileNotFoundException) {
+            System.out.println("File could not be found: " + tsvFile.getAbsolutePath());
+        } catch (IOException ioException) {
+            System.out.println("The data in the file:\n" + tsvFile.getAbsolutePath() + "\nis " +
+                    "incorrectly formatted. The first line could not be read correctly.\n");
+        }
+    }
+
+    private static void handleExperiments(BufferedReader tsvFuleBufferedReader) {
+        // TODO(Adam): Implement.
+    }
+
+    private static void handleUsers(BufferedReader tsvFuleBufferedReader) {
+        // TODO(Adam): Implement.
+    }
+
+    private static void handleTasks(BufferedReader tsvFuleBufferedReader) {
+        // TODO(Adam): Implement.
+    }
+
+
     public static void main(String[] args) {
-        // Authorize the Firestore database.
         authorizeFirestore();
         new Thread(_queueCheckerRunnable).start();
         new Thread(_userInterfaceRunnable).start();
