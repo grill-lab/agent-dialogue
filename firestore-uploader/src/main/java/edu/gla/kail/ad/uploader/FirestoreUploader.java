@@ -1,6 +1,7 @@
 package edu.gla.kail.ad.uploader;
 
 import com.google.auth.oauth2.GoogleCredentials;
+import com.google.cloud.firestore.DocumentReference;
 import com.google.cloud.firestore.Firestore;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
@@ -15,13 +16,17 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.StringTokenizer;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.TimeUnit;
 
+
+/**
+ * All the fields in the sheet must be filled.
+ * The number of filled columns for each row must be the same.
+ */
 public class FirestoreUploader {
     private static final String _AVAILABLE_COMMANDS = "\nAvailable commands:\n" +
             "\nquit - Exit the application immediately and stop all processes." +
@@ -149,7 +154,7 @@ public class FirestoreUploader {
 
             // Read parameters (keys) for the Firestore. Set tsvFileBufferedReader to third row.
             stringTokenizer = new StringTokenizer(tsvFileBufferedReader.readLine(), "\t");
-            List<String> arrayOfParameters = new ArrayList<String>();
+            ArrayList<String> arrayOfParameters = new ArrayList<String>();
             while (stringTokenizer.hasMoreElements()) {
                 arrayOfParameters.add(stringTokenizer.nextElement().toString());
             }
@@ -180,12 +185,16 @@ public class FirestoreUploader {
         }
     }
 
-    private static void handleExperiments(BufferedReader tsvFileBufferedReader, ArrayList
+    private static void handleExperiments(BufferedReader tsvFileBufferedReader, ArrayList<String>
+            arrayOfParameters) throws IOException {
+        // TODO(Adam): Implement.
+    }
+
+    private static void handleUsers(BufferedReader tsvFileBufferedReader, ArrayList<String>
             arrayOfParameters) throws IOException {
         // TODO(Adam): Implement.
         String nextRow;
         StringTokenizer stringTokenizer;
-
         try {
             // Read third line where the data starts.
             nextRow = tsvFileBufferedReader.readLine();
@@ -197,43 +206,24 @@ public class FirestoreUploader {
         while (nextRow != null) {
             stringTokenizer = new StringTokenizer(nextRow, "\t");
             Map<String, Object> updateHelperMap = new HashMap<>();
-            List<String> dataArray = new ArrayList<String>();
-            while (stringTokenizer.hasMoreElements()) {
+            ArrayList<String> dataArray = new ArrayList<String>();
+            while(stringTokenizer.hasMoreElements()){
                 dataArray.add(stringTokenizer.nextElement().toString());
             }
-
-
-            for (String item : dataArray) {
-                System.out.print(item + "  ");
+            for (int i = 0; i < dataArray.size(); i++) {
+                updateHelperMap.put(arrayOfParameters.get(i), dataArray.get(i));
             }
-            System.out.println(); // Print the data line.
-            dataRow = TSVFile.readLine(); // Read next line of data.
-        }
-    }
-
-    private static void handleUsers(BufferedReader tsvFileBufferedReader, ArrayList
-            arrayOfParameters) throws IOException {
-        // TODO(Adam): Implement.
-        String nextRow;
-        StringTokenizer stringTokenizer;
-
-        try {
-            // Read third line where the data starts.
+            DocumentReference userDocRef = _database
+                    .collection("clientWebSimulator")
+                    .document("agent-dialogue-experiments")
+                    .collection("users")
+                    .document(updateHelperMap.get("userId").toString());
+            userDocRef.set(updateHelperMap);
             nextRow = tsvFileBufferedReader.readLine();
-        } catch (IOException exception) {
-            System.out.println("Could not read the tsv file data.\n" + exception.getMessage());
-            throw new IOException();
         }
-        while (nextRow != null) {
-            stringTokenizer = new StringTokenizer(nextRow, "\t");
-            Map<String, Object> updateHelperMap = new HashMap<>();
-            List<String> dataArray = new ArrayList<String>();
-        }
-        
-
     }
 
-    private static void handleTasks(BufferedReader tsvFileBufferedReader, ArrayList
+    private static void handleTasks(BufferedReader tsvFileBufferedReader, ArrayList<String>
             arrayOfParameters) {
         // TODO(Adam): Implement.
     }
