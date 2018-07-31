@@ -94,7 +94,7 @@ public class LogReplayer {
     public static void main(String[] args) {
         LogReplayer client = new LogReplayer("localhost", 8070);
 
-        // Thread running as 'frontend' - collects the input from user.
+        // Thread running as 'frontend' - collect the input from user.
         Runnable userInterfaceRunnable = () -> {
             File directory;
             Scanner scanner = new Scanner(System.in);
