@@ -62,7 +62,8 @@ class OfflineExperimentTaskLoader {
                 // are some more available.
                 if (numberOfOpenRatings <= maxNumberOfTasksAssigned) {
                     listOfOpenTaskIds = assignMoreTasksToUser(allAssignedTaskIds,
-                            listOfOpenTaskIds, maxNumberOfTasksAssigned, numberOfOpenRatings, userDocRef);
+                            listOfOpenTaskIds, maxNumberOfTasksAssigned, numberOfOpenRatings,
+                            userDocRef);
                 }
                 json.addProperty("tasks", getOpenTasks(listOfOpenTaskIds));
             }
@@ -72,8 +73,10 @@ class OfflineExperimentTaskLoader {
         return json.toString();
     }
 
-    private ArrayList<String> assignMoreTasksToUser(HashSet<String> allAssignedTaskIds, ArrayList<String>
-            listOfOpenTaskIds, Integer maxNumberOfTasksAssigned, Integer numberOfOpenRatings, DocumentReference userDocRef)
+    private ArrayList<String> assignMoreTasksToUser(HashSet<String> allAssignedTaskIds,
+                                                    ArrayList<String>
+            listOfOpenTaskIds, Integer maxNumberOfTasksAssigned, Integer numberOfOpenRatings,
+                                                    DocumentReference userDocRef)
             throws ExecutionException, InterruptedException {
         HashSet<String> remainingAvailableTasks = new HashSet<>();
 
@@ -118,17 +121,18 @@ class OfflineExperimentTaskLoader {
 
     private void updateTaskDocument(String taskId, String ratingId) throws ExecutionException,
             InterruptedException {
-        DocumentReference taskDocRef = _database.collection("clientWebSimulator")
-                .document("agent-dialogue-experiments")
-                .collection("tasks").document(taskId);
-        ArrayList<String> ratingsIds = (ArrayList<String>) taskDocRef.get().get()
-                .getData().get("ratingsIds");
-        if (ratingsIds == null) {
-            ratingsIds = new ArrayList<>();
+        DocumentReference taskDocRef = _database.collection("clientWebSimulator").document
+                ("agent-dialogue-experiments").collection("tasks").document(taskId);
+        Map<String, Object> taskData = taskDocRef.get().get().getData();
+        ArrayList<String> ratingIds;
+        if (taskData.containsKey("ratingIds")) {
+            ratingIds = (ArrayList<String>) taskData.get("ratingIds");
+        } else {
+            ratingIds = new ArrayList<>();
         }
-        ratingsIds.add(ratingId);
+        ratingIds.add(ratingId);
         HashMap<String, Object> helperMap = new HashMap<>();
-        helperMap.put("ratingIds", ratingsIds);
+        helperMap.put("ratingIds", ratingIds);
         taskDocRef.update(helperMap);
     }
 

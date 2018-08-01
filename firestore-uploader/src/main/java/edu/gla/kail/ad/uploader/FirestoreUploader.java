@@ -61,8 +61,8 @@ public class FirestoreUploader {
                         System.out.println("The provided path to the log file is invalid:\n" +
                                 directory.toString() + "\nTry again! Type new command:\n\n");
                     } else {
-                        _tsvFilePathQueue.add(directory);
                         _numberOfScheduledOperations.incrementAndGet();
+                        _tsvFilePathQueue.add(directory);
                     }
                     break;
                 case "wait":
@@ -186,13 +186,13 @@ public class FirestoreUploader {
             System.out.println("\nThe database was uploaded successfully with the following file:" +
                     " \n\n" + tsvFile.getAbsolutePath() + "\nType new command:\n");
             tsvFileBufferedReader.close();
-            _numberOfScheduledOperations.decrementAndGet();
         } catch (FileNotFoundException fileNotFoundException) {
             System.out.println("File could not be found: " + tsvFile.getAbsolutePath());
         } catch (IOException ioException) {
             System.out.println("The data in the file:\n" + tsvFile.getAbsolutePath() + "\nis " +
                     "incorrectly formatted. The first line could not be read correctly.\n");
         }
+        _numberOfScheduledOperations.decrementAndGet();
     }
 
 
