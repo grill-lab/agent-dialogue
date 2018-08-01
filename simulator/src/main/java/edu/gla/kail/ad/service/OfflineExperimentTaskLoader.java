@@ -128,6 +128,9 @@ class OfflineExperimentTaskLoader {
         ratingIds.add(ratingId);
         HashMap<String, Object> helperMap = new HashMap<>();
         helperMap.put("ratingIds", ratingIds);
+        Long numberOfRemainingRatings = (Long) taskData.get("numberOfRemainingRatings");
+        numberOfRemainingRatings -= 1;
+        helperMap.put("numberOfRemainingRatings", numberOfRemainingRatings);
         taskDocRef.update(helperMap);
     }
 
