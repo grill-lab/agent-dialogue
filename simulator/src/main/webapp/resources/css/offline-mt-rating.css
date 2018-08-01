@@ -64,3 +64,7 @@
 .tasks-list-block .active {
     background-color: #b71115;
 }
+
+.date-utternace {
+    font-size: 12px;
+}
