@@ -106,11 +106,11 @@ function showTaskWithNumber(taskNumber) {
         let turn = JSON.parse(turns[i]);
         if (turn.request != null) {
             $rating_interface_block.append($('<div id="request"/>')
-                .append("<i>" + new Date(turn.requestTime_seconds * 1000).toLocaleString() + "</i>" + "<br>" + turn.request));
+                .append("<i class = 'date-utternace'>" + new Date(turn.requestTime_seconds * 1000).toLocaleString() + "</i>" + "<br>" + turn.request));
         }
         if (turn.response != null) {
             $rating_interface_block.append($('<div id="response"/>')
-                .append("<i>" + new Date(turn.responseTime_seconds * 1000).toLocaleString() + "</i>" + "<br>" + turn.response));
+                .append("<i class = 'date-utternace'>" + new Date(turn.responseTime_seconds * 1000).toLocaleString() + "</i>" + "<br>" + turn.response));
         }
     }
     createMtRating(taskNumber);
