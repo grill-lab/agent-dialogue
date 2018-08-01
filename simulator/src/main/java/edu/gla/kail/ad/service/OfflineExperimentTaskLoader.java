@@ -155,8 +155,8 @@ class OfflineExperimentTaskLoader {
         for (Integer taskIndex = 0; taskIndex < listOfOpenTaskIds.size(); taskIndex++) {
             String taskId = listOfOpenTaskIds.get(taskIndex);
             Map<String, Object> taskMap = _database.collection("clientWebSimulator")
-                    .document("agent-dialogue-experiments").collection("tasks").document
-                            (taskId).get().get().getData();
+                    .document("agent-dialogue-experiments").collection("tasks")
+                    .document(taskId).get().get().getData();
             JsonObject taskJson = new JsonObject();
             taskJson.addProperty("clientId", (String) taskMap.get("clientId"));
             taskJson.addProperty("deviceType", (String) taskMap.get("deviceType"));
