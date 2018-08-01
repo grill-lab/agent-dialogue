@@ -51,7 +51,8 @@
     display:inline-block;
     color: white;
     text-align: center;
-    padding: 14px 16px;
+    padding: 7px 8px;
+    margin: 3px;
     text-decoration: none;
     list-style-type: none;
 }

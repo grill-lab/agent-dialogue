@@ -31,11 +31,21 @@ class OfflineExperimentTaskRater {
         DocumentReference userDocRef = _database.collection("clientWebSimulator").document
                 ("agent-dialogue-experiments").collection("users").document(userId);
         try {
-            ArrayList<String> listOfOpenTaskIds = (ArrayList<String>) userDocRef.get().get()
-                    .getData().get("openTaskIds");
-            ArrayList<String> completedTaskIds = (ArrayList<String>) userDocRef.get().get()
-                    .getData().get("completedTaskIds");
-            updateHelperMap.clear();
+            Map<String, Object> userData = userDocRef.get().get().getData();
+            ArrayList<String> listOfOpenTaskIds;
+            if (userData.containsKey("openTaskIds")) {
+                listOfOpenTaskIds = (ArrayList<String>) userData.get("openTaskIds");
+            } else {
+                listOfOpenTaskIds = new ArrayList<>();
+            }
+            ArrayList<String> completedTaskIds;
+            if (userData.containsKey("completedTaskIds")) {
+                completedTaskIds = (ArrayList<String>) userData.get("completedTaskIds");
+            } else {
+                completedTaskIds = new ArrayList<>();
+            }
+
+            updateHelperMap = new HashMap<>();
             if (listOfOpenTaskIds.remove(taskId)) {
                 updateHelperMap.put("openTaskIds", listOfOpenTaskIds);
             }
@@ -54,8 +64,13 @@ class OfflineExperimentTaskRater {
         DocumentReference taskDocRef = _database.collection("clientWebSimulator").document
                 ("agent-dialogue-experiments").collection("tasks").document(taskId);
         try {
-            ArrayList<String> listOfRatings = (ArrayList<String>) taskDocRef.get().get()
-                    .getData().get("ratingIds");
+            Map<String, Object> taskData = taskDocRef.get().get().getData();
+            ArrayList<String> listOfRatings;
+            if (taskData.containsKey("ratingIds")) {
+                listOfRatings = (ArrayList<String>) taskData.get("ratingIds");
+            } else {
+                listOfRatings = new ArrayList<>();
+            }
             Long numberOfRemainingRatings = (Long) taskDocRef.get().get()
                     .getData().get("numberOfRemainingRatings");
             if (!listOfRatings.contains(ratingId)) {

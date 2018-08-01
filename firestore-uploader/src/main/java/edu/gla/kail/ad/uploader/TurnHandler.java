@@ -50,7 +50,7 @@ class TurnHandler {
                     supportingHelperMap.put(arrayOfParameters.get(i), data);
                 }
             }
-            
+
             // If line is empty, then read next line and continue executing while loop.
             if (dataArray.size() == 0) {
                 nextRow = tsvFileBufferedReader.readLine();
@@ -82,7 +82,7 @@ class TurnHandler {
             }
             if (type_of_turn.equals("request") || type_of_turn.equals("response")) {
                 turnMap.put(type_of_turn, utterance);
-                turnMap.put("time_seconds", Integer.valueOf(time_seconds));
+                turnMap.put(type_of_turn + "Time_seconds", Integer.valueOf(time_seconds));
                 turnMap.put("clientId", supportingHelperMap.get("clientId"));
                 turnMap.put("deviceType", supportingHelperMap.get("deviceType"));
                 turnMap.put("language_code", supportingHelperMap.get("language_code"));
