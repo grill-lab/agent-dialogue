@@ -74,7 +74,9 @@ class OfflineExperimentTaskLoader {
 
     private ArrayList<String> assignMoreTasksToUser(HashSet<String> allAssignedTaskIds,
                                                     ArrayList<String>
-            listOfOpenTaskIds, Integer maxNumberOfTasksAssigned, Integer numberOfOpenRatings,
+                                                            listOfOpenTaskIds, Integer
+                                                            maxNumberOfTasksAssigned, Integer
+                                                            numberOfOpenRatings,
                                                     DocumentReference userDocRef)
             throws ExecutionException, InterruptedException {
         HashSet<String> remainingAvailableTasks = new HashSet<>();
@@ -134,7 +136,8 @@ class OfflineExperimentTaskLoader {
         taskDocRef.update(helperMap);
     }
 
-    private String createNewOpenRating(String taskId) {
+    private String createNewOpenRating(String taskId) throws ExecutionException,
+            InterruptedException {
         String ratingId = taskId + "_" + _userId;
         DocumentReference createdRatingDocRef = _database.collection
                 ("clientWebSimulator").document("agent-dialogue-experiments")
@@ -147,7 +150,10 @@ class OfflineExperimentTaskLoader {
         data.put("complete", false);
         data.put("taskId", taskId);
         data.put("userId", _userId);
-
+        data.put("experimentId", _database.collection
+                ("clientWebSimulator").document("agent-dialogue-experiments")
+                .collection("taskId").document(taskId)
+                .get().get().getData().get("experimentId"));
         createdRatingDocRef.set(data);
         return ratingId;
     }
