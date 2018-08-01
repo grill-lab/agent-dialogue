@@ -4,6 +4,7 @@ import com.google.api.core.ApiFuture;
 import com.google.cloud.firestore.DocumentReference;
 import com.google.cloud.firestore.DocumentSnapshot;
 import com.google.cloud.firestore.Firestore;
+import com.google.common.primitives.Ints;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -38,18 +39,25 @@ class TurnHandler {
             while (stringTokenizer.hasMoreElements()) {
                 dataArray.add(stringTokenizer.nextElement().toString());
             }
+
+            // Add data as Integer if possible, if it's not ID.
             for (int i = 0; i < dataArray.size(); i++) {
-                supportingHelperMap.put(arrayOfParameters.get(i), dataArray.get(i));
+                String data = dataArray.get(i);
+                Integer dataInteger = Ints.tryParse(data);
+                if (dataInteger != null && !arrayOfParameters.get(i).contains("Id")) {
+                    supportingHelperMap.put(arrayOfParameters.get(i), dataInteger);
+                } else {
+                    supportingHelperMap.put(arrayOfParameters.get(i), data);
+                }
             }
+            
             // If line is empty, then read next line and continue executing while loop.
             if (dataArray.size() == 0) {
                 nextRow = tsvFileBufferedReader.readLine();
                 continue;
             }
             checkNotNull(supportingHelperMap.get("taskId"), "Table not formatted correctly; " +
-                    "taskId " +
-                    "non" +
-                    " existent.");
+                    "taskId non existent.");
             // If task if of the next data row is different from the previous task id, then add
             // the turn to the database.
             if (taskId != null && !taskId.equals(supportingHelperMap.get("taskId").toString())) {
@@ -62,7 +70,7 @@ class TurnHandler {
 
             String type_of_turn = supportingHelperMap.remove("type_of_turn").toString();
             String utterance = supportingHelperMap.remove("utterance").toString();
-            String time_seconds = supportingHelperMap.remove("time_seconds").toString();
+            Integer time_seconds = (Integer) supportingHelperMap.remove("time_seconds");
 
             // If it is a new task, then populate updateHelperMap.
             if (updateHelperMap.isEmpty()) {
