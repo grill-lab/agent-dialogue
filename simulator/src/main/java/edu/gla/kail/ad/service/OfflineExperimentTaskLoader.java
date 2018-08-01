@@ -57,7 +57,6 @@ class OfflineExperimentTaskLoader {
                 HashSet allAssignedTaskIds = new HashSet(listOfCompletedTaskIds);
 
                 allAssignedTaskIds.addAll(listOfOpenTaskIds);
-
                 // Assign more tasks to the user if the user can have more open tasks and there
                 // are some more available.
                 if (numberOfOpenRatings <= maxNumberOfTasksAssigned) {
@@ -83,7 +82,7 @@ class OfflineExperimentTaskLoader {
         // Get all candidate tasks.
         ApiFuture<QuerySnapshot> tasksFuture = _database.collection
                 ("clientWebSimulator").document("agent-dialogue-experiments")
-                .collection("ratings").get();
+                .collection("tasks").get();
         List<QueryDocumentSnapshot> tasks = tasksFuture.get().getDocuments();
         for (DocumentSnapshot task : tasks) {
             remainingAvailableTasks.add((String) task.get("taskId"));
@@ -112,10 +111,6 @@ class OfflineExperimentTaskLoader {
         Map<String, Object> helperMap = new HashMap<>();
         helperMap.put("openTaskIds", listOfOpenTaskIds);
         userDocRef.update(helperMap);
-
-        // Get updated user document.
-        Map<String, Object> userData = userDocRef.get().get().getData();
-        listOfOpenTaskIds = (ArrayList<String>) userData.get("openTaskIds");
         return listOfOpenTaskIds;
     }
 

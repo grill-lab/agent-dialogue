@@ -2,6 +2,7 @@ package edu.gla.kail.ad.uploader;
 
 import com.google.cloud.firestore.DocumentReference;
 import com.google.cloud.firestore.Firestore;
+import com.google.common.primitives.Ints;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -23,9 +24,18 @@ class UserHandler {
             while (stringTokenizer.hasMoreElements()) {
                 dataArray.add(stringTokenizer.nextElement().toString());
             }
+
+            // Add data as Integer if possible, if it's not ID.
             for (int i = 0; i < dataArray.size(); i++) {
-                updateHelperMap.put(arrayOfParameters.get(i), dataArray.get(i));
+                String data = dataArray.get(i);
+                Integer dataInteger = Ints.tryParse(data);
+                if (dataInteger != null && !arrayOfParameters.get(i).contains("Id")) {
+                    updateHelperMap.put(arrayOfParameters.get(i), dataInteger);
+                } else {
+                    updateHelperMap.put(arrayOfParameters.get(i), data);
+                }
             }
+
             // If line is empty, then read next line and continue executing while loop.
             if (updateHelperMap.size() == 0) {
                 nextRow = tsvFileBufferedReader.readLine();
