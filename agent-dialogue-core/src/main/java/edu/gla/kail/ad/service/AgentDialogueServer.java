@@ -13,8 +13,8 @@ import io.grpc.ServerBuilder;
 import io.grpc.stub.StreamObserver;
 
 import java.io.IOException;
+import java.net.URL;
 import java.time.Instant;
-import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -23,27 +23,29 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * TODO(Adam): Create a database used for server initialization.
  */
 public class AgentDialogueServer {
-    private final int _port;
     private final Server _server;
 
     public AgentDialogueServer(int port) {
-        this(ServerBuilder.forPort(port), port);
+        this(ServerBuilder.forPort(port));
     }
 
     /**
      * Create a server listening on specified port.
      *
      * @param serverBuilder
-     * @param port
      */
-    private AgentDialogueServer(ServerBuilder<?> serverBuilder, int port) {
-        _port = port;
+    private AgentDialogueServer(ServerBuilder<?> serverBuilder) {
         _server = serverBuilder.addService(new AgentDialogueService()).build();
     }
 
-    public static void main(String[] args) throws IOException, InterruptedException {
+    public static void main(String[] args) throws Exception {
         // Using the default port 8070.
-        AgentDialogueServer server = new AgentDialogueServer(8070);
+        if (args == null || args.length == 0) {
+            throw new Exception("Please specify the URL to the configuration file.");
+        }
+        PropertiesSingleton.getPropertiesSingleton(new URL(args[0]));
+        AgentDialogueServer server = new AgentDialogueServer(PropertiesSingleton.getCoreConfig()
+                .getGrpcServerPort());
         server.start();
         server.blockUntilShutdown();
     }
@@ -123,7 +125,7 @@ public class AgentDialogueServer {
         @Override
         public void getResponseFromAgents(InteractionRequest interactionRequest,
                                           StreamObserver<InteractionResponse> responseObserver) {
-            checkNotNull(interactionRequest.getUserID(), "The interactionRequest that have " +
+            checkNotNull(interactionRequest.getUserID(), "The InteractionRequest that have " +
                     "been sent doesn't have userID!");
             DialogAgentManager dialogAgentManager;
             try {
@@ -133,7 +135,7 @@ public class AgentDialogueServer {
                 exception.printStackTrace();
                 dialogAgentManager = null;
             }
-            checkNotNull(dialogAgentManager, "The initialization of the dialogAgentManager " +
+            checkNotNull(dialogAgentManager, "The initialization of the DialogAgentManager " +
                     "failed!");
             ResponseLog response;
             InteractionResponse interactionResponse;
