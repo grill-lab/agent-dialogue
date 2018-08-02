@@ -8,7 +8,7 @@ import java.net.URL;
 import java.util.Scanner;
 
 
-final class PropertiesSingleton {
+public final class PropertiesSingleton {
     private static PropertiesSingleton _instance;
     private static CoreConfig _coreConfig;
 

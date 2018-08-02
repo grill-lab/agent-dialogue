@@ -10,10 +10,10 @@ import com.google.cloud.dialogflow.v2beta1.SessionsSettings;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Scanner;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -25,7 +25,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * The class is thread safe.
  */
 public final class DialogflowAgentAuthorizationSingleton {
-    private static Map<Tuple<String, String>, DialogflowAgentAuthorizationSingleton>
+    private static Map<Tuple<String, URL>, DialogflowAgentAuthorizationSingleton>
             _agentAuthorizationInstances;
     private SessionsClient _sessionsClient;
     private String _projectId;
@@ -40,24 +40,21 @@ public final class DialogflowAgentAuthorizationSingleton {
      * @throws FileNotFoundException
      * @throws IllegalArgumentException
      */
-    private DialogflowAgentAuthorizationSingleton(Tuple<String, String>
+    private DialogflowAgentAuthorizationSingleton(Tuple<String, URL>
                                                           tupleOfProjectIdAndAuthenticationFile)
             throws FileNotFoundException, IllegalArgumentException, IOException {
         checkNotNull(tupleOfProjectIdAndAuthenticationFile, "The passed tuple is null!");
         _projectId = checkNotNull(tupleOfProjectIdAndAuthenticationFile.x(), "The project " +
                 "ID is null!");
-        String jsonKeyFileLocation = checkNotNull(tupleOfProjectIdAndAuthenticationFile.y(), "The" +
+        URL jsonKeyUrl = checkNotNull(tupleOfProjectIdAndAuthenticationFile.y(), "The" +
                 " JSON file location is null!");
         if (_projectId.isEmpty()) {
             throw new IllegalArgumentException("The provided project ID of the service is empty!");
         }
-        if (!(Files.exists(Paths.get(jsonKeyFileLocation)))) {
-            throw new FileNotFoundException("The location of the JSON key file provided does not " +
-                    "exist: " + jsonKeyFileLocation);
-        }
 
         CredentialsProvider credentialsProvider = FixedCredentialsProvider.create(
-                (ServiceAccountCredentials.fromStream(new FileInputStream(jsonKeyFileLocation))));
+                (ServiceAccountCredentials.fromStream(new FileInputStream(new Scanner(jsonKeyUrl
+                        .openStream()).useDelimiter("\\Z").next()))));
         SessionsSettings sessionsSettings = SessionsSettings.newBuilder().setCredentialsProvider
                 (credentialsProvider).build(); // TODO(Adam): Handle the error, when the
         // authorization fails. What to do then though?
@@ -77,7 +74,7 @@ public final class DialogflowAgentAuthorizationSingleton {
      *         empty, appropriate exception is thrown.
      */
     static synchronized Tuple<String, SessionsClient> getProjectIdAndSessionsClient
-    (Tuple<String, String> tupleOfProjectIdAndAuthenticationFile) throws IOException {
+    (Tuple<String, URL> tupleOfProjectIdAndAuthenticationFile) throws IOException {
         if (_agentAuthorizationInstances == null) {
             _agentAuthorizationInstances = new HashMap<>();
         }
