@@ -1,3 +1,4 @@
+/*
 package edu.gla.kail.ad.core;
 
 import edu.gla.kail.ad.Client.InputInteraction;
@@ -11,9 +12,11 @@ import static org.junit.Assert.fail;
 
 @RunWith(JUnit4.class)
 public class FailingExceptionDummyAgentTest {
-    /**
+    */
+/**
      * Test the FailingExceptionDummyAgent raise the exception.
-     */
+     *//*
+
     @Test
     public void testThrowingException() {
         InputInteraction inputInteraction = InputInteraction.newBuilder()
@@ -32,3 +35,4 @@ public class FailingExceptionDummyAgentTest {
         fail("The FailingExceptionDummyAgent doesn't throw the exception!");
     }
 }
+*/

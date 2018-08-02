@@ -29,8 +29,8 @@ public class AdClientServiceServlet extends HttpServlet {
     private static LogManagerSingleton _logManagerSingleton = LogManagerSingleton
             .getLogManagerSingleton();
     private static AgentDialogueClientService _client = new AgentDialogueClientService
-            ("35.184.227.176", 8070);
-    /*("localhost", 8070);*/
+            /*("35.184.227.176", 8070);*/
+    ("localhost", 8070);
 
     /**
      * Handle POST request.

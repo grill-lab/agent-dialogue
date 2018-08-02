@@ -1,3 +1,4 @@
+/*
 package edu.gla.kail.ad.core;
 
 import com.google.protobuf.Timestamp;
@@ -6,17 +7,19 @@ import edu.gla.kail.ad.Client.InputInteraction;
 import edu.gla.kail.ad.Client.InteractionType;
 import edu.gla.kail.ad.Client.OutputInteraction;
 import edu.gla.kail.ad.core.Log.ResponseLog;
-import edu.gla.kail.ad.core.Log.ResponseLog.ServiceProvider;
+import edu.gla.kail.ad.core.Log.ServiceProvider;
 import edu.gla.kail.ad.core.Log.Slot;
 import edu.gla.kail.ad.core.Log.SystemAct;
 
 import java.time.Instant;
 
 
+*/
 /**
  * This is a dummy agent created for testing purposes.
  * Returns valid inputInteraction.
- */
+ *//*
+
 class DummyAgent implements AgentInterface {
     private Timestamp timestamp = Timestamp.newBuilder()
             .setSeconds(Instant.now()
@@ -50,3 +53,4 @@ class DummyAgent implements AgentInterface {
                 .build();
     }
 }
+*/
