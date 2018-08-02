@@ -8,7 +8,7 @@ import com.google.common.cache.RemovalListener;
 import com.google.common.cache.RemovalNotification;
 import edu.gla.kail.ad.core.ConfigurationTuple;
 import edu.gla.kail.ad.core.DialogAgentManager;
-import edu.gla.kail.ad.core.Log.ResponseLog.ServiceProvider;
+import edu.gla.kail.ad.core.Log.ServiceProvider;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;

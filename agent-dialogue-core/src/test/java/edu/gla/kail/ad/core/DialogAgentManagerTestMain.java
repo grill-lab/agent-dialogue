@@ -6,7 +6,7 @@ import edu.gla.kail.ad.Client;
 import edu.gla.kail.ad.Client.InputInteraction;
 import edu.gla.kail.ad.Client.InteractionRequest;
 import edu.gla.kail.ad.Client.InteractionType;
-import edu.gla.kail.ad.core.Log.ResponseLog.ServiceProvider;
+import edu.gla.kail.ad.core.Log.ServiceProvider;
 
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -56,7 +56,7 @@ public class DialogAgentManagerTestMain {
                     _configurationTuples.add(new ConfigurationTuple<>(ServiceProvider.DIALOGFLOW,
                             dialogflowProjectIdAndJsonKeyFileList));
                     break;
-                case "DummyAgent":
+                /*case "DummyAgent":
                     _configurationTuples.add(new ConfigurationTuple<>(ServiceProvider
                             .DUMMYAGENT, null));
                     break;
@@ -71,7 +71,7 @@ public class DialogAgentManagerTestMain {
                 case "FailingTimeDummyAgent":
                     _configurationTuples.add(new ConfigurationTuple<>(ServiceProvider
                             .FAILINGTIMEDUMMYAGENT, null));
-                    break;
+                    break;*/
                 default:
                     throw new IllegalArgumentException("The name of the agent is not correctly " +
                             "formatted or the agent type: " +

@@ -1,6 +1,6 @@
 package edu.gla.kail.ad.core;
 
-import edu.gla.kail.ad.core.Log.ResponseLog.ServiceProvider;
+import edu.gla.kail.ad.core.Log.ServiceProvider;
 
 import javax.annotation.Nullable;
 import java.util.List;

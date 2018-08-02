@@ -1,3 +1,4 @@
+/*
 package edu.gla.kail.ad.core;
 
 import edu.gla.kail.ad.Client.InputInteraction;
@@ -10,9 +11,11 @@ import static org.junit.Assert.assertNull;
 
 @RunWith(JUnit4.class)
 public class FailingNullDummyAgentTest {
-    /**
+    */
+/**
      * Test the FailingNullDummyAgent returning null response
-     */
+     *//*
+
     @Test
     public void testThrowingException() {
         InputInteraction inputInteraction = InputInteraction.newBuilder()
@@ -25,3 +28,4 @@ public class FailingNullDummyAgentTest {
         assertNull(failingNullDummyAgent.getResponseFromAgent(inputInteraction));
     }
 }
+*/

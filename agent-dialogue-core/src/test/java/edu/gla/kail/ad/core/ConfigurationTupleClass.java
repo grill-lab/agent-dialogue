@@ -1,6 +1,7 @@
+/*
 package edu.gla.kail.ad.core;
 
-import edu.gla.kail.ad.core.Log.ResponseLog.ServiceProvider;
+import edu.gla.kail.ad.core.Log.ServiceProvider;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
@@ -70,3 +71,4 @@ public class ConfigurationTupleClass {
                 configurationTuple2.equals(configurationTuple1));
     }
 }
+*/

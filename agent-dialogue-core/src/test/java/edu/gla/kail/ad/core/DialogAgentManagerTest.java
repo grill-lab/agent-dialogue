@@ -1,3 +1,4 @@
+/*
 package edu.gla.kail.ad.core;
 
 import com.google.cloud.Tuple;
@@ -6,7 +7,7 @@ import edu.gla.kail.ad.Client;
 import edu.gla.kail.ad.Client.InputInteraction;
 import edu.gla.kail.ad.Client.InteractionRequest;
 import edu.gla.kail.ad.Client.InteractionType;
-import edu.gla.kail.ad.core.Log.ResponseLog.ServiceProvider;
+import edu.gla.kail.ad.core.Log.ServiceProvider;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -113,9 +114,11 @@ public class DialogAgentManagerTest {
                 .build();
     }
 
-    /**
+    */
+/**
      * Test if agents are being set up from the provided configurationTuple.
-     */
+     *//*
+
 
     @Test
     public void testSetUpAgents() {
@@ -138,3 +141,4 @@ public class DialogAgentManagerTest {
 
 }
 
+*/
