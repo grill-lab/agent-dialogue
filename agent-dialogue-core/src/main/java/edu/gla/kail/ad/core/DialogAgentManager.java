@@ -4,20 +4,26 @@ import com.google.cloud.Tuple;
 import com.google.protobuf.Timestamp;
 import edu.gla.kail.ad.Client.InputInteraction;
 import edu.gla.kail.ad.Client.InteractionRequest;
-import edu.gla.kail.ad.core.Log.*;
+import edu.gla.kail.ad.core.Log.RequestLog;
+import edu.gla.kail.ad.core.Log.ResponseLog;
 import edu.gla.kail.ad.core.Log.ResponseLog.Builder;
 import edu.gla.kail.ad.core.Log.ResponseLog.MessageStatus;
+import edu.gla.kail.ad.core.Log.ResponseLogOrBuilder;
+import edu.gla.kail.ad.core.Log.Turn;
+import edu.gla.kail.ad.core.Log.TurnOrBuilder;
 import io.reactivex.Observable;
 import io.reactivex.schedulers.Schedulers;
 
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-import java.util.concurrent.*;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -84,10 +90,10 @@ public class DialogAgentManager {
      * Set up (e.g. authenticate) all agents and store them to the list of agents.
      *
      * @param configurationTuples - The list stores the entities of ConfigurationTuple,
-     *                            which holds data required by each agent.
+     *         which holds data required by each agent.
      * @throws IllegalArgumentException - Raised by _agents.add(new
-     *                                  DialogflowAgent(_sessionId, agentSpecificData.get(0)));
-     * @throws IOException,             IllegalArgumentException
+     *         DialogflowAgent(_sessionId, agentSpecificData.get(0)));
+     * @throws IOException, IllegalArgumentException
      */
     public void setUpAgents(List<ConfigurationTuple> configurationTuples) throws
             IllegalArgumentException, IOException {
@@ -106,7 +112,8 @@ public class DialogAgentManager {
                     }
                     _agents.add(new DialogflowAgent(_sessionId, agentSpecificData.get(0)));
                     break;
-                case DUMMYAGENT: // TODO(ADAM): Delete these agents after testing is done.
+                /*case DUMMYAGENT: // TODO(ADAM): Delete these agents after testing is done.
+                Dummy agents have been moved to test folder.
                     _agents.add(new DummyAgent());
                     break;
                 case FAILINGEXCEPTIONDUMMYAGENT:
@@ -117,7 +124,7 @@ public class DialogAgentManager {
                     break;
                 case FAILINGTIMEDUMMYAGENT:
                     _agents.add(new FailingTimeDummyAgent());
-                    break;
+                    break;*/
                 default:
                     throw new IllegalArgumentException("The type of the agent provided " +
                             "\"" +
@@ -134,7 +141,7 @@ public class DialogAgentManager {
      *
      * @param interactionRequest - The request sent by the client.
      * @return ResponseLog - The response chosen with a particular method from the list of responses
-     * obtained by calling all the agents.
+     *         obtained by calling all the agents.
      */
     public ResponseLog getResponse(InteractionRequest interactionRequest) throws Exception {
         RequestLog requestLog = RequestLog.newBuilder()
@@ -165,9 +172,9 @@ public class DialogAgentManager {
      * Return the list of responses for a given request.
      *
      * @param inputInteraction - The a data structure (implemented in log.proto) holding
-     *                         the interaction input passed to agents.
+     *         the interaction input passed to agents.
      * @return List<ResponseLog> - The list of responses of all agents set up on the
-     * setUpAgents(...) method call.
+     *         setUpAgents(...) method call.
      */
     private List<ResponseLog> getResponsesFromAgents(InputInteraction inputInteraction) {
         if (checkNotNull(_agents, "Agents are not set up! Use the method" +
@@ -184,9 +191,9 @@ public class DialogAgentManager {
      * Return the responses by calling agents asynchronously.
      *
      * @param inputInteraction - The a data structure (implemented in log .proto) holding
-     *                         the interaction input sent to the agent.
+     *         the interaction input sent to the agent.
      * @return List<ResponseLog> - The list of responses of all agents set up on the
-     * setUpAgents(...) method call.
+     *         setUpAgents(...) method call.
      */
     private List<ResponseLog> asynchronousAgentCaller(InputInteraction inputInteraction) {
         Observable<AgentInterface> agentInterfaceObservable = Observable.fromIterable(_agents);
@@ -203,9 +210,9 @@ public class DialogAgentManager {
      * Return the responses by calling agents synchronously.
      *
      * @param inputInteraction - The a data structure (implemented in log .proto) holding
-     *                         the interaction input sent to the agent.
+     *         the interaction input sent to the agent.
      * @return List<ResponseLog> - The list of responses of all agents set up on the
-     * setUpAgents(...) method call.
+     *         setUpAgents(...) method call.
      */
     private List<ResponseLog> synchronousAgentCaller(InputInteraction inputInteraction) {
         List<ResponseLog> listOfResponseLogs = new ArrayList<>();
@@ -219,9 +226,9 @@ public class DialogAgentManager {
      * Return a valid response from an agent within a set time period or return and unsuccessful
      * response.
      *
-     * @param agent            - The agent which
+     * @param agent - The agent which
      * @param inputInteraction - The a data structure (implemented in log .proto) holding
-     *                         the interaction input sent to the agent.
+     *         the interaction input sent to the agent.
      * @return ResponseLog - Response from the agent or unsuccessful reponse.
      */
     private ResponseLog callForResponseAndValidate(AgentInterface agent, InputInteraction
@@ -290,7 +297,7 @@ public class DialogAgentManager {
      *
      * @param responses - The list of ResponseLog responses obtained from agents.
      * @return ResponseLog - The first successful response or unsuccessful response if none of the
-     * provided responses were successful.
+     *         provided responses were successful.
      */
     private ResponseLog chooseFirstValidResponse(List<ResponseLog> responses) {
         for (ResponseLog responseLog : responses) {

@@ -1,0 +1,26 @@
+syntax = "proto3";
+
+package edu.gla.kail.ad;
+
+option java_package = "edu.gla.kail.ad";
+
+
+message CoreConfig {
+    string grpc_server_port = 1;
+    string log_storage_path = 2;
+    string timeout_seconds = 3;
+    repeated Agent agents = 4;
+    string authorization_files_directory_path = 5;
+
+}
+
+message Agent {
+    enum ServiceProvider {
+        NOTSET = 0;
+        DIALOGFLOW = 1;
+    }
+    ServiceProvider service_provider = 1;
+    string project_id = 2;
+    string name_of_authorization_file = 3;
+}
+
