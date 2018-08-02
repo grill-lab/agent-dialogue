@@ -125,7 +125,7 @@ final class DialogAgentManagerSingleton {
                     configurationTuples.add(new ConfigurationTuple<>(ServiceProvider.DIALOGFLOW,
                             dialogflowProjectIdAndJsonKeyFileList));
                     break;
-                case "DummyAgent":
+/*                case "DummyAgent":
                     configurationTuples.add(new ConfigurationTuple<>(ServiceProvider
                             .DUMMYAGENT, null));
                     break;
@@ -140,7 +140,7 @@ final class DialogAgentManagerSingleton {
                 case "FailingTimeDummyAgent":
                     configurationTuples.add(new ConfigurationTuple<>(ServiceProvider
                             .FAILINGTIMEDUMMYAGENT, null));
-                    break;
+                    break;*/
                 default:
                     throw new IllegalArgumentException("The name of the agent is not correctly " +
                             "formatted or the agent type: " +
