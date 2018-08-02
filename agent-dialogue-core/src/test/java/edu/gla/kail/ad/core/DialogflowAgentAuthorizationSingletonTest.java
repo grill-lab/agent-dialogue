@@ -14,31 +14,25 @@ import org.junit.runners.JUnit4;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.nio.file.Paths;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.Scanner;
 
 import static org.junit.Assert.fail;
 
 @RunWith(JUnit4.class)
 public class DialogflowAgentAuthorizationSingletonTest {
-    private String _jsonKeyFileLocation;
+    private URL _jsonKeyURL;
     private String _projectId;
 
     /**
-     * Set up _jsonKeyFileLocation and projectID for the myquotemaster-13899 project.
+     * Set up _jsonKeyURL and projectID for the myquotemaster-13899 project.
      */
     @Before
-    public void setUp() {
-        _jsonKeyFileLocation = Paths
-                .get(DialogflowAgentAuthorizationSingletonTest
-                        .class
-                        .getProtectionDomain()
-                        .getCodeSource()
-                        .getLocation()
-                        .getPath())
-                .getParent()
-                .getParent()
-                .toString() +
-                "/src/main/resources/myquotemaster-13899-04ed41718e57.json";
+    public void setUp() throws MalformedURLException {
+        _jsonKeyURL = new URL
+                ("file:///Users/Adam/Documents/Internship/GitHub/agent-dialogue/agent-dialogue" +
+                        "-core/src/main/resources/myquotemaster-13899-04ed41718e57.json");
         _projectId = "myquotemaster-13899";
     }
 
@@ -47,15 +41,15 @@ public class DialogflowAgentAuthorizationSingletonTest {
      */
     @Test
     public void testInitialization() {
-        Tuple<String, String> tupleOfProjectIdAndAuthenticationFile = Tuple.of(_projectId,
-                _jsonKeyFileLocation);
+        Tuple<String, URL> tupleOfProjectIdAndAuthenticationFile = Tuple.of(_projectId,
+                _jsonKeyURL);
         try {
             Tuple<String, SessionsClient> tupleOfSessionIDAndSessionClient =
                     DialogflowAgentAuthorizationSingleton
                             .getProjectIdAndSessionsClient(tupleOfProjectIdAndAuthenticationFile);
         } catch (FileNotFoundException fileNotFoundException) {
             fail("The specified file directory doesn't exist or the file is missing: " +
-                    _jsonKeyFileLocation);
+                    _jsonKeyURL);
         } catch (IOException iOException) {
             fail("The creation of CredentialsProvider, SessionsSettings or SessionsClient " +
                     "for projectID: " + _projectId + " failed.");
@@ -70,10 +64,11 @@ public class DialogflowAgentAuthorizationSingletonTest {
         try {
             CredentialsProvider credentialsProvider = FixedCredentialsProvider.create(
                     (ServiceAccountCredentials.fromStream(new FileInputStream
-                            (_jsonKeyFileLocation))));
+                            (new Scanner(_jsonKeyURL
+                                    .openStream()).useDelimiter("\\Z").next()))));
         } catch (IOException iOException) {
-            fail("The creation of CredentialsProvider with given _jsonKeyFileLocation: " +
-                    _jsonKeyFileLocation + " failed!");
+            fail("The creation of CredentialsProvider with given _jsonKeyURL: " +
+                    _jsonKeyURL + " failed!");
         }
     }
 
@@ -85,12 +80,13 @@ public class DialogflowAgentAuthorizationSingletonTest {
         try {
             CredentialsProvider credentialsProvider = FixedCredentialsProvider.create(
                     (ServiceAccountCredentials.fromStream(new FileInputStream
-                            (_jsonKeyFileLocation))));
+                            (new Scanner(_jsonKeyURL
+                                    .openStream()).useDelimiter("\\Z").next()))));
             SessionsSettings sessionsSettings = SessionsSettings.newBuilder().setCredentialsProvider
                     (credentialsProvider).build();
         } catch (IOException iOException) {
             fail("The creation of SessionsSettings (or CredentialsProvider) with given " +
-                    "_jsonKeyFileLocation: " + _jsonKeyFileLocation + " failed!");
+                    "_jsonKeyURL: " + _jsonKeyURL + " failed!");
         }
     }
 
@@ -102,24 +98,25 @@ public class DialogflowAgentAuthorizationSingletonTest {
         try {
             CredentialsProvider credentialsProvider = FixedCredentialsProvider.create(
                     (ServiceAccountCredentials.fromStream(new FileInputStream
-                            (_jsonKeyFileLocation))));
+                            (new Scanner(_jsonKeyURL
+                                    .openStream()).useDelimiter("\\Z").next()))));
             SessionsSettings sessionsSettings = SessionsSettings.newBuilder().setCredentialsProvider
                     (credentialsProvider).build();
             SessionsClient sessionsClient = SessionsClient.create(sessionsSettings);
         } catch (IOException iOException) {
             fail("The creation of SessionsClient (or SessionsSettings or " +
-                    "CredentialsProvider) with given _jsonKeyFileLocation: " + _jsonKeyFileLocation
+                    "CredentialsProvider) with given _jsonKeyURL: " + _jsonKeyURL
                     + " failed!");
         }
     }
 
     /**
-     * Test when a wrong _jsonKeyFileLocation is provided.
+     * Test when a wrong _jsonKeyURL is provided.
      */
     @Test
-    public void testHandlingNonexistentFileDirection() {
-        String jsonKeyFileLocation = "NonExisting file directory.";
-        Tuple<String, String> tupleOfProjectIdAndAuthenticationFile = Tuple.of(_projectId,
+    public void testHandlingNonexistentFileDirection() throws MalformedURLException {
+        URL jsonKeyFileLocation = new URL("NonExisting file directory.");
+        Tuple<String, URL> tupleOfProjectIdAndAuthenticationFile = Tuple.of(_projectId,
                 jsonKeyFileLocation);
         try {
             Tuple<String, SessionsClient> tupleOfSessionIDAndSessionClient =
@@ -137,8 +134,8 @@ public class DialogflowAgentAuthorizationSingletonTest {
     @Test(expected = NullPointerException.class)
     public void testNullProjectId() {
         String projectId = null;
-        Tuple<String, String> tupleOfProjectIdAndAuthenticationFile = Tuple.of(projectId,
-                _jsonKeyFileLocation);
+        Tuple<String, URL> tupleOfProjectIdAndAuthenticationFile = Tuple.of(projectId,
+                _jsonKeyURL);
         try {
             Tuple<String, SessionsClient> tupleOfSessionIDAndSessionClient =
                     DialogflowAgentAuthorizationSingleton.getProjectIdAndSessionsClient
@@ -153,8 +150,8 @@ public class DialogflowAgentAuthorizationSingletonTest {
     @Test(expected = IllegalArgumentException.class)
     public void testEmptyProjectId() {
         String projectId = "";
-        Tuple<String, String> tupleOfProjectIdAndAuthenticationFile = Tuple.of(projectId,
-                _jsonKeyFileLocation);
+        Tuple<String, URL> tupleOfProjectIdAndAuthenticationFile = Tuple.of(projectId,
+                _jsonKeyURL);
         try {
             Tuple<String, SessionsClient> tupleOfSessionIDAndSessionClient =
                     DialogflowAgentAuthorizationSingleton.getProjectIdAndSessionsClient
@@ -164,12 +161,12 @@ public class DialogflowAgentAuthorizationSingletonTest {
     }
 
     /**
-     * Test when a null _jsonKeyFileLocation is provided.
+     * Test when a null _jsonKeyURL is provided.
      */
     @Test(expected = NullPointerException.class)
     public void testNullJsonKeyFileLocation() {
-        String jsonKeyFileLocation = null;
-        Tuple<String, String> tupleOfProjectIdAndAuthenticationFile = Tuple.of(_projectId,
+        URL jsonKeyFileLocation = null;
+        Tuple<String, URL> tupleOfProjectIdAndAuthenticationFile = Tuple.of(_projectId,
                 jsonKeyFileLocation);
         try {
             Tuple<String, SessionsClient> tupleOfSessionIDAndSessionClient =
@@ -180,12 +177,12 @@ public class DialogflowAgentAuthorizationSingletonTest {
     }
 
     /**
-     * Test when an empty _jsonKeyFileLocation is provided.
+     * Test when an empty _jsonKeyURL is provided.
      */
     @Test
-    public void testEmptyJsonKeyFileLocation() {
-        String jsonKeyFileLocation = "";
-        Tuple<String, String> tupleOfProjectIdAndAuthenticationFile = Tuple.of(_projectId,
+    public void testEmptyJsonKeyFileLocation() throws MalformedURLException {
+        URL jsonKeyFileLocation = new URL("");
+        Tuple<String, URL> tupleOfProjectIdAndAuthenticationFile = Tuple.of(_projectId,
                 jsonKeyFileLocation);
         try {
             Tuple<String, SessionsClient> tupleOfSessionIDAndSessionClient =
@@ -202,7 +199,7 @@ public class DialogflowAgentAuthorizationSingletonTest {
      */
     @Test(expected = NullPointerException.class)
     public void testNullTuple() {
-        Tuple<String, String> tupleOfProjectIdAndAuthenticationFile = null;
+        Tuple<String, URL> tupleOfProjectIdAndAuthenticationFile = null;
         try {
             Tuple<String, SessionsClient> tupleOfSessionIDAndSessionClient =
                     DialogflowAgentAuthorizationSingleton.getProjectIdAndSessionsClient

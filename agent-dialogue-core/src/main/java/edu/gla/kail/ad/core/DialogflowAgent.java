@@ -24,6 +24,7 @@ import edu.gla.kail.ad.core.Log.Slot;
 import edu.gla.kail.ad.core.Log.SystemAct;
 
 import java.io.IOException;
+import java.net.URL;
 import java.time.Instant;
 import java.util.Map;
 
@@ -57,7 +58,7 @@ public class DialogflowAgent implements AgentInterface {
      *         the tupleOfProjectIdAndAuthorizationFile is invalid.
      */
     DialogflowAgent(String sessionId,
-                    Tuple<String, String>
+                    Tuple<String, URL>
                             tupleOfProjectIdAndAuthorizationFile) throws IOException {
         _sessionId = sessionId;
         setUpAgent(tupleOfProjectIdAndAuthorizationFile);
@@ -78,7 +79,7 @@ public class DialogflowAgent implements AgentInterface {
      * @throws IOException - When a projectID or the Service Account key is either null or
      *         empty, appropriate exception is thrown.
      */
-    private void setUpAgent(Tuple<String, String>
+    private void setUpAgent(Tuple<String, URL>
                                     tupleOfProjectIdAndAuthenticationFile) throws IOException {
         Tuple<String, SessionsClient> projectIdAndSessionsClient = getProjectIdAndSessionsClient
                 (tupleOfProjectIdAndAuthenticationFile);

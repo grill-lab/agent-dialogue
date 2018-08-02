@@ -11,6 +11,8 @@ import edu.gla.kail.ad.core.DialogAgentManager;
 import edu.gla.kail.ad.core.Log.ServiceProvider;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -92,7 +94,7 @@ final class DialogAgentManagerSingleton {
      * @throws NullPointerException - Throw when the file with ProjectIds and Json
      *         Authorisation file is not accessible.
      */
-    private static List<ConfigurationTuple> supportingFunctionToBeDeleted() {
+    private static List<ConfigurationTuple> supportingFunctionToBeDeleted() throws MalformedURLException {
         List<ConfigurationTuple> configurationTuples = new ArrayList<>();
         Path projectCoreDir = Paths
                 .get(DialogAgentManagerSingleton
@@ -118,10 +120,10 @@ final class DialogAgentManagerSingleton {
             String[] projectIdAndJsonKey = line.split(",");
             switch (projectIdAndJsonKey[0]) {
                 case "Dialogflow":
-                    List<Tuple<String, String>> dialogflowProjectIdAndJsonKeyFileList = new
+                    List<Tuple<String, URL>> dialogflowProjectIdAndJsonKeyFileList = new
                             ArrayList<>();
                     dialogflowProjectIdAndJsonKeyFileList.add(Tuple.of(projectIdAndJsonKey[1],
-                            projectCoreDir + projectIdAndJsonKey[2]));
+                            new URL(projectIdAndJsonKey[2])));
                     configurationTuples.add(new ConfigurationTuple<>(ServiceProvider.DIALOGFLOW,
                             dialogflowProjectIdAndJsonKeyFileList));
                     break;
