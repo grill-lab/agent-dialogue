@@ -128,7 +128,7 @@ public class LogManagerSingleton {
             data.put("client_id", interactionRequest.getClientIdValue());
             data.put("time_seconds", interactionRequest.getTime().getSeconds());
             data.put("time_nanos", interactionRequest.getTime().getNanos());
-            data.put("userID", interactionRequest.getUserID());
+            data.put("userID", interactionRequest.getUserId());
             data.put("interaction_type", interactionRequest.getInteraction().getTypeValue());
             data.put("interaction_device_type", interactionRequest.getInteraction().getDeviceType
                     ());
@@ -155,7 +155,7 @@ public class LogManagerSingleton {
             data.put("client_id", interactionResponse.getClientIdValue());
             data.put("message_status", interactionResponse.getMessageStatusValue());
             data.put("error_message", interactionResponse.getErrorMessage());
-            data.put("userID", interactionResponse.getUserID());
+            data.put("userID", interactionResponse.getUserId());
             docRef.set(data);
 
             Integer counter = 0;

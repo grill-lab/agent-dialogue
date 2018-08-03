@@ -19,6 +19,6 @@ service AgentDialogue {
 }
 
 message UserID {
-    string userId = 1;
+    string user_id = 1;
     bool activeSession = 2;
 }

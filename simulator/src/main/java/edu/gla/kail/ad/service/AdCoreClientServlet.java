@@ -177,7 +177,7 @@ public class AdCoreClientServlet extends HttpServlet {
                                                                              inputInteraction) {
         return InteractionRequest.newBuilder()
                 .setClientId(WEB_SIMULATOR)
-                .setUserID(returnUserName())
+                .setUserId(returnUserName())
                 .setTime(getTimeStamp())
                 .setInteraction(inputInteraction);
     }
