@@ -84,7 +84,6 @@ public class AdCoreClientServlet extends HttpServlet {
         response.setCharacterEncoding("UTF-8");
         response.setContentType("application/json");
         JsonObject json = new JsonObject();
-
         InteractionRequest interactionRequest = getInteractionRequestFromText(request
                 .getParameter("textInput"), request.getParameter("language"));
         LogManagerSingleton.getLogManagerSingleton().addInteraction(interactionRequest, null);

@@ -43,10 +43,10 @@ public final class PropertiesSingleton {
     }
 
     private static void setProperties(URL url) throws IOException {
-        SimulatorConfig.Builder coreConfigBuilder = SimulatorConfig.newBuilder();
+        SimulatorConfig.Builder simulatorConfigBuilder = SimulatorConfig.newBuilder();
         String jsonText = readPropertiesFromUrl(url);
-        JsonFormat.parser().merge(jsonText, coreConfigBuilder);
-        _simulatorConfig = coreConfigBuilder.build();
+        JsonFormat.parser().merge(jsonText, simulatorConfigBuilder);
+        _simulatorConfig = simulatorConfigBuilder.build();
     }
 
     private static String readPropertiesFromUrl(URL url) throws IOException {
