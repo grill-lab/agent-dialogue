@@ -5,7 +5,7 @@ import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 import com.google.common.cache.RemovalListener;
 import com.google.common.cache.RemovalNotification;
-import edu.gla.kail.ad.CoreConfigOuterClass.Agent;
+import edu.gla.kail.ad.CoreConfiguration.Agent;
 import edu.gla.kail.ad.core.DialogAgentManager;
 
 import java.io.IOException;

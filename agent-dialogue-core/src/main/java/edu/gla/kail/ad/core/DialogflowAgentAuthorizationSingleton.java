@@ -6,7 +6,7 @@ import com.google.auth.oauth2.ServiceAccountCredentials;
 import com.google.cloud.Tuple;
 import com.google.cloud.dialogflow.v2beta1.SessionsClient;
 import com.google.cloud.dialogflow.v2beta1.SessionsSettings;
-import edu.gla.kail.ad.CoreConfigOuterClass.Agent;
+import edu.gla.kail.ad.CoreConfiguration.Agent;
 
 import java.io.IOException;
 import java.net.URL;
@@ -36,7 +36,7 @@ public final class DialogflowAgentAuthorizationSingleton {
     private DialogflowAgentAuthorizationSingleton(Agent agent)
             throws IllegalArgumentException, IOException {
         _projectId = checkNotNull(agent.getProjectId(), "The project ID is null!");
-        URL jsonKeyUrl = checkNotNull(new URL(agent.getAuthorizationPath()), "The" +
+        URL jsonKeyUrl = checkNotNull(new URL(agent.getConfigurationFileURL()), "The" +
                 " JSON file location is null!");
         if (_projectId.isEmpty()) {
             throw new IllegalArgumentException("The provided project ID of the service is empty!");

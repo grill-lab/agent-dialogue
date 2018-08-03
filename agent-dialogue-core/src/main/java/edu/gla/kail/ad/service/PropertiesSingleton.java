@@ -1,7 +1,7 @@
 package edu.gla.kail.ad.service;
 
 import com.google.protobuf.util.JsonFormat;
-import edu.gla.kail.ad.CoreConfigOuterClass.CoreConfig;
+import edu.gla.kail.ad.CoreConfiguration.CoreConfig;
 
 import java.io.IOException;
 import java.net.URL;

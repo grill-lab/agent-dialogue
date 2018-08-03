@@ -3,7 +3,7 @@ package edu.gla.kail.ad.core;
 import com.google.protobuf.Timestamp;
 import edu.gla.kail.ad.Client.InputInteraction;
 import edu.gla.kail.ad.Client.InteractionRequest;
-import edu.gla.kail.ad.CoreConfigOuterClass.Agent;
+import edu.gla.kail.ad.CoreConfiguration.Agent;
 import edu.gla.kail.ad.core.Log.RequestLog;
 import edu.gla.kail.ad.core.Log.ResponseLog;
 import edu.gla.kail.ad.core.Log.ResponseLog.Builder;

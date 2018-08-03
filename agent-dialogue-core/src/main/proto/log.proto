@@ -6,7 +6,7 @@ option java_package = "edu.gla.kail.ad.core";
 
 import "google/protobuf/timestamp.proto";
 import "client.proto";
-import "coreConfig.proto";
+import "core_configuration.proto";
 
 // This protobuffer is used for storing the data created by the agent-dialogue-core, that is used
 // across the platform.

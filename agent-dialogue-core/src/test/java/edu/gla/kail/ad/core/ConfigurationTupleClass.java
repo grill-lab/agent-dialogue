@@ -1,7 +1,7 @@
 /*
 package edu.gla.kail.ad.core;
 
-import edu.gla.kail.ad.CoreConfigOuterClass.Agent.ServiceProvider;;
+import edu.gla.kail.ad.CoreConfiguration.Agent.ServiceProvider;;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
