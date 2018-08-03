@@ -7,7 +7,7 @@ import edu.gla.kail.ad.Client.InputInteraction;
 import edu.gla.kail.ad.Client.InteractionType;
 import edu.gla.kail.ad.Client.OutputInteraction;
 import edu.gla.kail.ad.core.Log.ResponseLog;
-import edu.gla.kail.ad.CoreConfigOuterClass.Agent.ServiceProvider;;
+import edu.gla.kail.ad.CoreConfiguration.Agent.ServiceProvider;;
 import edu.gla.kail.ad.core.Log.Slot;
 import edu.gla.kail.ad.core.Log.SystemAct;
 

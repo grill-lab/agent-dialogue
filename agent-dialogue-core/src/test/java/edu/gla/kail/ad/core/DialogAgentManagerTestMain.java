@@ -7,8 +7,8 @@ import edu.gla.kail.ad.Client;
 import edu.gla.kail.ad.Client.InputInteraction;
 import edu.gla.kail.ad.Client.InteractionRequest;
 import edu.gla.kail.ad.Client.InteractionType;
-import edu.gla.kail.ad.CoreConfigOuterClass.Agent;
-import edu.gla.kail.ad.CoreConfigOuterClass.Agent.ServiceProvider;
+import edu.gla.kail.ad.CoreConfiguration.Agent;
+import edu.gla.kail.ad.CoreConfiguration.Agent.ServiceProvider;
 
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;

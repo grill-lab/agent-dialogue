@@ -11,9 +11,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 @WebServlet("/offline-mt-ranking-servlet")
@@ -30,8 +27,10 @@ public class OfflineMtRankingServlet extends HttpServlet {
             case "loadTasks":
                 Integer maxTasksAssigned = Integer.valueOf(request.getParameter
                         ("maxTasksAssigned"));
-                OfflineExperimentTaskLoader offlineExperimentTaskLoader = new OfflineExperimentTaskLoader();
-                response.getWriter().write(offlineExperimentTaskLoader.loadTasks(_database, userId, maxTasksAssigned));
+                OfflineExperimentTaskLoader offlineExperimentTaskLoader = new
+                        OfflineExperimentTaskLoader();
+                response.getWriter().write(offlineExperimentTaskLoader.loadTasks(_database,
+                        userId, maxTasksAssigned));
                 break;
             case "rateTask":
                 Integer ratingScore = Integer.valueOf(request.getParameter("ratingScore"));
@@ -39,8 +38,10 @@ public class OfflineMtRankingServlet extends HttpServlet {
                 Long startTime_seconds = Long.valueOf(request.getParameter
                         ("startTime_seconds"));
                 Long endTime_seconds = Long.valueOf(request.getParameter("endTime_seconds"));
-                OfflineExperimentTaskRater offlineExperimentTaskRater = new OfflineExperimentTaskRater();
-                offlineExperimentTaskRater.rateTask(_database, userId, ratingScore, taskId, startTime_seconds, endTime_seconds);
+                OfflineExperimentTaskRater offlineExperimentTaskRater = new
+                        OfflineExperimentTaskRater();
+                offlineExperimentTaskRater.rateTask(_database, userId, ratingScore, taskId,
+                        startTime_seconds, endTime_seconds);
                 break;
             default:
                 response.getWriter().write("false");

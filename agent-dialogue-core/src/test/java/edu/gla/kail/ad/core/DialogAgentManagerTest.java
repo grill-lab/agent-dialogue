@@ -7,7 +7,7 @@ import edu.gla.kail.ad.Client;
 import edu.gla.kail.ad.Client.InputInteraction;
 import edu.gla.kail.ad.Client.InteractionRequest;
 import edu.gla.kail.ad.Client.InteractionType;
-import edu.gla.kail.ad.CoreConfigOuterClass.Agent.ServiceProvider;;
+import edu.gla.kail.ad.CoreConfiguration.Agent.ServiceProvider;;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
