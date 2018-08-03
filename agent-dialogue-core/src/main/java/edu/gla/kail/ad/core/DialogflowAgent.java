@@ -25,7 +25,6 @@ import edu.gla.kail.ad.core.Log.Slot;
 import edu.gla.kail.ad.core.Log.SystemAct;
 
 import java.io.IOException;
-import java.net.URL;
 import java.time.Instant;
 import java.util.Map;
 
@@ -187,10 +186,8 @@ public class DialogflowAgent implements AgentInterface {
         // TODO(Jeff): What do do her when things go wrong?  Handle RPC errors?  Throw an
         // exception? or leave it for higher levels to catch exception and return as unsuccessful
         // response.
-
         DetectIntentResponse response = detectIntentResponseMethod(inputInteraction);
         QueryResult queryResult = response.getQueryResult();
-
         Timestamp timestamp = Timestamp.newBuilder()
                 .setSeconds(Instant.now()
                         .getEpochSecond())
