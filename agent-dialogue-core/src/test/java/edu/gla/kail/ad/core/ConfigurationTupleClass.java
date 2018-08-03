@@ -12,6 +12,7 @@ import java.util.List;
 
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
+TODO: rewrite all the tests.
 
 @RunWith(JUnit4.class)
 public class ConfigurationTupleClass {
