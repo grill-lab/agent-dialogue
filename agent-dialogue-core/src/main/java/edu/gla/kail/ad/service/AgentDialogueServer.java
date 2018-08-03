@@ -149,6 +149,7 @@ public class AgentDialogueServer {
                 response = dialogAgentManager.getResponse(interactionRequest);
                 interactionResponse = InteractionResponse.newBuilder()
                         .setResponseId(response.getResponseId())
+                        .setSessionId(dialogAgentManager.get_sessionId())
                         .setTime(timestamp)
                         .setClientId(response.getClientId())
                         .setUserId(interactionRequest.getUserId())

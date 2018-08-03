@@ -48,6 +48,11 @@ import static com.google.common.base.Preconditions.checkNotNull;
 public class DialogAgentManager {
     // List of instances of used Dialog agents.
     private List<AgentInterface> _agents;
+
+    public String get_sessionId() {
+        return _sessionId;
+    }
+
     // Session ID is a unique identifier of a session which is assigned by the method
     // startSession() called by DialogAgentManager constructor.
     private String _sessionId;
