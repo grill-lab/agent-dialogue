@@ -15,6 +15,7 @@ import com.google.protobuf.ByteString;
 import com.google.protobuf.Timestamp;
 import com.google.protobuf.Value;
 import edu.gla.kail.ad.Client.InputInteraction;
+import edu.gla.kail.ad.Client.InteractionRequest;
 import edu.gla.kail.ad.Client.InteractionType;
 import edu.gla.kail.ad.Client.OutputInteraction;
 import edu.gla.kail.ad.CoreConfiguration.Agent;
@@ -181,12 +182,13 @@ public class DialogflowAgent implements AgentInterface {
      *         interaction requested is not recognised or supported.
      */
     @Override
-    public ResponseLog getResponseFromAgent(InputInteraction inputInteraction) throws
+    public ResponseLog getResponseFromAgent(InteractionRequest interactionRequest) throws
             IllegalArgumentException {
         // TODO(Jeff): What do do her when things go wrong?  Handle RPC errors?  Throw an
         // exception? or leave it for higher levels to catch exception and return as unsuccessful
         // response.
-        DetectIntentResponse response = detectIntentResponseMethod(inputInteraction);
+        DetectIntentResponse response = detectIntentResponseMethod(interactionRequest
+                .getInteraction());
         QueryResult queryResult = response.getQueryResult();
         Timestamp timestamp = Timestamp.newBuilder()
                 .setSeconds(Instant.now()

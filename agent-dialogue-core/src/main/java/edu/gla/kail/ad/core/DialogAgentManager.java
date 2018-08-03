@@ -1,7 +1,6 @@
 package edu.gla.kail.ad.core;
 
 import com.google.protobuf.Timestamp;
-import edu.gla.kail.ad.Client.InputInteraction;
 import edu.gla.kail.ad.Client.InteractionRequest;
 import edu.gla.kail.ad.CoreConfiguration.Agent;
 import edu.gla.kail.ad.core.Log.RequestLog;
@@ -125,7 +124,7 @@ public class DialogAgentManager {
                 .setClientId(interactionRequest.getClientId())
                 .setInteraction(interactionRequest.getInteraction()).build();
 
-        List<ResponseLog> responses = getResponsesFromAgents(interactionRequest.getInteraction());
+        List<ResponseLog> responses = getResponsesFromAgents(interactionRequest);
         ResponseLog chosenResponse = chooseOneResponse(responses); // TODO(Jeff): This may throw
         // exception. Should I leave the error and propagate to higher levels, or do something here?
         TurnOrBuilder turnBuilder = Turn.newBuilder()
@@ -146,17 +145,17 @@ public class DialogAgentManager {
      * Get Request from Client and convert it to the RequestLog.
      * Return the list of responses for a given request.
      *
-     * @param inputInteraction - The a data structure (implemented in log.proto) holding
+     * @param interactionRequest - The a data structure (implemented in log.proto) holding
      *         the interaction input passed to agents.
      * @return List<ResponseLog> - The list of responses of all agents set up on the
      *         setUpAgents(...) method call.
      */
-    private List<ResponseLog> getResponsesFromAgents(InputInteraction inputInteraction) {
+    private List<ResponseLog> getResponsesFromAgents(InteractionRequest interactionRequest) {
         if (checkNotNull(_agents, "Agents are not set up! Use the method" +
                 " setUpAgents() first.").isEmpty()) {
             throw new IllegalArgumentException("The list of agents is empty!");
         }
-        List<ResponseLog> listOfResponseLogs = asynchronousAgentCaller(inputInteraction);
+        List<ResponseLog> listOfResponseLogs = asynchronousAgentCaller(interactionRequest);
         // TODO(Adam) Remove when the log saving is implemented. Currently we can see the output.
         listOfResponseLogs.forEach(System.out::println);
         return listOfResponseLogs;
@@ -165,34 +164,34 @@ public class DialogAgentManager {
     /**
      * Return the responses by calling agents asynchronously.
      *
-     * @param inputInteraction - The a data structure (implemented in log .proto) holding
+     * @param interactionRequest - The a data structure (implemented in log .proto) holding
      *         the interaction input sent to the agent.
      * @return List<ResponseLog> - The list of responses of all agents set up on the
      *         setUpAgents(...) method call.
      */
-    private List<ResponseLog> asynchronousAgentCaller(InputInteraction inputInteraction) {
+    private List<ResponseLog> asynchronousAgentCaller(InteractionRequest interactionRequest) {
         Observable<AgentInterface> agentInterfaceObservable = Observable.fromIterable(_agents);
         return (agentInterfaceObservable.flatMap(agentObservable -> Observable
                 .just(agentObservable)
                 .subscribeOn(Schedulers.computation())
                 .take(5, TimeUnit.SECONDS) // Take only the observable emitted (completed)
                 // within specified time.
-                .map(agent -> callForResponseAndValidate(agent, inputInteraction))
+                .map(agent -> callForResponseAndValidate(agent, interactionRequest))
         ).toList().blockingGet());
     }
 
     /**
      * Return the responses by calling agents synchronously.
      *
-     * @param inputInteraction - The a data structure (implemented in log .proto) holding
+     * @param interactionRequest - The a data structure (implemented in log .proto) holding
      *         the interaction input sent to the agent.
      * @return List<ResponseLog> - The list of responses of all agents set up on the
      *         setUpAgents(...) method call.
      */
-    private List<ResponseLog> synchronousAgentCaller(InputInteraction inputInteraction) {
+    private List<ResponseLog> synchronousAgentCaller(InteractionRequest interactionRequest) {
         List<ResponseLog> listOfResponseLogs = new ArrayList<>();
         for (AgentInterface agent : _agents) {
-            listOfResponseLogs.add(callForResponseAndValidate(agent, inputInteraction));
+            listOfResponseLogs.add(callForResponseAndValidate(agent, interactionRequest));
         }
         return listOfResponseLogs;
     }
@@ -202,16 +201,16 @@ public class DialogAgentManager {
      * response.
      *
      * @param agent - The agent which
-     * @param inputInteraction - The a data structure (implemented in log .proto) holding
+     * @param interactionRequest - The a data structure (implemented in log .proto) holding
      *         the interaction input sent to the agent.
      * @return ResponseLog - Response from the agent or unsuccessful reponse.
      */
-    private ResponseLog callForResponseAndValidate(AgentInterface agent, InputInteraction
-            inputInteraction) {
+    private ResponseLog callForResponseAndValidate(AgentInterface agent, InteractionRequest
+            interactionRequest) {
         // TODO(Adam): Resend a call if unsuccessful? To be done later on.
         Callable<ResponseLog> callableCallForResponseAndValidate = () -> {
             try {
-                return checkNotNull(agent.getResponseFromAgent(inputInteraction),
+                return checkNotNull(agent.getResponseFromAgent(interactionRequest),
                         "The response from Agent was null!");
             } catch (Exception exception) {
                 return ResponseLog.newBuilder()
