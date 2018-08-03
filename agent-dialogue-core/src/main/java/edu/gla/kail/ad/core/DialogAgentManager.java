@@ -1,9 +1,9 @@
 package edu.gla.kail.ad.core;
 
-import com.google.cloud.Tuple;
 import com.google.protobuf.Timestamp;
 import edu.gla.kail.ad.Client.InputInteraction;
 import edu.gla.kail.ad.Client.InteractionRequest;
+import edu.gla.kail.ad.CoreConfigOuterClass.Agent;
 import edu.gla.kail.ad.core.Log.RequestLog;
 import edu.gla.kail.ad.core.Log.ResponseLog;
 import edu.gla.kail.ad.core.Log.ResponseLog.Builder;
@@ -42,7 +42,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * <p>
  * Example usage :
  * DialogAgentManager dialogAgentManager = new DialogAgentManager();
- * dialogAgentManager.setUpAgents(_configurationTuples);
+ * dialogAgentManager.setUpAgents(agents);
  * dialogAgentManager.getResponse(interactionRequest);
  **/
 
@@ -73,7 +73,7 @@ public class DialogAgentManager {
      * Called before the end of the session to store and configuration of the DialogAgentManager ??
      */
     public void endSession() {
-        // TODO(Adam): Creation of configuration file - to be done later on.
+        // TODO(Adam): Thnk over this method.
     }
 
     /**
@@ -89,48 +89,23 @@ public class DialogAgentManager {
     /**
      * Set up (e.g. authenticate) all agents and store them to the list of agents.
      *
-     * @param configurationTuples - The list stores the entities of ConfigurationTuple,
-     *         which holds data required by each agent.
      * @throws IllegalArgumentException - Raised by _agents.add(new
      *         DialogflowAgent(_sessionId, agentSpecificData.get(0)));
      * @throws IOException, IllegalArgumentException
      */
-    public void setUpAgents(List<ConfigurationTuple> configurationTuples) throws
+    public void setUpAgents(List<Agent> agents) throws
             IllegalArgumentException, IOException {
         _agents = new ArrayList<>();
-        for (ConfigurationTuple configurationTuple : configurationTuples) {
-            switch (configurationTuple.get_agentType()) {
-                case NOTSET:
+        for (Agent agent : agents) {
+            switch (agent.getServiceProvider()) {
+                case UNRECOGNISED:
                     break;
                 case DIALOGFLOW:
-                    List<Tuple> agentSpecificData = checkNotNull(configurationTuple
-                            .get_agentSpecificData(), "The Dialogflow specific data is null!");
-                    if (agentSpecificData.size() != 1) {
-                        throw new IllegalArgumentException("The Dialogflow agent specific data " +
-                                "passed is not valid for Dialogflow! It has to be project ID and " +
-                                "Service Account key file directory.");
-                    }
-                    _agents.add(new DialogflowAgent(_sessionId, agentSpecificData.get(0)));
+                    _agents.add(new DialogflowAgent(_sessionId, agent));
                     break;
-                /*case DUMMYAGENT: // TODO(ADAM): Delete these agents after testing is done.
-                Dummy agents have been moved to test folder.
-                    _agents.add(new DummyAgent());
-                    break;
-                case FAILINGEXCEPTIONDUMMYAGENT:
-                    _agents.add(new FailingExceptionDummyAgent());
-                    break;
-                case FAILINGNULLDUMMYAGENT:
-                    _agents.add(new FailingNullDummyAgent());
-                    break;
-                case FAILINGTIMEDUMMYAGENT:
-                    _agents.add(new FailingTimeDummyAgent());
-                    break;*/
                 default:
                     throw new IllegalArgumentException("The type of the agent provided " +
-                            "\"" +
-                            configurationTuple
-                                    .get_agentType() + "\" is not currently supported " +
-                            "(yet)!");
+                            agent.getServiceProvider().toString() + "\" is not supported (yet)!");
             }
         }
     }

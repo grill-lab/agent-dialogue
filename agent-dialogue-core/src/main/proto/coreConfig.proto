@@ -4,6 +4,11 @@ package edu.gla.kail.ad;
 
 option java_package = "edu.gla.kail.ad";
 
+enum ServiceProvider {
+    UNRECOGNISED = 0;
+    DIALOGFLOW = 1;
+}
+
 message CoreConfig {
     int32 grpc_server_port = 1;
     string log_storage_path = 2;
@@ -11,10 +16,6 @@ message CoreConfig {
 }
 
 message Agent {
-    enum ServiceProvider {
-        NOTSET = 0;
-        DIALOGFLOW = 1;
-    }
     ServiceProvider service_provider = 1;
     string project_id = 2;
     string authorization_path = 3;

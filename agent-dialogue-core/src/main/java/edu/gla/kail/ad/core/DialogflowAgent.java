@@ -17,9 +17,10 @@ import com.google.protobuf.Value;
 import edu.gla.kail.ad.Client.InputInteraction;
 import edu.gla.kail.ad.Client.InteractionType;
 import edu.gla.kail.ad.Client.OutputInteraction;
+import edu.gla.kail.ad.CoreConfigOuterClass.Agent;
+import edu.gla.kail.ad.CoreConfigOuterClass.ServiceProvider;
 import edu.gla.kail.ad.core.Log.ResponseLog;
 import edu.gla.kail.ad.core.Log.ResponseLog.MessageStatus;
-import edu.gla.kail.ad.core.Log.ServiceProvider;
 import edu.gla.kail.ad.core.Log.Slot;
 import edu.gla.kail.ad.core.Log.SystemAct;
 
@@ -51,17 +52,13 @@ public class DialogflowAgent implements AgentInterface {
      * Initialize a ready-to-work DialogflowAgent.
      *
      * @param sessionId - A unique ID passed to the method by DialogAgentManager.
-     * @param tupleOfProjectIdAndAuthorizationFile - A tuple specific for DialogflowAgent.
-     *         It holds the project ID of a particular agent and the directory location of the file
-     *         with Service Account key for this particular agent.
      * @throws IOException - T setUpAgent method may throw exception if the data passed in
      *         the tupleOfProjectIdAndAuthorizationFile is invalid.
      */
-    DialogflowAgent(String sessionId,
-                    Tuple<String, URL>
-                            tupleOfProjectIdAndAuthorizationFile) throws IOException {
+    DialogflowAgent(String sessionId, Agent agent)
+            throws IOException {
         _sessionId = sessionId;
-        setUpAgent(tupleOfProjectIdAndAuthorizationFile);
+        setUpAgent(agent);
     }
 
     @Override
@@ -73,16 +70,12 @@ public class DialogflowAgent implements AgentInterface {
      * Create the SessionClients and SessionNames for the agent which project ID and Service Account
      * key file directory.
      *
-     * @param tupleOfProjectIdAndAuthenticationFile - A tuple specific for DialogflowAgent.
-     *         It holds the project ID of a particular agent and the directory location of the file
-     *         with Service Account key for this particular agent.
      * @throws IOException - When a projectID or the Service Account key is either null or
      *         empty, appropriate exception is thrown.
      */
-    private void setUpAgent(Tuple<String, URL>
-                                    tupleOfProjectIdAndAuthenticationFile) throws IOException {
+    private void setUpAgent(Agent agent) throws IOException {
         Tuple<String, SessionsClient> projectIdAndSessionsClient = getProjectIdAndSessionsClient
-                (tupleOfProjectIdAndAuthenticationFile);
+                (agent);
         _sessionsClient = projectIdAndSessionsClient.y();
         _session = SessionName.of(projectIdAndSessionsClient.x(), _sessionId);
     }

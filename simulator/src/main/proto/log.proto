@@ -6,14 +6,10 @@ option java_package = "edu.gla.kail.ad.core";
 
 import "google/protobuf/timestamp.proto";
 import "client.proto";
+import "coreConfig.proto";
 
 // This protobuffer is used for storing the data created by the agent-dialogue-core, that is used
 // across the platform.
-
-enum ServiceProvider {
-    NOTSET = 0;
-    DIALOGFLOW = 1;
-}
 
 message LogEntry {
     string session_id = 1; // The unique session ID.

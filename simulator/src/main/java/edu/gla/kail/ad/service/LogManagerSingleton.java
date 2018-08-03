@@ -200,7 +200,7 @@ public class LogManagerSingleton {
             experimentId, @Nullable String requestId) throws
             IOException {
         RatingOrBuilder ratingOrBuilder = Rating.newBuilder()
-                .setScore(ratingScore)
+                .setScore(Integer.valueOf(ratingScore))
                 .setResponseId(responseId)
                 .setTime(Timestamp.newBuilder()
                         .setSeconds(Instant.now()

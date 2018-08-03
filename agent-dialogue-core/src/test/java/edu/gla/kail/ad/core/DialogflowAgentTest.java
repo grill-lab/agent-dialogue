@@ -1,3 +1,4 @@
+/*
 package edu.gla.kail.ad.core;
 
 import com.google.api.gax.core.CredentialsProvider;
@@ -35,9 +36,11 @@ public class DialogflowAgentTest {
     // same function as the DialogAgentManager uses.
     DialogflowAgent _dialogFlowAgent;
 
-    /**
+    */
+/**
      * Set up _jsonKeyURL and projectID for the myquotemaster-13899 project.
-     */
+     *//*
+
     @Before
     public void setUp() throws MalformedURLException {
         String currentClassPathFile = Paths
@@ -78,9 +81,11 @@ public class DialogflowAgentTest {
         }
     }
 
-    /**
+    */
+/**
      * Test setting up the agent with valid parameters.
-     */
+     *//*
+
     @Test
     public void testSetUpAgent() {
         Tuple<String, URL> setUpAgentTuple = Tuple.of(_projectId, _jsonKeyURL);
@@ -92,9 +97,11 @@ public class DialogflowAgentTest {
         }
     }
 
-    /**
+    */
+/**
      * Test setting up the agent with invalid parameters.
-     */
+     *//*
+
     @Test(expected = NullPointerException.class)
     public void testSetUpAgentNullProjectID() {
         Tuple<String, URL> setUpAgentTuple = Tuple.of(null, _jsonKeyURL);
@@ -108,9 +115,11 @@ public class DialogflowAgentTest {
                 "was unsuccessful!");
     }
 
-    /**
+    */
+/**
      * Test setting up the agent with invalid parameters.
-     */
+     *//*
+
     @Test(expected = IllegalArgumentException.class)
     public void testSetUpAgentEmptyProjectID() {
         Tuple<String, URL> setUpAgentTuple = Tuple.of("", _jsonKeyURL);
@@ -123,9 +132,11 @@ public class DialogflowAgentTest {
                 "jsonKeyFileLocation: " + _jsonKeyURL + " was unsuccessful!");
     }
 
-    /**
+    */
+/**
      * Test setting up the agent with invalid parameters.
-     */
+     *//*
+
     @Test(expected = NullPointerException.class)
     public void testSetUpAgentNullJsonFileLocation() {
         Tuple<String, URL> setUpAgentTuple = Tuple.of(_projectId, null);
@@ -138,9 +149,11 @@ public class DialogflowAgentTest {
                 "jsonKeyFileLocation: " + _jsonKeyURL + " was unsuccessful!");
     }
 
-    /**
+    */
+/**
      * Test setting up the agent with invalid parameters.
-     */
+     *//*
+
     @Test
     public void testSetUpAgentInvalidJsonFileLocation() throws MalformedURLException {
         Tuple<String, URL> setUpAgentTuple = Tuple.of(_projectId, new URL("dsad"));
@@ -153,9 +166,11 @@ public class DialogflowAgentTest {
                 "jsonKeyFileLocation: " + _jsonKeyURL + " was unsuccessful!");
     }
 
-    /**
+    */
+/**
      * Test the validation method for a text input with invalid input.
-     */
+     *//*
+
     @Test(expected = IllegalArgumentException.class)
     public void testValidateInputInteraction() {
         InputInteraction inputInteraction = InputInteraction.newBuilder()
@@ -179,3 +194,4 @@ public class DialogflowAgentTest {
                 .getResponseFromAgent(inputInteraction).isInitialized());
     }
 }
+*/
