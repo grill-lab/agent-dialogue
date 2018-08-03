@@ -67,7 +67,7 @@ public class LogManagerSingleton {
             // Directory to the folder with logs.
             String logInteractionsPath = Paths
                     .get(PropertiesSingleton.getSimulatorConfig().getLogStoragePath() +
-                            "/interactions_logs/").toString() + "/" + DateTime.now().toString();
+                            "/interactions_logs/").toString();
             directoryExistsOrCreate(logInteractionsPath);
             logInteractionsPath += "/" + DateTime.now().toString();
             try {
