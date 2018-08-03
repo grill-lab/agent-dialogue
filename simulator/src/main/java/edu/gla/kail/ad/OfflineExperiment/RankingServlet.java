@@ -1,10 +1,11 @@
-package edu.gla.kail.ad.service;
+package edu.gla.kail.ad.OfflineExperiment;
 
 
 import com.google.api.core.ApiFuture;
 import com.google.cloud.firestore.DocumentReference;
 import com.google.cloud.firestore.DocumentSnapshot;
 import com.google.cloud.firestore.Firestore;
+import edu.gla.kail.ad.service.LogManagerSingleton;
 
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -14,7 +15,7 @@ import java.io.IOException;
 import java.util.concurrent.ExecutionException;
 
 @WebServlet("/offline-mt-ranking-servlet")
-public class OfflineMtRankingServlet extends HttpServlet {
+public class RankingServlet extends HttpServlet {
     private Firestore _database = LogManagerSingleton.returnDatabase();
 
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws
@@ -27,9 +28,9 @@ public class OfflineMtRankingServlet extends HttpServlet {
             case "loadTasks":
                 Integer maxTasksAssigned = Integer.valueOf(request.getParameter
                         ("maxTasksAssigned"));
-                OfflineExperimentTaskLoader offlineExperimentTaskLoader = new
-                        OfflineExperimentTaskLoader();
-                response.getWriter().write(offlineExperimentTaskLoader.loadTasks(_database,
+                TaskLoader taskLoader = new
+                        TaskLoader();
+                response.getWriter().write(taskLoader.loadTasks(_database,
                         userId, maxTasksAssigned));
                 break;
             case "rateTask":
@@ -38,9 +39,9 @@ public class OfflineMtRankingServlet extends HttpServlet {
                 Long startTime_seconds = Long.valueOf(request.getParameter
                         ("startTime_seconds"));
                 Long endTime_seconds = Long.valueOf(request.getParameter("endTime_seconds"));
-                OfflineExperimentTaskRater offlineExperimentTaskRater = new
-                        OfflineExperimentTaskRater();
-                offlineExperimentTaskRater.rateTask(_database, userId, ratingScore, taskId,
+                TaskRater taskRater = new
+                        TaskRater();
+                taskRater.rateTask(_database, userId, ratingScore, taskId,
                         startTime_seconds, endTime_seconds);
                 break;
             default:

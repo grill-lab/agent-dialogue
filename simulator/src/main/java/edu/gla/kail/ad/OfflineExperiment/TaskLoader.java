@@ -1,4 +1,4 @@
-package edu.gla.kail.ad.service;
+package edu.gla.kail.ad.OfflineExperiment;
 
 import com.google.api.core.ApiFuture;
 import com.google.cloud.firestore.DocumentReference;
@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
-class OfflineExperimentTaskLoader {
+class TaskLoader {
     private Firestore _database;
     private String _userId;
 

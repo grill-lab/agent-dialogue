@@ -1,4 +1,4 @@
-package edu.gla.kail.ad.service;
+package edu.gla.kail.ad.OfflineExperiment;
 
 import com.google.cloud.firestore.DocumentReference;
 import com.google.cloud.firestore.Firestore;
@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
-class OfflineExperimentTaskRater {
+class TaskRater {
     private Firestore _database;
 
     void rateTask(Firestore database, String userId, Integer ratingScore, String taskId, Long
