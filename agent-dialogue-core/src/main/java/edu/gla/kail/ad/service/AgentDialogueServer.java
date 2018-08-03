@@ -39,7 +39,6 @@ public class AgentDialogueServer {
     }
 
     public static void main(String[] args) throws Exception {
-        // Using the default port 8070.
         if (args == null || args.length == 0) {
             throw new Exception("Please specify the URL to the configuration file.");
         }

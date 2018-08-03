@@ -19,8 +19,10 @@ import java.util.concurrent.TimeUnit;
  */
 final class DialogAgentManagerSingleton {
     private static DialogAgentManagerSingleton _instance;
-    private static int _MAX_NUMBER_OF_SIMULTANEOUS_CONVERSATIONS = 10;
-    private static int _SESSION_TIMEOUT_IN_MINUTES = 5;
+    private static int _MAX_NUMBER_OF_SIMULTANEOUS_CONVERSATIONS = PropertiesSingleton
+            .getCoreConfig().getMaxNumberOfSimultaneousConversations();
+    private static int _SESSION_TIMEOUT_IN_MINUTES = PropertiesSingleton.getCoreConfig()
+            .getSessionTimeoutMinutes();
 
     // The cache mapping userID and the DialogAgentManager instances assigned to each user.
     private static LoadingCache<String, DialogAgentManager> _initializedManagers = CacheBuilder
