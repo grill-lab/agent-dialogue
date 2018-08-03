@@ -30,7 +30,7 @@ message InteractionRequest {
     google.protobuf.Timestamp time = 1; // The time of the creation of the request
     ClientId client_id = 2; // The ID of the client the request is sent from.
     InputInteraction interaction = 3;
-    string userID = 4;
+    string user_id = 4;
 }
 
 message InteractionResponse {
@@ -45,7 +45,8 @@ message InteractionResponse {
     repeated OutputInteraction interaction = 4;
     ClientMessageStatus message_status = 5; // The status of the message received from the agent-dialogue-core.
     string error_message = 6;
-    string userID = 7;
+    string user_id = 7;
+    string session_id = 8;
 }
 
 enum InteractionType {

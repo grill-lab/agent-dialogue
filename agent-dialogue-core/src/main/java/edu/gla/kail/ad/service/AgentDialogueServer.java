@@ -125,12 +125,12 @@ public class AgentDialogueServer {
         @Override
         public void getResponseFromAgents(InteractionRequest interactionRequest,
                                           StreamObserver<InteractionResponse> responseObserver) {
-            checkNotNull(interactionRequest.getUserID(), "The InteractionRequest that have " +
+            checkNotNull(interactionRequest.getUserId(), "The InteractionRequest that have " +
                     "been sent doesn't have userID!");
             DialogAgentManager dialogAgentManager;
             try {
                 dialogAgentManager = DialogAgentManagerSingleton
-                        .getDialogAgentManager(interactionRequest.getUserID());
+                        .getDialogAgentManager(interactionRequest.getUserId());
             } catch (Exception exception) {
                 exception.printStackTrace();
                 dialogAgentManager = null;
@@ -151,7 +151,7 @@ public class AgentDialogueServer {
                         .setResponseId(response.getResponseId())
                         .setTime(timestamp)
                         .setClientId(response.getClientId())
-                        .setUserID(interactionRequest.getUserID())
+                        .setUserId(interactionRequest.getUserId())
                         .setMessageStatus(ClientMessageStatus.SUCCESSFUL)
                         .addAllInteraction(response.getActionList().stream().map(action -> action
                                 .getInteraction()).collect(Collectors.toList()))
