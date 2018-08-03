@@ -12,4 +12,5 @@ RUN ["mvn", "install"]
 
 EXPOSE 8070
 
-CMD ["java", "-jar", "target/agent-dialogue-core-0.1-SNAPSHOT.jar"]
+CMD ["java", "-jar", "target/agent-dialogue-core-0.1-SNAPSHOT.jar",
+"file:///Users/Adam/Documents/Internship/GitHub/agent-dialogue/agent-dialogue-core/src/main/resources/config.json"]
