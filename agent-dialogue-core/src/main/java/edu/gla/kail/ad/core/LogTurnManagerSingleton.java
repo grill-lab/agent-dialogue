@@ -1,7 +1,7 @@
 package edu.gla.kail.ad.core;
 
 import edu.gla.kail.ad.core.Log.Turn;
-import edu.gla.kail.ad.service.PropertiesSingleton;
+import edu.gla.kail.ad.PropertiesSingleton;
 import org.joda.time.DateTime;
 
 import java.io.File;

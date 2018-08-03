@@ -5,6 +5,7 @@ import com.google.protobuf.Timestamp;
 import edu.gla.kail.ad.Client.InteractionRequest;
 import edu.gla.kail.ad.Client.InteractionResponse;
 import edu.gla.kail.ad.Client.InteractionResponse.ClientMessageStatus;
+import edu.gla.kail.ad.PropertiesSingleton;
 import edu.gla.kail.ad.core.DialogAgentManager;
 import edu.gla.kail.ad.core.Log.ResponseLog;
 import edu.gla.kail.ad.core.LogTurnManagerSingleton;

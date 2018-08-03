@@ -21,14 +21,14 @@ import java.util.List;
 import static edu.gla.kail.ad.Client.ClientId.WEB_SIMULATOR;
 
 /**
- * Connect to AgentDialogueClientService and therefore enable interaction with Agent Dialogue Core.
+ * Connect to AdCoreClient and therefore enable interaction with Agent Dialogue Core.
  * Accessible from JavaScript, through RESTful calls.
  */
 @WebServlet("/ad-client-service-servlet")
-public class AdClientServiceServlet extends HttpServlet {
+public class AdCoreClientServlet extends HttpServlet {
     private static LogManagerSingleton _logManagerSingleton = LogManagerSingleton
             .getLogManagerSingleton();
-    private static AgentDialogueClientService _client = new AgentDialogueClientService
+    private static AdCoreClient _client = new AdCoreClient
             /*("35.184.227.176", 8070);*/
             ("localhost", 8070);
 

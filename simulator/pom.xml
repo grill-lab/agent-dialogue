@@ -13,7 +13,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <javaVersion>1.8</javaVersion>
         <!-- to be changed later on to the main class -->
-        <mainClass>edu.gla.kail.ad.service.AgentDialogueClientService</mainClass>
+        <mainClass>edu.gla.kail.ad.service.AdCoreClient</mainClass>
 
         <maven-compiler-plugin.version>3.5.1</maven-compiler-plugin.version>
         <os-maven-plugin.version>1.6.0</os-maven-plugin.version>

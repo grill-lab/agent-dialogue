@@ -9,16 +9,16 @@ import io.grpc.StatusRuntimeException;
 
 import java.util.concurrent.TimeUnit;
 
-public class AgentDialogueClientService {
+public class AdCoreClient {
     private final ManagedChannel _channel;
     private final AgentDialogueBlockingStub _blockingStub; // gRPC will wait for the server to
     // respond; return response or raise an exception.
 
-    public AgentDialogueClientService(String host, int port) {
+    public AdCoreClient(String host, int port) {
         this(ManagedChannelBuilder.forAddress(host, port).usePlaintext(true));
     }
 
-    public AgentDialogueClientService(ManagedChannelBuilder<?> channelBuilder) {
+    public AdCoreClient(ManagedChannelBuilder<?> channelBuilder) {
         _channel = channelBuilder.build();
         _blockingStub = AgentDialogueGrpc.newBlockingStub(_channel);
     }
