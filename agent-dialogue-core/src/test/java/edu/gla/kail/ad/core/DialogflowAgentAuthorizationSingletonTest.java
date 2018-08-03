@@ -1,3 +1,4 @@
+/*
 package edu.gla.kail.ad.core;
 
 import com.google.api.gax.core.CredentialsProvider;
@@ -25,9 +26,11 @@ public class DialogflowAgentAuthorizationSingletonTest {
     private URL _jsonKeyURL;
     private String _projectId;
 
-    /**
+    */
+/**
      * Set up _jsonKeyURL and projectID for the myquotemaster-13899 project.
-     */
+     *//*
+
     @Before
     public void setUp() throws MalformedURLException {
         _jsonKeyURL = new URL
@@ -36,9 +39,11 @@ public class DialogflowAgentAuthorizationSingletonTest {
         _projectId = "myquotemaster-13899";
     }
 
-    /**
+    */
+/**
      * Test myquotemaster-13899 DialogflowAgentAuthorizationSingleton initialization.
-     */
+     *//*
+
     @Test
     public void testInitialization() {
         Tuple<String, URL> tupleOfProjectIdAndAuthenticationFile = Tuple.of(_projectId,
@@ -56,9 +61,11 @@ public class DialogflowAgentAuthorizationSingletonTest {
         }
     }
 
-    /**
+    */
+/**
      * Test myquotemaster-13899 Dialogflow's CredentialsProvider initialization.
-     */
+     *//*
+
     @Test
     public void testDialogflowCredentialsProviderInitialization() {
         try {
@@ -72,9 +79,11 @@ public class DialogflowAgentAuthorizationSingletonTest {
         }
     }
 
-    /**
+    */
+/**
      * Test myquotemaster-13899 Dialogflow's SessionsSettings initialization.
-     */
+     *//*
+
     @Test
     public void testDialogflowSessionsSettingsInitialization() {
         try {
@@ -90,9 +99,11 @@ public class DialogflowAgentAuthorizationSingletonTest {
         }
     }
 
-    /**
+    */
+/**
      * Test myquotemaster-13899 Dialogflow's SessionsClient initialization.
-     */
+     *//*
+
     @Test
     public void testDialogflowSessionsClientInitialization() {
         try {
@@ -110,9 +121,11 @@ public class DialogflowAgentAuthorizationSingletonTest {
         }
     }
 
-    /**
+    */
+/**
      * Test when a wrong _jsonKeyURL is provided.
-     */
+     *//*
+
     @Test
     public void testHandlingNonexistentFileDirection() throws MalformedURLException {
         URL jsonKeyFileLocation = new URL("NonExisting file directory.");
@@ -128,9 +141,11 @@ public class DialogflowAgentAuthorizationSingletonTest {
         fail("No exception was thrown!");
     }
 
-    /**
+    */
+/**
      * Test when a null projectID is provided.
-     */
+     *//*
+
     @Test(expected = NullPointerException.class)
     public void testNullProjectId() {
         String projectId = null;
@@ -144,9 +159,11 @@ public class DialogflowAgentAuthorizationSingletonTest {
         }
     }
 
-    /**
+    */
+/**
      * Test when an empty projectID is provided.
-     */
+     *//*
+
     @Test(expected = IllegalArgumentException.class)
     public void testEmptyProjectId() {
         String projectId = "";
@@ -160,9 +177,11 @@ public class DialogflowAgentAuthorizationSingletonTest {
         }
     }
 
-    /**
+    */
+/**
      * Test when a null _jsonKeyURL is provided.
-     */
+     *//*
+
     @Test(expected = NullPointerException.class)
     public void testNullJsonKeyFileLocation() {
         URL jsonKeyFileLocation = null;
@@ -176,9 +195,11 @@ public class DialogflowAgentAuthorizationSingletonTest {
         }
     }
 
-    /**
+    */
+/**
      * Test when an empty _jsonKeyURL is provided.
-     */
+     *//*
+
     @Test
     public void testEmptyJsonKeyFileLocation() throws MalformedURLException {
         URL jsonKeyFileLocation = new URL("");
@@ -194,9 +215,11 @@ public class DialogflowAgentAuthorizationSingletonTest {
         fail("No exception was thrown!");
     }
 
-    /**
+    */
+/**
      * Test when an a null Tuple is provided.
-     */
+     *//*
+
     @Test(expected = NullPointerException.class)
     public void testNullTuple() {
         Tuple<String, URL> tupleOfProjectIdAndAuthenticationFile = null;
@@ -208,3 +231,4 @@ public class DialogflowAgentAuthorizationSingletonTest {
         }
     }
 }
+*/

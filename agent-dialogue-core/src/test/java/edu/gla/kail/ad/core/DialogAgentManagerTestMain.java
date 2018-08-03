@@ -1,3 +1,4 @@
+/*
 package edu.gla.kail.ad.core;
 
 import com.google.cloud.Tuple;
@@ -6,7 +7,8 @@ import edu.gla.kail.ad.Client;
 import edu.gla.kail.ad.Client.InputInteraction;
 import edu.gla.kail.ad.Client.InteractionRequest;
 import edu.gla.kail.ad.Client.InteractionType;
-import edu.gla.kail.ad.core.Log.ServiceProvider;
+import edu.gla.kail.ad.CoreConfigOuterClass.Agent;
+import edu.gla.kail.ad.CoreConfigOuterClass.Agent.ServiceProvider;
 
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -16,11 +18,13 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
+*/
 /**
  * Class for testing the functionality.
- */
+ *//*
+
 public class DialogAgentManagerTestMain {
-    private static List<ConfigurationTuple> _configurationTuples;
+    private static List<Agent> _agents;
     private static Path _projectCoreDir = Paths
             .get(DialogAgentManagerTestMain
                     .class
@@ -31,8 +35,9 @@ public class DialogAgentManagerTestMain {
             .getParent()
             .getParent();
 
-    /**
-     * Add ConfigurationTuples to the _configurationTuples. This is just for testing purposes
+    */
+/**
+     * Add ConfigurationTuples to the _agents. This is just for testing purposes
      *
      * @param fileDirectory - It specifies the directory of the file with data used to set
      *         up agents. Each line has one agent entry, which specified agent type
@@ -40,9 +45,10 @@ public class DialogAgentManagerTestMain {
      *         required by this agent separated with ",".
      * @throws Exception - It is thrown when the given type name of the agent is not
      *         correctly formatted or the agent type is not supported yet.
-     */
+     *//*
+
     private static void readProjectIdAndKeyFileToHashMap(String fileDirectory) throws Exception {
-        _configurationTuples = new ArrayList<>();
+        _agents = new ArrayList<>();
         Path path = Paths.get(fileDirectory);
         List<String> lines = Files.readAllLines(path, StandardCharsets.UTF_8);
         for (String line : lines) {
@@ -53,25 +59,27 @@ public class DialogAgentManagerTestMain {
                             ArrayList<>();
                     dialogflowProjectIdAndJsonKeyFileList.add(Tuple.of(projectIdAndJsonKey[1],
                             _projectCoreDir.toString() + projectIdAndJsonKey[2]));
-                    _configurationTuples.add(new ConfigurationTuple<>(ServiceProvider.DIALOGFLOW,
+                    _agents.add(new <>(ServiceProvider.DIALOGFLOW,
                             dialogflowProjectIdAndJsonKeyFileList));
                     break;
-                /*case "DummyAgent":
-                    _configurationTuples.add(new ConfigurationTuple<>(ServiceProvider
+                */
+/*case "DummyAgent":
+                    _agents.add(new ConfigurationTuple<>(ServiceProvider
                             .DUMMYAGENT, null));
                     break;
                 case "FailingExceptionDummyAgent":
-                    _configurationTuples.add(new ConfigurationTuple<>(ServiceProvider
+                    _agents.add(new ConfigurationTuple<>(ServiceProvider
                             .FAILINGEXCEPTIONDUMMYAGENT, null));
                     break;
                 case "FailingNullDummyAgent":
-                    _configurationTuples.add(new ConfigurationTuple<>(ServiceProvider
+                    _agents.add(new ConfigurationTuple<>(ServiceProvider
                             .FAILINGNULLDUMMYAGENT, null));
                     break;
                 case "FailingTimeDummyAgent":
-                    _configurationTuples.add(new ConfigurationTuple<>(ServiceProvider
+                    _agents.add(new ConfigurationTuple<>(ServiceProvider
                             .FAILINGTIMEDUMMYAGENT, null));
-                    break;*/
+                    break;*//*
+
                 default:
                     throw new IllegalArgumentException("The name of the agent is not correctly " +
                             "formatted or the agent type: " +
@@ -96,7 +104,7 @@ public class DialogAgentManagerTestMain {
 
 
         DialogAgentManager dialogAgentManager = new DialogAgentManager();
-        dialogAgentManager.setUpAgents(_configurationTuples);
+        dialogAgentManager.setUpAgents(agent);
         Timestamp timestamp = Timestamp.newBuilder()
                 .setSeconds(Instant.now()
                         .getEpochSecond())
@@ -123,3 +131,4 @@ public class DialogAgentManagerTestMain {
         }
     }
 }
+*/
