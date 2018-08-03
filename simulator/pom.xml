@@ -182,7 +182,9 @@
                 <configuration>
                     <httpConnector>
                         <port>8080</port>
+                        <host>localhost</host>
                     </httpConnector>
+
                 </configuration>
             </plugin>
 

@@ -3,7 +3,10 @@ package edu.gla.kail.ad;
 import com.google.protobuf.util.JsonFormat;
 import edu.gla.kail.ad.SimulatorConfiguration.SimulatorConfig;
 
+import javax.annotation.Nullable;
+import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
 import java.util.Scanner;
 
@@ -12,7 +15,10 @@ public final class PropertiesSingleton {
     private static PropertiesSingleton _instance;
     private static SimulatorConfig _simulatorConfig;
 
-    public static synchronized SimulatorConfig getSimulatorConfig() {
+    public static synchronized SimulatorConfig getSimulatorConfig() throws IOException {
+        if (_instance == null) {
+            getPropertiesSingleton(null);
+        }
         return _simulatorConfig;
     }
 
@@ -21,11 +27,17 @@ public final class PropertiesSingleton {
         getPropertiesSingleton(url);
     }
 
-    public static synchronized PropertiesSingleton getPropertiesSingleton(URL url) throws
+    public static synchronized PropertiesSingleton getPropertiesSingleton(@Nullable URL url) throws
             IOException {
         if (_instance == null) {
             _instance = new PropertiesSingleton();
-            setProperties(url);
+            if (url == null) {
+                // Nasty but works...
+                setProperties(new URL("file://" + new File("s/").getAbsolutePath() +
+                        "rc/main/resources/config.json"));
+            } else {
+                setProperties(url);
+            }
         }
         return _instance;
     }
@@ -39,6 +51,5 @@ public final class PropertiesSingleton {
 
     private static String readPropertiesFromUrl(URL url) throws IOException {
         return new Scanner(url.openStream()).useDelimiter("\\Z").next();
-
     }
 }

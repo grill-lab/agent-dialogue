@@ -4,7 +4,6 @@ package edu.gla.kail.ad.OfflineExperiment;
 import com.google.api.core.ApiFuture;
 import com.google.cloud.firestore.DocumentReference;
 import com.google.cloud.firestore.DocumentSnapshot;
-import com.google.cloud.firestore.Firestore;
 import edu.gla.kail.ad.service.LogManagerSingleton;
 
 import javax.servlet.annotation.WebServlet;
@@ -16,7 +15,6 @@ import java.util.concurrent.ExecutionException;
 
 @WebServlet("/offline-mt-ranking-servlet")
 public class RankingServlet extends HttpServlet {
-    private Firestore _database = LogManagerSingleton.returnDatabase();
 
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws
             IOException {
@@ -30,7 +28,8 @@ public class RankingServlet extends HttpServlet {
                         ("maxTasksAssigned"));
                 TaskLoader taskLoader = new
                         TaskLoader();
-                response.getWriter().write(taskLoader.loadTasks(_database,
+                response.getWriter().write(taskLoader.loadTasks(LogManagerSingleton
+                                .returnDatabase(),
                         userId, maxTasksAssigned));
                 break;
             case "rateTask":
@@ -41,7 +40,8 @@ public class RankingServlet extends HttpServlet {
                 Long endTime_seconds = Long.valueOf(request.getParameter("endTime_seconds"));
                 TaskRater taskRater = new
                         TaskRater();
-                taskRater.rateTask(_database, userId, ratingScore, taskId,
+                taskRater.rateTask(LogManagerSingleton.returnDatabase(), userId, ratingScore,
+                        taskId,
                         startTime_seconds, endTime_seconds);
                 break;
             default:
@@ -53,11 +53,12 @@ public class RankingServlet extends HttpServlet {
         doPost(request, response);
     }
 
-    private Boolean verifyUser(String userId) {
+    private Boolean verifyUser(String userId) throws IOException {
         if (userId == null || userId.equals("")) {
             return false;
         }
-        DocumentReference docRef = _database.collection("clientWebSimulator")
+        DocumentReference docRef = LogManagerSingleton.returnDatabase().collection
+                ("clientWebSimulator")
                 .document("agent-dialogue-experiments").collection("users")
                 .document(userId);
         ApiFuture<DocumentSnapshot> future = docRef.get();
