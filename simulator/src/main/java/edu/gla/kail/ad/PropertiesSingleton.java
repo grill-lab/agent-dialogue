@@ -1,7 +1,7 @@
 package edu.gla.kail.ad;
 
 import com.google.protobuf.util.JsonFormat;
-import edu.gla.kail.ad.CoreConfiguration.CoreConfig;
+import edu.gla.kail.ad.SimulatorConfiguration.SimulatorConfig;
 
 import java.io.IOException;
 import java.net.URL;
@@ -10,10 +10,10 @@ import java.util.Scanner;
 
 public final class PropertiesSingleton {
     private static PropertiesSingleton _instance;
-    private static CoreConfig _coreConfig;
+    private static SimulatorConfig _simulatorConfig;
 
-    public static synchronized CoreConfig getCoreConfig() {
-        return _coreConfig;
+    public static synchronized SimulatorConfig getSimulatorConfig() {
+        return _simulatorConfig;
     }
 
     public static synchronized void reloadProperties(URL url) throws IOException {
@@ -31,10 +31,10 @@ public final class PropertiesSingleton {
     }
 
     private static void setProperties(URL url) throws IOException {
-        CoreConfig.Builder coreConfigBuilder = CoreConfig.newBuilder();
+        SimulatorConfig.Builder coreConfigBuilder = SimulatorConfig.newBuilder();
         String jsonText = readPropertiesFromUrl(url);
         JsonFormat.parser().merge(jsonText, coreConfigBuilder);
-        _coreConfig = coreConfigBuilder.build();
+        _simulatorConfig = coreConfigBuilder.build();
     }
 
     private static String readPropertiesFromUrl(URL url) throws IOException {

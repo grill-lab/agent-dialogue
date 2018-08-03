@@ -9,6 +9,7 @@ import edu.gla.kail.ad.Client.InteractionResponse;
 import edu.gla.kail.ad.Client.InteractionResponse.ClientMessageStatus;
 import edu.gla.kail.ad.Client.InteractionType;
 import edu.gla.kail.ad.Client.OutputInteraction;
+import edu.gla.kail.ad.PropertiesSingleton;
 
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -28,8 +29,8 @@ import static edu.gla.kail.ad.Client.ClientId.WEB_SIMULATOR;
 public class AdCoreClientServlet extends HttpServlet {
     private static LogManagerSingleton _logManagerSingleton = LogManagerSingleton
             .getLogManagerSingleton();
+    private static PropertiesSingleton _propertiesSingleton;
     private static AdCoreClient _client = new AdCoreClient
-            /*("35.184.227.176", 8070);*/
             ("localhost", 8070);
 
     /**
