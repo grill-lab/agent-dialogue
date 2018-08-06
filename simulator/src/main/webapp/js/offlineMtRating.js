@@ -1,11 +1,19 @@
 var _maxTasksAssigned = 5;
 var _listOfTasks = null;
 var _tasksRating = {};
-var _ratingScaleOffline = 5;
 var _userId = null;
 var _experimentId = null;
 var _startTimeOfCurrentTask = (Date.now() / 1000) | 0; // UTC in seconds.
 var _currentTask = null;
+
+var _ratingValues =
+    {
+        "0": "Fails to meet!",
+        "1": "Slightly meets.",
+        "2": "Moderately meets.",
+        "3": "Highly meets.",
+        "4": "Fully meets!!"
+    };
 
 $(document).ready(function () {
         // When user presses "enter" in userId field, the request is being sent.
@@ -23,7 +31,7 @@ $(document).ready(function () {
             document.getElementById("user").value = _userId;
             $('#user-submit-button').text("Change username");
             if (_experimentId == null) {
-                if (validateUser() === true) {
+                if (validateUser() == true) {
                     loadTasks(_userId);
                 }
             } else {
@@ -40,6 +48,7 @@ function redirectToUserPage() {
 }
 
 function validateUser() {
+    let userValidity = true;
     $.ajax({
         url: "offline-mt-ranking-servlet",
         type: 'POST',
@@ -52,16 +61,15 @@ function validateUser() {
             if (response == "false") {
                 alert("The User Id: " + _userId + " is invalid.");
                 $('.user-details-form').append($("<div>").text("INVALID USER ID"));
-                return false;
-            }
-            else if (response == "true") {
-                return true;
+                userValidity = false
             }
         },
         error: function (data, status, error) {
             alert("Error data: " + data + "\nStatus: " + status + "\nError message:" + error);
+            userValidity = false;
         },
     });
+    return userValidity;
 }
 
 
@@ -83,7 +91,7 @@ function loadTasks(_userId) {
             $tasks_list.empty();
             for (let i = 0; i < Object.keys(_listOfTasks).length; i++) {
                 let $task = $("<a class = 'task-a-element' id = \'" + i + "\' onclick=\'showTaskWithNumber(" + i + ")\'>" +
-                    "Task " + i + " <img id='tasks-indicator' " +
+                    "Task " + (i + 1) + " <img id='tasks-indicator' " +
                     "src='../resources/img/question-circle-solid.svg' /></a>");
                 $tasks_list.append($task).append("<br>");
                 _tasksRating[i] = 0;
@@ -127,7 +135,6 @@ function showTaskWithNumber(taskNumber) {
         }
     }
     createMtRating(taskNumber);
-    deselectStars(0, taskNumber);
     if (taskNumber + 1 < Object.keys(_listOfTasks).length) {
         addNextTaskButton(taskNumber + 1);
     }
@@ -158,7 +165,6 @@ function rateTask(taskNumber, starNumber) {
             $(".tasks-list").find('a[id="' + taskNumber + '"]')
                 .find('img[id="tasks-indicator"]')[0].src = '../resources/img/check-solid.svg';
             $ratingDiv.find('img[id="rating-indicator"]')[0].src = '../resources/img/check-solid.svg';
-            deselectStars(starNumber + 1, taskNumber)
         },
         error: function (data, status, error) {
             alert("Error data: " + data + "\nStatus: " + status + "\nError message:" + error);
@@ -168,41 +174,28 @@ function rateTask(taskNumber, starNumber) {
 
 function createMtRating(taskNumber) {
     let rating = _tasksRating[taskNumber];
-    let $rating = $('<div class = "rating" id = "current-rating">');
-    for (let numberOfStars = 0; numberOfStars < _ratingScaleOffline; numberOfStars++) {
-        $rating.append("<img id='star-rating' src='../resources/img/star-regular.svg' " +
-            "onmouseover= \'selectStars(" + numberOfStars + ")\' " +
-            "onmouseout = \'deselectStars(" + numberOfStars + ", " + taskNumber + ")\' " +
-            "onclick=\'rateTask(" + taskNumber + ", " + numberOfStars + ")\' />");
-    }
-    $rating.append("<img id='rating-indicator' src='../resources/img/question-circle-solid.svg' />");
-    $("#rating-interface-block").append($rating);
-}
+    $ratingBlock = $("#rating-interface-block");
+    $ratingBlock.append($('<br><div class = "rating-slider-section"><div id="slider">'));
 
-
-function selectStars(starNumber) {
-    let $stars = $("#current-rating").find('img[id="star-rating"]');
-    for (let i = 0; i < $stars.length; i++) {
-        if (i <= starNumber) {
-            $stars[i].src = '../resources/img/star-solid.svg';
+    $('#slider').slider({
+        value: rating,
+        min: 1,
+        max: 5,
+        step: 1,
+        id: "rating-slider",
+        slide: function (event, ui) {
+            rateTask(taskNumber, ui.value-1);
         }
-        else {
-            $stars[i].src = '../resources/img/star-regular.svg';
-        }
-    }
-}
-
-function deselectStars(starNumber, taskNumber) {
-    let $ratingDiv = $("#current-rating");
-    let stars = $ratingDiv.find('img[id="star-rating"]');
-    for (let i = 0; i < stars.length; i++) {
-        if (i < _tasksRating[taskNumber]) {
-            stars[i].src = '../resources/img/star-solid.svg';
-        }
-        else {
-            stars[i].src = '../resources/img/star-regular.svg';
-        }
-    }
+    })
+        .each(function () {
+            let opt = $(this).data().uiSlider.options;
+            let vals = opt.max - opt.min;
+            for (let i = 0; i <= vals; i++) {
+                let $label = $('<label>' + _ratingValues[i] + '</label>').css('left', (i / vals * 100) + '%');
+                $("#slider").append($label);
+            }
+        });
+    $ratingBlock.append($('<br>'));
 }
 
 function getCurrentTime() {
