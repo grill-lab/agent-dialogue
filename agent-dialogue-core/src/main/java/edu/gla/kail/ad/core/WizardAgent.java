@@ -170,7 +170,7 @@ class WizardAgent implements AgentInterface {
     data.put("client_id", interactionRequest.getClientIdValue());
     data.put("time_seconds", interactionRequest.getTime().getSeconds());
     data.put("time_nanos", interactionRequest.getTime().getNanos());
-    data.put("user_id", interactionRequest.getUserID());
+    data.put("user_id", interactionRequest.getUserId());
     data.put("interaction_type", interactionRequest.getInteraction().getTypeValue());
     data.put("interaction_device_type", interactionRequest.getInteraction().getDeviceType
             ());
