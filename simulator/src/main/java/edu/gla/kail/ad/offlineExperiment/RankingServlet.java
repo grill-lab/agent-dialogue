@@ -1,4 +1,4 @@
-package edu.gla.kail.ad.OfflineExperiment;
+package edu.gla.kail.ad.offlineExperiment;
 
 
 import com.google.api.core.ApiFuture;

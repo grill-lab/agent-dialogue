@@ -27,7 +27,7 @@
 
     <servlet>
         <servlet-name>OfflineMtRankingServlet</servlet-name>
-        <servlet-class>edu.gla.kail.ad.OfflineExperiment.RankingServlet</servlet-class>
+        <servlet-class>edu.gla.kail.ad.offlineExperiment.RankingServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>OfflineMtRankingServlet</servlet-name>

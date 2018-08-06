@@ -1,4 +1,4 @@
-package edu.gla.kail.ad.OfflineExperiment;
+package edu.gla.kail.ad.offlineExperiment;
 
 import com.google.api.core.ApiFuture;
 import com.google.cloud.firestore.DocumentReference;
@@ -150,9 +150,10 @@ class TaskLoader {
         data.put("complete", false);
         data.put("taskId", taskId);
         data.put("userId", _userId);
+        System.out.println(data.toString());
         data.put("experimentId", _database.collection
                 ("clientWebSimulator").document("agent-dialogue-experiments")
-                .collection("taskId").document(taskId)
+                .collection("tasks").document(taskId)
                 .get().get().getData().get("experimentId"));
         createdRatingDocRef.set(data);
         return ratingId;

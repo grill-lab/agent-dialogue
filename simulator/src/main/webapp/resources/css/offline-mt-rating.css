@@ -8,7 +8,7 @@
     width: 13vw;
 }
 
-#next-batch-button {
+#next-batch-button, #next-task-button {
     width: 9vw;
 }
 
