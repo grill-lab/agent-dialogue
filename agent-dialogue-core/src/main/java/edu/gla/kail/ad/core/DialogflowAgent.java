@@ -15,11 +15,13 @@ import com.google.protobuf.ByteString;
 import com.google.protobuf.Timestamp;
 import com.google.protobuf.Value;
 import edu.gla.kail.ad.Client.InputInteraction;
+import edu.gla.kail.ad.Client.InteractionRequest;
 import edu.gla.kail.ad.Client.InteractionType;
 import edu.gla.kail.ad.Client.OutputInteraction;
+import edu.gla.kail.ad.CoreConfiguration.Agent;
+import edu.gla.kail.ad.CoreConfiguration.ServiceProvider;
 import edu.gla.kail.ad.core.Log.ResponseLog;
 import edu.gla.kail.ad.core.Log.ResponseLog.MessageStatus;
-import edu.gla.kail.ad.core.Log.ResponseLog.ServiceProvider;
 import edu.gla.kail.ad.core.Log.Slot;
 import edu.gla.kail.ad.core.Log.SystemAct;
 
@@ -50,17 +52,13 @@ public class DialogflowAgent implements AgentInterface {
      * Initialize a ready-to-work DialogflowAgent.
      *
      * @param sessionId - A unique ID passed to the method by DialogAgentManager.
-     * @param tupleOfProjectIdAndAuthorizationFile - A tuple specific for DialogflowAgent.
-     *         It holds the project ID of a particular agent and the directory location of the file
-     *         with Service Account key for this particular agent.
      * @throws IOException - T setUpAgent method may throw exception if the data passed in
      *         the tupleOfProjectIdAndAuthorizationFile is invalid.
      */
-    DialogflowAgent(String sessionId,
-                    Tuple<String, String>
-                            tupleOfProjectIdAndAuthorizationFile) throws IOException {
+    DialogflowAgent(String sessionId, Agent agent)
+            throws IOException {
         _sessionId = sessionId;
-        setUpAgent(tupleOfProjectIdAndAuthorizationFile);
+        setUpAgent(agent);
     }
 
     @Override
@@ -72,16 +70,12 @@ public class DialogflowAgent implements AgentInterface {
      * Create the SessionClients and SessionNames for the agent which project ID and Service Account
      * key file directory.
      *
-     * @param tupleOfProjectIdAndAuthenticationFile - A tuple specific for DialogflowAgent.
-     *         It holds the project ID of a particular agent and the directory location of the file
-     *         with Service Account key for this particular agent.
      * @throws IOException - When a projectID or the Service Account key is either null or
      *         empty, appropriate exception is thrown.
      */
-    private void setUpAgent(Tuple<String, String>
-                                    tupleOfProjectIdAndAuthenticationFile) throws IOException {
+    private void setUpAgent(Agent agent) throws IOException {
         Tuple<String, SessionsClient> projectIdAndSessionsClient = getProjectIdAndSessionsClient
-                (tupleOfProjectIdAndAuthenticationFile);
+                (agent);
         _sessionsClient = projectIdAndSessionsClient.y();
         _session = SessionName.of(projectIdAndSessionsClient.x(), _sessionId);
     }
@@ -188,15 +182,14 @@ public class DialogflowAgent implements AgentInterface {
      *         interaction requested is not recognised or supported.
      */
     @Override
-    public ResponseLog getResponseFromAgent(InputInteraction inputInteraction) throws
+    public ResponseLog getResponseFromAgent(InteractionRequest interactionRequest) throws
             IllegalArgumentException {
         // TODO(Jeff): What do do her when things go wrong?  Handle RPC errors?  Throw an
         // exception? or leave it for higher levels to catch exception and return as unsuccessful
         // response.
-
-        DetectIntentResponse response = detectIntentResponseMethod(inputInteraction);
+        DetectIntentResponse response = detectIntentResponseMethod(interactionRequest
+                .getInteraction());
         QueryResult queryResult = response.getQueryResult();
-
         Timestamp timestamp = Timestamp.newBuilder()
                 .setSeconds(Instant.now()
                         .getEpochSecond())

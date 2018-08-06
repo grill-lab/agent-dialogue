@@ -1,13 +1,13 @@
 package edu.gla.kail.ad.core;
 
 import edu.gla.kail.ad.core.Log.Turn;
+import edu.gla.kail.ad.PropertiesSingleton;
 import org.joda.time.DateTime;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.nio.file.Paths;
 
 /**
  * Manage turns and store them in the output stream.
@@ -29,20 +29,11 @@ public final class LogTurnManagerSingleton {
         if (_instance == null) {
             _instance = new LogTurnManagerSingleton();
             // Directory to the folder with logs.
-            _logDailyTurnsPath =
-                    Paths.get(LogTurnManagerSingleton
-                            .class
-                            .getProtectionDomain()
-                            .getCodeSource()
-                            .getLocation()
-                            .getPath())
-                    .getParent()
-                    .getParent()
-                    .toString()
-                           /*"/mnt/adcoreserver"*/
-                                   + "/Logs/DailyTurns/" + DateTime.now().toLocalDate().toString() + "/";
+            _logDailyTurnsPath = PropertiesSingleton.getCoreConfig().getLogStoragePath() +
+                    "/DailyTurns/" + DateTime.now().toLocalDate().toString() + "/";
             directoryExistsOrCreate(_logDailyTurnsPath);
-            _currentDailyTurnPath = _logDailyTurnsPath + DateTime.now().toLocalDateTime().toString();
+            _currentDailyTurnPath = _logDailyTurnsPath + DateTime.now().toLocalDateTime()
+                    .toString();
             try {
                 _outputStream = new FileOutputStream(_currentDailyTurnPath);
             } catch (IOException exception) {

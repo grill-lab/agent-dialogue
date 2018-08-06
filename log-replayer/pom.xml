@@ -14,13 +14,18 @@
         <javaVersion>1.8</javaVersion>
         <!-- to be changed later on to the main class -->
         <mainClass>edu.gla.kail.ad.replayer.LogReplayer</mainClass>
+
+        <maven-compiler-plugin.version>3.5.1</maven-compiler-plugin.version>
         <os-maven-plugin.version>1.6.0</os-maven-plugin.version>
-        <agent-dialogue-core.version>0.1-SNAPSHOT</agent-dialogue-core.version>
         <junit.version>4.12</junit.version>
 
-        <protobuf.version>3.5.1</protobuf.version>
-        <protoc.version>3.5.1-1</protoc.version>
-        <grpc.version>1.12.0</grpc.version>
+        <protobuf.version>3.6.1</protobuf.version>
+        <protoc.version>3.6.1</protoc.version>
+        <protobuf-maven-plugin.version>0.5.1</protobuf-maven-plugin.version>
+
+        <grpc.version>1.14.0</grpc.version>
+
+        <agent-dialogue-core.version>0.1-SNAPSHOT</agent-dialogue-core.version>
     </properties>
 
 
@@ -45,7 +50,7 @@
             <!-- this is entirely to set the java version -->
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.5.1</version>
+                <version>${maven-compiler-plugin.version}</version>
                 <configuration>
                     <source>${javaVersion}</source>
                     <target>${javaVersion}</target>
@@ -104,7 +109,7 @@
             <plugin>
                 <groupId>org.xolstice.maven.plugins</groupId>
                 <artifactId>protobuf-maven-plugin</artifactId>
-                <version>0.5.1</version>
+                <version>${protobuf-maven-plugin.version}</version>
                 <configuration>
                     <protocArtifact>
                         com.google.protobuf:protoc:${protoc.version}:exe:${os.detected.classifier}

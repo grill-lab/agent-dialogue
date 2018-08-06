@@ -14,10 +14,12 @@
         <javaVersion>1.8</javaVersion>
         <!-- to be changed later on to the main class -->
         <mainClass>edu.gla.kail.ad.uploader.FirestoreUploader</mainClass>
+
+        <maven-compiler-plugin.version>3.5.1</maven-compiler-plugin.version>
         <os-maven-plugin.version>1.6.0</os-maven-plugin.version>
         <junit.version>4.12</junit.version>
 
-        <firebase-admin.version>6.2.0</firebase-admin.version>
+        <firebase-admin.version>6.3.0</firebase-admin.version>
     </properties>
 
 
@@ -42,7 +44,7 @@
             <!-- this is entirely to set the java version -->
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.5.1</version>
+                <version>${maven-compiler-plugin.version}</version>
                 <configuration>
                     <source>${javaVersion}</source>
                     <target>${javaVersion}</target>

@@ -4,7 +4,6 @@ import com.google.protobuf.Timestamp;
 import edu.gla.kail.ad.Client;
 import edu.gla.kail.ad.Client.InteractionRequest;
 import edu.gla.kail.ad.Client.InteractionResponse;
-import edu.gla.kail.ad.core.DialogAgentManagerTestMain;
 import edu.gla.kail.ad.core.Log.LogEntry;
 import edu.gla.kail.ad.core.Log.Turn;
 import edu.gla.kail.ad.service.AgentDialogueGrpc;
@@ -49,7 +48,7 @@ public class LogReplayer {
     // RPC will wait for the server to respond; return response or raise an exception.
     private final AgentDialogueBlockingStub _blockingStub;
     // True if the user wants to wait for all the threads to finish and then quit.
-    boolean _quit = false;
+    private boolean _quit = false;
     // Directory to the folder with logs.
     private String _LOG_STORAGE_DIRECTORY;
     // Maximum number of conversations (LogEntry replays) happening at any given time.

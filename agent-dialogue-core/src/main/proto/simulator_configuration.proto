@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+package edu.gla.kail.ad;
+
+option java_package = "edu.gla.kail.ad";
+
+message SimulatorConfig {
+    string grpc_core_server_host = 1;
+    int32 grpc_core_server_port = 2;
+    string log_storage_path = 3;
+    string firestore_authorization_URL = 4;
+}

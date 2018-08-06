@@ -8,7 +8,7 @@
     width: 13vw;
 }
 
-#next-batch-button {
+#next-batch-button, #next-task-button {
     width: 9vw;
 }
 
@@ -63,4 +63,23 @@
 
 .tasks-list-block .active {
     background-color: #b71115;
+}
+
+.date-utternace {
+    font-size: 12px;
+}
+.rating-slider-section {
+    padding-top: 1vw;
+    height: 10vw;
+}
+
+#slider label {
+    position: absolute;
+    word-wrap: break-word;
+    width: 8vw;
+    font-size: 10px;
+    padding-top: 3vw;
+    margin-left: -4vw;
+    padding-bottom: 1vw;
+    text-align: center;
 }

@@ -1,37 +1,36 @@
-package edu.gla.kail.ad.service;
+package edu.gla.kail.ad.offlineExperiment;
 
 
 import com.google.api.core.ApiFuture;
 import com.google.cloud.firestore.DocumentReference;
 import com.google.cloud.firestore.DocumentSnapshot;
-import com.google.cloud.firestore.Firestore;
+import edu.gla.kail.ad.service.LogManagerSingleton;
 
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 @WebServlet("/offline-mt-ranking-servlet")
-public class OfflineMtRankingServlet extends HttpServlet {
-    private Firestore _database = LogManagerSingleton.returnDatabase();
+public class RankingServlet extends HttpServlet {
 
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws
             IOException {
         String userId = request.getParameter("userId");
         switch (request.getHeader("operation")) {
-            case "validateUserAndStartExperiment":
+            case "validateUser":
                 response.getWriter().write(verifyUser(userId).toString());
                 break;
             case "loadTasks":
                 Integer maxTasksAssigned = Integer.valueOf(request.getParameter
                         ("maxTasksAssigned"));
-                OfflineExperimentTaskLoader offlineExperimentTaskLoader = new OfflineExperimentTaskLoader();
-                response.getWriter().write(offlineExperimentTaskLoader.loadTasks(_database, userId, maxTasksAssigned));
+                TaskLoader taskLoader = new
+                        TaskLoader();
+                response.getWriter().write(taskLoader.loadTasks(LogManagerSingleton
+                                .returnDatabase(),
+                        userId, maxTasksAssigned));
                 break;
             case "rateTask":
                 Integer ratingScore = Integer.valueOf(request.getParameter("ratingScore"));
@@ -39,8 +38,11 @@ public class OfflineMtRankingServlet extends HttpServlet {
                 Long startTime_seconds = Long.valueOf(request.getParameter
                         ("startTime_seconds"));
                 Long endTime_seconds = Long.valueOf(request.getParameter("endTime_seconds"));
-                OfflineExperimentTaskRater offlineExperimentTaskRater = new OfflineExperimentTaskRater();
-                offlineExperimentTaskRater.rateTask(_database, userId, ratingScore, taskId, startTime_seconds, endTime_seconds);
+                TaskRater taskRater = new
+                        TaskRater();
+                taskRater.rateTask(LogManagerSingleton.returnDatabase(), userId, ratingScore,
+                        taskId,
+                        startTime_seconds, endTime_seconds);
                 break;
             default:
                 response.getWriter().write("false");
@@ -51,11 +53,12 @@ public class OfflineMtRankingServlet extends HttpServlet {
         doPost(request, response);
     }
 
-    private Boolean verifyUser(String userId) {
+    private Boolean verifyUser(String userId) throws IOException {
         if (userId == null || userId.equals("")) {
             return false;
         }
-        DocumentReference docRef = _database.collection("clientWebSimulator")
+        DocumentReference docRef = LogManagerSingleton.returnDatabase().collection
+                ("clientWebSimulator")
                 .document("agent-dialogue-experiments").collection("users")
                 .document(userId);
         ApiFuture<DocumentSnapshot> future = docRef.get();

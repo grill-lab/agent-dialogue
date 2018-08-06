@@ -6,6 +6,7 @@ option java_package = "edu.gla.kail.ad.core";
 
 import "google/protobuf/timestamp.proto";
 import "client.proto";
+import "core_configuration.proto";
 
 // This protobuffer is used for storing the data created by the agent-dialogue-core, that is used
 // across the platform.
@@ -30,14 +31,6 @@ message RequestLog {
 }
 
 message ResponseLog {
-    enum ServiceProvider {
-        NOTSET = 0; // Proto3 doesn't distinguish between field that is empty or is set to it's default (value = 0).
-        DIALOGFLOW = 1;
-        DUMMYAGENT = 2;
-        FAILINGTIMEDUMMYAGENT = 3;
-        FAILINGNULLDUMMYAGENT = 4;
-        FAILINGEXCEPTIONDUMMYAGENT = 5;
-    }
     enum MessageStatus {
         NONSET = 0;
         SUCCESSFUL = 1;

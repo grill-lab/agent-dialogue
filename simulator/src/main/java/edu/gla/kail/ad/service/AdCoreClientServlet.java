@@ -9,6 +9,7 @@ import edu.gla.kail.ad.Client.InteractionResponse;
 import edu.gla.kail.ad.Client.InteractionResponse.ClientMessageStatus;
 import edu.gla.kail.ad.Client.InteractionType;
 import edu.gla.kail.ad.Client.OutputInteraction;
+import edu.gla.kail.ad.PropertiesSingleton;
 
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -21,22 +22,23 @@ import java.util.List;
 import static edu.gla.kail.ad.Client.ClientId.WEB_SIMULATOR;
 
 /**
- * Connect to AgentDialogueClientService and therefore enable interaction with Agent Dialogue Core.
+ * Connect to AdCoreClient and therefore enable interaction with Agent Dialogue Core.
  * Accessible from JavaScript, through RESTful calls.
  */
 @WebServlet("/ad-client-service-servlet")
-public class AdClientServiceServlet extends HttpServlet {
-    private static LogManagerSingleton _logManagerSingleton = LogManagerSingleton
-            .getLogManagerSingleton();
-    private static AgentDialogueClientService _client = new AgentDialogueClientService
-            ("35.184.227.176", 8070);
-    /*("localhost", 8070);*/
+public class AdCoreClientServlet extends HttpServlet {
+    private static AdCoreClient _client;
 
     /**
      * Handle POST request.
      */
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws
             IOException {
+        if (_client == null) {
+            _client = new AdCoreClient(PropertiesSingleton.getSimulatorConfig()
+                    .getGrpcCoreServerHost(), PropertiesSingleton.getSimulatorConfig()
+                    .getGrpcCoreServerPort());
+        }
         switch (request.getHeader("operation")) {
             case "sendRequestToAgents":
                 sendRequestToAgents(request, response);
@@ -67,7 +69,8 @@ public class AdClientServiceServlet extends HttpServlet {
      */
     private void updateRating(HttpServletRequest request, HttpServletResponse response) throws
             IOException {
-        _logManagerSingleton.addRating(request.getParameter("ratingScore"), request.getParameter
+        LogManagerSingleton.getLogManagerSingleton().addRating(request.getParameter
+                ("ratingScore"), request.getParameter
                 ("responseId"), request.getParameter("experimentId"), request.getParameter
                 ("requestId"));
     }
@@ -81,15 +84,14 @@ public class AdClientServiceServlet extends HttpServlet {
         response.setCharacterEncoding("UTF-8");
         response.setContentType("application/json");
         JsonObject json = new JsonObject();
-
         InteractionRequest interactionRequest = getInteractionRequestFromText(request
                 .getParameter("textInput"), request.getParameter("language"));
-        _logManagerSingleton.addInteraction(interactionRequest, null);
+        LogManagerSingleton.getLogManagerSingleton().addInteraction(interactionRequest, null);
         json.addProperty("interactionRequest", interactionRequest.toString());
         InteractionResponse interactionResponse;
         try {
             interactionResponse = _client.getInteractionResponse(interactionRequest);
-            _logManagerSingleton.addInteraction(null, interactionResponse);
+            LogManagerSingleton.getLogManagerSingleton().addInteraction(null, interactionResponse);
             json.addProperty("message", handleResponse(interactionResponse));
             json.addProperty("interactionResponse", interactionResponse.toString());
             json.addProperty("responseId", interactionResponse.getResponseId());
@@ -100,7 +102,7 @@ public class AdClientServiceServlet extends HttpServlet {
                     .setErrorMessage(exception.getMessage() + "\n\n" + exception.getStackTrace())
                     .setTime(getTimeStamp())
                     .build();
-            _logManagerSingleton.addInteraction(null, interactionResponse);
+            LogManagerSingleton.getLogManagerSingleton().addInteraction(null, interactionResponse);
             json.addProperty("message", "There was a fatal error! (Probably could not connect to " +
                     "the server)");
             json.addProperty("interactionResponse", interactionResponse.toString());
@@ -175,7 +177,7 @@ public class AdClientServiceServlet extends HttpServlet {
                                                                              inputInteraction) {
         return InteractionRequest.newBuilder()
                 .setClientId(WEB_SIMULATOR)
-                .setUserID(returnUserName())
+                .setUserId(returnUserName())
                 .setTime(getTimeStamp())
                 .setInteraction(inputInteraction);
     }
