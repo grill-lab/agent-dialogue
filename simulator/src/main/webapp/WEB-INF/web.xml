@@ -18,7 +18,7 @@
 
     <servlet>
         <servlet-name>AdClientServiceServlet</servlet-name>
-        <servlet-class>edu.gla.kail.ad.service.AdClientServiceServlet</servlet-class>
+        <servlet-class>edu.gla.kail.ad.service.AdCoreClientServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>AdClientServiceServlet</servlet-name>
@@ -27,7 +27,7 @@
 
     <servlet>
         <servlet-name>OfflineMtRankingServlet</servlet-name>
-        <servlet-class>edu.gla.kail.ad.service.OfflineMtRankingServlet</servlet-class>
+        <servlet-class>edu.gla.kail.ad.offlineExperiment.RankingServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>OfflineMtRankingServlet</servlet-name>

@@ -1,4 +1,4 @@
-package edu.gla.kail.ad.service;
+package edu.gla.kail.ad.offlineExperiment;
 
 import com.google.api.core.ApiFuture;
 import com.google.cloud.firestore.DocumentReference;
@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
-class OfflineExperimentTaskLoader {
+class TaskLoader {
     private Firestore _database;
     private String _userId;
 
@@ -74,7 +74,9 @@ class OfflineExperimentTaskLoader {
 
     private ArrayList<String> assignMoreTasksToUser(HashSet<String> allAssignedTaskIds,
                                                     ArrayList<String>
-            listOfOpenTaskIds, Integer maxNumberOfTasksAssigned, Integer numberOfOpenRatings,
+                                                            listOfOpenTaskIds, Integer
+                                                            maxNumberOfTasksAssigned, Integer
+                                                            numberOfOpenRatings,
                                                     DocumentReference userDocRef)
             throws ExecutionException, InterruptedException {
         HashSet<String> remainingAvailableTasks = new HashSet<>();
@@ -128,10 +130,14 @@ class OfflineExperimentTaskLoader {
         ratingIds.add(ratingId);
         HashMap<String, Object> helperMap = new HashMap<>();
         helperMap.put("ratingIds", ratingIds);
+        Long numberOfRemainingRatings = (Long) taskData.get("numberOfRemainingRatings");
+        numberOfRemainingRatings -= 1;
+        helperMap.put("numberOfRemainingRatings", numberOfRemainingRatings);
         taskDocRef.update(helperMap);
     }
 
-    private String createNewOpenRating(String taskId) {
+    private String createNewOpenRating(String taskId) throws ExecutionException,
+            InterruptedException {
         String ratingId = taskId + "_" + _userId;
         DocumentReference createdRatingDocRef = _database.collection
                 ("clientWebSimulator").document("agent-dialogue-experiments")
@@ -144,7 +150,10 @@ class OfflineExperimentTaskLoader {
         data.put("complete", false);
         data.put("taskId", taskId);
         data.put("userId", _userId);
-
+        data.put("experimentId", _database.collection
+                ("clientWebSimulator").document("agent-dialogue-experiments")
+                .collection("tasks").document(taskId)
+                .get().get().getData().get("experimentId"));
         createdRatingDocRef.set(data);
         return ratingId;
     }
@@ -155,8 +164,8 @@ class OfflineExperimentTaskLoader {
         for (Integer taskIndex = 0; taskIndex < listOfOpenTaskIds.size(); taskIndex++) {
             String taskId = listOfOpenTaskIds.get(taskIndex);
             Map<String, Object> taskMap = _database.collection("clientWebSimulator")
-                    .document("agent-dialogue-experiments").collection("tasks").document
-                            (taskId).get().get().getData();
+                    .document("agent-dialogue-experiments").collection("tasks")
+                    .document(taskId).get().get().getData();
             JsonObject taskJson = new JsonObject();
             taskJson.addProperty("clientId", (String) taskMap.get("clientId"));
             taskJson.addProperty("deviceType", (String) taskMap.get("deviceType"));

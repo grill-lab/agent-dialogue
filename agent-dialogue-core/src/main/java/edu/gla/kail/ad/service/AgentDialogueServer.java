@@ -5,6 +5,7 @@ import com.google.protobuf.Timestamp;
 import edu.gla.kail.ad.Client.InteractionRequest;
 import edu.gla.kail.ad.Client.InteractionResponse;
 import edu.gla.kail.ad.Client.InteractionResponse.ClientMessageStatus;
+import edu.gla.kail.ad.PropertiesSingleton;
 import edu.gla.kail.ad.core.DialogAgentManager;
 import edu.gla.kail.ad.core.Log.ResponseLog;
 import edu.gla.kail.ad.core.LogTurnManagerSingleton;
@@ -13,8 +14,8 @@ import io.grpc.ServerBuilder;
 import io.grpc.stub.StreamObserver;
 
 import java.io.IOException;
+import java.net.URL;
 import java.time.Instant;
-import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -23,27 +24,28 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * TODO(Adam): Create a database used for server initialization.
  */
 public class AgentDialogueServer {
-    private final int _port;
     private final Server _server;
 
     public AgentDialogueServer(int port) {
-        this(ServerBuilder.forPort(port), port);
+        this(ServerBuilder.forPort(port));
     }
 
     /**
      * Create a server listening on specified port.
      *
      * @param serverBuilder
-     * @param port
      */
-    private AgentDialogueServer(ServerBuilder<?> serverBuilder, int port) {
-        _port = port;
+    private AgentDialogueServer(ServerBuilder<?> serverBuilder) {
         _server = serverBuilder.addService(new AgentDialogueService()).build();
     }
 
-    public static void main(String[] args) throws IOException, InterruptedException {
-        // Using the default port 8070.
-        AgentDialogueServer server = new AgentDialogueServer(8070);
+    public static void main(String[] args) throws Exception {
+        if (args == null || args.length == 0) {
+            throw new Exception("Please specify the URL to the configuration file.");
+        }
+        PropertiesSingleton.getPropertiesSingleton(new URL(args[0]));
+        AgentDialogueServer server = new AgentDialogueServer(PropertiesSingleton.getCoreConfig()
+                .getGrpcServerPort());
         server.start();
         server.blockUntilShutdown();
     }
@@ -56,9 +58,7 @@ public class AgentDialogueServer {
     public void start() throws IOException {
         _server.start();
         Runtime.getRuntime().addShutdownHook(new Thread() {
-            /**
-             * In case the JVM is being shut down
-             */
+            // In case the JVM is being shut down
             @Override
             public void run() {
                 System.err.println("Server shut down due to JVM being shut down.");
@@ -123,17 +123,17 @@ public class AgentDialogueServer {
         @Override
         public void getResponseFromAgents(InteractionRequest interactionRequest,
                                           StreamObserver<InteractionResponse> responseObserver) {
-            checkNotNull(interactionRequest.getUserID(), "The interactionRequest that have " +
+            checkNotNull(interactionRequest.getUserId(), "The InteractionRequest that have " +
                     "been sent doesn't have userID!");
             DialogAgentManager dialogAgentManager;
             try {
                 dialogAgentManager = DialogAgentManagerSingleton
-                        .getDialogAgentManager(interactionRequest.getUserID());
+                        .getDialogAgentManager(interactionRequest.getUserId());
             } catch (Exception exception) {
                 exception.printStackTrace();
                 dialogAgentManager = null;
             }
-            checkNotNull(dialogAgentManager, "The initialization of the dialogAgentManager " +
+            checkNotNull(dialogAgentManager, "The initialization of the DialogAgentManager " +
                     "failed!");
             ResponseLog response;
             InteractionResponse interactionResponse;
@@ -147,12 +147,14 @@ public class AgentDialogueServer {
                 response = dialogAgentManager.getResponse(interactionRequest);
                 interactionResponse = InteractionResponse.newBuilder()
                         .setResponseId(response.getResponseId())
+                        .setSessionId(dialogAgentManager.get_sessionId())
                         .setTime(timestamp)
                         .setClientId(response.getClientId())
-                        .setUserID(interactionRequest.getUserID())
+                        .setUserId(interactionRequest.getUserId())
                         .setMessageStatus(ClientMessageStatus.SUCCESSFUL)
-                        .addAllInteraction(response.getActionList().stream().map(action -> action
-                                .getInteraction()).collect(Collectors.toList()))
+                        .addAllInteraction(response.getActionList().stream()
+                                .map(action -> action.getInteraction())
+                                .collect(Collectors.toList()))
                         .build();
             } catch (Exception exception) {
                 interactionResponse = InteractionResponse.newBuilder()

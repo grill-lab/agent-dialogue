@@ -6,12 +6,10 @@ import com.google.auth.oauth2.ServiceAccountCredentials;
 import com.google.cloud.Tuple;
 import com.google.cloud.dialogflow.v2beta1.SessionsClient;
 import com.google.cloud.dialogflow.v2beta1.SessionsSettings;
+import edu.gla.kail.ad.CoreConfiguration.Agent;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -25,8 +23,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * The class is thread safe.
  */
 public final class DialogflowAgentAuthorizationSingleton {
-    private static Map<Tuple<String, String>, DialogflowAgentAuthorizationSingleton>
-            _agentAuthorizationInstances;
+    private static Map<Agent, DialogflowAgentAuthorizationSingleton> _agentAuthorizationInstances;
     private SessionsClient _sessionsClient;
     private String _projectId;
 
@@ -34,30 +31,19 @@ public final class DialogflowAgentAuthorizationSingleton {
      * Create the SessionClients and project for all the agents which project ID and Service Account
      * key file directories are provided.
      *
-     * @param tupleOfProjectIdAndAuthenticationFile - A tuple specific for DialogflowAgent.
-     *         It holds the project ID of a particular agent and the directory location of the file
-     *         with Service Account key for this particular agent.
-     * @throws FileNotFoundException
      * @throws IllegalArgumentException
      */
-    private DialogflowAgentAuthorizationSingleton(Tuple<String, String>
-                                                          tupleOfProjectIdAndAuthenticationFile)
-            throws FileNotFoundException, IllegalArgumentException, IOException {
-        checkNotNull(tupleOfProjectIdAndAuthenticationFile, "The passed tuple is null!");
-        _projectId = checkNotNull(tupleOfProjectIdAndAuthenticationFile.x(), "The project " +
-                "ID is null!");
-        String jsonKeyFileLocation = checkNotNull(tupleOfProjectIdAndAuthenticationFile.y(), "The" +
+    private DialogflowAgentAuthorizationSingleton(Agent agent)
+            throws IllegalArgumentException, IOException {
+        _projectId = checkNotNull(agent.getProjectId(), "The project ID is null!");
+        URL jsonKeyUrl = checkNotNull(new URL(agent.getConfigurationFileURL()), "The" +
                 " JSON file location is null!");
         if (_projectId.isEmpty()) {
             throw new IllegalArgumentException("The provided project ID of the service is empty!");
         }
-        if (!(Files.exists(Paths.get(jsonKeyFileLocation)))) {
-            throw new FileNotFoundException("The location of the JSON key file provided does not " +
-                    "exist: " + jsonKeyFileLocation);
-        }
 
         CredentialsProvider credentialsProvider = FixedCredentialsProvider.create(
-                (ServiceAccountCredentials.fromStream(new FileInputStream(jsonKeyFileLocation))));
+                (ServiceAccountCredentials.fromStream(jsonKeyUrl.openStream())));
         SessionsSettings sessionsSettings = SessionsSettings.newBuilder().setCredentialsProvider
                 (credentialsProvider).build(); // TODO(Adam): Handle the error, when the
         // authorization fails. What to do then though?
@@ -68,25 +54,21 @@ public final class DialogflowAgentAuthorizationSingleton {
      * Thread safe method, providing a Tuple of projectID and SessionClient corresponding to the
      * passed-input tuple.
      *
-     * @param tupleOfProjectIdAndAuthenticationFile - A tuple specific for DialogflowAgent.
-     *         It holds the project ID of a particular agent and the directory location of the file
-     *         with Service Account key for this particular agent.
      * @return Tuple<> - A data structure holding projectID and SessionClient required for the
      *         authorization.
      * @throws IOException - When a projectID or the Service Account key is either null or
      *         empty, appropriate exception is thrown.
      */
-    static synchronized Tuple<String, SessionsClient> getProjectIdAndSessionsClient
-    (Tuple<String, String> tupleOfProjectIdAndAuthenticationFile) throws IOException {
+    static synchronized Tuple<String, SessionsClient> getProjectIdAndSessionsClient(Agent agent)
+            throws IOException {
         if (_agentAuthorizationInstances == null) {
             _agentAuthorizationInstances = new HashMap<>();
         }
-        if (!_agentAuthorizationInstances.containsKey(tupleOfProjectIdAndAuthenticationFile)) {
-            _agentAuthorizationInstances.put(tupleOfProjectIdAndAuthenticationFile, new
-                    DialogflowAgentAuthorizationSingleton(tupleOfProjectIdAndAuthenticationFile));
-        }
+        if (!_agentAuthorizationInstances.containsKey(agent))
+            _agentAuthorizationInstances.put(agent, new DialogflowAgentAuthorizationSingleton
+                    (agent));
         DialogflowAgentAuthorizationSingleton _agentAuthorizationInstance =
-                _agentAuthorizationInstances.get(tupleOfProjectIdAndAuthenticationFile);
+                _agentAuthorizationInstances.get(agent);
         return Tuple.of(_agentAuthorizationInstance._projectId, _agentAuthorizationInstance
                 ._sessionsClient);
     }

@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+package edu.gla.kail.ad;
+
+option java_package = "edu.gla.kail.ad";
+
+enum ServiceProvider {
+    UNRECOGNISED = 0;
+    DIALOGFLOW = 1;
+}
+
+message CoreConfig {
+    int32 grpc_server_port = 1;
+    string log_storage_path = 2;
+    int32 max_number_of_simultaneous_conversations = 3;
+    int32 session_timeout_minutes = 4;
+
+    repeated Agent agents = 5;
+}
+
+message Agent {
+    ServiceProvider service_provider = 1;
+    string project_id = 2;
+    string configuration_file_URL = 3;
+}

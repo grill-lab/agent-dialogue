@@ -10,6 +10,7 @@ import com.google.protobuf.Timestamp;
 import edu.gla.kail.ad.Client.InteractionRequest;
 import edu.gla.kail.ad.Client.InteractionResponse;
 import edu.gla.kail.ad.Client.OutputInteraction;
+import edu.gla.kail.ad.PropertiesSingleton;
 import edu.gla.kail.ad.eval.Ratings.Rating;
 import edu.gla.kail.ad.eval.Ratings.Rating.Builder;
 import edu.gla.kail.ad.eval.Ratings.RatingOrBuilder;
@@ -17,12 +18,10 @@ import org.joda.time.DateTime;
 
 import javax.annotation.Nullable;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.OutputStream;
-import java.nio.file.Path;
+import java.net.URL;
 import java.nio.file.Paths;
 import java.time.Instant;
 import java.util.HashMap;
@@ -40,35 +39,21 @@ public class LogManagerSingleton {
     private static OutputStream _interactionsOutputStream;
     private static OutputStream _ratingsOutputStream;
     private static Firestore _database;
-    private static Path _projectSimulatorPath = Paths
-            .get(LogManagerSingleton
-                    .class
-                    .getProtectionDomain()
-                    .getCodeSource()
-                    .getLocation()
-                    .getPath())
-            .getParent()
-            .getParent();
 
     /**
      * Get instance of this class.
      *
      * @return LogManagerSingleton - An instance of the class itself.
      */
-    static synchronized LogManagerSingleton getLogManagerSingleton() {
+    static synchronized LogManagerSingleton getLogManagerSingleton() throws IOException {
         if (_instance == null) {
-
             GoogleCredentials credentials;
-            try {
-                InputStream serviceAccount = new FileInputStream
-                        (_projectSimulatorPath +
-                                "/src/main/resources/agentdialogue-2cd4b-firebase-adminsdk-z39zw" +
-                                "-4d5427d1fc.json");
-                credentials = GoogleCredentials.fromStream(serviceAccount);
-            } catch (Exception e) {
-                credentials = null;
-                System.out.println();
-            }
+            credentials = GoogleCredentials
+                    .fromStream(new URL(PropertiesSingleton
+                            .getSimulatorConfig()
+                            .getFirestoreAuthorizationURL())
+                            .openStream());
+
             checkNotNull(credentials, "Credentials used to initialise FireStore are null.");
             FirebaseOptions options = new FirebaseOptions.Builder()
                     .setCredentials(credentials)
@@ -81,7 +66,8 @@ public class LogManagerSingleton {
             _instance = new LogManagerSingleton();
             // Directory to the folder with logs.
             String logInteractionsPath = Paths
-                    .get(_projectSimulatorPath.toString() + "/Logs/interactions_logs/").toString();
+                    .get(PropertiesSingleton.getSimulatorConfig().getLogStoragePath() +
+                            "/interactions_logs/").toString();
             directoryExistsOrCreate(logInteractionsPath);
             logInteractionsPath += "/" + DateTime.now().toString();
             try {
@@ -91,7 +77,8 @@ public class LogManagerSingleton {
             }
 
             String logRatingsPath = Paths
-                    .get(_projectSimulatorPath.toString() + "/Logs/ratings_logs/").toString();
+                    .get(PropertiesSingleton.getSimulatorConfig().getLogStoragePath() +
+                            "/ratings_logs/").toString();
             directoryExistsOrCreate(logRatingsPath);
             logRatingsPath += "/" + DateTime.now().toString();
             try {
@@ -103,7 +90,7 @@ public class LogManagerSingleton {
         return _instance;
     }
 
-    public static Firestore returnDatabase() {
+    public static Firestore returnDatabase() throws IOException {
         return getLogManagerSingleton()._database;
     }
 
@@ -141,7 +128,7 @@ public class LogManagerSingleton {
             data.put("client_id", interactionRequest.getClientIdValue());
             data.put("time_seconds", interactionRequest.getTime().getSeconds());
             data.put("time_nanos", interactionRequest.getTime().getNanos());
-            data.put("userID", interactionRequest.getUserID());
+            data.put("userID", interactionRequest.getUserId());
             data.put("interaction_type", interactionRequest.getInteraction().getTypeValue());
             data.put("interaction_device_type", interactionRequest.getInteraction().getDeviceType
                     ());
@@ -168,7 +155,7 @@ public class LogManagerSingleton {
             data.put("client_id", interactionResponse.getClientIdValue());
             data.put("message_status", interactionResponse.getMessageStatusValue());
             data.put("error_message", interactionResponse.getErrorMessage());
-            data.put("userID", interactionResponse.getUserID());
+            data.put("userID", interactionResponse.getUserId());
             docRef.set(data);
 
             Integer counter = 0;
@@ -179,7 +166,8 @@ public class LogManagerSingleton {
                 outputInteractionData.put("type", outputInteraction.getTypeValue());
                 outputInteractionData.put("action_list", outputInteraction.getActionList()
                         .toString());
-                docRef.collection("output_interaction").document(counter.toString()).set(data);
+                docRef.collection("output_interaction").document(counter.toString()).set
+                        (outputInteractionData);
                 counter++;
             }
         }
@@ -200,7 +188,7 @@ public class LogManagerSingleton {
             experimentId, @Nullable String requestId) throws
             IOException {
         RatingOrBuilder ratingOrBuilder = Rating.newBuilder()
-                .setScore(ratingScore)
+                .setScore(Integer.valueOf(ratingScore))
                 .setResponseId(responseId)
                 .setTime(Timestamp.newBuilder()
                         .setSeconds(Instant.now()
@@ -217,8 +205,9 @@ public class LogManagerSingleton {
         _ratingsOutputStream.flush();
 
         DocumentReference docRef = _database.collection("clientWebSimulator").document
-                ("experimentalUi").collection("clientRatings").document(rating.getTime()
-                .getSeconds() + "_" + rating.getTime().getNanos());
+                ("experimentalUi").collection("clientRatings")
+                .document(rating.getTime()
+                        .getSeconds() + "_" + rating.getTime().getNanos());
         Map<String, Object> data = new HashMap<>();
 
         data.put("experiment_id", rating.getExperimentId());
