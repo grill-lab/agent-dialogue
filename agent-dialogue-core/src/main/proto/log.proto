@@ -37,6 +37,7 @@ message ResponseLog {
         FAILINGTIMEDUMMYAGENT = 3;
         FAILINGNULLDUMMYAGENT = 4;
         FAILINGEXCEPTIONDUMMYAGENT = 5;
+        WIZARD = 6;
     }
     enum MessageStatus {
         NONSET = 0;
