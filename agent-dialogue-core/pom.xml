@@ -71,6 +71,11 @@
             <artifactId>rxjava</artifactId>
             <version>${rxjava.version}</version>
         </dependency>
+        <dependency>
+           <groupId>com.google.firebase</groupId>
+           <artifactId>firebase-admin</artifactId>
+           <version>${firebase-admin.version}</version>
+        </dependency>
     </dependencies>
 
     <build>
