@@ -23,7 +23,7 @@ public class WizardAgentTest {
                         .setSeconds(Instant.now().getEpochSecond())
                         .setNanos(Instant.now().getNano())
                         .build())
-                .setUserID("1")
+                .setUserId("1")
                 .setClientId(Client.ClientId.EXTERNAL_APPLICATION)
                 .setInteraction(InputInteraction.newBuilder()
                     .setType(InteractionType.TEXT)
