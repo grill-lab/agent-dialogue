@@ -114,7 +114,15 @@ function showTaskWithNumber(taskNumber) {
         }
     }
     createMtRating(taskNumber);
-    deselectStars(0, taskNumber)
+    deselectStars(0, taskNumber);
+    if (taskNumber < Object.keys(_listOfTasks).length) {
+        addNextTaskButton(taskNumber + 1);
+    }
+}
+
+function addNextTaskButton(taskNumber) {
+    let $nextTaskButton = $("<button id = 'next-task-button' class = 'submit-button' type = 'button' onclick = 'showTaskWithNumber(" + taskNumber + ")'>Next Batch</button>");
+    $("#rating-interface-block").append($nextTaskButton);
 }
 
 function rateTask(taskNumber, starNumber) {

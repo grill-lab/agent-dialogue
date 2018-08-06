@@ -1,4 +1,4 @@
-package edu.gla.kail.ad.OfflineExperiment;
+package edu.gla.kail.ad.offlineExperiment;
 
 import com.google.cloud.firestore.DocumentReference;
 import com.google.cloud.firestore.Firestore;

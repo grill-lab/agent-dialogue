@@ -58,9 +58,7 @@ public class AgentDialogueServer {
     public void start() throws IOException {
         _server.start();
         Runtime.getRuntime().addShutdownHook(new Thread() {
-            /**
-             * In case the JVM is being shut down
-             */
+            // In case the JVM is being shut down
             @Override
             public void run() {
                 System.err.println("Server shut down due to JVM being shut down.");
@@ -154,8 +152,9 @@ public class AgentDialogueServer {
                         .setClientId(response.getClientId())
                         .setUserId(interactionRequest.getUserId())
                         .setMessageStatus(ClientMessageStatus.SUCCESSFUL)
-                        .addAllInteraction(response.getActionList().stream().map(action -> action
-                                .getInteraction()).collect(Collectors.toList()))
+                        .addAllInteraction(response.getActionList().stream()
+                                .map(action -> action.getInteraction())
+                                .collect(Collectors.toList()))
                         .build();
             } catch (Exception exception) {
                 interactionResponse = InteractionResponse.newBuilder()
