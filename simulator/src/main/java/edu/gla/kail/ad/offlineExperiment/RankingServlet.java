@@ -20,7 +20,7 @@ public class RankingServlet extends HttpServlet {
             IOException {
         String userId = request.getParameter("userId");
         switch (request.getHeader("operation")) {
-            case "validateUserAndStartExperiment":
+            case "validateUser":
                 response.getWriter().write(verifyUser(userId).toString());
                 break;
             case "loadTasks":

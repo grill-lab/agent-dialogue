@@ -3,25 +3,35 @@ var _listOfTasks = null;
 var _tasksRating = {};
 var _ratingScaleOffline = 5;
 var _userId = null;
+var _experimentId = null;
 var _startTimeOfCurrentTask = (Date.now() / 1000) | 0; // UTC in seconds.
 var _currentTask = null;
 
 $(document).ready(function () {
-    // When user presses "enter" in userId field, the request is being sent.
-    $('#user').keypress(function (keyPressed) {
-        if (keyPressed.which == 13) {
-            keyPressed.preventDefault();
-            redirectToUserPage();
-        }
-    });
+        // When user presses "enter" in userId field, the request is being sent.
+        $('#user').keypress(function (keyPressed) {
+            if (keyPressed.which == 13) {
+                keyPressed.preventDefault();
+                redirectToUserPage();
+            }
+        });
 
-    _userId = (new URL(document.location)).searchParams.get("user");
-    if (_userId != null) {
-        document.getElementById("user").value = _userId;
-        $('#user-submit-button').text("Change username");
-        validateUserAndStartExperiment()
+        _userId = (new URL(document.location)).searchParams.get("user");
+        _experimentId = (new URL(document.location)).searchParams.get("experiment");
+
+        if (_userId != null) {
+            document.getElementById("user").value = _userId;
+            $('#user-submit-button').text("Change username");
+            if (_experimentId == null) {
+                if (validateUser() === true) {
+                    loadTasks(_userId);
+                }
+            } else {
+                $(".epxeriment-id").append("Experiment ID: " + _experimentId);
+            }
+        }
     }
-});
+);
 
 function redirectToUserPage() {
     let basicUrl = (new URL(document.location)).origin + (new URL(document.location)).pathname;
@@ -29,11 +39,11 @@ function redirectToUserPage() {
     window.location.replace(basicUrl + "?user=" + userId);
 }
 
-function validateUserAndStartExperiment() {
+function validateUser() {
     $.ajax({
         url: "offline-mt-ranking-servlet",
         type: 'POST',
-        headers: {"operation": "validateUserAndStartExperiment"},
+        headers: {"operation": "validateUser"},
         dataType: 'text',
         data: {
             userId: _userId
@@ -42,9 +52,10 @@ function validateUserAndStartExperiment() {
             if (response == "false") {
                 alert("The User Id: " + _userId + " is invalid.");
                 $('.user-details-form').append($("<div>").text("INVALID USER ID"));
+                return false;
             }
             else if (response == "true") {
-                loadTasks(_userId);
+                return true;
             }
         },
         error: function (data, status, error) {
@@ -106,11 +117,13 @@ function showTaskWithNumber(taskNumber) {
         let turn = JSON.parse(turns[i]);
         if (turn.request != null) {
             $rating_interface_block.append($('<div id="request"/>')
-                .append("<i class = 'date-utternace'>" + new Date(turn.requestTime_seconds * 1000).toLocaleString() + "</i>" + "<br>" + turn.request));
+                .append("<i class = 'date-utternace'>" + new Date(turn.requestTime_seconds * 1000)
+                    .toLocaleString() + "</i>" + "<br>" + turn.request));
         }
         if (turn.response != null) {
             $rating_interface_block.append($('<div id="response"/>')
-                .append("<i class = 'date-utternace'>" + new Date(turn.responseTime_seconds * 1000).toLocaleString() + "</i>" + "<br>" + turn.response));
+                .append("<i class = 'date-utternace'>" + new Date(turn.responseTime_seconds * 1000)
+                    .toLocaleString() + "</i>" + "<br>" + turn.response));
         }
     }
     createMtRating(taskNumber);
@@ -121,7 +134,8 @@ function showTaskWithNumber(taskNumber) {
 }
 
 function addNextTaskButton(taskNumber) {
-    let $nextTaskButton = $("<button id = 'next-task-button' class = 'submit-button' type = 'button' onclick = 'showTaskWithNumber(" + taskNumber + ")'>Next Task</button>");
+    let $nextTaskButton = $("<button id = 'next-task-button' class = 'submit-button' type = 'button' " +
+        "onclick = 'showTaskWithNumber(" + taskNumber + ")'>Next Task</button>");
     $("#rating-interface-block").append($nextTaskButton);
 }
 

@@ -150,7 +150,6 @@ class TaskLoader {
         data.put("complete", false);
         data.put("taskId", taskId);
         data.put("userId", _userId);
-        System.out.println(data.toString());
         data.put("experimentId", _database.collection
                 ("clientWebSimulator").document("agent-dialogue-experiments")
                 .collection("tasks").document(taskId)
