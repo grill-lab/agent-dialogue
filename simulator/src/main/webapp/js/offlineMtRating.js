@@ -30,7 +30,7 @@ $(document).ready(function () {
         if (_userId != null) {
             document.getElementById("user").value = _userId;
             $('#user-submit-button').text("Change username");
-            if (_experimentId == null) {
+            if (_experimentId == null || _experimentId == "null") {
                 if (validateUser() == true) {
                     loadTasks(_userId);
                 }
@@ -44,7 +44,7 @@ $(document).ready(function () {
 function redirectToUserPage() {
     let basicUrl = (new URL(document.location)).origin + (new URL(document.location)).pathname;
     userId = document.getElementById("user").value;
-    window.location.replace(basicUrl + "?user=" + userId);
+    window.location.replace(basicUrl + "?user=" + userId + "&experiment=" + _experimentId);
 }
 
 function validateUser() {

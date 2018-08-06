@@ -45,8 +45,11 @@
 .left {
     float: left;
     width: 65%;
-    padding: 0 20px;
     overflow: hidden;
+    border-style: solid;
+    border-radius: 5vw;
+    border-color: #ff6928;
+    padding: 2vw;
 }
 
 .text-input {
