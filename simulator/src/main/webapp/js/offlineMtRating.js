@@ -115,13 +115,13 @@ function showTaskWithNumber(taskNumber) {
     }
     createMtRating(taskNumber);
     deselectStars(0, taskNumber);
-    if (taskNumber < Object.keys(_listOfTasks).length) {
+    if (taskNumber + 1 < Object.keys(_listOfTasks).length) {
         addNextTaskButton(taskNumber + 1);
     }
 }
 
 function addNextTaskButton(taskNumber) {
-    let $nextTaskButton = $("<button id = 'next-task-button' class = 'submit-button' type = 'button' onclick = 'showTaskWithNumber(" + taskNumber + ")'>Next Batch</button>");
+    let $nextTaskButton = $("<button id = 'next-task-button' class = 'submit-button' type = 'button' onclick = 'showTaskWithNumber(" + taskNumber + ")'>Next Task</button>");
     $("#rating-interface-block").append($nextTaskButton);
 }
 
@@ -135,7 +135,7 @@ function rateTask(taskNumber, starNumber) {
         data: {
             startTime_seconds: _startTimeOfCurrentTask,
             endTime_seconds: getCurrentTime(),
-            ratingScore: starNumber +1,
+            ratingScore: starNumber + 1,
             userId: _userId,
             taskId: _currentTask.taskId
         },
