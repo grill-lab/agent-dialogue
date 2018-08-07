@@ -10,9 +10,11 @@ import edu.gla.kail.ad.core.Log.ResponseLog;
  */
 interface AgentInterface {
     ServiceProvider serviceProvider = null;
+    String _agentId = null;
 
 
     ServiceProvider getServiceProvider(); // Return the service provider type of the instance.
+    String getAgentId(); // Return the agentID of the instance (e.g. projectID).
 
     /**
      * Return a response for a formatted request.

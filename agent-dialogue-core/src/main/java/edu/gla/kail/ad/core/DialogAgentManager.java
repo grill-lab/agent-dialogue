@@ -12,6 +12,7 @@ import edu.gla.kail.ad.core.Log.Turn;
 import edu.gla.kail.ad.core.Log.TurnOrBuilder;
 import io.reactivex.Observable;
 import io.reactivex.schedulers.Schedulers;
+import sun.management.resources.agent;
 
 import java.io.IOException;
 import java.time.Instant;
@@ -23,6 +24,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -47,22 +49,22 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 public class DialogAgentManager {
     // List of instances of used Dialog agents.
-    private List<AgentInterface> _agents;
-
-    public String get_sessionId() {
-        return _sessionId;
-    }
-
+    private ArrayList<AgentInterface> _agents;
     // Session ID is a unique identifier of a session which is assigned by the method
     // startSession() called by DialogAgentManager constructor.
     private String _sessionId;
     private LogTurnManagerSingleton _logTurnManagerSingleton;
+    private Integer _agentCallTimeoutSeconds = 50;
 
     /**
      * Create a unique session ID generated with startSession() method.
      */
     public DialogAgentManager() {
         startSession();
+    }
+
+    public String get_sessionId() {
+        return _sessionId;
     }
 
     /**
@@ -106,6 +108,14 @@ public class DialogAgentManager {
                     break;
                 case DIALOGFLOW:
                     _agents.add(new DialogflowAgent(_sessionId, agent));
+                    break;
+                case WIZARD:
+                    try {
+                        _agents.add(new WizardAgent(_sessionId, agent));
+                    } catch (Exception exception) {
+                        // TODO: Implement
+                        exception.printStackTrace();
+                    }
                     break;
                 default:
                     throw new IllegalArgumentException("The type of the agent provided " +
@@ -160,8 +170,11 @@ public class DialogAgentManager {
                 " setUpAgents() first.").isEmpty()) {
             throw new IllegalArgumentException("The list of agents is empty!");
         }
-        List<ResponseLog> listOfResponseLogs = asynchronousAgentCaller(interactionRequest);
-        // TODO(Adam) Remove when the log saving is implemented. Currently we can see the output.
+        ArrayList<AgentInterface> agents = (ArrayList<AgentInterface>) _agents.stream().filter
+                (agent -> interactionRequest.getChosenAgentsList().contains(agent.getAgentId()))
+                .collect(Collectors.toList());
+        List<ResponseLog> listOfResponseLogs = asynchronousAgentCaller(interactionRequest, agents);
+        // TODO: Remove when the log saving is implemented. Currently we can see the output.
         listOfResponseLogs.forEach(System.out::println);
         return listOfResponseLogs;
     }
@@ -174,12 +187,13 @@ public class DialogAgentManager {
      * @return List<ResponseLog> - The list of responses of all agents set up on the
      *         setUpAgents(...) method call.
      */
-    private List<ResponseLog> asynchronousAgentCaller(InteractionRequest interactionRequest) {
-        Observable<AgentInterface> agentInterfaceObservable = Observable.fromIterable(_agents);
+    private List<ResponseLog> asynchronousAgentCaller(InteractionRequest interactionRequest,
+                                                      List<AgentInterface> agents) {
+        Observable<AgentInterface> agentInterfaceObservable = Observable.fromIterable(agents);
         return (agentInterfaceObservable.flatMap(agentObservable -> Observable
                 .just(agentObservable)
                 .subscribeOn(Schedulers.computation())
-                .take(5, TimeUnit.SECONDS) // Take only the observable emitted (completed)
+                .take(_agentCallTimeoutSeconds, TimeUnit.SECONDS) // Take only the observable emitted (completed)
                 // within specified time.
                 .map(agent -> callForResponseAndValidate(agent, interactionRequest))
         ).toList().blockingGet());
@@ -236,7 +250,7 @@ public class DialogAgentManager {
         Future<ResponseLog> future = executor.submit(callableCallForResponseAndValidate);
         ResponseLog responseLog;
         try {
-            responseLog = future.get(5, TimeUnit.SECONDS);
+            responseLog = future.get(_agentCallTimeoutSeconds, TimeUnit.SECONDS);
         } catch (Exception exception) {
             future.cancel(true); // Cancel and send a thread interrupt.
             ResponseLogOrBuilder responseLogBuilder = ResponseLog.newBuilder()

@@ -47,6 +47,7 @@ public class DialogflowAgent implements AgentInterface {
     private SessionName _session;
     // A unique ID passed set in the constructor, passed by DialogAgentManager.
     private String _sessionId;
+    private String _agentId;
 
     /**
      * Initialize a ready-to-work DialogflowAgent.
@@ -59,6 +60,11 @@ public class DialogflowAgent implements AgentInterface {
             throws IOException {
         _sessionId = sessionId;
         setUpAgent(agent);
+    }
+
+    @Override
+    public String getAgentId() {
+        return _agentId;
     }
 
     @Override
@@ -77,6 +83,7 @@ public class DialogflowAgent implements AgentInterface {
         Tuple<String, SessionsClient> projectIdAndSessionsClient = getProjectIdAndSessionsClient
                 (agent);
         _sessionsClient = projectIdAndSessionsClient.y();
+        _agentId = projectIdAndSessionsClient.x();
         _session = SessionName.of(projectIdAndSessionsClient.x(), _sessionId);
     }
 

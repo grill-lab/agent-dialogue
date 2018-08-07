@@ -2,7 +2,7 @@
  * Do on loading HTML.
  */
 $(document).ready(function () {
-    $('#user').keypress(function (keyPressed) {
+    $('#userId').keypress(function (keyPressed) {
         if (keyPressed.which == 13) {
             keyPressed.preventDefault();
             addUserToUrl();
@@ -34,6 +34,8 @@ $(document).ready(function () {
         if (_conversationId != null && _conversationId !== "null" && _conversationId != "null") {
             if (validateUser() == true) {
                 loadConversation(_userId, _conversationId);
+            } else {
+                _userValid = false;
             }
         } else {
             alert("Specify the conversation ID to be able to participate!");

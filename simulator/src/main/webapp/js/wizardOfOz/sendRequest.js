@@ -1,4 +1,4 @@
-var _awaitingResponses = 0;
+var _userValid = false;
 
 function addUserToUrl() {
     let basicUrl = (new URL(document.location)).origin + (new URL(document.location)).pathname;
@@ -13,7 +13,7 @@ function chooseConversation() {
 }
 
 function loadConversation(_userId, _conversationId) {
-
+    _userValid = true;
 }
 
 
@@ -23,25 +23,30 @@ function loadConversation(_userId, _conversationId) {
  */
 function sendRequest() {
     // TODO: only if the userid and conversation id are specified
-
+    if (_userId === "null" || _userId === null || _conversationId === "null"
+        || _conversationId === null || _userValid === false) {
+        alert("User ID and Conversation ID not specified. Pleas, fill them first.")
+        return false;
+    }
 
     let textInput = $('textarea#message').val();
-    let language = $('input[name=language]:checked', '#language-form').val();
+    let language = "en-US"; // TODO: Push language onto agent specific parameters.
     let createRatingBool = $('input[name=rating-enabled]:checked', '#rating-options-form').val();
     $('textarea#message').val("");
     $("#conversation-panel").append($('<div id="request"/>').append(textInput));
-    _awaitingResponses += 1;
-    $('#awaiting-responses').text(_awaitingResponses);
+    agent_request_parameters = {
+        "conversationId": _conversationId
+    };
     $.ajax({
         url: "ad-client-service-servlet",
         type: 'POST',
-        headers: {"Operation": "sendRequestToAgents"},
+        headers: {"Operation": "sendRequest"},
         dataType: 'json',
         data: {
             textInput: textInput,
             language: language,
             chosen_agents: "WizardOfOz",
-            agent_request_parameters: ""
+            agent_request_parameters: JSON.stringify(agent_request_parameters)
         },
         success: function (response) {
             $("#conversation-panel").append($('<div id="response">-  </div>')
@@ -57,8 +62,6 @@ function sendRequest() {
             alert("Error data: " + data + "\nStatus: " + status + "\nError message:" + error);
         },
         complete: function () {
-            _awaitingResponses -= 1;
-            $('#awaiting-responses').text(_awaitingResponses);
         }
     });
 }
