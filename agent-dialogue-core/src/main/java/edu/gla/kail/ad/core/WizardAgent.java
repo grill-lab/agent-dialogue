@@ -55,7 +55,7 @@ class WizardAgent implements AgentInterface {
 
   private String _conversationId = "NslkRXnAntZJa2QRvet6";
 
-  private static final long TIMEOUT_SECONDS = 60;
+  private static final long TIMEOUT_SECONDS = 180;
 
   /**
    * Construct a new WizardAgent.
@@ -100,49 +100,73 @@ class WizardAgent implements AgentInterface {
 
   @Override
   public ResponseLog getResponseFromAgent(InteractionRequest interactionRequest) throws InterruptedException, ExecutionException, TimeoutException {
-    final SettableApiFuture<ResponseLog> future = SettableApiFuture.create();
+    String responseId = "made up response id";
+      if (userExit(interactionRequest)) {
+        Map<String, Object> data = new HashMap<>();
+        data.put("interaction_text", "Goodbye!");
+        return buildResponse(responseId, data);
+      }
+      return addUserRequestWaitForReply(interactionRequest, isRequestFromUser(interactionRequest));
+  }
 
+  private boolean isRequestFromUser(InteractionRequest interactionRequest) {
+    return interactionRequest.getUserId().startsWith("ADwizard");
+  }
+
+  private boolean userExit(InteractionRequest interactionRequest) {
+    return interactionRequest.getInteraction().getText().toLowerCase().equals("exit");
+  }
+
+  private ResponseLog addUserRequestWaitForReply(InteractionRequest interactionRequest, boolean isFromUser) throws InterruptedException, ExecutionException, TimeoutException {
+    final SettableApiFuture<ResponseLog> future = SettableApiFuture.create();
+    System.out.println("Handling user request.");
     checkNotNull(interactionRequest, "The passed interaction request is null!");
     String responseId = "made up response id";
-    DocumentReference dbReference = addInteractionRequestToDatabase(_conversationId, interactionRequest);
-
+    DocumentReference documentReference = addInteractionRequestToDatabase(_conversationId, interactionRequest, isFromUser);
     // Now we wait for a response!
     CollectionReference conversationCollection = getDbCollection();
-    System.out.println("Waiting on listener: " + conversationCollection.getPath());
-    conversationCollection.addSnapshotListener(new EventListener<QuerySnapshot>() {
+    Query query = conversationCollection
+            .whereGreaterThan("timestamp", com.google.cloud.Timestamp.now());
+           // .whereEqualTo("from_user", !isFromUser);
+    System.out.println("Waiting on listener: " + query.toString());
+    ListenerRegistration registration = query.addSnapshotListener(new EventListener<QuerySnapshot>() {
       @Override
       public void onEvent(@Nullable QuerySnapshot snapshots, @Nullable FirestoreException e) {
         if (e != null) {
           System.err.println("Listen failed: " + e);
           return;
         }
-        System.out.println("Got event!");
         ResponseLog response = null;
-        List<DocumentChange> documentChanges = snapshots.getDocumentChanges();
-        System.out.println("num document change:" + documentChanges.size());
-        for (DocumentChange dc : documentChanges) {
-          System.out.println("Document change!");
-          switch (dc.getType()) {
+        if (snapshots != null && !snapshots.isEmpty()) {
+          List<DocumentChange> documentChanges = snapshots.getDocumentChanges();
+          System.out.println("num document change:" + documentChanges.size());
+          DocumentChange lastChange = documentChanges.get(documentChanges.size() - 1);
+          switch (lastChange.getType()) {
             case ADDED:
-              response = buildResponse(responseId,  "New message: " + dc.getDocument().getData());
+              response = buildResponse(responseId, lastChange.getDocument().getData());
           }
-        }
-        if (!future.isDone()) {
-          future.set(response);
+          if (!future.isDone()) {
+            future.set(response);
+          }
         }
       }
     });
 
+    // Stop listening to changes
+    //  registration.remove();
     return future.get(TIMEOUT_SECONDS, TimeUnit.SECONDS);
   }
 
-  private ResponseLog buildResponse(String responseId, String responseString) {
+  private ResponseLog buildResponse(String responseId, Map<String, Object> data) {
     Timestamp timestamp = Timestamp.newBuilder()
             .setSeconds(Instant.now()
                     .getEpochSecond())
             .setNanos(Instant.now()
                     .getNano())
             .build();
+
+    String responseString = data.getOrDefault("interaction_text",
+            "I'm sorry, there's an error.").toString();
 
     ResponseLog.Builder responseLogBuilder = ResponseLog.newBuilder()
             .setResponseId(responseId)
@@ -163,7 +187,7 @@ class WizardAgent implements AgentInterface {
             ).build();
   }
 
-  private DocumentReference addInteractionRequestToDatabase(String responseId, InteractionRequest interactionRequest) {
+  private DocumentReference addInteractionRequestToDatabase(String responseId, InteractionRequest interactionRequest, boolean isFromUser) {
     DocumentReference chatReference = getDbCollection().document(responseId);
     Map<String, Object> data = new HashMap();
     data.put("response_id", responseId);
@@ -181,7 +205,8 @@ class WizardAgent implements AgentInterface {
             ());
     data.put("interaction_action_list", interactionRequest.getInteraction().getActionList
             ().toString());
-
+    data.put("timestamp", com.google.cloud.Timestamp.now());
+    data.put("from_user", isFromUser);
     chatReference.set(data);
     return chatReference;
   }
