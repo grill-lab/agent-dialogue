@@ -34,7 +34,7 @@ message InteractionRequest {
     string user_id = 4;
     // A struct representing a json configuration object containing agent-specific request parameters.
     google.protobuf.Struct agent_request_parameters = 5;
-    repeated string choosen_agents = 6;
+    repeated string chosen_agents = 6;
 }
 
 message InteractionResponse {
