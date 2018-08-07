@@ -32,7 +32,8 @@ message InteractionRequest {
     ClientId client_id = 2; // The ID of the client the request is sent from.
     InputInteraction interaction = 3;
     string user_id = 4;
-    google.protobuf.Struct agent_specific_data = 5;
+    // A struct representing a json configuration object containing agent-specific request parameters.
+    google.protobuf.Struct agent_request_parameters = 5;
 }
 
 message InteractionResponse {

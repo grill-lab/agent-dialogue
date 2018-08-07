@@ -2,7 +2,7 @@ package edu.gla.kail.ad.core;
 
 import com.google.protobuf.Timestamp;
 import edu.gla.kail.ad.Client.InteractionRequest;
-import edu.gla.kail.ad.CoreConfiguration.Agent;
+import edu.gla.kail.ad.CoreConfiguration.AgentConfig;
 import edu.gla.kail.ad.core.Log.RequestLog;
 import edu.gla.kail.ad.core.Log.ResponseLog;
 import edu.gla.kail.ad.core.Log.ResponseLog.Builder;
@@ -97,10 +97,10 @@ public class DialogAgentManager {
      *         DialogflowAgent(_sessionId, agentSpecificData.get(0)));
      * @throws IOException, IllegalArgumentException
      */
-    public void setUpAgents(List<Agent> agents) throws
+    public void setUpAgents(List<AgentConfig> agents) throws
             IllegalArgumentException, IOException {
         _agents = new ArrayList<>();
-        for (Agent agent : agents) {
+        for (AgentConfig agent : agents) {
             switch (agent.getServiceProvider()) {
                 case UNRECOGNISED:
                     break;
