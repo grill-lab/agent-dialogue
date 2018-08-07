@@ -4,7 +4,7 @@ var _awaitingResponses = 0;
  * Send message request to servlet when the Submit button is pressed.
  * Use AJAX.
  */
-function sendRequestToAgents() {
+function sendRequest() {
     let textInput = $('textarea#message').val();
     let language = $('input[name=language]:checked', '#language-form').val();
     let createRatingBool = $('input[name=rating-enabled]:checked', '#rating-options-form').val();
@@ -15,11 +15,13 @@ function sendRequestToAgents() {
     $.ajax({
         url: "ad-client-service-servlet",
         type: 'POST',
-        headers: {"Operation": "sendRequestToAgents"},
+        headers: {"Operation": "sendRequest"},
         dataType: 'json',
+
         data: {
             textInput: textInput,
-            language: language
+            language: language,
+            choosen_agents: "1"
         },
         success: function (response) {
             $("#conversation-panel").append($('<div id="response">-  </div>')

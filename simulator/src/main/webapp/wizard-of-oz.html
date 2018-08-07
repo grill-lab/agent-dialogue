@@ -41,6 +41,15 @@
         <div class = "right">
             <div class = "user-details-form">
                 <h3>Experiment details</h3>
+                <form id = "rating-options-form">
+                    <legend><h5>User Type:</h5></legend>
+                    <label for = "rating-enabled-true">Wizard</label>
+                    <input type = "radio" name = "rating-enabled" id = "rating-enabled-true"
+                           value = "true"/>
+                    <label for = "rating-enabled-false">User</label>
+                    <input type = "radio" name = "rating-enabled" id = "rating-enabled-false"
+                           value = "false" checked = "true"/>
+                </form>
                 <label for = "user">User ID:</label>
                 <input type = "text" placeholder = "Enter Username" name = "experiment-details"
                        id = "user"/>
@@ -51,7 +60,7 @@
             </div>
             <div class = "conversation-choosing-panel">
                 <h3>Conversation</h3>
-    
+                
                 <label for = "conversationId">Conversation ID:</label>
                 <input type = "text" placeholder = "Enter Conversation Id" name = "conversationId"
                        id = "conversationId"/>

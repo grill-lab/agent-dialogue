@@ -1,3 +1,8 @@
+let _LANGUAGES = {
+    AMERICAN_ENGLISH: {value: "en-US", name: "American English"},
+    BRITISH_ENGLISH: {value: "en-UK", name: "British English"},
+};
+
 /**
  * Do on loading HTML.
  */
@@ -9,22 +14,17 @@ $(document).ready(function () {
     $('#message').keypress(function(keyPressed){
         if(keyPressed.which == 13 && !keyPressed.shiftKey){
             keyPressed.preventDefault();
-            sendRequestToAgents();
+            sendRequest();
         }
     });
 });
 
-// Populate languages from LANGUAGES dictionary.
-let LANGUAGES = {
-    AMERICAN_ENGLISH: {value: "en-US", name: "American English"},
-    BRITISH_ENGLISH: {value: "en-UK", name: "British English"},
-};
-
+// Populate languages from _LANGUAGES dictionary.
 function populateLanguages() {
     let $languageFieldset = $('<form id = "language-form">').append("<h5><legend>Language:</legend></h5>");
 
-    for (let language in LANGUAGES) {
-        let parameters = LANGUAGES[language];
+    for (let language in _LANGUAGES) {
+        let parameters = _LANGUAGES[language];
         let $label = $("<label for=" + parameters.value + ">").text(parameters.name);
         let $input = $('<input type="radio" name="language">').attr({
             id: parameters.value,
@@ -36,6 +36,6 @@ function populateLanguages() {
 
         $('.options').append($languageFieldset);
     }
-    $("#" + LANGUAGES.AMERICAN_ENGLISH.value).prop("checked", true);
+    $("#" + _LANGUAGES.AMERICAN_ENGLISH.value).prop("checked", true);
 }
 

@@ -40,7 +40,7 @@ public class AdCoreClientServlet extends HttpServlet {
                     .getGrpcCoreServerPort());
         }
         switch (request.getHeader("operation")) {
-            case "sendRequestToAgents":
+            case "sendRequest":
                 sendRequestToAgents(request, response);
                 break;
             case "updateRating":
