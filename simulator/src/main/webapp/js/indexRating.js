@@ -1,21 +1,27 @@
-let _ratingScale = 5;
+var _ratingValues =
+    {
+        "0": "Fails to meet!",
+        "1": "Slightly meets.",
+        "2": "Moderately meets.",
+        "3": "Highly meets.",
+        "4": "Fully meets!!"
+    };
 
-function updateRating(starNumber, responseId) {
-    let $ratingDiv = $("#" + responseId.toString());
+function updateRating(score, responseId) {
+    let $ratingDiv = $("#" + responseId.toString() + ".rating");
     $.ajax({
         url: "ad-client-service-servlet",
         type: 'POST',
         headers: {"operation": "updateRating"},
         dataType: 'text',
         data: {
-            ratingScore: starNumber + 1,
+            ratingScore: score,
             responseId: responseId,
             // TODO(Adam): Delete experimentId and requestId.
             experimentId: "to be implemented",
             requestId: ""
         },
         success: function () {
-            $ratingDiv.attr("value", starNumber + 1);
             $ratingDiv.find('img[id="rating-indicator"]')[0].src = '../resources/img/check-solid.svg';
         },
         error: function (data, status, error) {
@@ -25,43 +31,28 @@ function updateRating(starNumber, responseId) {
 }
 
 function createRating(responseId) {
-    let $rating = $('<div class = "rating" id = \"' + responseId + '\"/>');
-    for (let numberOfStars = 0; numberOfStars < _ratingScale; numberOfStars++) {
-        $rating.append("<img id='star-rating' src='../resources/img/star-regular.svg' " +
-            "onmouseover= \'selectStars(" + numberOfStars + ", \"" + responseId + "\")\' " +
-            "onmouseout = \'deselectStars(\"" + responseId + "\")\' " +
-            "onclick=\'updateRating(" + numberOfStars + ",\"" + responseId + "\")\'/>");
-    }
+    $output = $("#output");
+    $output.append($('<div class = "rating" id = \"' + responseId + '\"><div class="slider" id = \"' + responseId + '\"/><div>'));
+    $rating = $("#" + responseId + ".rating");
+    $slider = $("#" + responseId + ".slider");
+    $slider.slider({
+        value: 1,
+        min: 1,
+        max: 5,
+        step: 1,
+        id: responseId,
+        slide: function (event, ui) {
+            updateRating(ui.value, responseId);
+        }
+    })
+        .each(function () {
+            let opt = $(this).data().uiSlider.options;
+            let vals = opt.max - opt.min;
+            for (let i = 0; i <= vals; i++) {
+                let $label = $('<label>' + _ratingValues[i] + '</label>').css('left', (i / vals * 100) + '%');
+                $slider.append($label);
+            }
+        });
     $rating.append("<img id='rating-indicator' src='../resources/img/question-circle-solid.svg' />");
-    $("#output").append($rating);
-}
-
-
-function selectStars(starNumber, responseId) {
-    let $stars = $("#" + responseId.toString()).find('img[id="star-rating"]');
-    for (let i = 0; i < $stars.length; i++) {
-        if (i <= starNumber) {
-            $stars[i].src = '../resources/img/star-solid.svg';
-        }
-        else {
-            $stars[i].src = '../resources/img/star-regular.svg';
-        }
-    }
-}
-
-function deselectStars(responseId) {
-    let $ratingDiv = $("#" + responseId.toString());
-    let stars = $ratingDiv.find('img[id="star-rating"]');
-    let ratingScore = 0;
-    if ($($ratingDiv)[0].hasAttribute("value")) {
-        ratingScore = $($ratingDiv)[0].getAttribute("value");
-    }
-    for (let i = 0; i < stars.length; i++) {
-        if (i < ratingScore) {
-            stars[i].src = '../resources/img/star-solid.svg';
-        }
-        else {
-            stars[i].src = '../resources/img/star-regular.svg';
-        }
-    }
+    $output.append($('<br>'));
 }

@@ -8,11 +8,20 @@
     box-sizing: border-box;
 }
 
+h3 {
+    font-size: 1.7vw;
+}
+
+h5 {
+    font-size: 0.9vw;
+}
+
 .right {
     text-align: center;
     float: right;
     width: 35%;
 }
+
 .right * {
     border-radius: 2vw;
     margin: 7px;
@@ -87,23 +96,29 @@
     text-align: left;
 }
 
+#rating-indicator {
+    margin-left: 0.4vw;
+    padding-left: 0.8vw;
+    width: 3vw;
+}
+
 .rating {
     text-align: center;
     white-space: nowrap;
     margin-left: auto;
     margin-right: auto;
-    width: 3vw;
+
+    padding-top: 1vw;
+    height: 10vw;
 }
 
-#rating-indicator {
-    margin-left: 0.4vw;
-    padding-left: 0.8vw;
-}
-
-h3 {
-    font-size: 1.7vw;
-}
-
-h5 {
-    font-size: 0.9vw;
+.slider label {
+    position: absolute;
+    word-wrap: break-word;
+    width: 8vw;
+    font-size: 10px;
+    padding-top: 3vw;
+    margin-left: -4vw;
+    padding-bottom: 1vw;
+    text-align: center;
 }
