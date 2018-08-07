@@ -16,21 +16,21 @@
 .right * {
     border-radius: 2vw;
     margin: 7px;
+    background-color: var(--options);
 }
 
 .options {
-    background-color: darksalmon;
     padding: 10px 15px;
     margin-top: 7px;
 }
 
 .conversation-details {
-    background-color: lightsalmon;
     padding: 10px 15px;
     margin-top: 7px;
 }
 
 .alert-details-button {
+    background-color: white;
     text-align: center;
     width: 5vw;
     min-width: 80px;
@@ -44,11 +44,11 @@
 
 .left {
     float: left;
-    width: 65%;
+    width: 60%;
     overflow: hidden;
     border-style: solid;
     border-radius: 5vw;
-    border-color: #ff6928;
+    border-color: var(--message-frame);
     padding: 2vw;
 }
 
