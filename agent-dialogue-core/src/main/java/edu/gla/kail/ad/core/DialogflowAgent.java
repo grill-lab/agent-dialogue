@@ -18,7 +18,7 @@ import edu.gla.kail.ad.Client.InputInteraction;
 import edu.gla.kail.ad.Client.InteractionRequest;
 import edu.gla.kail.ad.Client.InteractionType;
 import edu.gla.kail.ad.Client.OutputInteraction;
-import edu.gla.kail.ad.CoreConfiguration.Agent;
+import edu.gla.kail.ad.CoreConfiguration.AgentConfig;
 import edu.gla.kail.ad.CoreConfiguration.ServiceProvider;
 import edu.gla.kail.ad.core.Log.ResponseLog;
 import edu.gla.kail.ad.core.Log.ResponseLog.MessageStatus;
@@ -55,7 +55,7 @@ public class DialogflowAgent implements AgentInterface {
      * @throws IOException - T setUpAgent method may throw exception if the data passed in
      *         the tupleOfProjectIdAndAuthorizationFile is invalid.
      */
-    DialogflowAgent(String sessionId, Agent agent)
+    DialogflowAgent(String sessionId, AgentConfig agent)
             throws IOException {
         _sessionId = sessionId;
         setUpAgent(agent);
@@ -73,7 +73,7 @@ public class DialogflowAgent implements AgentInterface {
      * @throws IOException - When a projectID or the Service Account key is either null or
      *         empty, appropriate exception is thrown.
      */
-    private void setUpAgent(Agent agent) throws IOException {
+    private void setUpAgent(AgentConfig agent) throws IOException {
         Tuple<String, SessionsClient> projectIdAndSessionsClient = getProjectIdAndSessionsClient
                 (agent);
         _sessionsClient = projectIdAndSessionsClient.y();
