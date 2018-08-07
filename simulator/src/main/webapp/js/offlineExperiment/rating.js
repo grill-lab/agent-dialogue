@@ -39,7 +39,8 @@ function loadTasks(_userId) {
         dataType: 'json',
         data: {
             userId: _userId,
-            maxTasksAssigned: _maxTasksAssigned
+            maxTasksAssigned: _maxTasksAssigned,
+            experimentId: _experimentId
         },
         success: function (response) {
             $("#tasks-buttons").empty();

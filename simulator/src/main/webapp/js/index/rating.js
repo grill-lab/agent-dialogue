@@ -9,9 +9,8 @@ function updateRating(score, responseId) {
             ratingScore: score,
             responseId: responseId,
             // TODO(Adam): Delete experimentId and requestId.
-            experimentId: "to be implemented",
-            requestId: "",
-            choosen_agents: ""
+            experimentId: "sent_from_index_servlet",
+            requestId: ""
         },
         success: function () {
             $ratingDiv.find('img[id="rating-indicator"]')[0].src = '../resources/img/check-solid.svg';

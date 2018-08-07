@@ -1,9 +1,14 @@
 package edu.gla.kail.ad.service;
 
 import com.google.gson.JsonObject;
+import com.google.protobuf.InvalidProtocolBufferException;
+import com.google.protobuf.Struct;
+import com.google.protobuf.StructOrBuilder;
 import com.google.protobuf.Timestamp;
+import com.google.protobuf.util.JsonFormat;
 import edu.gla.kail.ad.Client.InputInteraction;
 import edu.gla.kail.ad.Client.InteractionRequest;
+import edu.gla.kail.ad.Client.InteractionRequest.Builder;
 import edu.gla.kail.ad.Client.InteractionRequestOrBuilder;
 import edu.gla.kail.ad.Client.InteractionResponse;
 import edu.gla.kail.ad.Client.InteractionResponse.ClientMessageStatus;
@@ -17,6 +22,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static edu.gla.kail.ad.Client.ClientId.WEB_SIMULATOR;
@@ -85,7 +92,8 @@ public class AdCoreClientServlet extends HttpServlet {
         response.setContentType("application/json");
         JsonObject json = new JsonObject();
         InteractionRequest interactionRequest = getInteractionRequestFromText(request
-                .getParameter("textInput"), request.getParameter("language"));
+                .getParameter("textInput"), request.getParameter("language"), request
+                .getParameter("chosen_agents"), request.getParameter("agent_request_parameters"));
         LogManagerSingleton.getLogManagerSingleton().addInteraction(interactionRequest, null);
         json.addProperty("interactionRequest", interactionRequest.toString());
         InteractionResponse interactionResponse;
@@ -159,14 +167,23 @@ public class AdCoreClientServlet extends HttpServlet {
      * Helper method: create InteractionRequests from text Input.
      */
     private InteractionRequest getInteractionRequestFromText(String textInput, String
-            languageCode) {
-        return ((InteractionRequest.Builder) getInteractionRequestBuilder(InputInteraction
+            languageCode, String chosen_agents, String agent_request_parameters)
+            throws InvalidProtocolBufferException {
+        System.out.println(agent_request_parameters);
+        StructOrBuilder agentRequestParameters = Struct.newBuilder();
+        if (agent_request_parameters != null && !agent_request_parameters.equals("")) {
+            JsonFormat.parser().merge(agent_request_parameters, (Struct.Builder)
+                    agentRequestParameters);
+        }
+        return ((Builder) getInteractionRequestBuilder(InputInteraction
                 .newBuilder()
                 .setLanguageCode(languageCode)
                 .setDeviceType(deviceType())
                 .setType(InteractionType.TEXT)
                 .setText(textInput)
                 .build()))
+                .addAllChosenAgents(Arrays.asList(chosen_agents.split(",")))
+                .setAgentRequestParameters(((Struct.Builder) agentRequestParameters).build())
                 .build();
     }
 
