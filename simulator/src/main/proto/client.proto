@@ -33,6 +33,7 @@ message InteractionRequest {
     InputInteraction interaction = 3;
     string user_id = 4;
     google.protobuf.Struct agent_specific_data = 5;
+    repeated string choosen_agents = 6;
 }
 
 message InteractionResponse {

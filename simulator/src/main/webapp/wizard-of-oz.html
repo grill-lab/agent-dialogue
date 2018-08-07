@@ -10,15 +10,16 @@
     <link href = "resources/css/offline-experiment.css" type = "text/css" rel = "stylesheet"/>
     <link href = "resources/css/wizard-of-oz.css" type = "text/css" rel = "stylesheet"/>
     
+    <link rel = "stylesheet" href = "https://code.jquery.com/ui/1.9.2/themes/base/jquery-ui.css">
     <script src = "http://code.jquery.com/jquery-latest.min.js"></script>
     <script src = "http://code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
-    <link rel = "stylesheet" href = "https://code.jquery.com/ui/1.9.2/themes/base/jquery-ui.css">
     
-    <script src = "js/index/sendRequestToAgents.js"></script>
-    <script src = "js/index/onLoad.js"></script>
-    <script src = "js/index/messageDetails.js"></script>
-    <script src = "js/index/rating.js"></script>
+    <script src = "js/wizardOfOz/onLoad.js"></script>
+    <script src = "js/messageDetails.js"></script>
+    
     <script src = "js/ratingScale.js"></script>
+    <script src = "js/index/sendRequestToAgents.js"></script>
+    <script src = "js/index/rating.js"></script>
 </head>
 
 <body>
@@ -45,7 +46,7 @@
                        id = "user"/>
                 <br>
                 <button id = "user-submit-button" class = "submit-button" type = "button"
-                        onclick = "redirectToUserPage()">Start Session
+                        onclick = "addUserToUrl()">Start Session
                 </button>
             </div>
             <div class = "conversation-choosing-panel">
@@ -58,8 +59,6 @@
                 <button id = "conversation-submit-button" class = "submit-button" type = "button"
                         onclick = "chooseConversation()">Join conversation
                 </button>
-                
-                
             </div>
             <div class = "conversation-details">
                 <h3>Message Details</h3>
@@ -69,7 +68,6 @@
                 <button class = "alert-details-button" type = "button"
                         onclick = "alertResponseDetails()">Response details
                 </button>
-            
             </div>
         </div>
         <br>
@@ -84,7 +82,6 @@
                     <button class = "submit-button" type = "button"
                             onclick = "sendRequestToAgents()">Submit
                     </button>
-                    <span>Number of pending responses: <span id = "awaiting-responses"></span></span>
                 </p>
             </div>
             

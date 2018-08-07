@@ -15,11 +15,6 @@ Right panel sections.
     margin-top: 7px;
 }
 
-#user-submit-button {
-    background-color: var(--button-colour);
-    width: 13vw;
-}
-
 #user {
     background-color: white;
 }
@@ -27,6 +22,11 @@ Right panel sections.
 .task-details {
     padding: 10px 15px;
     margin-top: 7px;
+}
+
+#user-submit-button {
+    background-color: var(--button-colour);
+    width: 8vw;
 }
 
 #next-batch-button, #next-task-button {
