@@ -1,3 +1,14 @@
+:root {
+    --header-top: rgb(245, 182, 113);
+    --header-menu: rgb(255, 146, 46);
+    --header-menu-active: rgb(253, 105, 37);
+    --message-frame: rgb(255, 98, 0);
+    --options: rgb(255, 146, 46);
+    --menu-font-colour: rgb(255, 222, 207);
+    --button-colour: white;
+}
+
+
 body {
     margin: 0;
     padding: 0;
@@ -5,7 +16,7 @@ body {
 }
 
 .App-header {
-    background-color: #ffcb95;
+    background-color: var(--header-top);
     height: 6vw;
     padding: 0.7vw;
     padding-left: 1.4vw;
@@ -32,7 +43,7 @@ body {
     overflow: hidden;
     text-align: center;
     margin: auto;
-    background-color: #ff6928;
+    background-color: var(--header-menu);
 }
 
 .functionality-menu li {
@@ -44,7 +55,7 @@ body {
 
 .functionality-menu li a {
     display:inline-block;
-    color: white;
+    color: var(--menu-font-colour);
     text-align: center;
     padding: 14px 16px;
     text-decoration: none;
@@ -52,9 +63,9 @@ body {
 }
 
 .functionality-menu li a:hover:not(.active) {
-    background-color: #f59024;
+    background-color: var(--header-menu);
 }
 
 .functionality-menu .active {
-    background-color: #b71115;
+    background-color: var(--header-menu-active);
 }

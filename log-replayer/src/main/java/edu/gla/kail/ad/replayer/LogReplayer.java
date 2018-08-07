@@ -270,7 +270,7 @@ public class LogReplayer {
                             .setSeconds(Instant.now().getEpochSecond())
                             .setNanos(Instant.now().getNano())
                             .build())
-                    .setUserID(_userId)
+                    .setUserId(_userId)
                     .setClientId(Client.ClientId.LOG_REPLAYER)
                     .setInteraction(turn.getRequestLog().getInteraction()).build();
             InteractionResponse interactionResponse = getInteractionResponse(interactionRequest);
