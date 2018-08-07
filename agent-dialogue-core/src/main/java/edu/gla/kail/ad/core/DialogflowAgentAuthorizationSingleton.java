@@ -6,7 +6,7 @@ import com.google.auth.oauth2.ServiceAccountCredentials;
 import com.google.cloud.Tuple;
 import com.google.cloud.dialogflow.v2beta1.SessionsClient;
 import com.google.cloud.dialogflow.v2beta1.SessionsSettings;
-import edu.gla.kail.ad.CoreConfiguration.Agent;
+import edu.gla.kail.ad.CoreConfiguration.AgentConfig;
 
 import java.io.IOException;
 import java.net.URL;
@@ -23,7 +23,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * The class is thread safe.
  */
 public final class DialogflowAgentAuthorizationSingleton {
-    private static Map<Agent, DialogflowAgentAuthorizationSingleton> _agentAuthorizationInstances;
+    private static Map<AgentConfig, DialogflowAgentAuthorizationSingleton> _agentAuthorizationInstances;
     private SessionsClient _sessionsClient;
     private String _projectId;
 
@@ -33,7 +33,7 @@ public final class DialogflowAgentAuthorizationSingleton {
      *
      * @throws IllegalArgumentException
      */
-    private DialogflowAgentAuthorizationSingleton(Agent agent)
+    private DialogflowAgentAuthorizationSingleton(AgentConfig agent)
             throws IllegalArgumentException, IOException {
         _projectId = checkNotNull(agent.getProjectId(), "The project ID is null!");
         URL jsonKeyUrl = checkNotNull(new URL(agent.getConfigurationFileURL()), "The" +
@@ -59,7 +59,7 @@ public final class DialogflowAgentAuthorizationSingleton {
      * @throws IOException - When a projectID or the Service Account key is either null or
      *         empty, appropriate exception is thrown.
      */
-    static synchronized Tuple<String, SessionsClient> getProjectIdAndSessionsClient(Agent agent)
+    static synchronized Tuple<String, SessionsClient> getProjectIdAndSessionsClient(AgentConfig agent)
             throws IOException {
         if (_agentAuthorizationInstances == null) {
             _agentAuthorizationInstances = new HashMap<>();
