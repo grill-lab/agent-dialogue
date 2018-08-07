@@ -20,6 +20,7 @@ import edu.gla.kail.ad.core.Log.SystemAct;
 
 import javax.annotation.Nullable;
 import java.io.FileInputStream;
+import java.net.URL;
 import java.time.Instant;
 import java.util.*;
 import java.util.concurrent.ExecutionException;
@@ -51,6 +52,9 @@ class WizardAgent implements AgentInterface {
   // Hold the wizard agent's configuration, including necessary db credentials.
   private AgentConfig _agent;
 
+  // Gold the hardcoded agent ID.
+  private String _agentId = null;
+
   /**
    * Construct a new WizardAgent.
    *
@@ -60,6 +64,7 @@ class WizardAgent implements AgentInterface {
   public WizardAgent(String sessionId, AgentConfig agent) throws Exception {
     _agent = agent;
     _projectId = _agent.getProjectId();
+    _agentId = _agent.getProjectId();
     initAgent();
   }
 
@@ -69,7 +74,8 @@ class WizardAgent implements AgentInterface {
    * @throws Exception
    */
   private void initAgent() throws Exception {
-    GoogleCredentials credentials = GoogleCredentials.fromStream(new FileInputStream(_agent.getConfigurationFileURL()));
+    URL configFileURL = new URL(_agent.getConfigurationFileURL());
+    GoogleCredentials credentials = GoogleCredentials.fromStream(configFileURL.openStream());
     checkNotNull(credentials, "Credentials used to initialise FireStore are null.");
 
     FirebaseOptions options = new FirebaseOptions.Builder()
@@ -94,6 +100,11 @@ class WizardAgent implements AgentInterface {
             .document(conversationId)
             .collection("messages");
     return collectionReference;
+  }
+
+  @Override
+  public String getAgentId() {
+    return _agentId;
   }
 
   @Override
@@ -160,10 +171,10 @@ class WizardAgent implements AgentInterface {
 
     // Get the conversation id from the request parameters.
     Map<String, Value> fieldsMap = interactionRequest.getAgentRequestParameters().getFieldsMap();
-    if (!fieldsMap.containsKey("conversation_id")) {
-      throw new IllegalArgumentException("Request must specify the conversation_id in the agent request parameters.");
+    if (!fieldsMap.containsKey("conversationId")) {
+      throw new IllegalArgumentException("Request must specify the conversationId in the agent request parameters.");
     }
-    String conversationId = fieldsMap.get("conversation_id").getStringValue();
+    String conversationId = fieldsMap.get("conversationId").getStringValue();
 
     DocumentReference documentReference =
             addInteractionRequestToDatabase(responseId, conversationId, interactionRequest);

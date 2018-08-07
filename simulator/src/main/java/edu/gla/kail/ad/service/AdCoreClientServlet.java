@@ -169,7 +169,6 @@ public class AdCoreClientServlet extends HttpServlet {
     private InteractionRequest getInteractionRequestFromText(String textInput, String
             languageCode, String chosen_agents, String agent_request_parameters)
             throws InvalidProtocolBufferException {
-        System.out.println(agent_request_parameters);
         StructOrBuilder agentRequestParameters = Struct.newBuilder();
         if (agent_request_parameters != null && !agent_request_parameters.equals("")) {
             JsonFormat.parser().merge(agent_request_parameters, (Struct.Builder)

@@ -9,7 +9,7 @@ function updateRating(score, responseId) {
             ratingScore: score,
             responseId: responseId,
             // TODO(Adam): Delete experimentId and requestId.
-            experimentId: "to be implemented",
+            experimentId: "from_wizard_oz_interface",
             requestId: ""
         },
         success: function () {
@@ -46,4 +46,29 @@ function createRating(responseId) {
         });
     $rating.append("<img id='rating-indicator' src='../../resources/img/question-circle-solid.svg' />");
     $output.append($('<br>'));
+}
+
+function validateUser() {
+    let userValidity = true;
+    $.ajax({
+        url: "offline-mt-ranking-servlet",
+        type: 'POST',
+        headers: {"operation": "validateUser"},
+        dataType: 'text',
+        data: {
+            userId: _userId
+        },
+        success: function (response) {
+            if (response == "false") {
+                alert("The User Id: " + _userId + " is invalid.");
+                $('.user-details-form').append($("<div>").text("INVALID USER ID"));
+                userValidity = false
+            }
+        },
+        error: function (data, status, error) {
+            alert("Error data: " + data + "\nStatus: " + status + "\nError message:" + error);
+            userValidity = false;
+        },
+    });
+    return userValidity;
 }
