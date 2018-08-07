@@ -1,12 +1,3 @@
-var _ratingValues =
-    {
-        "0": "Fails to meet!",
-        "1": "Slightly meets.",
-        "2": "Moderately meets.",
-        "3": "Highly meets.",
-        "4": "Fully meets!!"
-    };
-
 function updateRating(score, responseId) {
     let $ratingDiv = $("#" + responseId.toString() + ".rating");
     $.ajax({
@@ -31,7 +22,7 @@ function updateRating(score, responseId) {
 }
 
 function createRating(responseId) {
-    $output = $("#output");
+    $output = $("#conversation-panel");
     $output.append($('<div class = "rating" id = \"' + responseId + '\"><div class="slider" id = \"' + responseId + '\"/><div>'));
     $rating = $("#" + responseId + ".rating");
     $slider = $("#" + responseId + ".slider");
@@ -53,6 +44,6 @@ function createRating(responseId) {
                 $slider.append($label);
             }
         });
-    $rating.append("<img id='rating-indicator' src='../resources/img/question-circle-solid.svg' />");
+    $rating.append("<img id='rating-indicator' src='../../resources/img/question-circle-solid.svg' />");
     $output.append($('<br>'));
 }

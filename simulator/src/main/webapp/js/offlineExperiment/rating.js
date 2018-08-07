@@ -1,46 +1,3 @@
-var _maxTasksAssigned = 5;
-var _listOfTasks = null;
-var _tasksRating = {};
-var _userId = null;
-var _experimentId = null;
-var _startTimeOfCurrentTask = (Date.now() / 1000) | 0; // UTC in seconds.
-var _currentTask = null;
-
-var _ratingValues =
-    {
-        "0": "Fails to meet!",
-        "1": "Slightly meets.",
-        "2": "Moderately meets.",
-        "3": "Highly meets.",
-        "4": "Fully meets!!"
-    };
-
-$(document).ready(function () {
-        // When user presses "enter" in userId field, the request is being sent.
-        $('#user').keypress(function (keyPressed) {
-            if (keyPressed.which == 13) {
-                keyPressed.preventDefault();
-                redirectToUserPage();
-            }
-        });
-
-        _userId = (new URL(document.location)).searchParams.get("user");
-        _experimentId = (new URL(document.location)).searchParams.get("experiment");
-
-        if (_userId != null) {
-            document.getElementById("user").value = _userId;
-            $('#user-submit-button').text("Change username");
-            if (_experimentId == null || _experimentId == "null") {
-                if (validateUser() == true) {
-                    loadTasks(_userId);
-                }
-            } else {
-                $(".epxeriment-id").append("Experiment ID: " + _experimentId);
-            }
-        }
-    }
-);
-
 function redirectToUserPage() {
     let basicUrl = (new URL(document.location)).origin + (new URL(document.location)).pathname;
     userId = document.getElementById("user").value;
@@ -92,7 +49,7 @@ function loadTasks(_userId) {
             for (let i = 0; i < Object.keys(_listOfTasks).length; i++) {
                 let $task = $("<a class = 'task-a-element' id = \'" + i + "\' onclick=\'showTaskWithNumber(" + i + ")\'>" +
                     "Task " + (i + 1) + " <img id='tasks-indicator' " +
-                    "src='../resources/img/question-circle-solid.svg' /></a>");
+                    "src='../../resources/img/question-circle-solid.svg' /></a>");
                 $tasks_list.append($task).append("<br>");
                 _tasksRating[i] = 0;
             }
@@ -118,7 +75,7 @@ function showTaskWithNumber(taskNumber) {
     $current_task_details.append("<div>Client ID: " + _currentTask.clientId + "</div>");
     $current_task_details.append("<div>Device type: " + _currentTask.deviceType + "</div>");
     $current_task_details.append("<div>Language code: " + _currentTask.language_code + "</div>");
-    let $rating_interface_block = $("#rating-interface-block");
+    let $rating_interface_block = $("#conversation-panel");
     $rating_interface_block.empty();
     let turns = JSON.parse(_currentTask.turns);
     for (let i in Object.keys(turns)) {
@@ -143,7 +100,7 @@ function showTaskWithNumber(taskNumber) {
 function addNextTaskButton(taskNumber) {
     let $nextTaskButton = $("<button id = 'next-task-button' class = 'submit-button' type = 'button' " +
         "onclick = 'showTaskWithNumber(" + taskNumber + ")'>Next Task</button>");
-    $("#rating-interface-block").append($nextTaskButton);
+    $("#conversation-panel").append($nextTaskButton);
 }
 
 function rateTask(taskNumber, score) {
@@ -174,7 +131,7 @@ function rateTask(taskNumber, score) {
 
 function createMtRating(taskNumber) {
     let rating = _tasksRating[taskNumber];
-    $ratingBlock = $("#rating-interface-block");
+    $ratingBlock = $("#conversation-panel");
     $ratingBlock.append($('<br><div class = "rating-slider-section"><div id="slider">'));
 
     $('#slider').slider({

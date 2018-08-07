@@ -5,15 +5,17 @@
     <meta charset = "utf-8">
     <title>Agent Dialogue Web Simulator</title>
     
-    <link href = "resources/css/App-index-interface.css" type = "text/css" rel = "stylesheet"/>
-    <link href = "resources/css/Header.css" type = "text/css" rel = "stylesheet"/>
-    <link href = "resources/css/offline-mt-rating.css" type = "text/css" rel = "stylesheet"/>
+    <link href = "resources/css/all_pages.css" type = "text/css" rel = "stylesheet"/>
+    <link href = "resources/css/offline-experiment.css" type = "text/css" rel = "stylesheet"/>
     
     <script src = "http://code.jquery.com/jquery-latest.min.js"></script>
     <script src = "http://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <link rel = "stylesheet" href = "https://code.jquery.com/ui/1.9.2/themes/base/jquery-ui.css">
     
-    <script src = "js/offlineMtRating.js"></script>
+    <script src = "js/offlineExperiment/rating.js"></script>
+    <script src = "js/offlineExperiment/onLoad.js"></script>
+    <script src = "js/offlineExperiment/variables.js"></script>
+    <script src = "js/ratingScale.js"></script>
 </head>
 <body>
     <div>
@@ -25,6 +27,7 @@
             <ul class = "functionality-menu">
                 <li><a href = "index.html">Home</a></li>
                 <li><a class = "active" href = "offline-mt-rating.html">Offline MT Ratings</a></li>
+                <li><a href = "wizard-of-oz.html">Wizard of Oz</a></li>
             </ul>
         </div>
     </div>
@@ -57,7 +60,7 @@
             </div>
         </div>
         <div class = "left">
-            <div id = "rating-interface-block">
+            <div id = "conversation-panel">
                 <h2>Please enter User ID and Experiment ID to start the experiment.</h2>
             </div>
         </div>
