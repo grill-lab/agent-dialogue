@@ -15,11 +15,10 @@ message CoreConfig {
     string log_storage_path = 2;
     int32 max_number_of_simultaneous_conversations = 3;
     int32 session_timeout_minutes = 4;
-
-    repeated Agent agents = 5;
+    repeated AgentConfig agents = 5;
 }
 
-message Agent {
+message AgentConfig {
     ServiceProvider service_provider = 1;
     string project_id = 2;
     string configuration_file_URL = 3;
