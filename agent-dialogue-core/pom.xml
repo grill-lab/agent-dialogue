@@ -76,6 +76,11 @@
             <artifactId>google-cloud-firestore</artifactId>
             <version>0.56.0-beta</version>
         </dependency>
+        <dependency>
+            <groupId>commons-codec</groupId>
+            <artifactId>commons-codec</artifactId>
+            <version>1.11</version>
+        </dependency>
     </dependencies>
 
     <build>
