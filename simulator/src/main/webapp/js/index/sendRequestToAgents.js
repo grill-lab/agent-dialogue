@@ -9,7 +9,7 @@ function sendRequestToAgents() {
     let language = $('input[name=language]:checked', '#language-form').val();
     let createRatingBool = $('input[name=rating-enabled]:checked', '#rating-options-form').val();
     $('textarea#message').val("");
-    $("#output").append($('<div id="request"/>').append(textInput));
+    $("#conversation-panel").append($('<div id="request"/>').append(textInput));
     _awaitingResponses += 1;
     $('#awaiting-responses').text(_awaitingResponses);
     $.ajax({
@@ -22,7 +22,7 @@ function sendRequestToAgents() {
             language: language
         },
         success: function (response) {
-            $("#output").append($('<div id="response">-  </div>')
+            $("#conversation-panel").append($('<div id="response">-  </div>')
                 .append(response.message)
             );
             if (createRatingBool == "true") {
