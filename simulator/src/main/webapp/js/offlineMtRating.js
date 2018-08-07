@@ -146,7 +146,7 @@ function addNextTaskButton(taskNumber) {
     $("#rating-interface-block").append($nextTaskButton);
 }
 
-function rateTask(taskNumber, starNumber) {
+function rateTask(taskNumber, score) {
     let $ratingDiv = $("#current-rating");
     $.ajax({
         url: "offline-mt-ranking-servlet",
@@ -156,12 +156,12 @@ function rateTask(taskNumber, starNumber) {
         data: {
             startTime_seconds: _startTimeOfCurrentTask,
             endTime_seconds: getCurrentTime(),
-            ratingScore: starNumber + 1,
+            ratingScore: score,
             userId: _userId,
             taskId: _currentTask.taskId
         },
         success: function () {
-            _tasksRating[taskNumber] = starNumber + 1;
+            _tasksRating[taskNumber] = score;
             $(".tasks-list").find('a[id="' + taskNumber + '"]')
                 .find('img[id="tasks-indicator"]')[0].src = '../resources/img/check-solid.svg';
             $ratingDiv.find('img[id="rating-indicator"]')[0].src = '../resources/img/check-solid.svg';
@@ -184,7 +184,7 @@ function createMtRating(taskNumber) {
         step: 1,
         id: "rating-slider",
         slide: function (event, ui) {
-            rateTask(taskNumber, ui.value-1);
+            rateTask(taskNumber, ui.value);
         }
     })
         .each(function () {
