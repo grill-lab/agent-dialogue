@@ -28,7 +28,8 @@ class TaskLoader {
      * @param maxNumberOfTasksAssigned
      * @return
      */
-    String loadTasks(Firestore database, String userId, Integer maxNumberOfTasksAssigned) {
+    String loadTasks(Firestore database, String userId, Integer maxNumberOfTasksAssigned, String
+            experimentId) {
         _database = database;
         _userId = userId;
         JsonObject json = new JsonObject();
@@ -62,7 +63,7 @@ class TaskLoader {
                 if (numberOfOpenRatings <= maxNumberOfTasksAssigned) {
                     listOfOpenTaskIds = assignMoreTasksToUser(allAssignedTaskIds,
                             listOfOpenTaskIds, maxNumberOfTasksAssigned, numberOfOpenRatings,
-                            userDocRef);
+                            userDocRef, experimentId);
                 }
                 json.addProperty("tasks", getOpenTasks(listOfOpenTaskIds));
             }
@@ -73,18 +74,17 @@ class TaskLoader {
     }
 
     private ArrayList<String> assignMoreTasksToUser(HashSet<String> allAssignedTaskIds,
-                                                    ArrayList<String>
-                                                            listOfOpenTaskIds, Integer
+                                                    ArrayList<String> listOfOpenTaskIds, Integer
                                                             maxNumberOfTasksAssigned, Integer
                                                             numberOfOpenRatings,
-                                                    DocumentReference userDocRef)
+                                                    DocumentReference userDocRef, String experimentId)
             throws ExecutionException, InterruptedException {
         HashSet<String> remainingAvailableTasks = new HashSet<>();
 
         // Get all candidate tasks.
         ApiFuture<QuerySnapshot> tasksFuture = _database.collection
                 ("clientWebSimulator").document("agent-dialogue-experiments")
-                .collection("tasks").get();
+                .collection("tasks").whereEqualTo("experimentId", experimentId).get();
         List<QueryDocumentSnapshot> tasks = tasksFuture.get().getDocuments();
         for (DocumentSnapshot task : tasks) {
             remainingAvailableTasks.add((String) task.get("taskId"));

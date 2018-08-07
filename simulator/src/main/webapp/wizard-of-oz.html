@@ -15,11 +15,11 @@
     <script src = "http://code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
     
     <script src = "js/wizardOfOz/onLoad.js"></script>
-    <script src = "js/messageDetails.js"></script>
-    
-    <script src = "js/ratingScale.js"></script>
     <script src = "js/wizardOfOz/sendRequest.js"></script>
-    <script src = "js/index/rating.js"></script>
+    <script src = "js/wizardOfOz/rating.js"></script>
+    <script src = "js/wizardOfOz/variables.js"></script>
+    <script src = "js/messageDetails.js"></script>
+    <script src = "js/globalVariables.js"></script>
 </head>
 
 <body>
@@ -50,12 +50,12 @@
                     <input type = "radio" name = "rating-enabled" id = "rating-enabled-false"
                            value = "false" checked = "true"/>
                 </form>
-                <label for = "user">User ID:</label>
+                <label for = "userId">User ID:</label>
                 <input type = "text" placeholder = "Enter Username" name = "experiment-details"
-                       id = "user"/>
+                       id = "userId"/>
                 <br>
                 <button id = "user-submit-button" class = "submit-button" type = "button"
-                        onclick = "addUserToUrl()">Start Session
+                        onclick = "addUserToUrl()">Log in
                 </button>
             </div>
             <div class = "conversation-choosing-panel">

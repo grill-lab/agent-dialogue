@@ -30,7 +30,8 @@ public class RankingServlet extends HttpServlet {
                         TaskLoader();
                 response.getWriter().write(taskLoader.loadTasks(LogManagerSingleton
                                 .returnDatabase(),
-                        userId, maxTasksAssigned));
+                        userId, maxTasksAssigned, request.getParameter
+                                ("experimentId")));
                 break;
             case "rateTask":
                 Integer ratingScore = Integer.valueOf(request.getParameter("ratingScore"));

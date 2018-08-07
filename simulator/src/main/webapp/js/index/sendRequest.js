@@ -21,7 +21,8 @@ function sendRequest() {
         data: {
             textInput: textInput,
             language: language,
-            choosen_agents: "1"
+            agent_request_parameters: "",
+            chosen_agents: _listOfOnlineAgents.toString()
         },
         success: function (response) {
             $("#conversation-panel").append($('<div id="response">-  </div>')

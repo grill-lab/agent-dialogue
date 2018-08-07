@@ -13,12 +13,13 @@ $(document).ready(function () {
         if (_userId != null) {
             document.getElementById("user").value = _userId;
             $('#user-submit-button').text("Change username");
-            if (_experimentId == null || _experimentId == "null") {
+            if (_experimentId == null || _experimentId == "null" || _experimentId === "null") {
+                alert("Experiment ID not specified!");
+            } else {
+                $(".epxeriment-id").append("Experiment ID: " + _experimentId);
                 if (validateUser() == true) {
                     loadTasks(_userId);
                 }
-            } else {
-                $(".epxeriment-id").append("Experiment ID: " + _experimentId);
             }
         }
     }
