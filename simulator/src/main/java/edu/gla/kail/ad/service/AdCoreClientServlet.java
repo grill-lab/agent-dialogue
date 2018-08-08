@@ -93,7 +93,7 @@ public class AdCoreClientServlet extends HttpServlet {
         JsonObject json = new JsonObject();
         InteractionRequest interactionRequest = getInteractionRequestFromText(request
                 .getParameter("textInput"), request.getParameter("language"), request
-                .getParameter("chosen_agents"), request.getParameter("agent_request_parameters"));
+                .getParameter("chosen_agents"), request.getParameter("agent_request_parameters"), request.getParameter("userId"));
         LogManagerSingleton.getLogManagerSingleton().addInteraction(interactionRequest, null);
         json.addProperty("interactionRequest", interactionRequest.toString());
         InteractionResponse interactionResponse;
@@ -167,7 +167,7 @@ public class AdCoreClientServlet extends HttpServlet {
      * Helper method: create InteractionRequests from text Input.
      */
     private InteractionRequest getInteractionRequestFromText(String textInput, String
-            languageCode, String chosen_agents, String agent_request_parameters)
+            languageCode, String chosen_agents, String agent_request_parameters, String userId)
             throws InvalidProtocolBufferException {
         StructOrBuilder agentRequestParameters = Struct.newBuilder();
         if (agent_request_parameters != null && !agent_request_parameters.equals("")) {
@@ -181,6 +181,7 @@ public class AdCoreClientServlet extends HttpServlet {
                 .setType(InteractionType.TEXT)
                 .setText(textInput)
                 .build()))
+                .setUserId(userId)
                 .addAllChosenAgents(Arrays.asList(chosen_agents.split(",")))
                 .setAgentRequestParameters(((Struct.Builder) agentRequestParameters).build())
                 .build();
@@ -193,7 +194,6 @@ public class AdCoreClientServlet extends HttpServlet {
                                                                              inputInteraction) {
         return InteractionRequest.newBuilder()
                 .setClientId(WEB_SIMULATOR)
-                .setUserId(returnUserName())
                 .setTime(getTimeStamp())
                 .setInteraction(inputInteraction);
     }
@@ -205,14 +205,6 @@ public class AdCoreClientServlet extends HttpServlet {
                 .setNanos(Instant.now()
                         .getNano())
                 .build();
-    }
-
-    /**
-     * Return the current user name.
-     * TODO(Adam): Implement getting username from database or having a username object!
-     */
-    private String returnUserName() {
-        return "sampleUserName-to-be-implemented";
     }
 
     /**

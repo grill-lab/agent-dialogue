@@ -45,6 +45,7 @@ function sendRequest() {
         data: {
             textInput: textInput,
             language: language,
+            userId: _userId,
             chosen_agents: "WizardOfOz",
             agent_request_parameters: JSON.stringify(agent_request_parameters)
         },

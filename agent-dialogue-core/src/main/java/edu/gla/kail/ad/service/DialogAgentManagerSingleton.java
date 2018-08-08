@@ -64,6 +64,7 @@ final class DialogAgentManagerSingleton {
             throw new Exception("The maximum number of conversations have been reached - wait " +
                     "some time or quit coversations on other user accounts.");
         }
+        System.out.println(_initializedManagers.toString());
         return _initializedManagers.get(userId);
     }
 
