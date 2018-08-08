@@ -16,6 +16,7 @@ import edu.gla.kail.ad.Client.OutputInteraction;
 import edu.gla.kail.ad.CoreConfiguration.AgentConfig;
 import edu.gla.kail.ad.CoreConfiguration.ServiceProvider;
 import edu.gla.kail.ad.core.Log.ResponseLog;
+import edu.gla.kail.ad.core.Log.ResponseLog.MessageStatus;
 import edu.gla.kail.ad.core.Log.SystemAct;
 
 import javax.annotation.Nullable;
@@ -81,7 +82,9 @@ class WizardAgent implements AgentInterface {
     FirebaseOptions options = new FirebaseOptions.Builder()
             .setCredentials(credentials)
             .build();
-    FirebaseApp.initializeApp(options);
+    if (FirebaseApp.getApps().isEmpty()) {
+      FirebaseApp.initializeApp(options);
+    }
     _database = FirestoreClient.getFirestore();
   }
 
@@ -255,6 +258,7 @@ class WizardAgent implements AgentInterface {
             .setTime(timestamp)
             .setClientId(Client.ClientId.EXTERNAL_APPLICATION)
             .setServiceProvider(ServiceProvider.WIZARD)
+            .setMessageStatus(MessageStatus.SUCCESSFUL)
             .setRawResponse("Text response: " + responseString)
             .addAction(SystemAct.newBuilder().setInteraction(OutputInteraction.newBuilder()
                     .setType(InteractionType.TEXT) // TODO(Jeff): Support more advanced actions.
