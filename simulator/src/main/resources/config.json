@@ -1,6 +1,6 @@
 {
-  "grpc_core_server_host": "localhost",
+  "grpc_core_server_host": "35.184.227.176",
   "grpc_core_server_port": 8070,
   "log_storage_path": "file:///Users/Adam/Documents/Internship/GitHub/agent-dialogue/Logs",
-  "firestore_authorization_URL": "file:///Users/Adam/Documents/Internship/GitHub/agent-dialogue/simulator/src/main/resources/agentdialogue-2cd4b-firebase-adminsdk-z39zw-4d5427d1fc.json"
+  "firestore_authorization_URL": "https://raw.githubusercontent.com/gla-ial/agent-dialogue/configuration/simulator/src/main/resources/agentdialogue-2cd4b-firebase-adminsdk-z39zw-4d5427d1fc.json?token=Adv8z_0pyB6Ujf1zKRni2xXtiYaaNWtqks5bdEOmwA%3D%3D"
 }
