@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "myquotemaster-13899",
+  "private_key_id": "04ed41718e579697f7d4ec08bad3bfd182f55600",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQCI02C5ZxqSx/K4\nCbooB+/+rWTFV3PAsV/qa0hBWqU5Sj/96r2echmK9hayOHe94lrhmvNExtaQhJB3\njTkJsJrg477Zt8i6OCap52T+3FMhkOS4cJ13Ho0S1N4bHWcmFBIptR1JIrG8uZZ2\nwgoR8lK9gM2H/D1T6p/F7ceRVMFLlug+zD1oRKSSEUFsv5q6/YxHDIZZVWAHMrwc\nfuUHpQTqcKZ9qo2XEAUtpZlkKLSG33Y/SnTswEdJ1D7GTM/iel5O8uPhjzD3r0CC\nThxivi1x13fWn6LVTALAj6f0QVfnLxfjNzdfUUA54E9Ws3LUdNYv3XHFbV81y73v\n8SXpWz3zAgMBAAECggEAA+d0JRYqDfIinNm6NBY15OBxtafPJ7pn8Dprb2H0wPO7\na7Vc/75luC9ZanBuCj8BNNrFAjtiN/FwZdjjvcEKSkx1T6UM1zNu9v4hRZxnytdl\nj1W3SITYpabpR4DJRq7f7cy7LzEMPURWZMEYpHZzofCg7LZn0ZMqR+2G+kCe21dC\nTpIDIM0FnmVZ4FWWTAEozx+KjmlKSlJLmgFfsNtX13SJqVu0uW3y8vI0/SKd50qp\nHsaobaKLLBnV7b/xBGkbMPe43o1uc2vl5eIrniGk1X+B/GbbFpTfdrcz+0he7H09\nfd7TwMrCr9TRLAv7i6ZdENW58cTZR3FUL72r7gQmoQKBgQC+dIFh5J94n5aKWb1Z\n3sQ/TkaNKFql0o9ADYGZOgjyB7BMF0zy35WUpkJrq4m4GhUXrS5lLUQcYz1t2Fu0\nAII6RvU1f8Me5i0QoBq0XQLnNQFJsHNthLslGgE4R+1eTBcT1yKUmXYh7UoyQqLT\nmwigKFi+9mHQ6QbZeXdOCyVbOQKBgQC36gJXtOh33lwDO5qr+H/UME5eOpVTlcGc\n330zZ1eHafR+1D6nbgIw4q1i7YSPMUyj6x+61LVH1b/hsBTfDTZY3SdSEy0hjtwV\n5x6qg4Fe/y+CN5SYO30lcRMh2S613Dwo25MudhxadBS+gA58xrbcD1mbDrswnxlF\nybrHNYpmiwKBgHqC3RtIgmCIX8D9OvVNe/Ww92cj1zOlv2oXhg83qrttwLUho+jz\nc/fb/wvdm0hm1ryVNSv2M0MDf2dibpLaZOrx7BgO6Ee/DqwMIUF2N0Dc8sghDg8b\n+3pBQRmgAwvObGXh1Ke8E6Z9SmYMQUtXBfRoH7YvLPrCexp3rQvx1YTZAoGBAI9n\nIu56fC1DL6HBrwfamum7xM+KhHcJNU95n+kd8kz/HApsunHYwFKX3TRfGVaBzU2e\n/z2xr6xUieqTXqLRbYf64TcJBs680vUtImc4ZP7KoaO6bN4KvLkeIxnoe5iIIkyF\ncYzvwYnyK16jASjf1SNfwLG72c++rnkRI9dC8yijAoGBALenHAP7rC/FAhQXlXvD\nXbCEMckzaiL3IBB3LEIYGJjszKTLUZTbAoTUuxY4udw993W13xNbL+lPKmqJdKHU\nk66ZU1INrII15wh3JRfTQf6rY5lU3ohyw+TOcoq3+zQnkajnwzP6cwfURJbLe7R3\nWhpqne++RUBZNk+DfUIUnlaV\n-----END PRIVATE KEY-----\n",
+  "client_email": "dialogflowmetabottesting@myquotemaster-13899.iam.gserviceaccount.com",
+  "client_id": "113970773118820446727",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://accounts.google.com/o/oauth2/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/dialogflowmetabottesting%40myquotemaster-13899.iam.gserviceaccount.com"
+}

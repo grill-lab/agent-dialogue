@@ -1,0 +1,19 @@
+{
+  "grpc_server_port": 8070,
+  "log_storage_path": "file:///Users/Adam/Documents/Internship/GitHub/agent-dialogue/Logs",
+  "max_number_of_simultaneous_conversations": 20,
+  "session_timeout_minutes": 10,
+
+  "agents": [
+    {
+      "service_provider": "1",
+      "project_id": "myquotemaster-13899",
+      "configuration_file_URL": "file:///Users/Adam/Documents/Internship/GitHub/agent-dialogue/agent-dialogue-core/src/main/resources/myquotemaster-13899-04ed41718e57.json"
+    },
+    {
+      "service_provider": "2",
+      "project_id": "WizardOfOz",
+      "configuration_file_URL": "file:///Users/Adam/Documents/Internship/GitHub/agent-dialogue/simulator/src/main/resources/agentdialogue-2cd4b-firebase-adminsdk-z39zw-4d5427d1fc.json"
+    }
+  ]
+}

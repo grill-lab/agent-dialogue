@@ -10,7 +10,6 @@
 */gradle
 */.gradle
 /agent-dialogue-core/dependency-reduced-pom.xml
-/agent-dialogue-core/src/main/resources/
 /log-replayer/src/main/resources/
 /log-replayer/dependency-reduced-pom.xml
 /simulator/target/
@@ -18,4 +17,3 @@
 /simulator/package-lock.json
 /simulator/node_modules/
 /simulator/Logs/
-/simulator/src/main/resources/
