@@ -16,25 +16,22 @@ import java.util.Map;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
- * Modified singleton-design-pattern package-private class: verifies the creation of new instance of
- * the class based on tuple tupleOfProjectIdAndAuthenticationFile occurrence in the
- * _agentAuthorizationInstances. The only accessible method is getProjectIdAndSessionsClient(),
- * which returns the Tuple of projectID and SessionClient.
+ * Modified singleton-design-pattern class used for authorization of Dialogflow Agents.
  * The class is thread safe.
  */
 public final class DialogflowAgentAuthorizationSingleton {
-    private static Map<AgentConfig, DialogflowAgentAuthorizationSingleton> _agentAuthorizationInstances;
+    private static Map<AgentConfig, DialogflowAgentAuthorizationSingleton>
+            _agentAuthorizationInstances;
     private SessionsClient _sessionsClient;
     private String _projectId;
 
     /**
-     * Create the SessionClients and project for all the agents which project ID and Service Account
-     * key file directories are provided.
+     * Create the SessionClients and project for the particular agent.
      *
      * @throws IllegalArgumentException
      */
     private DialogflowAgentAuthorizationSingleton(AgentConfig agent)
-            throws IllegalArgumentException, IOException {
+            throws IOException {
         _projectId = checkNotNull(agent.getProjectId(), "The project ID is null!");
         URL jsonKeyUrl = checkNotNull(new URL(agent.getConfigurationFileURL()), "The" +
                 " JSON file location is null!");
@@ -46,21 +43,22 @@ public final class DialogflowAgentAuthorizationSingleton {
                 (ServiceAccountCredentials.fromStream(jsonKeyUrl.openStream())));
         SessionsSettings sessionsSettings = SessionsSettings.newBuilder().setCredentialsProvider
                 (credentialsProvider).build(); // TODO(Adam): Handle the error, when the
-        // authorization fails. What to do then though?
+        // authorization fails.
         _sessionsClient = SessionsClient.create(sessionsSettings);
     }
 
     /**
      * Thread safe method, providing a Tuple of projectID and SessionClient corresponding to the
-     * passed-input tuple.
+     * passed agentConfig.
      *
+     * @param agent - The AgentConfig read from the core configuration file.
      * @return Tuple<> - A data structure holding projectID and SessionClient required for the
      *         authorization.
      * @throws IOException - When a projectID or the Service Account key is either null or
      *         empty, appropriate exception is thrown.
      */
-    static synchronized Tuple<String, SessionsClient> getProjectIdAndSessionsClient(AgentConfig agent)
-            throws IOException {
+    static synchronized Tuple<String, SessionsClient> getProjectIdAndSessionsClient(AgentConfig
+                                                                                            agent) throws IOException {
         if (_agentAuthorizationInstances == null) {
             _agentAuthorizationInstances = new HashMap<>();
         }

@@ -31,21 +31,19 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * The manager is configured to have conversations with specified agents (of certain agent type,
- * * e.g. Dialogflow or Alexa).
+ * e.g. Dialogflow or Alexa).
  * Conversation management includes handling session state, including starting sessions (assigning
  * session IDs), as well as request identifiers. It also handles serialization of conversation log
  * data.
- * <p>
+ *
  * Instruction of usage:
  * 1) Set up the Dialog agents using setUpAgents method.
- * 2) Call the getResponseFromAgent for passed input.
- * 3)
- * TODO(Adam): further part needs to be implemented
- * <p>
+ * 2) Call the getResponse for passed input.
+ *
  * Example usage :
  * DialogAgentManager dialogAgentManager = new DialogAgentManager();
  * dialogAgentManager.setUpAgents(agents);
- * dialogAgentManager.getResponse(interactionRequest);
+ * ResponseLog response = dialogAgentManager.getResponse(interactionRequest);
  **/
 
 public class DialogAgentManager {
@@ -55,6 +53,7 @@ public class DialogAgentManager {
     // startSession() called by DialogAgentManager constructor.
     private String _sessionId;
     private LogTurnManagerSingleton _logTurnManagerSingleton;
+    // Time of no response from agent, after which there is timeout on getting response from agent.
     private Integer _agentCallTimeoutSeconds = 50;
 
     /**
@@ -80,7 +79,7 @@ public class DialogAgentManager {
      * Called before the end of the session to store and configuration of the DialogAgentManager ??
      */
     public void endSession() {
-        // TODO(Adam): Thnk over this method.
+        // TODO(Adam): Implement
     }
 
     /**
@@ -141,8 +140,7 @@ public class DialogAgentManager {
                 .setInteraction(interactionRequest.getInteraction()).build();
 
         List<ResponseLog> responses = getResponsesFromAgents(interactionRequest);
-        ResponseLog chosenResponse = chooseOneResponse(responses); // TODO(Jeff): This may throw
-        // exception. Should I leave the error and propagate to higher levels, or do something here?
+        ResponseLog chosenResponse = chooseOneResponse(responses);
         TurnOrBuilder turnBuilder = Turn.newBuilder()
                 .setRequestLog(requestLog)
                 .setSessionId(_sessionId)
@@ -194,9 +192,7 @@ public class DialogAgentManager {
         return (agentInterfaceObservable.flatMap(agentObservable -> Observable
                 .just(agentObservable)
                 .subscribeOn(Schedulers.computation())
-                .take(_agentCallTimeoutSeconds, TimeUnit.SECONDS) // Take only the observable
-                // emitted (completed)
-                // within specified time.
+                .take(_agentCallTimeoutSeconds, TimeUnit.SECONDS) // Take only the observable emitted (completed) within specified time.
                 .map(agent -> callForResponseAndValidate(agent, interactionRequest))
         ).toList().blockingGet());
     }
