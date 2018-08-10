@@ -13,8 +13,11 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.concurrent.ExecutionException;
 
+/**
+ * Servlet for handling Offline Experiment requests.
+ */
 @WebServlet("/offline-mt-ranking-servlet")
-public class RankingServlet extends HttpServlet {
+public class RatingServlet extends HttpServlet {
 
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws
             IOException {
@@ -54,6 +57,9 @@ public class RankingServlet extends HttpServlet {
         doPost(request, response);
     }
 
+    /**
+     * Verify if the user ID is stored in Firestore database.
+     */
     private Boolean verifyUser(String userId) throws IOException {
         if (userId == null || userId.equals("")) {
             return false;

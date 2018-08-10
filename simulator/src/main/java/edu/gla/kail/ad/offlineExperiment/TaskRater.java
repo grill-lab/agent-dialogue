@@ -8,9 +8,16 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
+/**
+ * Used for storing user rating in the Database and in Logs.
+ */
 class TaskRater {
     private Firestore _database;
 
+    /**
+     * Update the Firestore entry for the open rating and assign the score and time of the rating.
+     * Mark rating as completed.
+     */
     void rateTask(Firestore database, String userId, Integer ratingScore, String taskId, Long
             startTime_seconds, Long endTime_seconds) {
         _database = database;

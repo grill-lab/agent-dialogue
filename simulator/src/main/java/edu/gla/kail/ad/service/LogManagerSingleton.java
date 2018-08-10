@@ -32,7 +32,6 @@ import static com.google.common.base.Preconditions.checkNotNull;
 /**
  * Manage Client _interactions and store them in a certain directory/path.
  * TODO(Adam): Implement the use of LogStash, or maybe log4j, or make this thread safe.
- * TODO(Adam): Setting log storage directory to be changed to a different directory/database.
  */
 public class LogManagerSingleton {
     private static LogManagerSingleton _instance;
