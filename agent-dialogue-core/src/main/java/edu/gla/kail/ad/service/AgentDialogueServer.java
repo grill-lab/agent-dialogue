@@ -112,8 +112,7 @@ public class AgentDialogueServer {
 
         /**
          * Sends the request to the agents and retrieves the chosen response.
-         * TODO(Adam): Right now the method uses getResponseFromAgentAsInteractionResponse, which is
-         * a dummy method for testing purposes.
+         * TODO(Adam): This method may cause the calls not to be asynchronous. Check it!
          *
          * @param interactionRequest - The instance of InteractionRequest passed by the
          *         user/client to the agents.

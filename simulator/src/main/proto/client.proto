@@ -10,16 +10,18 @@ import "google/protobuf/struct.proto";
 // This protobuffer is used for storing the data that is being obtained from the client
 // and that is being sent back to the client.
 
-
+// Store entire conversation held within a particular session.
 message ClientConversation {
     repeated ClientTurn turn = 1;
 }
 
+// Store request from the user and response from the agent.
 message ClientTurn {
     InteractionRequest interaction_request = 1;
     InteractionResponse interction_response = 2;
 }
 
+// The ID of the client the request is sent from.
 enum ClientId {
     NONSET = 0;
     EXTERNAL_APPLICATION = 1;
@@ -27,17 +29,20 @@ enum ClientId {
     WEB_SIMULATOR = 3;
 }
 
+// The message that is being passed through gRPC calls, from client to core, containing the information about the request and the request itself.
 message InteractionRequest {
     google.protobuf.Timestamp time = 1; // The time of the creation of the request
     ClientId client_id = 2; // The ID of the client the request is sent from.
     InputInteraction interaction = 3;
-    string user_id = 4;
+    string user_id = 4; // A unique ID of the user who sent the request.
     // A struct representing a json configuration object containing agent-specific request parameters.
-    google.protobuf.Struct agent_request_parameters = 5;
-    repeated string chosen_agents = 6;
+    google.protobuf.Struct agent_request_parameters = 5; // The Structure unique for every Agent type (ServiceProvider), which contains data used by the instance of that Agent.
+    repeated string chosen_agents = 6; // The list of agents ID, that are "asked" to provide the reply.
 }
 
+// The message that is being passed through gRPC calls, from Core to Client, containing the information about the response and the response itself.
 message InteractionResponse {
+    // The status of the message received from the agent-dialogue-core.
     enum ClientMessageStatus {
         NONSET = 0;
         SUCCESSFUL = 1;
@@ -48,11 +53,12 @@ message InteractionResponse {
     ClientId client_id = 3; // The ID of the client the request is sent from.
     repeated OutputInteraction interaction = 4;
     ClientMessageStatus message_status = 5; // The status of the message received from the agent-dialogue-core.
-    string error_message = 6;
-    string user_id = 7;
-    string session_id = 8;
+    string error_message = 6; // The error message informing the user about the particular error that occured.
+    string user_id = 7; // The unique ID of the user that the response is sent to.
+    string session_id = 8; // The unique ID of the session that the response is sent within.
 }
 
+// The type of the interaction.
 enum InteractionType {
     NOTSET = 0; // Proto3 doesn't distinguish between field that is empty or is set to it's default (value = 0).
     TEXT = 1;
@@ -60,6 +66,7 @@ enum InteractionType {
     ACTION = 3;
 }
 
+// Message sent to the agent.
 message InputInteraction {
     string text = 1; // The text that is being sent to the Agent.
     string audio_bytes = 2; // The audio bytes that are being sent to the Agent.
@@ -69,6 +76,7 @@ message InputInteraction {
     string language_code = 6; // The language code, e.g. "en-US".
 }
 
+// Message sent back by agent.
 message OutputInteraction {
     string text = 1; // The text that is being sent as the response by the Agent.
     string audio_bytes = 2; // The audio bytes that are being sent as the response by the Agent.

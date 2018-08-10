@@ -53,6 +53,6 @@ message SystemAct {
 }
 
 message Slot {
-    string name = 1; // E.g. name = "author",
+    string name = 1; // E.g. name = "author"
     string value = 2; // E.g. value = "Ada Lovelace"
 }
