@@ -85,6 +85,7 @@ public class AdCoreClientServlet extends HttpServlet {
     /**
      * Send request to agent and write (return) JSON back with response and it's details.
      * Store request and response in log files.
+     * TODO: Make this multi-threaded!!
      */
     private void sendRequestToAgents(HttpServletRequest request, HttpServletResponse response)
             throws IOException {

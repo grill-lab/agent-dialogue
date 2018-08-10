@@ -35,6 +35,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * °A lot of code is repeated in AgentDialogueClientService in web-simulator client.
  * TODO(Adam): Change log replayer - reading one file with multiple conversations = multiple
  * LogEntries.
+ * TODO: Break it down into smaller classes.
  */
 public class LogReplayer {
     private final ManagedChannel _channel;
