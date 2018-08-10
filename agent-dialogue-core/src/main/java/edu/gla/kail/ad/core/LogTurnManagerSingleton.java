@@ -11,13 +11,15 @@ import java.io.OutputStream;
 /**
  * Manage turns and store them in the output stream.
  * TODO(Adam): Implement the use of LogStash, or maybe log4j, or make this thread safe.
- * TODO(Adam): Setting log storage directory to be changed to a different directory/database.
  */
 public final class LogTurnManagerSingleton {
     private static LogTurnManagerSingleton _instance;
-    private static OutputStream _outputStream;
-    private static String _logDailyTurnsPath;
-    private static String _currentDailyTurnPath;
+    private static OutputStream _outputStream; // The stream used for writing all the log entries
+    // to.
+    private static String _logDailyTurnsPath; // A path for storing all folders with LogTurns for
+    // each day.
+    private static String _currentDailyTurnPath; // A path which the OutputStream is being
+    // written to.
 
     /**
      * Get instance of this class.
