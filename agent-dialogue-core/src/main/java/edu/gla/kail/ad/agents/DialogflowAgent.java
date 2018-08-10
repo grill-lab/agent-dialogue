@@ -35,19 +35,21 @@ import static edu.gla.kail.ad.agents.DialogflowAgentAuthorizationSingleton
         .getProjectIdAndSessionsClient;
 
 /**
- * This class is initialized once per session per agent. (Thus different sessions have different
+ * This class is initialized once per session per agent. (Different sessions have different
  * instances for the same agent.)
- * The request sent to the agent is validated. (There are no invalid characters which can make
- * dialogflow throw errors.)
- * // TODO(Adam) Use shutdown() method for closing _sessionClient stream? If so, where: here or in
- * DialogflowAgentAuthorizationSingleton?
+ * The request sent to the agent is validated.
+ * (There are no invalid characters which can make dialogflow throw errors.)
+ * // TODO(Adam) Use shutdown() method for closing _sessionClient stream? Implement it in
+ * AgentInterface?
  */
 public class DialogflowAgent implements AgentInterface {
-    // The SessionsClient and SessionName are needed for the Dialogflow interaction.
+    // The SessionsClient and SessionName are needed for the Dialogflow interaction. The are
+    // created upon agent initialization.
     private SessionsClient _sessionsClient;
     private SessionName _session;
-    // A unique ID passed set in the constructor, passed by DialogAgentManager.
+    // A unique ID passed by DialogAgentManager.
     private String _sessionId;
+    // A unique ID of the agent this instance is of.
     private String _agentId;
 
     /**
@@ -57,7 +59,7 @@ public class DialogflowAgent implements AgentInterface {
      * @throws IOException - T setUpAgent method may throw exception if the data passed in
      *         the tupleOfProjectIdAndAuthorizationFile is invalid.
      */
-    DialogflowAgent(String sessionId, AgentConfig agent)
+    public DialogflowAgent(String sessionId, AgentConfig agent)
             throws IOException {
         _sessionId = sessionId;
         setUpAgent(agent);
@@ -74,11 +76,10 @@ public class DialogflowAgent implements AgentInterface {
     }
 
     /**
-     * Create the SessionClients and SessionNames for the agent which project ID and Service Account
-     * key file directory.
+     * Create the SessionClients and SessionNames for the agent.
      *
-     * @throws IOException - When a projectID or the Service Account key is either null or
-     *         empty, appropriate exception is thrown.
+     * @throws IOException - When a there is something wrong with getting ProjectID and
+     *         Session Client of the Agent.
      */
     private void setUpAgent(AgentConfig agent) throws IOException {
         Tuple<String, SessionsClient> projectIdAndSessionsClient = getProjectIdAndSessionsClient
@@ -186,15 +187,14 @@ public class DialogflowAgent implements AgentInterface {
     }
 
     /**
+     * Send the request to the particular agent, using Dialogflow API.
+     *
      * @throws IllegalArgumentException - The exception is being thrown when the type of the
      *         interaction requested is not recognised or supported.
      */
     @Override
     public ResponseLog getResponseFromAgent(InteractionRequest interactionRequest) throws
             IllegalArgumentException {
-        // TODO(Jeff): What do do her when things go wrong?  Handle RPC errors?  Throw an
-        // exception? or leave it for higher levels to catch exception and return as unsuccessful
-        // response.
         DetectIntentResponse response = detectIntentResponseMethod(interactionRequest
                 .getInteraction());
         QueryResult queryResult = response.getQueryResult();

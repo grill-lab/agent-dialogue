@@ -44,6 +44,17 @@ public class AgentDialogueServer {
         _server = serverBuilder.addService(new AgentDialogueService()).build();
     }
 
+    public static void main(String[] args) throws Exception {
+        if (args == null || args.length == 0) {
+            throw new Exception("Please specify the URL to the configuration file.");
+        }
+        PropertiesSingleton.getPropertiesSingleton(new URL(args[0]));
+        AgentDialogueServer server = new AgentDialogueServer(PropertiesSingleton.getCoreConfig()
+                .getGrpcServerPort());
+        server.start();
+        server.blockUntilShutdown();
+    }
+
     /**
      * Start the server.
      *
@@ -159,16 +170,5 @@ public class AgentDialogueServer {
             responseObserver.onNext(interactionResponse);
             responseObserver.onCompleted();
         }
-    }
-
-    public static void main(String[] args) throws Exception {
-        if (args == null || args.length == 0) {
-            throw new Exception("Please specify the URL to the configuration file.");
-        }
-        PropertiesSingleton.getPropertiesSingleton(new URL(args[0]));
-        AgentDialogueServer server = new AgentDialogueServer(PropertiesSingleton.getCoreConfig()
-                .getGrpcServerPort());
-        server.start();
-        server.blockUntilShutdown();
     }
 }

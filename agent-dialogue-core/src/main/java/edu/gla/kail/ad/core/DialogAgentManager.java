@@ -194,7 +194,8 @@ public class DialogAgentManager {
         return (agentInterfaceObservable.flatMap(agentObservable -> Observable
                 .just(agentObservable)
                 .subscribeOn(Schedulers.computation())
-                .take(_agentCallTimeoutSeconds, TimeUnit.SECONDS) // Take only the observable emitted (completed)
+                .take(_agentCallTimeoutSeconds, TimeUnit.SECONDS) // Take only the observable
+                // emitted (completed)
                 // within specified time.
                 .map(agent -> callForResponseAndValidate(agent, interactionRequest))
         ).toList().blockingGet());

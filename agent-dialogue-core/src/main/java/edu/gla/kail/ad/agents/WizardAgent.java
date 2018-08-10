@@ -37,7 +37,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * with one another.
  * It uses Firestore for storing the messages and to listen for events on shared chat 'documents'.
  */
-class WizardAgent implements AgentInterface {
+public class WizardAgent implements AgentInterface {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(WizardAgent.class);
 
