@@ -15,6 +15,7 @@ public class AdCoreClient {
     // respond; return response or raise an exception.
 
     public AdCoreClient(String host, int port) {
+        // TODO: Change deprecated method usePlaintext().
         this(ManagedChannelBuilder.forAddress(host, port).usePlaintext(true));
     }
 

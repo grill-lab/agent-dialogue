@@ -18,15 +18,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
+/**
+ * Loads available tasks from the Firestore Database.
+ */
 class TaskLoader {
     private Firestore _database;
     private String _userId;
 
     /**
-     * @param database
-     * @param userId
-     * @param maxNumberOfTasksAssigned
-     * @return
+     * Load tasks from the database for a particular user, for a particular experiment.
      */
     String loadTasks(Firestore database, String userId, Integer maxNumberOfTasksAssigned, String
             experimentId) {
@@ -73,12 +73,17 @@ class TaskLoader {
         return json.toString();
     }
 
+    /**
+     * Called to assign more tasks to the user if possible:
+     * if there are more existing tasks in the database that fulfill certain criteria.
+     */
     private ArrayList<String> assignMoreTasksToUser(HashSet<String> allAssignedTaskIds,
                                                     ArrayList<String> listOfOpenTaskIds, Integer
                                                             maxNumberOfTasksAssigned, Integer
                                                             numberOfOpenRatings,
-                                                    DocumentReference userDocRef, String experimentId)
-            throws ExecutionException, InterruptedException {
+                                                    DocumentReference userDocRef, String
+                                                            experimentId) throws
+            ExecutionException, InterruptedException {
         HashSet<String> remainingAvailableTasks = new HashSet<>();
 
         // Get all candidate tasks.
@@ -116,6 +121,9 @@ class TaskLoader {
         return listOfOpenTaskIds;
     }
 
+    /**
+     * Add the rating ID to the task entry in the database, for a newly assigned rating task.
+     */
     private void updateTaskDocument(String taskId, String ratingId) throws ExecutionException,
             InterruptedException {
         DocumentReference taskDocRef = _database.collection("clientWebSimulator").document
@@ -136,6 +144,9 @@ class TaskLoader {
         taskDocRef.update(helperMap);
     }
 
+    /**
+     * Create a new open rating for the particular task. for a particular user.
+     */
     private String createNewOpenRating(String taskId) throws ExecutionException,
             InterruptedException {
         String ratingId = taskId + "_" + _userId;
@@ -158,6 +169,10 @@ class TaskLoader {
         return ratingId;
     }
 
+    /**
+     * Return the list of all open tasks - the tasks assigned to the user that haven't been
+     * completed yet.
+     */
     private String getOpenTasks(ArrayList<String> listOfOpenTaskIds) throws ExecutionException,
             InterruptedException {
         JsonObject jsonOfTasks = new JsonObject();
