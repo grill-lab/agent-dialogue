@@ -11,6 +11,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.StringTokenizer;
 
+
+/**
+ * Creates user entries in the Firestore database.
+ */
 class UserHandler {
     void handleUsers(BufferedReader tsvFileBufferedReader, ArrayList<String>
             arrayOfParameters, Firestore database) throws IOException {
