@@ -1,4 +1,4 @@
-package edu.gla.kail.ad.core;
+package edu.gla.kail.ad.agents;
 
 import com.google.api.core.SettableApiFuture;
 import com.google.auth.oauth2.GoogleCredentials;
@@ -15,12 +15,12 @@ import edu.gla.kail.ad.Client.InteractionType;
 import edu.gla.kail.ad.Client.OutputInteraction;
 import edu.gla.kail.ad.CoreConfiguration.AgentConfig;
 import edu.gla.kail.ad.CoreConfiguration.ServiceProvider;
+import edu.gla.kail.ad.core.AgentInterface;
 import edu.gla.kail.ad.core.Log.ResponseLog;
 import edu.gla.kail.ad.core.Log.ResponseLog.MessageStatus;
 import edu.gla.kail.ad.core.Log.SystemAct;
 
 import javax.annotation.Nullable;
-import java.io.FileInputStream;
 import java.net.URL;
 import java.time.Instant;
 import java.util.*;

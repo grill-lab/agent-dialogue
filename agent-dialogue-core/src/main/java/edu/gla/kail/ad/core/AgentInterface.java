@@ -7,7 +7,7 @@ import edu.gla.kail.ad.core.Log.ResponseLog;
 /**
  * Agent interface is a common interface to different dialogue framework implementations.
  */
-interface AgentInterface {
+public interface AgentInterface {
     ServiceProvider serviceProvider = null;
     String _agentId = null;
 

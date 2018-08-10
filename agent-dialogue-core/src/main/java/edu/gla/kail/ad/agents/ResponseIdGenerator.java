@@ -1,4 +1,4 @@
-package edu.gla.kail.ad.core;
+package edu.gla.kail.ad.agents;
 
 import org.apache.commons.codec.binary.Base64;
 

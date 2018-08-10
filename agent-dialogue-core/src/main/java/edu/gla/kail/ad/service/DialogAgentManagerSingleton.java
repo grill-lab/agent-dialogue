@@ -6,8 +6,8 @@ import com.google.common.cache.LoadingCache;
 import com.google.common.cache.RemovalListener;
 import com.google.common.cache.RemovalNotification;
 import edu.gla.kail.ad.CoreConfiguration.AgentConfig;
-import edu.gla.kail.ad.PropertiesSingleton;
 import edu.gla.kail.ad.core.DialogAgentManager;
+import edu.gla.kail.ad.core.PropertiesSingleton;
 
 import java.io.IOException;
 import java.util.List;
@@ -15,13 +15,15 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
 /**
- * Class used to hold the instances of DialogAgentManager for each session ID
- * over certain period of time after the last activity, which are unique for every session.
+ * Class used to hold the instances of DialogAgentManager for each session.
  */
 final class DialogAgentManagerSingleton {
     private static DialogAgentManagerSingleton _instance;
+    // The maximum number of sessions that can be active at the same time.
     private static int _MAX_NUMBER_OF_SIMULTANEOUS_CONVERSATIONS = PropertiesSingleton
             .getCoreConfig().getMaxNumberOfSimultaneousConversations();
+    // The time, after which the session becomes inactive (times out) if there are no requests
+    // coming in from the user.
     private static int _SESSION_TIMEOUT_IN_MINUTES = PropertiesSingleton.getCoreConfig()
             .getSessionTimeoutMinutes();
 
@@ -38,18 +40,21 @@ final class DialogAgentManagerSingleton {
             .build(
                     new CacheLoader<String, DialogAgentManager>() {
                         public DialogAgentManager load(String key) throws IOException {
+                            // Execute if the active session for the user doesn't exist.
                             DialogAgentManager dialogAgentManager = new DialogAgentManager();
                             dialogAgentManager.setUpAgents((List<AgentConfig>) PropertiesSingleton
                                     .getCoreConfig()
                                     .getAgentsList());
-                            // TODO(Adam): Add a functionality to setting up agents from the
-                            // database once we have it.
                             return dialogAgentManager;
                         }
                     });
 
 
     /**
+     * Get the DialogAgentManager instance for a particular user. If the user has active session,
+     * the DialogAgentManager for that session will be returned. Otherwise, a new session will be
+     * created, provided the limit of maximum number of sessions hasn't been reached.
+     *
      * @param userId - The identification String userID, which is sent by each user
      *         with every request.
      * @return DialogAgentManager - The instance of DialogAgentManager used for particular session.
