@@ -1,4 +1,4 @@
-package edu.gla.kail.ad.core;
+package edu.gla.kail.ad.agents;
 
 import com.google.cloud.Tuple;
 import com.google.cloud.dialogflow.v2beta1.AudioEncoding;
@@ -20,6 +20,7 @@ import edu.gla.kail.ad.Client.InteractionType;
 import edu.gla.kail.ad.Client.OutputInteraction;
 import edu.gla.kail.ad.CoreConfiguration.AgentConfig;
 import edu.gla.kail.ad.CoreConfiguration.ServiceProvider;
+import edu.gla.kail.ad.core.AgentInterface;
 import edu.gla.kail.ad.core.Log.ResponseLog;
 import edu.gla.kail.ad.core.Log.ResponseLog.MessageStatus;
 import edu.gla.kail.ad.core.Log.Slot;
@@ -30,7 +31,7 @@ import java.time.Instant;
 import java.util.Map;
 
 import static com.google.common.base.Preconditions.checkNotNull;
-import static edu.gla.kail.ad.core.DialogflowAgentAuthorizationSingleton
+import static edu.gla.kail.ad.agents.DialogflowAgentAuthorizationSingleton
         .getProjectIdAndSessionsClient;
 
 /**

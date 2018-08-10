@@ -5,10 +5,10 @@ import com.google.protobuf.Timestamp;
 import edu.gla.kail.ad.Client.InteractionRequest;
 import edu.gla.kail.ad.Client.InteractionResponse;
 import edu.gla.kail.ad.Client.InteractionResponse.ClientMessageStatus;
-import edu.gla.kail.ad.PropertiesSingleton;
 import edu.gla.kail.ad.core.DialogAgentManager;
 import edu.gla.kail.ad.core.Log.ResponseLog;
 import edu.gla.kail.ad.core.LogTurnManagerSingleton;
+import edu.gla.kail.ad.core.PropertiesSingleton;
 import io.grpc.Server;
 import io.grpc.ServerBuilder;
 import io.grpc.stub.StreamObserver;
@@ -21,39 +21,33 @@ import java.util.stream.Collectors;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
- * TODO(Adam): Create a database used for server initialization.
+ * The server which handles gRPC calls.
  */
 public class AgentDialogueServer {
     private final Server _server;
 
+    /**
+     * Create a localhost server listening on specified port.
+     *
+     * @param port - the integer specifying the port.
+     */
     public AgentDialogueServer(int port) {
         this(ServerBuilder.forPort(port));
     }
 
     /**
-     * Create a server listening on specified port.
+     * Create a localhost server listening on specified port.
      *
-     * @param serverBuilder
+     * @param serverBuilder - the builder created for a particular port.
      */
     private AgentDialogueServer(ServerBuilder<?> serverBuilder) {
         _server = serverBuilder.addService(new AgentDialogueService()).build();
     }
 
-    public static void main(String[] args) throws Exception {
-        if (args == null || args.length == 0) {
-            throw new Exception("Please specify the URL to the configuration file.");
-        }
-        PropertiesSingleton.getPropertiesSingleton(new URL(args[0]));
-        AgentDialogueServer server = new AgentDialogueServer(PropertiesSingleton.getCoreConfig()
-                .getGrpcServerPort());
-        server.start();
-        server.blockUntilShutdown();
-    }
-
     /**
      * Start the server.
      *
-     * @throws IOException
+     * @throws IOException - Thrown when the server cannot start properly.
      */
     public void start() throws IOException {
         _server.start();
@@ -165,5 +159,16 @@ public class AgentDialogueServer {
             responseObserver.onNext(interactionResponse);
             responseObserver.onCompleted();
         }
+    }
+
+    public static void main(String[] args) throws Exception {
+        if (args == null || args.length == 0) {
+            throw new Exception("Please specify the URL to the configuration file.");
+        }
+        PropertiesSingleton.getPropertiesSingleton(new URL(args[0]));
+        AgentDialogueServer server = new AgentDialogueServer(PropertiesSingleton.getCoreConfig()
+                .getGrpcServerPort());
+        server.start();
+        server.blockUntilShutdown();
     }
 }

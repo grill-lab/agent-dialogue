@@ -1,4 +1,4 @@
-package edu.gla.kail.ad;
+package edu.gla.kail.ad.core;
 
 import com.google.protobuf.util.JsonFormat;
 import edu.gla.kail.ad.CoreConfiguration.CoreConfig;
