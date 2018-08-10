@@ -17,9 +17,16 @@ import java.util.concurrent.ExecutionException;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-class TurnHandler {
+
+/**
+ * Create Turn entries in the Firestore database. Update experiment entries with tasks
+ */
+class TaskHandler {
     private Firestore _database;
 
+    /**
+     * Process the file passed under tsvFileBufferedReader.
+     */
     void handleTasks(BufferedReader tsvFileBufferedReader, ArrayList<String>
             arrayOfParameters, Firestore database) throws IOException {
         _database = database;
@@ -28,13 +35,15 @@ class TurnHandler {
         String nextRow = tsvFileBufferedReader.readLine();
 
         String taskId = null;
-        HashMap<String, Object> updateHelperMap = new HashMap<>();
+        HashMap<String, Object> updateHelperMap = new HashMap<>(); // Store the data about the
+        // a particular task.
         HashMap<String, Object> turnMap = new HashMap<>();
         ArrayList<Object> turnsArray = new ArrayList<>();
 
         while (nextRow != null) {
             stringTokenizer = new StringTokenizer(nextRow, "\t");
-            HashMap<String, Object> supportingHelperMap = new HashMap<>();
+            HashMap<String, Object> supportingHelperMap = new HashMap<>(); // Store the data
+            // about the turn within a task.
             ArrayList<String> dataArray = new ArrayList<>();
             while (stringTokenizer.hasMoreElements()) {
                 dataArray.add(stringTokenizer.nextElement().toString());
@@ -61,7 +70,7 @@ class TurnHandler {
             // If task if of the next data row is different from the previous task id, then add
             // the turn to the database.
             if (taskId != null && !taskId.equals(supportingHelperMap.get("taskId").toString())) {
-                addTurnToDatabase(supportingHelperMap, updateHelperMap);
+                addTaskToDatabase(supportingHelperMap, updateHelperMap);
                 updateHelperMap = new HashMap<>();
             }
             // Update taskId.
@@ -95,14 +104,20 @@ class TurnHandler {
 
             nextRow = tsvFileBufferedReader.readLine();
             if (nextRow == null) {
-                addTurnToDatabase(supportingHelperMap, updateHelperMap);
+                addTaskToDatabase(supportingHelperMap, updateHelperMap);
             }
             turnMap = new HashMap<>();
             turnsArray = new ArrayList<>();
         }
     }
 
-    private void addTurnToDatabase(HashMap<String, Object> supportingHelperMap,
+    /**
+     * Create a new task in the Firestore Database.
+     *
+     * @param supportingHelperMap - Store the data about the turn within a task.
+     * @param updateHelperMap - The map that stores the data about the a particular task.
+     */
+    private void addTaskToDatabase(HashMap<String, Object> supportingHelperMap,
                                    HashMap<String, Object> updateHelperMap) {
         // Update or create experiment in experiments database.
         String experimentId = supportingHelperMap.get("experimentId").toString();
@@ -146,6 +161,12 @@ class TurnHandler {
     }
 
 
+    /**
+     * Checks the existence of the experiment in Firestore database.
+     *
+     * @param experimentId - The unique ID of the particular experiment.
+     * @return - report whether the document exists or not.
+     */
     private Boolean verifyExperimentExistence(String experimentId) {
         if (experimentId == null || experimentId.equals("")) {
             return false;

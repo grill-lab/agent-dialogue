@@ -34,7 +34,7 @@ public class FirestoreUploader {
             "\nnumber - Get the number of files to be processed." +
             "\nhelp - Get the available commands list.";
 
-    // True if the user wants to wait for all the threads to finish and then quit.
+    // True if the user wants to quit the application.
     private static boolean _quit = false;
     private static ConcurrentLinkedQueue<File> _tsvFilePathQueue = new ConcurrentLinkedQueue<>();
     private static Firestore _database;
@@ -110,6 +110,10 @@ public class FirestoreUploader {
     };
 
 
+    /**
+     * Set up the connection to Firestore and use provided authorization JSON file to authorize
+     * Firestore.
+     */
     private static void authorizeFirestore() {
         GoogleCredentials credentials;
         Scanner scanner = new Scanner(System.in);
@@ -150,6 +154,11 @@ public class FirestoreUploader {
     }
 
 
+    /**
+     * Upload the entries from the tsv file to the Firestore database.
+     *
+     * @param tsvFile
+     */
     private static void updateTheDatabase(File tsvFile) {
         try {
             BufferedReader tsvFileBufferedReader = new BufferedReader(new FileReader(tsvFile));
@@ -176,8 +185,8 @@ public class FirestoreUploader {
                     userHandler.handleUsers(tsvFileBufferedReader, arrayOfParameters, _database);
                     break;
                 case "tasks":
-                    TurnHandler turnHandler = new TurnHandler();
-                    turnHandler.handleTasks(tsvFileBufferedReader, arrayOfParameters, _database);
+                    TaskHandler taskHandler = new TaskHandler();
+                    taskHandler.handleTasks(tsvFileBufferedReader, arrayOfParameters, _database);
                     break;
                 default:
                     System.out.println("Wrong data indicator: " + indicator);

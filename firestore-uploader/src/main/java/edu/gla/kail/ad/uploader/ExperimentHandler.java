@@ -11,6 +11,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.StringTokenizer;
 
+
+/**
+ * Creates experiment entries in the Firestore database.
+ */
 class ExperimentHandler {
 
     void handleExperiments(BufferedReader tsvFileBufferedReader, ArrayList<String>
