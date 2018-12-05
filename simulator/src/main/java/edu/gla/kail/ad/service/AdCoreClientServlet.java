@@ -36,11 +36,31 @@ import static edu.gla.kail.ad.Client.ClientId.WEB_SIMULATOR;
 public class AdCoreClientServlet extends HttpServlet {
     private static AdCoreClient _client;
 
+    private void addCORS(HttpServletRequest request,
+                         HttpServletResponse response)
+    {
+        response.addHeader("Access-Control-Allow-Origin", "*");
+        response.addHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE, HEAD");
+        response.addHeader("Access-Control-Allow-Headers", "Operation, Origin, X-Requested-With, Content-Type, Accept");
+        response.addHeader("Access-Control-Max-Age", "1728000");
+    }
+
+    protected void doOptions(HttpServletRequest request,
+                             HttpServletResponse response)
+                      throws ServletException,
+                             IOException   
+    {
+        addCORS(request, response);
+        response.setStatus(HttpServletResponse.SC_OK);
+    }
+
     /**
      * Handle POST request.
      */
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws
-            IOException {
+            IOException 
+    {
+        addCORS(request, response);
         if (_client == null) {
             _client = new AdCoreClient(PropertiesSingleton.getSimulatorConfig()
                     .getGrpcCoreServerHost(), PropertiesSingleton.getSimulatorConfig()
