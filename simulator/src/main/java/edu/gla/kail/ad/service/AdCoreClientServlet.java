@@ -47,8 +47,7 @@ public class AdCoreClientServlet extends HttpServlet {
 
     protected void doOptions(HttpServletRequest request,
                              HttpServletResponse response)
-                      throws ServletException,
-                             IOException   
+                      throws IOException
     {
         addCORS(request, response);
         response.setStatus(HttpServletResponse.SC_OK);
