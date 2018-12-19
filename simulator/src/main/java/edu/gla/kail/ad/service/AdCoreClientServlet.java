@@ -15,6 +15,7 @@ import edu.gla.kail.ad.Client.InteractionResponse.ClientMessageStatus;
 import edu.gla.kail.ad.Client.InteractionType;
 import edu.gla.kail.ad.Client.OutputInteraction;
 import edu.gla.kail.ad.PropertiesSingleton;
+import edu.gla.kail.ad.SimulatorConfiguration;
 
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -25,6 +26,7 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.logging.Logger;
 
 import static edu.gla.kail.ad.Client.ClientId.WEB_SIMULATOR;
 
@@ -34,6 +36,9 @@ import static edu.gla.kail.ad.Client.ClientId.WEB_SIMULATOR;
  */
 @WebServlet("/ad-client-service-servlet")
 public class AdCoreClientServlet extends HttpServlet {
+
+    private static final Logger LOGGER = Logger.getLogger( AdCoreClientServlet.class.getName() );
+
     private static AdCoreClient _client;
 
     private void addCORS(HttpServletRequest request,
@@ -56,15 +61,14 @@ public class AdCoreClientServlet extends HttpServlet {
     /**
      * Handle POST request.
      */
-    public void doPost(HttpServletRequest request, HttpServletResponse response) throws
-            IOException 
-    {
+    public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        SimulatorConfiguration.SimulatorConfig config = PropertiesSingleton.getSimulatorConfig();
         addCORS(request, response);
         if (_client == null) {
-            _client = new AdCoreClient(PropertiesSingleton.getSimulatorConfig()
-                    .getGrpcCoreServerHost(), PropertiesSingleton.getSimulatorConfig()
-                    .getGrpcCoreServerPort());
+            _client = new AdCoreClient(config.getGrpcCoreServerHost(),
+                    config.getGrpcCoreServerPort());
         }
+        LOGGER.info(request.toString());
         switch (request.getHeader("operation")) {
             case "sendRequest":
                 sendRequestToAgents(request, response);
@@ -77,6 +81,8 @@ public class AdCoreClientServlet extends HttpServlet {
                 json.addProperty("message", "The Operation passed in the header is not supported.");
                 response.getWriter().write(json.toString());
         }
+        LOGGER.info(response.toString());
+
     }
 
     /**
@@ -125,6 +131,7 @@ public class AdCoreClientServlet extends HttpServlet {
             json.addProperty("responseId", interactionResponse.getResponseId());
             response.getWriter().write(json.toString());
         } catch (Exception exception) {
+            LOGGER.warning("Error: " + exception.getMessage());
             interactionResponse = InteractionResponse.newBuilder()
                     .setMessageStatus(ClientMessageStatus.ERROR)
                     .setErrorMessage(exception.getMessage() + "\n\n" + exception.getStackTrace())
