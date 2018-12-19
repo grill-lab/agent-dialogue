@@ -8,6 +8,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Scanner;
+import java.util.logging.Logger;
 
 /**
  * PropertiesSingleton is a class which holds the data read from the configuration file.
@@ -17,6 +18,9 @@ import java.util.Scanner;
 public final class PropertiesSingleton {
     private static PropertiesSingleton _instance;
     private static SimulatorConfig _simulatorConfig; // Protocol Buffer data structure holding
+
+    private static final Logger LOGGER = Logger.getLogger( PropertiesSingleton.class.getName() );
+
     // all the data
     // read from the configuration file.
 
@@ -71,10 +75,13 @@ public final class PropertiesSingleton {
      *         the URL.
      */
     private static void setProperties(URL url) throws IOException {
+        LOGGER.info("Loading properties from URL: " + url.toString());
         SimulatorConfig.Builder simulatorConfigBuilder = SimulatorConfig.newBuilder();
         String jsonText = readPropertiesFromUrl(url);
         JsonFormat.parser().merge(jsonText, simulatorConfigBuilder);
         _simulatorConfig = simulatorConfigBuilder.build();
+        LOGGER.info("Loaded properties " + _simulatorConfig.toString());
+
     }
 
     /**
