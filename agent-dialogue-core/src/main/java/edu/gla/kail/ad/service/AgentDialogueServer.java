@@ -17,6 +17,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.time.Instant;
 import java.util.stream.Collectors;
+import java.util.logging.Logger;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -25,6 +26,8 @@ import static com.google.common.base.Preconditions.checkNotNull;
  */
 public class AgentDialogueServer {
     private final Server _server;
+
+    private static final Logger LOGGER = Logger.getLogger( AgentDialogueServer.class.getName() );
 
     /**
      * Create a localhost server listening on specified port.
@@ -48,7 +51,9 @@ public class AgentDialogueServer {
         if (args == null || args.length == 0) {
             throw new Exception("Please specify the URL to the configuration file.");
         }
+        LOGGER.info("Loading config file from:" + args[0]);
         PropertiesSingleton.getPropertiesSingleton(new URL(args[0]));
+        LOGGER.info("Configuration loaded: " + PropertiesSingleton.getCoreConfig().toString());
         AgentDialogueServer server = new AgentDialogueServer(PropertiesSingleton.getCoreConfig()
                 .getGrpcServerPort());
         server.start();
@@ -61,6 +66,8 @@ public class AgentDialogueServer {
      * @throws IOException - Thrown when the server cannot start properly.
      */
     public void start() throws IOException {
+        LOGGER.info("Starting server");
+
         _server.start();
         Runtime.getRuntime().addShutdownHook(new Thread() {
             // In case the JVM is being shut down
@@ -76,6 +83,8 @@ public class AgentDialogueServer {
      * Shut down the server.
      */
     public void shutDown() {
+        LOGGER.info("Shutting down server");
+
         if (_server != null) {
             try {
                 LogTurnManagerSingleton.getLogTurnManagerSingleton().saveAndExit();
@@ -127,6 +136,8 @@ public class AgentDialogueServer {
         @Override
         public void getResponseFromAgents(InteractionRequest interactionRequest,
                                           StreamObserver<InteractionResponse> responseObserver) {
+            LOGGER.info("Processing request:" + interactionRequest.toString());
+
             checkNotNull(interactionRequest.getUserId(), "The InteractionRequest that have " +
                     "been sent doesn't have userID!");
             DialogAgentManager dialogAgentManager;
@@ -161,6 +172,8 @@ public class AgentDialogueServer {
                                 .collect(Collectors.toList()))
                         .build();
             } catch (Exception exception) {
+                LOGGER.warning("Error processing request :" + exception.getMessage() + " " + exception.getMessage());
+
                 interactionResponse = InteractionResponse.newBuilder()
                         .setMessageStatus(InteractionResponse.ClientMessageStatus.ERROR)
                         .setErrorMessage(exception.getMessage())
