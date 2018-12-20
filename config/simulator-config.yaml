@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: simulator-container
-        image: gcr.io/agent-dialogue/simulator:v2
+        image: gcr.io/agent-dialogue/simulator:v3
         ports:
         - containerPort: 8080
         volumeMounts:
