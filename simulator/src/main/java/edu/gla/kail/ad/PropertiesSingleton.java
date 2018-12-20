@@ -8,7 +8,8 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Scanner;
-import java.util.logging.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * PropertiesSingleton is a class which holds the data read from the configuration file.
@@ -19,7 +20,7 @@ public final class PropertiesSingleton {
     private static PropertiesSingleton _instance;
     private static SimulatorConfig _simulatorConfig; // Protocol Buffer data structure holding
 
-    private static final Logger LOGGER = Logger.getLogger( PropertiesSingleton.class.getName() );
+    private static final Logger logger = LoggerFactory.getLogger( PropertiesSingleton.class);
 
     // all the data
     // read from the configuration file.
@@ -56,7 +57,7 @@ public final class PropertiesSingleton {
             _instance = new PropertiesSingleton();
             if (url == null) {
                 // Nasty but works...
-                setProperties(new URL("file://" + new File("s/").getAbsolutePath() +
+                setProperties(new URL("file:///" + new File("s/").getAbsolutePath() +
                         "rc/main/resources/config.json"));
             } else {
                 setProperties(url);
@@ -75,12 +76,12 @@ public final class PropertiesSingleton {
      *         the URL.
      */
     private static void setProperties(URL url) throws IOException {
-        LOGGER.info("Loading properties from URL: " + url.toString());
+        logger.info("Loading properties from URL: " + url.toString());
         SimulatorConfig.Builder simulatorConfigBuilder = SimulatorConfig.newBuilder();
         String jsonText = readPropertiesFromUrl(url);
         JsonFormat.parser().merge(jsonText, simulatorConfigBuilder);
         _simulatorConfig = simulatorConfigBuilder.build();
-        LOGGER.info("Loaded properties " + _simulatorConfig.toString());
+        logger.info("Loaded properties " + _simulatorConfig.toString());
 
     }
 
