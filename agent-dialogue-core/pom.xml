@@ -22,9 +22,9 @@
         <proto-google-common-protos.version>1.12.0</proto-google-common-protos.version>
         <protobuf-maven-plugin.version>0.5.1</protobuf-maven-plugin.version>
 
-        <grpc.version>1.14.0</grpc.version>
-        <dialogflow.version>0.53.0-alpha</dialogflow.version>
-        <firebase-admin.version>6.3.0</firebase-admin.version>
+        <grpc.version>1.16.1</grpc.version>
+        <dialogflow.version>0.74.0-alpha</dialogflow.version>
+        <firebase-admin.version>6.6.0</firebase-admin.version>
         <rxjava.version>2.2.0</rxjava.version>
 
     </properties>
@@ -74,12 +74,17 @@
        <dependency>
             <groupId>com.google.cloud</groupId>
             <artifactId>google-cloud-firestore</artifactId>
-            <version>0.56.0-beta</version>
+            <version>0.74.0-beta</version>
         </dependency>
         <dependency>
             <groupId>commons-codec</groupId>
             <artifactId>commons-codec</artifactId>
             <version>1.11</version>
+        </dependency>
+        <dependency>
+            <groupId>com.google.cloud</groupId>
+            <artifactId>google-cloud-logging-logback</artifactId>
+            <version>0.73.0-alpha</version>
         </dependency>
     </dependencies>
 

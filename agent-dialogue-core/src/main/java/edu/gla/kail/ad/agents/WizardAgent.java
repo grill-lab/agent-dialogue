@@ -39,7 +39,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
  */
 public class WizardAgent implements AgentInterface {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(WizardAgent.class);
+  private static final Logger logger = LoggerFactory.getLogger(WizardAgent.class);
 
   // The firestore database connection.
   private Firestore _database;
@@ -167,7 +167,7 @@ public class WizardAgent implements AgentInterface {
           throws InterruptedException, ExecutionException, TimeoutException {
     checkNotNull(interactionRequest, "The passed interaction request is null!");
 
-    LOGGER.debug("Handling request from client" + interactionRequest.getClientId());
+    logger.debug("Handling request from client" + interactionRequest.getClientId());
 
     // Create a future for our aysnc response.
     final SettableApiFuture<ResponseLog> future = SettableApiFuture.create();
@@ -188,25 +188,25 @@ public class WizardAgent implements AgentInterface {
     // Wait for a response after the current time (filter out past messages).
     Query query = conversationCollection
             .whereGreaterThan("timestamp", com.google.cloud.Timestamp.now());
-    LOGGER.debug("Waiting on listener: " + query.toString());
+    logger.debug("Waiting on listener: " + query.toString());
     // TODO(Jeff): Replace with lambda.
     ListenerRegistration registration = query.addSnapshotListener(new EventListener<QuerySnapshot>() {
       @Override
       public void onEvent(@Nullable QuerySnapshot snapshots, @Nullable FirestoreException e) {
         if (e != null) {
-          LOGGER.error("Listen failed: " + e);
+          logger.error("Listen failed: " + e);
           return;
         }
         ResponseLog response = null;
         if (snapshots != null && !snapshots.isEmpty()) {
           List<DocumentChange> documentChanges = snapshots.getDocumentChanges();
-          LOGGER.debug("Num document changes:" + documentChanges.size());
+          logger.debug("Num document changes:" + documentChanges.size());
           DocumentChange lastChange = documentChanges.get(documentChanges.size() - 1);
           Map<String, Object> changeData = lastChange.getDocument().getData();
 
           if (changeData.get("user_id").equals(interactionRequest.getUserId())) {
             // Message is from the same user, don't build a response from the same user.
-            LOGGER.info("Ignoring change from the same user:" + interactionRequest.getUserId());
+            logger.info("Ignoring change from the same user:" + interactionRequest.getUserId());
             return;
           }
           switch (lastChange.getType()) {
@@ -249,7 +249,7 @@ public class WizardAgent implements AgentInterface {
     if (messageText != null) {
       responseString = (String) messageText;
     } else {
-      LOGGER.error("Message does not contain text. Returning fallback. For response: " + responseId);
+      logger.error("Message does not contain text. Returning fallback. For response: " + responseId);
       responseString = "I'm sorry, message does not contain text.";
     }
 

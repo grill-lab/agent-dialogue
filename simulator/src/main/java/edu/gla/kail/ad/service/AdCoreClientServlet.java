@@ -16,6 +16,8 @@ import edu.gla.kail.ad.Client.InteractionType;
 import edu.gla.kail.ad.Client.OutputInteraction;
 import edu.gla.kail.ad.PropertiesSingleton;
 import edu.gla.kail.ad.SimulatorConfiguration;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -23,10 +25,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.time.Instant;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.logging.Logger;
+
 
 import static edu.gla.kail.ad.Client.ClientId.WEB_SIMULATOR;
 
@@ -37,7 +38,7 @@ import static edu.gla.kail.ad.Client.ClientId.WEB_SIMULATOR;
 @WebServlet("/ad-client-service-servlet")
 public class AdCoreClientServlet extends HttpServlet {
 
-    private static final Logger LOGGER = Logger.getLogger( AdCoreClientServlet.class.getName() );
+    private static final Logger logger = LoggerFactory.getLogger( AdCoreClientServlet.class.getName() );
 
     private static AdCoreClient _client;
 
@@ -68,7 +69,7 @@ public class AdCoreClientServlet extends HttpServlet {
             _client = new AdCoreClient(config.getGrpcCoreServerHost(),
                     config.getGrpcCoreServerPort());
         }
-        LOGGER.info(request.toString());
+        logger.info(request.toString());
         switch (request.getHeader("operation")) {
             case "sendRequest":
                 sendRequestToAgents(request, response);
@@ -81,7 +82,7 @@ public class AdCoreClientServlet extends HttpServlet {
                 json.addProperty("message", "The Operation passed in the header is not supported.");
                 response.getWriter().write(json.toString());
         }
-        LOGGER.info(response.toString());
+        logger.info(response.toString());
 
     }
 
@@ -131,7 +132,7 @@ public class AdCoreClientServlet extends HttpServlet {
             json.addProperty("responseId", interactionResponse.getResponseId());
             response.getWriter().write(json.toString());
         } catch (Exception exception) {
-            LOGGER.warning("Error: " + exception.getMessage());
+            logger.warn("Error: " + exception.getMessage());
             interactionResponse = InteractionResponse.newBuilder()
                     .setMessageStatus(ClientMessageStatus.ERROR)
                     .setErrorMessage(exception.getMessage() + "\n\n" + exception.getStackTrace())
