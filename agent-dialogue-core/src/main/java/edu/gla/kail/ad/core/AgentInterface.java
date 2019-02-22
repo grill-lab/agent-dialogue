@@ -1,16 +1,17 @@
 package edu.gla.kail.ad.core;
 
+import edu.gla.kail.ad.Client;
 import edu.gla.kail.ad.Client.InteractionRequest;
 import edu.gla.kail.ad.CoreConfiguration.ServiceProvider;
 import edu.gla.kail.ad.core.Log.ResponseLog;
+import io.grpc.stub.StreamObserver;
 
 /**
  * Agent interface is a common interface to different dialogue framework implementations.
  */
 public interface AgentInterface {
-    ServiceProvider serviceProvider = null; // Specifies the dialogue framework implementation.
+    ServiceProvider _serviceProvider = null; // Specifies the dialogue framework implementation.
     String _agentId = null; // The unique ID of a particular agent.
-
 
     ServiceProvider getServiceProvider(); // Return the service provider type of the instance.
 
@@ -26,4 +27,13 @@ public interface AgentInterface {
      * @throws Exception
      */
     ResponseLog getResponseFromAgent(InteractionRequest interactionRequest) throws Exception;
+
+    /**
+     * List responses for a request using streaming.
+     *
+     * @param interactionRequest - Initial setup to setup a streaming response pipeline.
+     * @throws Exception
+     */
+    void listResponsesFromAgent(InteractionRequest interactionRequest,
+                                StreamObserver<Client.InteractionResponse> responseObserver) throws Exception;
 }
