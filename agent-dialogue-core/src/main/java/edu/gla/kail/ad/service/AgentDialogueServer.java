@@ -109,7 +109,6 @@ public class AgentDialogueServer {
 
     /**
      * Serves the requests from clients/users.
-     * TODO(Adam): check if the class and the gRPC server are thread safe.
      */
     static class AgentDialogueService extends AgentDialogueGrpc.AgentDialogueImplBase {
         @Override
@@ -184,5 +183,63 @@ public class AgentDialogueServer {
             responseObserver.onNext(interactionResponse);
             responseObserver.onCompleted();
         }
+    }
+
+    /**
+     * Sends the request to the agents and retrieves the chosen response.
+     *
+     * @param interactionRequest - The instance of InteractionRequest passed by the
+     *         user/client to the agents.
+     * @param responseObserver - The instance, which is used to pass the instance of
+     *         InteractionResponse with the response from the agents.
+     */
+    @Override
+    public void listResponses(InteractionRequest interactionRequest,
+                              StreamObserver<InteractionResponse> responseObserver) {
+        logger.info("Processing request:" + interactionRequest.toString());
+        checkNotNull(interactionRequest.getUserId(), "The InteractionRequest that have " +
+                "been sent doesn't have userID!");
+        DialogAgentManager dialogAgentManager;
+        try {
+            dialogAgentManager = DialogAgentManagerSingleton
+                    .getDialogAgentManager(interactionRequest.getUserId());
+        } catch (Exception exception) {
+            exception.printStackTrace();
+            dialogAgentManager = null;
+        }
+        checkNotNull(dialogAgentManager, "The initialization of the DialogAgentManager " +
+                "failed!");
+        ResponseLog response;
+        InteractionResponse interactionResponse;
+        Timestamp timestamp = Timestamp.newBuilder()
+                .setSeconds(Instant.now()
+                        .getEpochSecond())
+                .setNanos(Instant.now()
+                        .getNano())
+                .build();
+        try {
+            response = dialogAgentManager.getResponse(interactionRequest);
+            interactionResponse = InteractionResponse.newBuilder()
+                    .setResponseId(response.getResponseId())
+                    .setSessionId(dialogAgentManager.get_sessionId())
+                    .setTime(timestamp)
+                    .setClientId(response.getClientId())
+                    .setUserId(interactionRequest.getUserId())
+                    .setMessageStatus(ClientMessageStatus.SUCCESSFUL)
+                    .addAllInteraction(response.getActionList().stream()
+                            .map(action -> action.getInteraction())
+                            .collect(Collectors.toList()))
+                    .build();
+        } catch (Exception exception) {
+            logger.warn("Error processing request :" + exception.getMessage() + " " + exception.getMessage());
+
+            interactionResponse = InteractionResponse.newBuilder()
+                    .setMessageStatus(InteractionResponse.ClientMessageStatus.ERROR)
+                    .setErrorMessage(exception.getMessage())
+                    .setTime(timestamp)
+                    .build();
+        }
+        responseObserver.onNext(interactionResponse);
+        responseObserver.onCompleted();
     }
 }

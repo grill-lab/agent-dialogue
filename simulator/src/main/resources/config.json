@@ -1,6 +1,6 @@
 {
-  "grpc_core_server_host": "35.184.227.176",
-  "grpc_core_server_port": 8070,
-  "log_storage_path": "file:///tmp/Logs",
+  "grpc_core_server_host": "35.225.7.76",
+  "grpc_core_server_port": 80,
+  "log_storage_path": "file:///tmp/mnt",
   "firestore_authorization_URL": "https://storage.googleapis.com/agent-dialogue-core/agentdialogue-2cd4b-firebase-adminsdk-z39zw-4d5427d1fc.json"
 }

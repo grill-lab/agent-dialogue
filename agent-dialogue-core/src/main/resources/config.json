@@ -1,6 +1,6 @@
 {
   "grpc_server_port": 8070,
-  "log_storage_path": "file:///tmp/Logs",
+  "log_storage_path": "file:///tmp/logs",
   "max_number_of_simultaneous_conversations": 20,
   "session_timeout_minutes": 10,
 

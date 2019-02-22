@@ -1,6 +1,7 @@
 package edu.gla.kail.ad.core;
 
 import com.google.protobuf.Timestamp;
+import edu.gla.kail.ad.Client;
 import edu.gla.kail.ad.Client.InteractionRequest;
 import edu.gla.kail.ad.CoreConfiguration.AgentConfig;
 import edu.gla.kail.ad.agents.DialogflowAgent;
@@ -12,6 +13,7 @@ import edu.gla.kail.ad.core.Log.ResponseLog.MessageStatus;
 import edu.gla.kail.ad.core.Log.ResponseLogOrBuilder;
 import edu.gla.kail.ad.core.Log.Turn;
 import edu.gla.kail.ad.core.Log.TurnOrBuilder;
+import io.grpc.stub.StreamObserver;
 import io.reactivex.Observable;
 import io.reactivex.schedulers.Schedulers;
 
@@ -133,6 +135,35 @@ public class DialogAgentManager {
      *         obtained by calling all the agents.
      */
     public ResponseLog getResponse(InteractionRequest interactionRequest) throws Exception {
+        RequestLog requestLog = RequestLog.newBuilder()
+                .setRequestId(generateRandomID())
+                .setTime(getCurrentTimeStamp())
+                .setClientId(interactionRequest.getClientId())
+                .setInteraction(interactionRequest.getInteraction()).build();
+
+        List<ResponseLog> responses = getResponsesFromAgents(interactionRequest);
+        ResponseLog chosenResponse = chooseOneResponse(responses);
+        TurnOrBuilder turnBuilder = Turn.newBuilder()
+                .setRequestLog(requestLog)
+                .setSessionId(_sessionId)
+                .setResponseLog(chosenResponse);
+        for (ResponseLog response : responses) {
+            ((Turn.Builder) turnBuilder).addCandidateResponse(response);
+        }
+        Turn turn = ((Turn.Builder) turnBuilder).build();
+
+        // Store the turn in the log file.
+        _logTurnManagerSingleton.addTurn(turn);
+        return chosenResponse;
+    }
+
+    /**
+     * Take the request from the service and send back chosen response.
+     * Store the turn in the logfile
+     *
+     */
+    public void listResponse(InteractionRequest interactionRequest,
+                             StreamObserver<Client.InteractionResponse> responseObserver) throws Exception {
         RequestLog requestLog = RequestLog.newBuilder()
                 .setRequestId(generateRandomID())
                 .setTime(getCurrentTimeStamp())
