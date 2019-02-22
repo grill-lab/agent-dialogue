@@ -29,11 +29,11 @@ public interface AgentInterface {
     ResponseLog getResponseFromAgent(InteractionRequest interactionRequest) throws Exception;
 
     /**
-     * List responses for a request using streaming.
+     * Create a streaming response setup for the agent. Messages will be written to the observer.
      *
      * @param interactionRequest - Initial setup to setup a streaming response pipeline.
      * @throws Exception
      */
-    void listResponsesFromAgent(InteractionRequest interactionRequest,
+    void streamingResponseFromAgent(InteractionRequest interactionRequest,
                                 StreamObserver<Client.InteractionResponse> responseObserver) throws Exception;
 }

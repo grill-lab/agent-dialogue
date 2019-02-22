@@ -14,6 +14,7 @@ import com.google.cloud.dialogflow.v2beta1.TextInput;
 import com.google.protobuf.ByteString;
 import com.google.protobuf.Timestamp;
 import com.google.protobuf.Value;
+import edu.gla.kail.ad.Client;
 import edu.gla.kail.ad.Client.InputInteraction;
 import edu.gla.kail.ad.Client.InteractionRequest;
 import edu.gla.kail.ad.Client.InteractionType;
@@ -25,6 +26,8 @@ import edu.gla.kail.ad.core.Log.ResponseLog;
 import edu.gla.kail.ad.core.Log.ResponseLog.MessageStatus;
 import edu.gla.kail.ad.core.Log.Slot;
 import edu.gla.kail.ad.core.Log.SystemAct;
+import io.grpc.stub.StreamObserver;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.io.IOException;
 import java.time.Instant;
@@ -232,5 +235,11 @@ public class DialogflowAgent implements AgentInterface {
         }
         responseLogBuilder.addAction(systemActBuilder.build());
         return responseLogBuilder.setMessageStatus(MessageStatus.SUCCESSFUL).build();
+    }
+
+    @Override
+    public void streamingResponseFromAgent(InteractionRequest interactionRequest,
+                                    StreamObserver<Client.InteractionResponse> responseObserver) throws Exception {
+        responseObserver.onError(new NotImplementedException());
     }
 }
