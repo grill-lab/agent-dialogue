@@ -126,6 +126,17 @@ public class WizardAgent implements AgentInterface {
     return addUserRequestWaitForReply(responseId, interactionRequest);
   }
 
+  @Override
+  public void listResponses(InteractionRequest interactionRequest, StreamObserver<InteractionResponse>) throws Exception {
+    String responseId = ResponseIdGenerator.generate();
+    if (userExit(interactionRequest)) {
+      Map<String, Object> data = new HashMap<>();
+      data.put("interaction_text", "Goodbye!");
+      return buildResponse(responseId, data);
+    }
+    return addUserRequestWaitForReply(responseId, interactionRequest);
+  }
+
 
   /**
    * Determine whether a request is from a wizard or not. This should be contained
