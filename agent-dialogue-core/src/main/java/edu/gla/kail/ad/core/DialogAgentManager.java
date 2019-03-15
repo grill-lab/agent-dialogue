@@ -58,6 +58,9 @@ public class DialogAgentManager {
     // Time of no response from agent, after which there is timeout on getting response from agent.
     private Integer _agentCallTimeoutSeconds = 50;
 
+    // Needed for streaming clients
+    private StreamObserver<Client.InteractionResponse> _responseObserver;
+
     /**
      * Create a unique session ID generated with startSession() method.
      */
@@ -69,6 +72,13 @@ public class DialogAgentManager {
         return _sessionId;
     }
 
+    public void set_responseObserver(StreamObserver<Client.InteractionResponse> responseObserver) {
+        _responseObserver = responseObserver;
+    }
+
+    public StreamObserver<Client.InteractionResponse> get_responseObserver(){
+        return _responseObserver;
+    }
     /**
      * Create a unique sessionId.
      */
@@ -78,10 +88,10 @@ public class DialogAgentManager {
     }
 
     /**
-     * Called before the end of the session to store and configuration of the DialogAgentManager ??
+     * Called before the end of the session to store and configuration of the DialogAgentManager
      */
     public void endSession() {
-        // TODO(Adam): Implement
+        _responseObserver.onCompleted();
     }
 
     /**
@@ -158,32 +168,21 @@ public class DialogAgentManager {
     }
 
     /**
-     * Take the request from the service and send back chosen response.
-     * Store the turn in the logfile
+     * Take a request from the service and create a streaming setup.
      *
      */
-    public void listResponse(InteractionRequest interactionRequest,
-                             StreamObserver<Client.InteractionResponse> responseObserver) throws Exception {
-        RequestLog requestLog = RequestLog.newBuilder()
-                .setRequestId(generateRandomID())
-                .setTime(getCurrentTimeStamp())
-                .setClientId(interactionRequest.getClientId())
-                .setInteraction(interactionRequest.getInteraction()).build();
-
-        List<ResponseLog> responses = getResponsesFromAgents(interactionRequest);
-        ResponseLog chosenResponse = chooseOneResponse(responses);
-        TurnOrBuilder turnBuilder = Turn.newBuilder()
-                .setRequestLog(requestLog)
-                .setSessionId(_sessionId)
-                .setResponseLog(chosenResponse);
-        for (ResponseLog response : responses) {
-            ((Turn.Builder) turnBuilder).addCandidateResponse(response);
+    public void listResponse(InteractionRequest interactionRequest) throws Exception {
+        if (checkNotNull(_agents, "Agents are not set up! Use the method" +
+                " setUpAgents() first.").isEmpty()) {
+            throw new IllegalArgumentException("The list of agents is empty!");
         }
-        Turn turn = ((Turn.Builder) turnBuilder).build();
+        ArrayList<AgentInterface> agents = (ArrayList<AgentInterface>) _agents.stream().filter
+                (agent -> interactionRequest.getChosenAgentsList().contains(agent.getAgentId()))
+                .collect(Collectors.toList());
 
-        // Store the turn in the log file.
-        _logTurnManagerSingleton.addTurn(turn);
-        return chosenResponse;
+        for (AgentInterface agent : agents) {
+            agent.streamingResponseFromAgent(interactionRequest, _responseObserver);
+        }
     }
 
     /**
