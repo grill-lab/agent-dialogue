@@ -27,6 +27,7 @@ import java.util.*;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
+import java.util.stream.Collectors;
 
 import io.grpc.stub.StreamObserver;
 import org.slf4j.Logger;
@@ -129,14 +130,37 @@ public class WizardAgent implements AgentInterface {
   }
 
   @Override
-  public void listResponses(InteractionRequest interactionRequest, StreamObserver<Client.InteractionResponse>) throws Exception {
+  public void streamingResponseFromAgent(InteractionRequest interactionRequest, StreamObserver<Client.InteractionResponse> observer)
+          throws Exception {
     String responseId = ResponseIdGenerator.generate();
-    if (userExit(interactionRequest)) {
-      Map<String, Object> data = new HashMap<>();
-      data.put("interaction_text", "Goodbye!");
-      return buildResponse(responseId, data);
+    // TODO: Replace the fixed response with a listener.
+    Map<String, Object> data = new HashMap<>();
+    data.put("interaction_text", "Goodbye!");
+    ResponseLog response =  buildResponse(responseId, data);
+    Client.InteractionResponse interactionResponse;
+    Timestamp timestamp = Timestamp.newBuilder()
+            .setSeconds(Instant.now()
+                    .getEpochSecond())
+            .setNanos(Instant.now()
+                    .getNano())
+            .build();
+    try {
+      interactionResponse = Client.InteractionResponse.newBuilder()
+              .setResponseId(response.getResponseId())
+              .setSessionId("blah")
+              .setTime(timestamp)
+              .setClientId(response.getClientId())
+              .setUserId(interactionRequest.getUserId())
+              .setMessageStatus(Client.InteractionResponse.ClientMessageStatus.SUCCESSFUL)
+              .addAllInteraction(response.getActionList().stream()
+                      .map(action -> action.getInteraction())
+                      .collect(Collectors.toList()))
+              .build();
+      observer.onNext(interactionResponse);
+    } catch (Exception exception) {
+      logger.warn("Error processing request :" + exception.getMessage() + " " + exception.getMessage());
+      observer.onError(exception);
     }
-    return addUserRequestWaitForReply(responseId, interactionRequest);
   }
 
 
