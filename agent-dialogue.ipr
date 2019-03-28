@@ -29,8 +29,12 @@
     <profile version="1.0">
       <option name="myName" value="Project Default" />
       <inspection_tool class="AntDuplicateImportedTargetsInspection" enabled="true" level="INFO" enabled_by_default="true" />
+      <inspection_tool class="TsLint" enabled="true" level="WARNING" enabled_by_default="true" />
     </profile>
     <version value="1.0" />
+  </component>
+  <component name="JavaScriptSettings">
+    <option name="languageLevel" value="JSX" />
   </component>
   <component name="MavenProjectsManager">
     <option name="originalFiles">
@@ -47,6 +51,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/agent-dialogue-core/agent-dialogue-core.iml" filepath="$PROJECT_DIR$/agent-dialogue-core/agent-dialogue-core.iml" />
+      <module fileurl="file://$PROJECT_DIR$/agent-dialogue-ui/agent-dialogue-ui.iml" filepath="$PROJECT_DIR$/agent-dialogue-ui/agent-dialogue-ui.iml" />
       <module fileurl="file://$PROJECT_DIR$/log-replayer/log-replayer.iml" filepath="$PROJECT_DIR$/log-replayer/log-replayer.iml" />
       <module fileurl="file://$PROJECT_DIR$/simulator/simulator.iml" filepath="$PROJECT_DIR$/simulator/simulator.iml" />
     </modules>
@@ -65,6 +70,9 @@
         </serverdata>
       </paths>
     </serverData>
+  </component>
+  <component name="TypeScriptCompiler">
+    <option name="recompileOnChanges" value="true" />
   </component>
   <component name="VcsDirectoryMappings">
     <mapping directory="$PROJECT_DIR$" vcs="Git" />
