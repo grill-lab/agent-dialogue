@@ -4,11 +4,13 @@
   "homepage": "./",
   "private": true,
   "dependencies": {
-    "google-protobuf": "^3.7.1",
     "@types/google-protobuf": "^3.2.7",
+    "google-protobuf": "^3.7.1",
     "grpc-web": "^1.0.4",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
+    "semantic-ui-css": "^2.4.1",
+    "semantic-ui-react": "^0.86.0",
     "typescript": "3.3.4000"
   },
   "scripts": {

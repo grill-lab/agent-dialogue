@@ -14,7 +14,7 @@
 
 .App-header {
   background-color: var(--header-top);
-  height: 6vw;
+  height: 10vw;
   padding: 0.7vw 1.4vw;
 }
 
@@ -31,3 +31,13 @@
   font-family: Courier New, serif;
   text-align: center;
 }
+
+.ui.inverted.orange.menu a:first-child {
+  margin-left: auto;
+}
+
+.ui.inverted.orange.menu a:last-child {
+  margin-right: auto;
+}
+
+@defaultBorderRadius: 0em;
