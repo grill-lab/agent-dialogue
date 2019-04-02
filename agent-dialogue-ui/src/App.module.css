@@ -8,36 +8,44 @@
   --button-colour: white;
 }
 
-.App {
+.app {
   text-align: center;
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+  position: absolute;
+  display: flex;
+  flex-direction: column;
 }
 
-.App-header {
+.appHeader {
   background-color: var(--header-top);
   height: 10vw;
   padding: 0.7vw 1.4vw;
 }
 
-.App-logo {
+.appLogo {
   margin-left: auto;
   margin-right: auto;
   float: left;
   height: 6vw;
 }
 
-.App-title {
+.appTitle {
   font-size: 3vw;
   min-font-size: 0.6em;
   font-family: Courier New, serif;
   text-align: center;
 }
 
-.ui.inverted.orange.menu a:first-child {
-  margin-left: auto;
+.mainTab {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
 }
 
-.ui.inverted.orange.menu a:last-child {
-  margin-right: auto;
+.mainTabPane {
+  flex: 1 1 auto;
+  /*display: flex;*/
+  /*flex-direction: column;*/
 }
-
-@defaultBorderRadius: 0em;

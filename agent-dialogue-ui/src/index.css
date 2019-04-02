@@ -12,3 +12,12 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+div.ui.inverted.orange.menu a:first-child {
+  margin-left: auto;
+}
+
+div.ui.inverted.orange.menu a:last-child {
+  margin-right: auto;
+}
+
