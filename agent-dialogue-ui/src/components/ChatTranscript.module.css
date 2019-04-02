@@ -1,0 +1,65 @@
+.root {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.transcript {
+  flex: 1 1 auto;
+  position: relative;
+}
+
+.scrollable {
+  overflow-y: scroll;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+}
+
+.entry {
+  flex: 0 0 auto;
+}
+
+#entry {
+  width: 100%;
+}
+
+.row {
+  width: 100%;
+  margin-bottom: .25em;
+  margin-top: .25em;
+  padding-left: 1em;
+  padding-right: 1em;
+}
+
+.ourRow {
+  text-align: right;
+}
+
+.theirRow {
+  text-align: left;
+}
+
+.ourCell {
+  text-align: left;
+  background-color: #0000dd;
+}
+
+.theirCell {
+  text-align: left;
+  background-color: #888888;
+}
+
+.cell {
+  color: white;
+  padding: 1em;
+  border-radius: 1em;
+  max-width: 70%;
+  display: inline-block;
+}
+
+:global(#root) i.enterButton {
+  background-color: #0000dd!important;
+}
