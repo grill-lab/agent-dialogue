@@ -44,8 +44,8 @@
   flex-direction: column;
 }
 
-.mainTabPane {
+:global(#root) .mainTabPane {
   flex: 1 1 auto;
-  /*display: flex;*/
-  /*flex-direction: column;*/
+  padding-top: 0;
+  padding-bottom: 0;
 }
