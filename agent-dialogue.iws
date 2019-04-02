@@ -2,17 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="2a47167e-5ceb-4a84-bf41-4ebf4e3a2960" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/agent-dialogue-ui/src/common/util.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/agent-dialogue-ui/src/components/ChatTranscript.module.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/agent-dialogue-ui/src/components/ChatTranscript.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/agent-dialogue-ui/src/components/DialogueModel.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/agent-dialogue-ui/src/components/MessageModel.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/agent-dialogue-ui/src/woz/WoZPanel.module.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/agent-dialogue-ui/src/App.css" beforeDir="false" afterPath="$PROJECT_DIR$/agent-dialogue-ui/src/App.module.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/agent-dialogue-ui/src/App.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/agent-dialogue-ui/src/App.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/agent-dialogue-ui/src/index.css" beforeDir="false" afterPath="$PROJECT_DIR$/agent-dialogue-ui/src/index.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/agent-dialogue-ui/src/App.module.css" beforeDir="false" afterPath="$PROJECT_DIR$/agent-dialogue-ui/src/App.module.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/agent-dialogue-ui/src/components/ChatTranscript.module.css" beforeDir="false" afterPath="$PROJECT_DIR$/agent-dialogue-ui/src/components/ChatTranscript.module.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/agent-dialogue-ui/src/components/DialogueModel.ts" beforeDir="false" afterPath="$PROJECT_DIR$/agent-dialogue-ui/src/components/DialogueModel.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/agent-dialogue-ui/src/home/HomePanel.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/agent-dialogue-ui/src/home/HomePanel.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/agent-dialogue-ui/src/woz/WoZPanel.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/agent-dialogue-ui/src/woz/WoZPanel.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/agent-dialogue.ipr" beforeDir="false" afterPath="$PROJECT_DIR$/agent-dialogue.ipr" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/agent-dialogue.iws" beforeDir="false" afterPath="$PROJECT_DIR$/agent-dialogue.iws" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
@@ -63,8 +57,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/agent-dialogue-ui/src/components/ChatTranscript.module.css">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="360">
-              <caret line="54" column="7" lean-forward="true" selection-start-line="54" selection-start-column="7" selection-end-line="54" selection-end-column="7" />
+            <state relative-caret-position="945">
+              <caret line="63" column="14" selection-start-line="63" selection-end-line="63" selection-end-column="14" />
             </state>
           </provider>
         </entry>
@@ -81,17 +75,26 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/agent-dialogue-ui/src/components/DialogueModel.ts">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="165">
-              <caret line="11" column="18" selection-start-line="11" selection-start-column="18" selection-end-line="11" selection-end-column="18" />
+            <state relative-caret-position="210">
+              <caret line="15" column="7" selection-start-line="15" selection-start-column="7" selection-end-line="15" selection-end-column="7" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/agent-dialogue-ui/src/woz/WoZPanel.tsx">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="1185">
+              <caret line="79" lean-forward="true" selection-start-line="11" selection-end-line="79" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/agent-dialogue-ui/src/woz/WoZPanel.tsx">
+        <entry file="file://$PROJECT_DIR$/agent-dialogue-ui/src/home/HomePanel.tsx">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="764">
-              <caret line="90" column="25" selection-start-line="90" selection-start-column="25" selection-end-line="90" selection-end-column="25" />
+            <state relative-caret-position="795">
+              <caret line="53" column="51" selection-start-line="53" selection-start-column="51" selection-end-line="53" selection-end-column="51" />
             </state>
           </provider>
         </entry>
@@ -108,17 +111,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/agent-dialogue-ui/src/App.module.css">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="240">
-              <caret line="16" column="16" lean-forward="true" selection-start-line="16" selection-start-column="16" selection-end-line="16" selection-end-column="16" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/agent-dialogue-ui/src/index.css">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="345">
-              <caret line="23" lean-forward="true" selection-start-line="23" selection-end-line="23" />
+            <state relative-caret-position="760">
+              <caret line="51" lean-forward="true" selection-start-line="51" selection-end-line="51" />
             </state>
           </provider>
         </entry>
@@ -138,6 +132,7 @@
       <find>, time: new Date()</find>
       <find>&quot;us&quot;</find>
       <find>&quot;them&quot;</find>
+      <find>'</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -154,20 +149,20 @@
         <option value="$PROJECT_DIR$/agent-dialogue-ui/src/generated/service_grpc_web_pb.js" />
         <option value="$PROJECT_DIR$/agent-dialogue-ui/src/readme_proto.txt" />
         <option value="$PROJECT_DIR$/agent-dialogue-ui/src/index.tsx" />
-        <option value="$PROJECT_DIR$/agent-dialogue-ui/src/home/HomePanel.tsx" />
         <option value="$PROJECT_DIR$/agent-dialogue-ui/src/ratings/RatingsPanel.tsx" />
-        <option value="$PROJECT_DIR$/agent-dialogue-ui/src/components/DialogueModel.ts" />
         <option value="$PROJECT_DIR$/agent-dialogue-ui/src/App.css" />
         <option value="$PROJECT_DIR$/agent-dialogue-ui/src/index.css" />
         <option value="$PROJECT_DIR$/agent-dialogue-ui/src/App.tsx" />
-        <option value="$PROJECT_DIR$/agent-dialogue-ui/src/App.module.css" />
         <option value="$PROJECT_DIR$/agent-dialogue-ui/src/woz/WoZPanel.module.css" />
         <option value="$PROJECT_DIR$/agent-dialogue-ui/src/components/util.ts" />
         <option value="$PROJECT_DIR$/agent-dialogue-ui/src/common/util.ts" />
         <option value="$PROJECT_DIR$/agent-dialogue-ui/src/components/MessageModel.ts" />
-        <option value="$PROJECT_DIR$/agent-dialogue-ui/src/components/ChatTranscript.module.css" />
         <option value="$PROJECT_DIR$/agent-dialogue-ui/src/components/ChatTranscript.tsx" />
+        <option value="$PROJECT_DIR$/agent-dialogue-ui/src/components/ChatTranscript.module.css" />
+        <option value="$PROJECT_DIR$/agent-dialogue-ui/src/App.module.css" />
+        <option value="$PROJECT_DIR$/agent-dialogue-ui/src/components/DialogueModel.ts" />
         <option value="$PROJECT_DIR$/agent-dialogue-ui/src/woz/WoZPanel.tsx" />
+        <option value="$PROJECT_DIR$/agent-dialogue-ui/src/home/HomePanel.tsx" />
       </list>
     </option>
   </component>
@@ -457,12 +452,12 @@
       <option name="presentableId" value="Default" />
       <updated>1553794738138</updated>
       <workItem from="1553794773542" duration="10771000" />
-      <workItem from="1554227173917" duration="14190000" />
+      <workItem from="1554227173917" duration="16264000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="24961000" />
+    <option name="totallyTimeSpent" value="27035000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="1033" y="33" width="1672" height="1587" extended-state="0" />
@@ -715,13 +710,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/agent-dialogue-ui/src/home/HomePanel.tsx">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="105">
-          <caret line="7" lean-forward="true" selection-start-line="7" selection-end-line="7" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/agent-dialogue-ui/src/index.css">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="345">
@@ -733,27 +721,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="285">
           <caret line="19" column="4" selection-start-line="19" selection-start-column="4" selection-end-line="19" selection-end-column="4" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/agent-dialogue-ui/src/App.module.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="240">
-          <caret line="16" column="16" lean-forward="true" selection-start-line="16" selection-start-column="16" selection-end-line="16" selection-end-column="16" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/agent-dialogue-ui/src/woz/WoZPanel.module.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="45">
-          <caret line="3" column="1" lean-forward="true" selection-start-line="3" selection-start-column="1" selection-end-line="3" selection-end-column="1" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/agent-dialogue-ui/src/components/DialogueModel.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="165">
-          <caret line="11" column="18" selection-start-line="11" selection-start-column="18" selection-end-line="11" selection-end-column="18" />
         </state>
       </provider>
     </entry>
@@ -771,10 +738,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/agent-dialogue-ui/src/components/ChatTranscript.module.css">
+    <entry file="file://$PROJECT_DIR$/agent-dialogue-ui/src/woz/WoZPanel.module.css">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="360">
-          <caret line="54" column="7" lean-forward="true" selection-start-line="54" selection-start-column="7" selection-end-line="54" selection-end-column="7" />
+        <state relative-caret-position="45">
+          <caret line="3" column="1" lean-forward="true" selection-start-line="3" selection-start-column="1" selection-end-line="3" selection-end-column="1" />
         </state>
       </provider>
     </entry>
@@ -785,10 +752,38 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/agent-dialogue-ui/src/components/ChatTranscript.module.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="945">
+          <caret line="63" column="14" selection-start-line="63" selection-end-line="63" selection-end-column="14" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/agent-dialogue-ui/src/App.module.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="760">
+          <caret line="51" lean-forward="true" selection-start-line="51" selection-end-line="51" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/agent-dialogue-ui/src/components/DialogueModel.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="210">
+          <caret line="15" column="7" selection-start-line="15" selection-start-column="7" selection-end-line="15" selection-end-column="7" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/agent-dialogue-ui/src/woz/WoZPanel.tsx">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="764">
-          <caret line="90" column="25" selection-start-line="90" selection-start-column="25" selection-end-line="90" selection-end-column="25" />
+        <state relative-caret-position="1185">
+          <caret line="79" lean-forward="true" selection-start-line="11" selection-end-line="79" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/agent-dialogue-ui/src/home/HomePanel.tsx">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="795">
+          <caret line="53" column="51" selection-start-line="53" selection-start-column="51" selection-end-line="53" selection-end-column="51" />
         </state>
       </provider>
     </entry>
