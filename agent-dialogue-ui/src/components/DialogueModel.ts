@@ -1,7 +1,8 @@
-import {IMessage, Message} from "./MessageModel"
+import {IMessage, IMessageArgument, Message} from "./MessageModel"
 
 export interface IDialogue {
   messages: IMessage[]
+  // append(message: IMessageArgument): void
 }
 
 export class Dialogue implements IDialogue {
@@ -9,7 +10,13 @@ export class Dialogue implements IDialogue {
     Object.assign(this, model)
   }
 
+  // noinspection JSUnusedGlobalSymbols
   public messages!: IMessage[]
+
+  // noinspection JSUnusedGlobalSymbols
+  public append = (message: IMessageArgument) => {
+    this.messages.push(new Message(message))
+  }
 }
 
 export const US = "us"
@@ -17,9 +24,11 @@ export const THEM = "them"
 
 // noinspection SpellCheckingInspection
 export const sampleDialogue = () => new Dialogue({messages: [
+    new Message({text: "Begin"}),
     new Message({speaker: "them", text: "Hello"}),
     new Message({speaker: US, text: "How are you"}),
     new Message({speaker: THEM, text: "I'm well"}),
+    new Message({text: "More chat"}),
     new Message({speaker: US,
       text: "Your bones don't break, mine do. That's clear. Your cells "
             + "react to bacteria and viruses differently than mine. "

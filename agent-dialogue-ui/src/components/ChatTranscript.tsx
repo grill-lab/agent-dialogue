@@ -39,10 +39,16 @@ class ChatTranscript
   public render(): React.ReactNode {
 
     const rows = this.props.dialogue.messages.map((message, index) => {
-      const cellClass = (message.speaker === this.props.us
-                            ? css.ourCell : css.theirCell)
-      const rowClass = (message.speaker === this.props.us
-                         ? css.ourRow : css.theirRow)
+      const cellClass = message.speaker === undefined
+      ? css.systemCell
+      : message.speaker === this.props.us
+        ? css.ourCell
+        : css.theirCell
+      const rowClass = message.speaker == undefined
+      ? css.systemRow
+      : message.speaker === this.props.us
+        ? css.ourRow
+        : css.theirRow
       return <div className={css.row + " " + rowClass} key={index}>
         <div className={css.cell + " " + cellClass}>{message.text}</div>
       </div>
