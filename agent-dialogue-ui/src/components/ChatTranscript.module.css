@@ -35,12 +35,28 @@
   padding-right: 1em;
 }
 
+.cell {
+  color: white;
+  padding: 1em;
+  border-radius: 1em;
+  max-width: 70%;
+  display: inline-block;
+}
+
 .ourRow {
   text-align: right;
 }
 
 .theirRow {
   text-align: left;
+}
+
+.systemRow {
+  text-align: center;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: center;
 }
 
 .ourCell {
@@ -53,12 +69,20 @@
   background-color: #888888;
 }
 
-.cell {
-  color: white;
-  padding: 1em;
-  border-radius: 1em;
-  max-width: 70%;
+.systemCell {
+  text-align: center;
+  color: #888888;
+  font-size: smaller;
+  flex: 0 0 auto;
+}
+
+.systemRow:before,
+.systemRow:after {
+  background-color: #aaaaaa;
+  content: "";
   display: inline-block;
+  height: 1px;
+  flex: 0.5 0.5 auto;
 }
 
 :global(#root) i.enterButton {

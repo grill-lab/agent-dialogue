@@ -2,11 +2,17 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="2a47167e-5ceb-4a84-bf41-4ebf4e3a2960" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/agent-dialogue-ui/src/App.module.css" beforeDir="false" afterPath="$PROJECT_DIR$/agent-dialogue-ui/src/App.module.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/agent-dialogue-ui/src/common/ADConnection.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/agent-dialogue-ui/src/common/util.ts" beforeDir="false" afterPath="$PROJECT_DIR$/agent-dialogue-ui/src/common/util.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/agent-dialogue-ui/src/components/ChatTranscript.module.css" beforeDir="false" afterPath="$PROJECT_DIR$/agent-dialogue-ui/src/components/ChatTranscript.module.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/agent-dialogue-ui/src/components/ChatTranscript.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/agent-dialogue-ui/src/components/ChatTranscript.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/agent-dialogue-ui/src/components/DialogueModel.ts" beforeDir="false" afterPath="$PROJECT_DIR$/agent-dialogue-ui/src/components/DialogueModel.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/agent-dialogue-ui/src/home/HomePanel.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/agent-dialogue-ui/src/home/HomePanel.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/agent-dialogue-ui/src/woz/WoZPanel.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/agent-dialogue-ui/src/woz/WoZPanel.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/agent-dialogue-ui/src/components/MessageModel.ts" beforeDir="false" afterPath="$PROJECT_DIR$/agent-dialogue-ui/src/components/MessageModel.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/agent-dialogue-ui/src/generated/client_pb.js" beforeDir="false" afterPath="$PROJECT_DIR$/agent-dialogue-ui/src/generated/client_pb.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/agent-dialogue-ui/src/generated/service_grpc_web_pb.js" beforeDir="false" afterPath="$PROJECT_DIR$/agent-dialogue-ui/src/generated/service_grpc_web_pb.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/agent-dialogue-ui/src/generated/service_pb.js" beforeDir="false" afterPath="$PROJECT_DIR$/agent-dialogue-ui/src/generated/service_pb.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/agent-dialogue-ui/src/readme_proto.txt" beforeDir="false" afterPath="$PROJECT_DIR$/agent-dialogue-ui/src/readme_proto.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/agent-dialogue.ipr" beforeDir="false" afterPath="$PROJECT_DIR$/agent-dialogue.ipr" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/agent-dialogue.iws" beforeDir="false" afterPath="$PROJECT_DIR$/agent-dialogue.iws" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
@@ -27,11 +33,20 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/agent-dialogue-ui/src/App.tsx">
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/agent-dialogue-ui/src/common/ADConnection.ts">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="285">
-              <caret line="19" column="4" selection-start-line="19" selection-start-column="4" selection-end-line="19" selection-end-column="4" />
+            <state relative-caret-position="1124">
+              <caret line="179" column="28" selection-start-line="179" selection-start-column="28" selection-end-line="179" selection-end-column="28" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/agent-dialogue-ui/node_modules/typescript/lib/lib.es5.d.ts">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="403">
+              <caret line="1225" column="4" selection-start-line="1225" selection-start-column="4" selection-end-line="1225" selection-end-column="4" />
             </state>
           </provider>
         </entry>
@@ -39,8 +54,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/agent-dialogue-ui/src/components/ChatTranscript.tsx">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2025">
-              <caret line="135" lean-forward="true" selection-start-line="135" selection-end-line="135" />
+            <state relative-caret-position="515">
+              <caret line="39" lean-forward="true" selection-start-line="39" selection-end-line="39" />
             </state>
           </provider>
         </entry>
@@ -48,26 +63,26 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/agent-dialogue-ui/src/common/util.ts">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="285">
-              <caret line="20" column="21" selection-start-line="20" selection-start-column="21" selection-end-line="20" selection-end-column="21" />
+            <state relative-caret-position="495">
+              <caret line="33" selection-start-line="33" selection-end-line="33" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/agent-dialogue-ui/src/components/ChatTranscript.module.css">
+        <entry file="file://$PROJECT_DIR$/agent-dialogue-ui/src/generated/service_grpc_web_pb.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="945">
-              <caret line="63" column="14" selection-start-line="63" selection-end-line="63" selection-end-column="14" />
+            <state relative-caret-position="2160">
+              <caret line="144" column="6" selection-start-line="144" selection-start-column="6" selection-end-line="144" selection-end-column="6" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/agent-dialogue-ui/src/components/MessageModel.ts">
+        <entry file="file://$PROJECT_DIR$/agent-dialogue-ui/node_modules/grpc-web/index.d.ts">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="88">
-              <caret line="8" column="28" selection-start-line="8" selection-start-column="28" selection-end-line="8" selection-end-column="28" />
+            <state relative-caret-position="300">
+              <caret line="20" column="4" selection-start-line="20" selection-start-column="4" selection-end-line="20" selection-end-column="4" />
             </state>
           </provider>
         </entry>
@@ -75,44 +90,35 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/agent-dialogue-ui/src/components/DialogueModel.ts">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="210">
-              <caret line="15" column="7" selection-start-line="15" selection-start-column="7" selection-end-line="15" selection-end-column="7" />
+            <state relative-caret-position="135">
+              <caret line="9" column="13" selection-start-line="9" selection-end-line="10" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/agent-dialogue-ui/src/woz/WoZPanel.tsx">
+        <entry file="file://$PROJECT_DIR$/agent-dialogue-ui/src/generated/service_pb.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1185">
-              <caret line="79" lean-forward="true" selection-start-line="11" selection-end-line="79" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/agent-dialogue-ui/src/home/HomePanel.tsx">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="795">
-              <caret line="53" column="51" selection-start-line="53" selection-start-column="51" selection-end-line="53" selection-end-column="51" />
+            <state relative-caret-position="360">
+              <caret line="24" column="20" selection-start-line="24" selection-start-column="20" selection-end-line="24" selection-end-column="20" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/agent-dialogue-ui/src/woz/WoZPanel.module.css">
+        <entry file="file://$PROJECT_DIR$/agent-dialogue-ui/src/generated/ServiceServiceClientPb.ts">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="45">
-              <caret line="3" column="1" lean-forward="true" selection-start-line="3" selection-start-column="1" selection-end-line="3" selection-end-column="1" />
+            <state relative-caret-position="664">
+              <caret line="73" column="33" selection-start-line="73" selection-start-column="33" selection-end-line="73" selection-end-column="33" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/agent-dialogue-ui/src/App.module.css">
+        <entry file="file://$PROJECT_DIR$/agent-dialogue-ui/node_modules/@types/google-protobuf/google/protobuf/descriptor_pb.d.ts">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="760">
-              <caret line="51" lean-forward="true" selection-start-line="51" selection-end-line="51" />
+            <state relative-caret-position="407">
+              <caret line="525" column="4" selection-start-line="525" selection-start-column="4" selection-end-line="525" selection-end-column="4" />
             </state>
           </provider>
         </entry>
@@ -133,6 +139,7 @@
       <find>&quot;us&quot;</find>
       <find>&quot;them&quot;</find>
       <find>'</find>
+      <find>InteractionType</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -144,7 +151,6 @@
         <option value="$PROJECT_DIR$/agent-dialogue-ui/tslint.json" />
         <option value="$PROJECT_DIR$/agent-dialogue-ui/tsconfig.json" />
         <option value="$PROJECT_DIR$/agent-dialogue-ui/package.json" />
-        <option value="$PROJECT_DIR$/agent-dialogue-ui/src/generated/client_pb.js" />
         <option value="$PROJECT_DIR$/agent-dialogue-ui/src/generated/service_pb.js" />
         <option value="$PROJECT_DIR$/agent-dialogue-ui/src/generated/service_grpc_web_pb.js" />
         <option value="$PROJECT_DIR$/agent-dialogue-ui/src/readme_proto.txt" />
@@ -155,14 +161,16 @@
         <option value="$PROJECT_DIR$/agent-dialogue-ui/src/App.tsx" />
         <option value="$PROJECT_DIR$/agent-dialogue-ui/src/woz/WoZPanel.module.css" />
         <option value="$PROJECT_DIR$/agent-dialogue-ui/src/components/util.ts" />
-        <option value="$PROJECT_DIR$/agent-dialogue-ui/src/common/util.ts" />
-        <option value="$PROJECT_DIR$/agent-dialogue-ui/src/components/MessageModel.ts" />
-        <option value="$PROJECT_DIR$/agent-dialogue-ui/src/components/ChatTranscript.tsx" />
-        <option value="$PROJECT_DIR$/agent-dialogue-ui/src/components/ChatTranscript.module.css" />
         <option value="$PROJECT_DIR$/agent-dialogue-ui/src/App.module.css" />
-        <option value="$PROJECT_DIR$/agent-dialogue-ui/src/components/DialogueModel.ts" />
         <option value="$PROJECT_DIR$/agent-dialogue-ui/src/woz/WoZPanel.tsx" />
         <option value="$PROJECT_DIR$/agent-dialogue-ui/src/home/HomePanel.tsx" />
+        <option value="$PROJECT_DIR$/agent-dialogue-ui/src/components/MessageModel.ts" />
+        <option value="$PROJECT_DIR$/agent-dialogue-ui/src/components/DialogueModel.ts" />
+        <option value="$PROJECT_DIR$/agent-dialogue-ui/src/components/ChatTranscript.tsx" />
+        <option value="$PROJECT_DIR$/agent-dialogue-ui/src/components/ChatTranscript.module.css" />
+        <option value="$PROJECT_DIR$/agent-dialogue-ui/src/generated/client_pb.js" />
+        <option value="$PROJECT_DIR$/agent-dialogue-ui/src/common/util.ts" />
+        <option value="$PROJECT_DIR$/agent-dialogue-ui/src/common/ADConnection.ts" />
       </list>
     </option>
   </component>
@@ -190,9 +198,9 @@
   </component>
   <component name="ProjectFrameBounds">
     <option name="x" value="1033" />
-    <option name="y" value="33" />
+    <option name="y" value="76" />
     <option name="width" value="1672" />
-    <option name="height" value="1587" />
+    <option name="height" value="1544" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
     <ConfirmationsSetting value="2" id="Add" />
@@ -203,12 +211,68 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="PackagesPane" />
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
             <path>
               <item name="agent-dialogue" type="b2602c69:ProjectViewProjectNode" />
               <item name="agent-dialogue-ui" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="agent-dialogue" type="b2602c69:ProjectViewProjectNode" />
+              <item name="agent-dialogue-ui" type="462c0819:PsiDirectoryNode" />
+              <item name="node_modules" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="agent-dialogue" type="b2602c69:ProjectViewProjectNode" />
+              <item name="agent-dialogue-ui" type="462c0819:PsiDirectoryNode" />
+              <item name="node_modules" type="462c0819:PsiDirectoryNode" />
+              <item name="@types" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="agent-dialogue" type="b2602c69:ProjectViewProjectNode" />
+              <item name="agent-dialogue-ui" type="462c0819:PsiDirectoryNode" />
+              <item name="node_modules" type="462c0819:PsiDirectoryNode" />
+              <item name="@types" type="462c0819:PsiDirectoryNode" />
+              <item name="google-protobuf" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="agent-dialogue" type="b2602c69:ProjectViewProjectNode" />
+              <item name="agent-dialogue-ui" type="462c0819:PsiDirectoryNode" />
+              <item name="node_modules" type="462c0819:PsiDirectoryNode" />
+              <item name="@types" type="462c0819:PsiDirectoryNode" />
+              <item name="google-protobuf" type="462c0819:PsiDirectoryNode" />
+              <item name="google" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="agent-dialogue" type="b2602c69:ProjectViewProjectNode" />
+              <item name="agent-dialogue-ui" type="462c0819:PsiDirectoryNode" />
+              <item name="node_modules" type="462c0819:PsiDirectoryNode" />
+              <item name="@types" type="462c0819:PsiDirectoryNode" />
+              <item name="google-protobuf" type="462c0819:PsiDirectoryNode" />
+              <item name="google" type="462c0819:PsiDirectoryNode" />
+              <item name="protobuf" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="agent-dialogue" type="b2602c69:ProjectViewProjectNode" />
+              <item name="agent-dialogue-ui" type="462c0819:PsiDirectoryNode" />
+              <item name="node_modules" type="462c0819:PsiDirectoryNode" />
+              <item name="grpc-web" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="agent-dialogue" type="b2602c69:ProjectViewProjectNode" />
+              <item name="agent-dialogue-ui" type="462c0819:PsiDirectoryNode" />
+              <item name="node_modules" type="462c0819:PsiDirectoryNode" />
+              <item name="typescript" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="agent-dialogue" type="b2602c69:ProjectViewProjectNode" />
+              <item name="agent-dialogue-ui" type="462c0819:PsiDirectoryNode" />
+              <item name="node_modules" type="462c0819:PsiDirectoryNode" />
+              <item name="typescript" type="462c0819:PsiDirectoryNode" />
+              <item name="lib" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="agent-dialogue" type="b2602c69:ProjectViewProjectNode" />
@@ -329,8 +393,6 @@
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
-      <pane id="PackagesPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -355,11 +417,12 @@
     <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
-    <property name="settings.editor.selected.configurable" value="JavaScript.Libraries" />
+    <property name="settings.editor.selected.configurable" value="settings.javascript.linters.tslint" />
     <property name="ts.external.directory.path" value="$PROJECT_DIR$/agent-dialogue-ui/node_modules/typescript/lib" />
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/agent-dialogue-ui/src" />
       <recent name="$PROJECT_DIR$/agent-dialogue-ui/src/common" />
     </key>
   </component>
@@ -452,18 +515,19 @@
       <option name="presentableId" value="Default" />
       <updated>1553794738138</updated>
       <workItem from="1553794773542" duration="10771000" />
-      <workItem from="1554227173917" duration="16264000" />
+      <workItem from="1554227173917" duration="16529000" />
+      <workItem from="1554320926677" duration="10586000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="27035000" />
+    <option name="totallyTimeSpent" value="37886000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="1033" y="33" width="1672" height="1587" extended-state="0" />
+    <frame x="1033" y="76" width="1672" height="1544" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.8257165" visible="true" weight="0.24846625" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.82532054" visible="true" weight="0.24846625" />
       <window_info id="Structure" order="1" weight="0.25" />
       <window_info id="Captures" order="2" weight="0.25" />
       <window_info id="Image Layers" order="3" />
@@ -471,11 +535,11 @@
       <window_info id="Favorites" order="5" side_tool="true" />
       <window_info id="UI Designer" order="6" />
       <window_info id="Designer" order="7" />
-      <window_info id="npm" order="8" sideWeight="0.1742835" side_tool="true" visible="true" weight="0.24846625" />
+      <window_info id="npm" order="8" sideWeight="0.17467949" side_tool="true" visible="true" weight="0.24846625" />
       <window_info id="Web" order="9" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info anchor="bottom" id="Run" order="2" visible="true" weight="0.13645485" />
+      <window_info anchor="bottom" id="Run" order="2" visible="true" weight="0.14049587" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -502,25 +566,19 @@
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="1" />
   </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/agent-dialogue-ui/src/generated/service_pb.js</url>
+          <line>9</line>
+          <properties lambdaOrdinal="-1" />
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+  </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/simulator/src/main/webapp/js/offlineExperiment/onLoad.js">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/simulator/src/main/webapp/resources/img/question-circle-solid.svg">
-      <provider selected="true" editor-type-id="images" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/simulator/src/main/webapp/resources/img/check-solid.svg">
-      <provider selected="true" editor-type-id="images" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/simulator/src/main/webapp/resources/img/Agent_logo.jpg">
-      <provider selected="true" editor-type-id="images" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/simulator/src/main/webapp/resources/css/index-page.css">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/simulator/src/main/webapp/resources/css/offline-experiment.css">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
     <entry file="file://$PROJECT_DIR$/simulator/src/main/webapp/resources/css/wizard-of-oz.css">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
@@ -583,20 +641,6 @@
     <entry file="file://$PROJECT_DIR$/agent-dialogue-ui/src/logo.svg">
       <provider selected="true" editor-type-id="images" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/agent-dialogue-ui/tslint.json">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="277">
-          <caret line="63" column="20" selection-start-line="63" selection-start-column="20" selection-end-line="63" selection-end-column="20" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/agent-dialogue-ui/tsconfig.json">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="525">
-          <caret line="35" column="19" lean-forward="true" selection-start-line="35" selection-start-column="19" selection-end-line="35" selection-end-column="19" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/agent-dialogue-ui/node_modules/google-protobuf/google-protobuf.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="615">
@@ -611,20 +655,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/agent-dialogue-ui/src/generated/service_pb.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="600">
-          <caret line="40" lean-forward="true" selection-start-line="40" selection-end-line="40" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/agent-dialogue-ui/src/generated/service_grpc_web_pb.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="675">
-          <caret line="45" lean-forward="true" selection-start-line="45" selection-end-line="45" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/agent-dialogue-ui/src/App.test.tsx">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="60">
@@ -636,13 +666,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="60">
           <caret line="4" column="7" lean-forward="true" selection-start-line="4" selection-start-column="7" selection-end-line="4" selection-end-column="7" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/agent-dialogue-ui/src/generated/client_pb.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="150">
-          <caret line="10" lean-forward="true" selection-start-line="7" selection-end-line="10" />
         </state>
       </provider>
     </entry>
@@ -717,24 +740,17 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/agent-dialogue-ui/src/home/HomePanel.tsx">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="840">
+          <caret line="56" column="25" lean-forward="true" selection-start-line="56" selection-start-column="25" selection-end-line="56" selection-end-column="25" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/agent-dialogue-ui/src/App.tsx">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="285">
           <caret line="19" column="4" selection-start-line="19" selection-start-column="4" selection-end-line="19" selection-end-column="4" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/agent-dialogue-ui/src/components/MessageModel.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="88">
-          <caret line="8" column="28" selection-start-line="8" selection-start-column="28" selection-end-line="8" selection-end-column="28" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/agent-dialogue-ui/src/common/util.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="285">
-          <caret line="20" column="21" selection-start-line="20" selection-start-column="21" selection-end-line="20" selection-end-column="21" />
         </state>
       </provider>
     </entry>
@@ -745,45 +761,129 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/agent-dialogue-ui/src/components/ChatTranscript.tsx">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2025">
-          <caret line="135" lean-forward="true" selection-start-line="135" selection-end-line="135" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/agent-dialogue-ui/src/components/ChatTranscript.module.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="945">
-          <caret line="63" column="14" selection-start-line="63" selection-end-line="63" selection-end-column="14" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/agent-dialogue-ui/src/App.module.css">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="760">
+        <state relative-caret-position="765">
           <caret line="51" lean-forward="true" selection-start-line="51" selection-end-line="51" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/agent-dialogue-ui/src/components/DialogueModel.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="210">
-          <caret line="15" column="7" selection-start-line="15" selection-start-column="7" selection-end-line="15" selection-end-column="7" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/agent-dialogue-ui/src/woz/WoZPanel.tsx">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1185">
-          <caret line="79" lean-forward="true" selection-start-line="11" selection-end-line="79" />
+        <state relative-caret-position="645">
+          <caret line="43" lean-forward="true" selection-start-line="43" selection-end-line="43" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/agent-dialogue-ui/src/home/HomePanel.tsx">
+    <entry file="file://$PROJECT_DIR$/agent-dialogue-ui/src/components/MessageModel.ts">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="795">
-          <caret line="53" column="51" selection-start-line="53" selection-start-column="51" selection-end-line="53" selection-end-column="51" />
+        <state relative-caret-position="285">
+          <caret line="20" selection-start-line="20" selection-end-line="20" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/agent-dialogue-ui/src/components/ChatTranscript.module.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="900">
+          <caret line="60" lean-forward="true" selection-start-line="60" selection-end-line="60" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/agent-dialogue-ui/tsconfig.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="495">
+          <caret line="33" column="4" lean-forward="true" selection-start-line="33" selection-start-column="4" selection-end-line="33" selection-end-column="4" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/agent-dialogue-ui/src/generated/service_pb.d.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1002">
+          <caret line="8" column="28" selection-start-line="8" selection-start-column="13" selection-end-line="8" selection-end-column="28" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/agent-dialogue-ui/src/generated/client_pb.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="135">
+          <caret line="9" column="10" lean-forward="true" selection-start-line="9" selection-end-line="10" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/agent-dialogue-ui/tslint.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="945">
+          <caret line="63" column="20" selection-start-line="63" selection-start-column="20" selection-end-line="63" selection-end-column="20" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/agent-dialogue-ui/node_modules/@types/google-protobuf/google/protobuf/descriptor_pb.d.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="407">
+          <caret line="525" column="4" selection-start-line="525" selection-start-column="4" selection-end-line="525" selection-end-column="4" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/agent-dialogue-ui/src/generated/service_pb.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="360">
+          <caret line="24" column="20" selection-start-line="24" selection-start-column="20" selection-end-line="24" selection-end-column="20" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/agent-dialogue-ui/node_modules/grpc-web/index.d.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="300">
+          <caret line="20" column="4" selection-start-line="20" selection-start-column="4" selection-end-line="20" selection-end-column="4" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/agent-dialogue-ui/src/generated/service_grpc_web_pb.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2160">
+          <caret line="144" column="6" selection-start-line="144" selection-start-column="6" selection-end-line="144" selection-end-column="6" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/agent-dialogue-ui/src/components/ChatTranscript.tsx">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="515">
+          <caret line="39" lean-forward="true" selection-start-line="39" selection-end-line="39" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/agent-dialogue-ui/src/components/DialogueModel.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="135">
+          <caret line="9" column="13" selection-start-line="9" selection-end-line="10" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/agent-dialogue-ui/src/common/util.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="495">
+          <caret line="33" selection-start-line="33" selection-end-line="33" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/agent-dialogue-ui/node_modules/typescript/lib/lib.es5.d.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="403">
+          <caret line="1225" column="4" selection-start-line="1225" selection-start-column="4" selection-end-line="1225" selection-end-column="4" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/agent-dialogue-ui/src/generated/ServiceServiceClientPb.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="664">
+          <caret line="73" column="33" selection-start-line="73" selection-start-column="33" selection-end-line="73" selection-end-column="33" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/agent-dialogue-ui/src/common/ADConnection.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1124">
+          <caret line="179" column="28" selection-start-line="179" selection-start-column="28" selection-end-line="179" selection-end-column="28" />
         </state>
       </provider>
     </entry>
