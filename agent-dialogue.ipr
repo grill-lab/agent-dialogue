@@ -47,6 +47,13 @@
   <component name="NodePackageJsonFileManager">
     <packageJsonPaths />
   </component>
+  <component name="ProjectDictionaryState">
+    <dictionary name="leuski">
+      <words>
+        <w>grpc</w>
+      </words>
+    </dictionary>
+  </component>
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/agent-dialogue-core/agent-dialogue-core.iml" filepath="$PROJECT_DIR$/agent-dialogue-core/agent-dialogue-core.iml" />
