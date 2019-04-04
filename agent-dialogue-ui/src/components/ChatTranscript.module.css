@@ -61,7 +61,7 @@
 
 .ourCell {
   text-align: left;
-  background-color: #0000dd;
+  background-color: var(--message-frame);
 }
 
 .theirCell {
@@ -86,5 +86,5 @@
 }
 
 :global(#root) i.enterButton {
-  background-color: #0000dd!important;
+  background-color: var(--message-frame)!important;
 }
