@@ -2,19 +2,18 @@ import React from "react"
 import {Form, Grid} from "semantic-ui-react"
 import {ChatComponent} from "../components/ChatTranscript"
 import {
-  IDialogue,
+  Dialogue,
   sampleDialogue,
   US,
 } from "../components/DialogueModel"
-import {Message} from "../components/MessageModel"
 import css from "./WoZPanel.module.css"
 
 interface IWozPanelState {
-  dialogue: IDialogue
+  dialogue: Dialogue
 }
 
 interface IWozPanelProperties {
-  dialogue?: IDialogue
+  dialogue?: Dialogue
 }
 
 export class WoZPanel extends React.Component<IWozPanelProperties, IWozPanelState> {
@@ -31,7 +30,7 @@ export class WoZPanel extends React.Component<IWozPanelProperties, IWozPanelStat
   private onEnter = (text: string) => {
     this.setState((prev) => {
       const d = prev.dialogue
-      d.messages.push(new Message({speaker: US, text}))
+      d.append({speaker: US, text})
       return {dialogue: d}
     })
   }

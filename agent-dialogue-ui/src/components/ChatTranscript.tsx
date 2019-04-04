@@ -1,8 +1,8 @@
 import * as React from "react"
-import {Icon, Input} from "semantic-ui-react"
-import {isKeyPressed} from "../common/util"
+import {Icon} from "semantic-ui-react"
 import css from "./ChatTranscript.module.css"
 import {IDialogue} from "./DialogueModel"
+import {ControlledInput} from "./ValueInput"
 
 interface IChatTranscriptProperties {
   dialogue: IDialogue
@@ -96,19 +96,12 @@ class ChatInput
 
   public render(): React.ReactNode {
     return <div className={css.entry}>
-        <Input
+        <ControlledInput
             value={this.state.value}
             fluid
-            onKeyDown={(event: KeyboardEvent) => {
-              if (isKeyPressed(event, "Enter")) {
-                this.onCommit()
-              } else if (isKeyPressed(event, "Escape")) {
-                this.onRevert()
-              }
-            }}
-            onChange={(_e, data) => {
-              this.onChange(data.value)
-            }}
+            onCommit={this.onCommit}
+            onRevert={this.onRevert}
+            onUpdate={this.onChange}
             icon={<Icon
                 name="arrow up" inverted circular link
                 className={css.enterButton}
