@@ -3,7 +3,7 @@ import { Tab } from "semantic-ui-react"
 import css from "./App.module.css"
 import {HomePanel} from "./home/HomePanel"
 import {RatingsPanel} from "./ratings/RatingsPanel"
-import logo from "./resources/img/Agent_logo.jpg"
+import logo from "./resources/img/Agent_logo.png"
 import {WoZPanel} from "./woz/WoZPanel"
 
 const panes = [
