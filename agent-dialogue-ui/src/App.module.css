@@ -1,12 +1,3 @@
-:root {
-  --header-top: rgb(245, 182, 113);
-  --header-menu: rgb(255, 146, 46);
-  --header-menu-active: rgb(253, 105, 37);
-  --message-frame: rgb(255, 98, 0);
-  --right-panels: rgb(255, 146, 46);
-  --menu-font-colour: rgb(255, 222, 207);
-  --button-colour: white;
-}
 
 .app {
   text-align: center;
