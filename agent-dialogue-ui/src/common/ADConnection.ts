@@ -69,6 +69,29 @@ class ConcreteSubscription implements IConcreteSubscription, ISubscription {
   }
 }
 
+export interface ADTextResponse {
+  text: string
+  userID: string
+  time: Date
+}
+
+declare module "../generated/service_pb" {
+  interface InteractionResponse {
+    asTextResponse(): ADTextResponse
+  }
+}
+
+// noinspection JSUnusedGlobalSymbols
+proto.edu.gla.kail.ad.InteractionResponse.prototype.asTextResponse =
+    function(): ADTextResponse {
+  return {
+    text: this.getInteractionList()[0].getText(),
+    time: new Date(this.getTime().getSeconds() * 1000
+                   + this.getTime().getNanos() / 1e+6),
+    userID: this.getUserId()
+  }
+}
+
 export class ADConnection {
 
   constructor(host: string) {
