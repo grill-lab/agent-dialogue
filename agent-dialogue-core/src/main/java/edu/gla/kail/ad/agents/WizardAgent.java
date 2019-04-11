@@ -132,35 +132,64 @@ public class WizardAgent implements AgentInterface {
   @Override
   public void streamingResponseFromAgent(InteractionRequest interactionRequest, StreamObserver<Client.InteractionResponse> observer)
           throws Exception {
-    String responseId = ResponseIdGenerator.generate();
-    // TODO: Replace the fixed response with a listener.
-    Map<String, Object> data = new HashMap<>();
-    data.put("interaction_text", "Goodbye!");
-    ResponseLog response =  buildResponse(responseId, data);
-    Client.InteractionResponse interactionResponse;
-    Timestamp timestamp = Timestamp.newBuilder()
-            .setSeconds(Instant.now()
-                    .getEpochSecond())
-            .setNanos(Instant.now()
-                    .getNano())
-            .build();
-    try {
-      interactionResponse = Client.InteractionResponse.newBuilder()
-              .setResponseId(response.getResponseId())
-              .setSessionId("blah")
-              .setTime(timestamp)
-              .setClientId(response.getClientId())
-              .setUserId(interactionRequest.getUserId())
-              .setMessageStatus(Client.InteractionResponse.ClientMessageStatus.SUCCESSFUL)
-              .addAllInteraction(response.getActionList().stream()
-                      .map(action -> action.getInteraction())
-                      .collect(Collectors.toList()))
-              .build();
-      observer.onNext(interactionResponse);
-    } catch (Exception exception) {
-      logger.warn("Error processing request :" + exception.getMessage() + " " + exception.getMessage());
-      observer.onError(exception);
+
+    // Get the conversation id from the request parameters.
+    Map<String, Value> fieldsMap = interactionRequest.getAgentRequestParameters().getFieldsMap();
+    if (!fieldsMap.containsKey("conversationId")) {
+      throw new IllegalArgumentException("Request must specify the conversationId in the agent request parameters.");
     }
+    String conversationId = fieldsMap.get("conversationId").getStringValue();
+    Client.ClientId clientId = interactionRequest.getClientId();
+
+    CollectionReference conversationCollection = getDbCollection(conversationId);
+
+    // Wait for a response after the current time (filter out past messages).
+    Query query = conversationCollection;
+    logger.debug("Waiting on listener: " + query.toString());
+    ListenerRegistration registration = query.addSnapshotListener(new EventListener<QuerySnapshot>() {
+      @Override
+      public void onEvent(@Nullable QuerySnapshot snapshots, @Nullable FirestoreException e) {
+        if (e != null) {
+          logger.error("Listen failed: " + e);
+          return;
+        }
+        if (snapshots != null && !snapshots.isEmpty()) {
+          List<DocumentChange> documentChanges = snapshots.getDocumentChanges();
+          logger.debug("Num document changes:" + documentChanges.size());
+          for (DocumentChange change : documentChanges) {
+            String responseId = ResponseIdGenerator.generate();
+            ResponseLog response;
+            Map<String, Object> changeData = change.getDocument().getData();
+                response = buildResponse(responseId, changeData);
+            Client.InteractionResponse interactionResponse;
+            Timestamp timestamp = Timestamp.newBuilder()
+                    .setSeconds(Instant.now()
+                            .getEpochSecond())
+                    .setNanos(Instant.now()
+                            .getNano())
+                    .build();
+            try {
+              interactionResponse = Client.InteractionResponse.newBuilder()
+                      .setResponseId(responseId)
+                      .setSessionId("blah")
+                      .setTime(timestamp)
+                      .setClientId(clientId)
+                      .setUserId(interactionRequest.getUserId())
+                      .setMessageStatus(Client.InteractionResponse.ClientMessageStatus.SUCCESSFUL)
+                      .addAllInteraction(response.getActionList().stream()
+                              .map(action -> action.getInteraction())
+                              .collect(Collectors.toList()))
+                      .build();
+              logger.debug("Sending response: " + interactionResponse.getResponseId());
+              observer.onNext(interactionResponse);
+            } catch (Exception exception) {
+              logger.warn("Error processing request :" + exception.getMessage() + " " + exception.getMessage());
+              observer.onError(exception);
+            }
+          }
+        }
+      }
+    });
   }
 
 
@@ -219,47 +248,31 @@ public class WizardAgent implements AgentInterface {
     DocumentReference documentReference =
             addInteractionRequestToDatabase(responseId, conversationId, interactionRequest);
 
-    // Now we wait for a response!
-    CollectionReference conversationCollection = getDbCollection(conversationId);
-
-    // Wait for a response after the current time (filter out past messages).
-    Query query = conversationCollection
-            .whereGreaterThan("timestamp", com.google.cloud.Timestamp.now());
-    logger.debug("Waiting on listener: " + query.toString());
-    // TODO(Jeff): Replace with lambda.
-    ListenerRegistration registration = query.addSnapshotListener(new EventListener<QuerySnapshot>() {
-      @Override
-      public void onEvent(@Nullable QuerySnapshot snapshots, @Nullable FirestoreException e) {
-        if (e != null) {
-          logger.error("Listen failed: " + e);
-          return;
-        }
-        ResponseLog response = null;
-        if (snapshots != null && !snapshots.isEmpty()) {
-          List<DocumentChange> documentChanges = snapshots.getDocumentChanges();
-          logger.debug("Num document changes:" + documentChanges.size());
-          DocumentChange lastChange = documentChanges.get(documentChanges.size() - 1);
-          Map<String, Object> changeData = lastChange.getDocument().getData();
-
-          if (changeData.get("user_id").equals(interactionRequest.getUserId())) {
-            // Message is from the same user, don't build a response from the same user.
-            logger.info("Ignoring change from the same user:" + interactionRequest.getUserId());
-            return;
-          }
-          switch (lastChange.getType()) {
-            case ADDED:
-              response = buildResponse(responseId, changeData);
-          }
-          // Why do we need to do this?
-          if (!future.isDone()) {
-            future.set(response);
-          }
-        }
-      }
-    });
-    final ResponseLog response = future.get(DEFAULT_TIMEOUT_SECONDS, TimeUnit.SECONDS);
-    // Stop listening to changes
-    registration.remove();
+    Map<String, Object> data = new HashMap<>();
+    data.put("interaction_text", "Success, message added!");
+    ResponseLog response =  buildResponse(responseId, data);
+    Client.InteractionResponse interactionResponse;
+    Timestamp timestamp = Timestamp.newBuilder()
+            .setSeconds(Instant.now()
+                    .getEpochSecond())
+            .setNanos(Instant.now()
+                    .getNano())
+            .build();
+    try {
+      interactionResponse = Client.InteractionResponse.newBuilder()
+              .setResponseId(response.getResponseId())
+              .setSessionId("blah")
+              .setTime(timestamp)
+              .setClientId(response.getClientId())
+              .setUserId(interactionRequest.getUserId())
+              .setMessageStatus(Client.InteractionResponse.ClientMessageStatus.SUCCESSFUL)
+              .addAllInteraction(response.getActionList().stream()
+                      .map(action -> action.getInteraction())
+                      .collect(Collectors.toList()))
+              .build();
+    } catch (Exception exception) {
+      logger.warn("Error processing request :" + exception.getMessage() + " " + exception.getMessage());
+    }
     return response;
   }
 
