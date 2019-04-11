@@ -18,7 +18,7 @@ message ClientConversation {
 // Store request from the user and response from the agent.
 message ClientTurn {
     InteractionRequest interaction_request = 1;
-    InteractionResponse interction_response = 2;
+    InteractionResponse interaction_response = 2;
 }
 
 // The ID of the client the request is sent from.
