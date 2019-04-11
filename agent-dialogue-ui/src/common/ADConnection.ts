@@ -82,7 +82,8 @@ export class ADConnection {
 
   private _makeInputInteraction = (args: IInputInteractionArguments)
       : InputInteraction => {
-    const input = new InputInteraction()
+    const input = new proto.edu.gla.kail.ad.InputInteraction as InputInteraction
+    // InputInteraction()
     input.setText(args.text || "")
     input.setLanguageCode(args.languageCode || "en-US")
     input.setType(args.type || InteractionType.TEXT)
@@ -93,7 +94,7 @@ export class ADConnection {
       : InteractionRequest => {
     const input = this._makeInputInteraction(args)
 
-    const request = new InteractionRequest()
+    const request = new proto.edu.gla.kail.ad.InteractionRequest as InteractionRequest
     request.setClientId(args.clientID || ClientId.WEB_SIMULATOR)
     request.setInteraction(input)
     request.setUserId(args.userID)
