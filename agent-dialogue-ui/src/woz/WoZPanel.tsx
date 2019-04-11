@@ -4,6 +4,7 @@ import {StringMap} from "../App"
 import {ADConnection} from "../common/ADConnection"
 import {ChatComponent} from "../components/ChatTranscript"
 import {Dialogue} from "../components/DialogueModel"
+import {IMessage, IMessageArgument} from "../components/MessageModel"
 
 interface IWozPanelState {
   connection?: ADConnection
@@ -132,6 +133,10 @@ class WoZDialogue
       userID: this.props.params.userID,
       text
     })
+    this.append({
+      speaker: this.props.params.userID,
+      text
+    })
     this.setState((prev) => {
       const d = prev.dialogue
       d.append({speaker: this.props.params.userID, text})
@@ -147,6 +152,34 @@ class WoZDialogue
     />
   }
 
+  append = (message: IMessageArgument) => {
+    if (message.text.trim().length === 0) { return }
+    this.setState((prev) => {
+      const d = prev.dialogue
+      const time = message.time || new Date()
+      if (d.messages.length !== 0) {
+        const durationBetweenDatesInSec = 300
+        const lastMessageTime = d.messages[d.messages.length-1].time
+        if (lastMessageTime.getTime()
+            < (time.getTime() - durationBetweenDatesInSec * 1000))
+        {
+          const options = {
+            year: 'numeric',
+            month: 'numeric',
+            day: 'numeric',
+            hour: 'numeric',
+            minute: 'numeric',
+            second: 'numeric'
+          }
+          d.append({
+            text: new Intl.DateTimeFormat(undefined, options).format(time)})
+        }
+      }
+      d.append({ ...message, time})
+      return {dialogue: d}
+    })
+  }
+
   constructor(props: IWoZDialogueProperties) {
     super(props)
 
@@ -159,13 +192,8 @@ class WoZDialogue
 
     this.props.connection.subscribe({
       onResponse: (response => {
-        console.log(response.getUserId())
-        console.log(response.getInteractionList()[0].getText())
-        // this.setState((prev) => {
-        //   const d = prev.dialogue
-        //   d.append({speaker: this.props.params.userID, text: response.get})
-        //   return {dialogue: d}
-        // })
+        const reply = response.asTextResponse()
+        this.append({speaker: reply.userID, text: reply.text, time: reply.time})
       }),
       conversationID: this.props.params.conversationID,
       userID: this.props.params.userID,
