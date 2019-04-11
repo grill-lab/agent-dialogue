@@ -6,6 +6,7 @@
  * @public
  */
 // GENERATED CODE -- DO NOT EDIT!
+/* eslint-disable */
 
 // @ts-ignore
 var jspb = require('google-protobuf');

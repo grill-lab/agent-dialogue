@@ -35,6 +35,9 @@
   <component name="JavaScriptSettings">
     <option name="languageLevel" value="JSX" />
   </component>
+  <component name="Kotlin2JsCompilerArguments">
+    <option name="sourceMapEmbedSources" />
+  </component>
   <component name="MavenProjectsManager">
     <option name="originalFiles">
       <list>
@@ -71,6 +74,14 @@
         <serverdata>
           <mappings>
             <mapping local="$PROJECT_DIR$/agent-dialogue-core" web="/" />
+            <mapping local="$PROJECT_DIR$" web="/" />
+          </mappings>
+        </serverdata>
+      </paths>
+      <paths name="bookmania">
+        <serverdata>
+          <mappings>
+            <mapping local="$PROJECT_DIR$/agent-dialogue-ui" web="/" />
             <mapping local="$PROJECT_DIR$" web="/" />
           </mappings>
         </serverdata>
