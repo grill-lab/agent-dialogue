@@ -9,6 +9,8 @@ import com.google.firebase.FirebaseOptions;
 import com.google.firebase.cloud.FirestoreClient;
 import com.google.protobuf.Timestamp;
 import com.google.protobuf.Value;
+import com.google.protobuf.util.TimeUtil;
+import com.google.protobuf.util.Timestamps;
 import edu.gla.kail.ad.Client;
 import edu.gla.kail.ad.Client.InteractionRequest;
 import edu.gla.kail.ad.Client.InteractionType;
@@ -22,6 +24,7 @@ import edu.gla.kail.ad.core.Log.SystemAct;
 
 import javax.annotation.Nullable;
 import java.net.URL;
+import java.text.ParseException;
 import java.time.Instant;
 import java.util.*;
 import java.util.concurrent.ExecutionException;
@@ -157,24 +160,45 @@ public class WizardAgent implements AgentInterface {
           List<DocumentChange> documentChanges = snapshots.getDocumentChanges();
           logger.debug("Num document changes:" + documentChanges.size());
           for (DocumentChange change : documentChanges) {
-            String responseId = ResponseIdGenerator.generate();
             ResponseLog response;
             Map<String, Object> changeData = change.getDocument().getData();
-                response = buildResponse(responseId, changeData);
+
+            // NOTE: This is replaying events from the DB for streaming.  It should copy the correct values from the
+            // change data to the response to mimic the original response correctly.
+
+            // TODO: Factor this out into its own method.
+            Object responseIdString = changeData.get("response_id");
+            String responseId = null;
+            if (responseIdString != null) {
+              responseId = (String) responseIdString;
+            }
+            response = buildResponse(responseId, changeData);
+
+            // Information about the original change.
+            String userId = null;
+            Object userString = changeData.get("user_id");
+            if (userString != null) {
+              userId = (String) userString;
+            } else {
+              userId = "undefined";
+            }
+
+            Object timestampString = changeData.get("timestamp");
+            Timestamp timestamp = null;
+            try {
+              Date dateTime = (Date) timestampString;
+              timestamp = Timestamps.fromMillis(dateTime.getTime());
+            } catch (Exception e1) {
+              e1.printStackTrace();
+            }
             Client.InteractionResponse interactionResponse;
-            Timestamp timestamp = Timestamp.newBuilder()
-                    .setSeconds(Instant.now()
-                            .getEpochSecond())
-                    .setNanos(Instant.now()
-                            .getNano())
-                    .build();
             try {
               interactionResponse = Client.InteractionResponse.newBuilder()
                       .setResponseId(responseId)
                       .setSessionId("blah")
                       .setTime(timestamp)
                       .setClientId(clientId)
-                      .setUserId(interactionRequest.getUserId())
+                      .setUserId(userId)
                       .setMessageStatus(Client.InteractionResponse.ClientMessageStatus.SUCCESSFUL)
                       .addAllInteraction(response.getActionList().stream()
                               .map(action -> action.getInteraction())
@@ -301,6 +325,14 @@ public class WizardAgent implements AgentInterface {
     } else {
       logger.error("Message does not contain text. Returning fallback. For response: " + responseId);
       responseString = "I'm sorry, message does not contain text.";
+    }
+
+    String userId = null;
+    Object userString = data.get("user_id");
+    if (userId != null) {
+      userString = (String) userId;
+    } else {
+      userString = "No valid user.";
     }
 
     return ResponseLog.newBuilder()
