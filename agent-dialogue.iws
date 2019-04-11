@@ -2,13 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="2a47167e-5ceb-4a84-bf41-4ebf4e3a2960" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/agent-dialogue-ui/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/agent-dialogue-ui/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/agent-dialogue-ui/src/App.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/agent-dialogue-ui/src/App.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/agent-dialogue-ui/src/common/ADConnection.ts" beforeDir="false" afterPath="$PROJECT_DIR$/agent-dialogue-ui/src/common/ADConnection.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/agent-dialogue-ui/src/generated/client_pb.js" beforeDir="false" afterPath="$PROJECT_DIR$/agent-dialogue-ui/src/generated/client_pb.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/agent-dialogue-ui/src/generated/service_pb.js" beforeDir="false" afterPath="$PROJECT_DIR$/agent-dialogue-ui/src/generated/service_pb.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/agent-dialogue-ui/src/woz/WoZPanel.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/agent-dialogue-ui/src/woz/WoZPanel.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/agent-dialogue.ipr" beforeDir="false" afterPath="$PROJECT_DIR$/agent-dialogue.ipr" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/agent-dialogue.iws" beforeDir="false" afterPath="$PROJECT_DIR$/agent-dialogue.iws" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
@@ -34,8 +29,17 @@
           <file pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/agent-dialogue-ui/src/woz/WoZPanel.tsx">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="875">
-                  <caret line="161" column="40" selection-start-line="161" selection-start-column="40" selection-end-line="161" selection-end-column="40" />
+                <state relative-caret-position="527">
+                  <caret line="155" column="51" selection-start-line="155" selection-start-column="51" selection-end-line="155" selection-end-column="51" />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/agent-dialogue-ui/node_modules/typescript/lib/lib.es5.d.ts">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="352">
+                  <caret line="4260" column="8" selection-start-line="4260" selection-start-column="8" selection-end-line="4260" selection-end-column="8" />
                 </state>
               </provider>
             </entry>
@@ -44,7 +48,7 @@
             <entry file="file://$PROJECT_DIR$/agent-dialogue-ui/src/generated/service_pb.js">
               <provider selected="true" editor-type-id="text-editor">
                 <state relative-caret-position="360">
-                  <caret line="24" column="9" lean-forward="true" selection-start-line="24" selection-start-column="9" selection-end-line="24" selection-end-column="9" />
+                  <caret line="24" column="9" selection-start-line="24" selection-start-column="9" selection-end-line="24" selection-end-column="9" />
                 </state>
               </provider>
             </entry>
@@ -59,29 +63,10 @@
             </entry>
           </file>
           <file pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/agent-dialogue-ui/README.md">
-              <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
-                <state split_layout="SPLIT">
-                  <first_editor />
-                  <second_editor />
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/agent-dialogue-ui/src/readme_proto.txt">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="150">
-                  <caret line="10" lean-forward="true" selection-start-line="10" selection-end-line="10" />
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/agent-dialogue-ui/src/common/ADConnection.ts">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="888">
-                  <caret line="96" column="86" selection-start-line="96" selection-start-column="86" selection-end-line="96" selection-end-column="86" />
+                <state relative-caret-position="770">
+                  <caret line="96" column="29" lean-forward="true" selection-start-line="96" selection-start-column="29" selection-end-line="96" selection-end-column="29" />
                 </state>
               </provider>
             </entry>
@@ -90,7 +75,7 @@
             <entry file="file://$PROJECT_DIR$/agent-dialogue-ui/tsconfig.json">
               <provider selected="true" editor-type-id="text-editor">
                 <state relative-caret-position="495">
-                  <caret line="33" column="4" lean-forward="true" selection-start-line="33" selection-start-column="4" selection-end-line="33" selection-end-column="4" />
+                  <caret line="33" column="4" selection-start-line="33" selection-start-column="4" selection-end-line="33" selection-end-column="4" />
                 </state>
               </provider>
             </entry>
@@ -98,8 +83,17 @@
           <file pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/agent-dialogue-ui/src/components/DialogueModel.ts">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="135">
-                  <caret line="9" column="13" selection-start-line="9" selection-end-line="10" />
+                <state relative-caret-position="240">
+                  <caret line="16" column="9" selection-start-line="16" selection-start-column="9" selection-end-line="16" selection-end-column="9" />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/agent-dialogue-ui/src/components/MessageModel.ts">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="120">
+                  <caret line="8" column="12" selection-start-line="8" selection-start-column="12" selection-end-line="8" selection-end-column="12" />
                 </state>
               </provider>
             </entry>
@@ -107,8 +101,8 @@
           <file pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/agent-dialogue-ui/src/generated/service_pb.d.ts">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="210">
-                  <caret line="14" column="30" selection-start-line="14" selection-start-column="14" selection-end-line="14" selection-end-column="30" />
+                <state relative-caret-position="356">
+                  <caret line="60" column="13" selection-start-line="60" selection-start-column="13" selection-end-line="60" selection-end-column="13" />
                 </state>
               </provider>
             </entry>
@@ -130,7 +124,7 @@
             <entry file="file://$PROJECT_DIR$/agent-dialogue-ui/src/woz/WoZPanel.tsx">
               <provider selected="true" editor-type-id="text-editor">
                 <state relative-caret-position="360">
-                  <caret line="63" selection-start-line="62" selection-end-line="63" />
+                  <caret line="64" selection-start-line="63" selection-end-line="64" />
                 </state>
               </provider>
             </entry>
@@ -171,7 +165,7 @@
             <entry file="file://$PROJECT_DIR$/simulator/src/main/webapp/wizard-of-oz.html">
               <provider selected="true" editor-type-id="text-editor">
                 <state relative-caret-position="360">
-                  <caret line="39" column="16" lean-forward="true" selection-start-line="39" selection-start-column="16" selection-end-line="39" selection-end-column="16" />
+                  <caret line="39" column="16" selection-start-line="39" selection-start-column="16" selection-end-line="39" selection-end-column="16" />
                 </state>
               </provider>
             </entry>
@@ -180,7 +174,7 @@
             <entry file="file://$PROJECT_DIR$/agent-dialogue-ui/src/App.tsx">
               <provider selected="true" editor-type-id="text-editor">
                 <state relative-caret-position="585">
-                  <caret line="39" column="34" lean-forward="true" selection-start-line="39" selection-start-column="34" selection-end-line="39" selection-end-column="34" />
+                  <caret line="39" column="34" selection-start-line="39" selection-start-column="34" selection-end-line="39" selection-end-column="34" />
                 </state>
               </provider>
             </entry>
@@ -671,24 +665,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/agent-dialogue-ui/src/components/MessageModel.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="285">
-          <caret line="20" selection-start-line="20" selection-end-line="20" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/agent-dialogue-ui/tslint.json">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="945">
           <caret line="63" column="20" selection-start-line="63" selection-start-column="20" selection-end-line="63" selection-end-column="20" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/agent-dialogue-ui/node_modules/typescript/lib/lib.es5.d.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="18180">
-          <caret line="1225" column="4" selection-start-line="1225" selection-start-column="4" selection-end-line="1225" selection-end-column="4" />
         </state>
       </provider>
     </entry>
@@ -862,7 +842,7 @@
     <entry file="file://$PROJECT_DIR$/simulator/src/main/webapp/wizard-of-oz.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="360">
-          <caret line="39" column="16" lean-forward="true" selection-start-line="39" selection-start-column="16" selection-end-line="39" selection-end-column="16" />
+          <caret line="39" column="16" selection-start-line="39" selection-start-column="16" selection-end-line="39" selection-end-column="16" />
         </state>
       </provider>
     </entry>
@@ -883,7 +863,7 @@
     <entry file="file://$PROJECT_DIR$/agent-dialogue-ui/src/readme_proto.txt">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="150">
-          <caret line="10" lean-forward="true" selection-start-line="10" selection-end-line="10" />
+          <caret line="10" selection-start-line="10" selection-end-line="10" />
         </state>
       </provider>
     </entry>
@@ -898,14 +878,7 @@
     <entry file="file://$PROJECT_DIR$/agent-dialogue-ui/src/generated/service_pb.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="360">
-          <caret line="24" column="9" lean-forward="true" selection-start-line="24" selection-start-column="9" selection-end-line="24" selection-end-column="9" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/agent-dialogue-ui/src/components/DialogueModel.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="135">
-          <caret line="9" column="13" selection-start-line="9" selection-end-line="10" />
+          <caret line="24" column="9" selection-start-line="24" selection-start-column="9" selection-end-line="24" selection-end-column="9" />
         </state>
       </provider>
     </entry>
@@ -919,14 +892,7 @@
     <entry file="file://$PROJECT_DIR$/agent-dialogue-ui/tsconfig.json">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="495">
-          <caret line="33" column="4" lean-forward="true" selection-start-line="33" selection-start-column="4" selection-end-line="33" selection-end-column="4" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/agent-dialogue-ui/src/generated/service_pb.d.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="210">
-          <caret line="14" column="30" selection-start-line="14" selection-start-column="14" selection-end-line="14" selection-end-column="30" />
+          <caret line="33" column="4" selection-start-line="33" selection-start-column="4" selection-end-line="33" selection-end-column="4" />
         </state>
       </provider>
     </entry>
@@ -937,17 +903,45 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/agent-dialogue-ui/src/generated/service_pb.d.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="356">
+          <caret line="60" column="13" selection-start-line="60" selection-start-column="13" selection-end-line="60" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/agent-dialogue-ui/src/common/ADConnection.ts">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="888">
-          <caret line="96" column="86" selection-start-line="96" selection-start-column="86" selection-end-line="96" selection-end-column="86" />
+        <state relative-caret-position="770">
+          <caret line="96" column="29" lean-forward="true" selection-start-line="96" selection-start-column="29" selection-end-line="96" selection-end-column="29" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/agent-dialogue-ui/src/components/MessageModel.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="120">
+          <caret line="8" column="12" selection-start-line="8" selection-start-column="12" selection-end-line="8" selection-end-column="12" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/agent-dialogue-ui/src/components/DialogueModel.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="240">
+          <caret line="16" column="9" selection-start-line="16" selection-start-column="9" selection-end-line="16" selection-end-column="9" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/agent-dialogue-ui/node_modules/typescript/lib/lib.es5.d.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="352">
+          <caret line="4260" column="8" selection-start-line="4260" selection-start-column="8" selection-end-line="4260" selection-end-column="8" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/agent-dialogue-ui/src/woz/WoZPanel.tsx">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="875">
-          <caret line="161" column="40" selection-start-line="161" selection-start-column="40" selection-end-line="161" selection-end-column="40" />
+        <state relative-caret-position="527">
+          <caret line="155" column="51" selection-start-line="155" selection-start-column="51" selection-end-line="155" selection-end-column="51" />
         </state>
       </provider>
     </entry>
