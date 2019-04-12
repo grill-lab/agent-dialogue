@@ -28,7 +28,7 @@ export class HomePanel extends React.Component<IHomePanelProperties, IHomePanelS
   private onEnter = (text: string) => {
     this.setState((prev) => {
       const d = prev.dialogue
-      d.messages.push(new Message({speaker: US, text}))
+      d.messages.push(new Message({userID: US, text}))
       return {dialogue: d}
     })
   }
@@ -45,6 +45,7 @@ export class HomePanel extends React.Component<IHomePanelProperties, IHomePanelS
           <ChatComponent
               dialogue={this.state.dialogue}
               us={US}
+              them={[]}
               onEnter={this.onEnter}
           />
         </Grid.Column>

@@ -4,7 +4,7 @@ import {StringMap} from "../App"
 import {ADConnection} from "../common/ADConnection"
 import {ChatComponent} from "../components/ChatTranscript"
 import {Dialogue} from "../components/DialogueModel"
-import {IMessage, IMessageArgument} from "../components/MessageModel"
+import {IMessage, IMessageArgument, Message} from "../components/MessageModel"
 
 interface IWozPanelState {
   connection?: ADConnection
@@ -61,7 +61,7 @@ export class WoZPanel
   constructor(props: IWozPanelProperties) {
     super(props)
 
-    console.log(this.props)
+    // console.log(this.props)
 
     const params: IWozParams = {
       conversationID: (props.params.conversationID || "").trim(),
@@ -128,30 +128,35 @@ class WoZDialogue
     extends React.Component<IWoZDialogueProperties, IWoZDialogueState> {
 
   private onEnter = (text: string) => {
-    this.props.connection.send({
+    const message = new Message({userID: this.props.params.userID, text})
+    this.props.connection.send(message,{
       conversationID: this.props.params.conversationID,
-      userID: this.props.params.userID,
-      text
     })
-    this.append({
-      speaker: this.props.params.userID,
-      text
-    })
+    this._append(message)
   }
 
   public render(): React.ReactNode {
     return <ChatComponent
         dialogue={this.state.dialogue}
         us={this.props.params.userID}
+        them={[]}
         onEnter={this.onEnter}
     />
   }
 
-  append = (message: IMessageArgument) => {
+  private _append = (message: Message) => {
     if (message.text.trim().length === 0) { return }
+
     this.setState((prev) => {
       const d = prev.dialogue
-      const time = message.time || new Date()
+
+      // if the message with this ID exists, do not add it
+      if (undefined !== d.messages.find(
+          (existingMessage) => (existingMessage.id === message.id))) {
+        return {dialogue: d}
+      }
+
+      const time = message.time
       if (d.messages.length !== 0) {
         const durationBetweenDatesInSec = 300
         const lastMessageTime = d.messages[d.messages.length-1].time
@@ -170,7 +175,9 @@ class WoZDialogue
             text: new Intl.DateTimeFormat(undefined, options).format(time)})
         }
       }
-      d.append({ ...message, time})
+
+      d.appendMessage(message)
+
       return {dialogue: d}
     })
   }
@@ -178,7 +185,7 @@ class WoZDialogue
   constructor(props: IWoZDialogueProperties) {
     super(props)
 
-    console.log(this.props)
+    // console.log(this.props)
 
     this.state = {
       dialogue: props.dialogue === undefined
@@ -187,9 +194,10 @@ class WoZDialogue
 
     this.props.connection.subscribe({
       onResponse: (response => {
-        console.log("response: ", response)
+        // console.log("response: ", response)
         const reply = response.asTextResponse()
-        this.append({speaker: reply.userID, text: reply.text, time: reply.time})
+        const message = new Message({...reply, id: reply.responseID})
+        this._append(message)
       }),
       conversationID: this.props.params.conversationID,
       userID: this.props.params.userID,

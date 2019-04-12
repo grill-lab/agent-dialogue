@@ -2,6 +2,7 @@
   height: 100%;
   display: flex;
   flex-direction: column;
+  flex: 1 1 auto;
 }
 
 .transcript {
@@ -87,4 +88,9 @@
 
 :global(#root) i.enterButton {
   background-color: var(--message-frame)!important;
+}
+
+span.them {
+  font-weight: bolder;
+  font-size: smaller;
 }

@@ -7,6 +7,7 @@ import {ControlledInput} from "./ValueInput"
 interface IChatTranscriptProperties {
   dialogue: IDialogue
   us: string
+  them: string[]
 }
 
 class ChatTranscript
@@ -39,26 +40,32 @@ class ChatTranscript
   public render(): React.ReactNode {
 
     const rows = this.props.dialogue.messages.map((message, index) => {
-      const cellClass = message.speaker === undefined
-      ? css.systemCell
-      : message.speaker === this.props.us
-        ? css.ourCell
-        : css.theirCell
-      const rowClass = message.speaker == undefined
-      ? css.systemRow
-      : message.speaker === this.props.us
-        ? css.ourRow
-        : css.theirRow
+      const cellClass = message.userID === undefined
+                        ? css.systemCell
+                        : message.userID === this.props.us
+                          ? css.ourCell
+                          : css.theirCell
+      const rowClass = message.userID === undefined
+                       ? css.systemRow
+                       : message.userID === this.props.us
+                         ? css.ourRow
+                         : css.theirRow
+      const visibleUserID = message.userID !== undefined
+                            && message.userID !== this.props.us
+                            && this.props.them.find(
+          (id) => (id === message.userID)) === undefined
+                            ? <span className={css.them}>{message.userID}: </span>
+                            : ""
       return <div className={css.row + " " + rowClass} key={index}>
-        <div className={css.cell + " " + cellClass}>{message.text}</div>
+        <div className={css.cell + " " + cellClass}>{visibleUserID}{message.text}</div>
       </div>
     })
 
     return <div className={css.transcript}>
-        <div
-            className={css.scrollable}
-            ref={(div) => {this.messageList = div || undefined}}>{rows}</div>
-      </div>
+      <div
+          className={css.scrollable}
+          ref={(div) => {this.messageList = div || undefined}}>{rows}</div>
+    </div>
   }
 }
 
@@ -75,7 +82,7 @@ class ChatInput
 
   constructor(props: IChatInputProperties) {
     super(props)
-    this.state = { value: "" }
+    this.state = {value: ""}
   }
 
   private onCommit = () => {
@@ -96,20 +103,20 @@ class ChatInput
 
   public render(): React.ReactNode {
     return <div className={css.entry}>
-        <ControlledInput
-            value={this.state.value}
-            fluid
-            onCommit={this.onCommit}
-            onRevert={this.onRevert}
-            onUpdate={this.onChange}
-            icon={<Icon
-                name="arrow up" inverted circular link
-                className={css.enterButton}
-                disabled={this.state.value.trim().length === 0}
-                onClick={this.onCommit}
-            />}
-        />
-      </div>
+      <ControlledInput
+          value={this.state.value}
+          fluid
+          onCommit={this.onCommit}
+          onRevert={this.onRevert}
+          onUpdate={this.onChange}
+          icon={<Icon
+              name="arrow up" inverted circular link
+              className={css.enterButton}
+              disabled={this.state.value.trim().length === 0}
+              onClick={this.onCommit}
+          />}
+      />
+    </div>
   }
 }
 
