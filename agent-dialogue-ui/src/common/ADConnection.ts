@@ -1,12 +1,14 @@
 import {Struct} from "google-protobuf/google/protobuf/struct_pb"
 import {Timestamp} from "google-protobuf/google/protobuf/timestamp_pb"
 import * as grpcWeb from "grpc-web"
+import {IMessage} from "../components/MessageModel"
 import {AgentDialogueClient} from "../generated/service_grpc_web_pb"
 import {
   InputInteraction,
   InteractionRequest,
   InteractionResponse,
 } from "../generated/service_pb"
+import {Omit} from "./util"
 
 enum InteractionType {
   // noinspection JSUnusedGlobalSymbols SpellCheckingInspection
@@ -34,8 +36,11 @@ export interface IRequestArguments extends IInputInteractionArguments {
   chosenAgentList?: string[]
   clientID?: ClientId
   conversationID?: string
+  time?: Date
   userID: string
 }
+
+export type ISendOptions = Omit<IRequestArguments, "text" | "time" | "userID">
 
 export interface ISubscribeArguments extends IRequestArguments {
   onResponse: (response: InteractionResponse) => void
@@ -71,6 +76,7 @@ class ConcreteSubscription implements IConcreteSubscription, ISubscription {
 }
 
 export interface ADTextResponse {
+  responseID: string
   text: string
   userID: string
   time: Date
@@ -86,6 +92,7 @@ declare module "../generated/service_pb" {
 proto.edu.gla.kail.ad.InteractionResponse.prototype.asTextResponse =
     function(): ADTextResponse {
   return {
+    responseID: this.getResponseId(),
     text: this.getInteractionList()[0].getText(),
     time: new Date(this.getTime().getSeconds() * 1000
                    + this.getTime().getNanos() / 1e+6),
@@ -124,7 +131,7 @@ export class ADConnection {
     request.setInteraction(input)
     request.setUserId(args.userID)
 
-    const time = new Date()
+    const time = args.time || new Date()
     const timestamp = new Timestamp()
     timestamp.setSeconds(Math.floor(time.getTime() / 1000))
     timestamp.setNanos((Math.floor(time.getTime()) % 1000) * 1e+6)
@@ -193,15 +200,21 @@ export class ADConnection {
   }
 
   // noinspection JSUnusedGlobalSymbols
-  public send = (args: IRequestArguments) => {
-    const request = this._makeInteractionRequest(args)
-    console.log("request: ", request)
+  public send = (message: IMessage, options?: ISendOptions) => {
+    const userID = message.userID
+    if (userID === undefined) { return }
+    const request = this._makeInteractionRequest(
+        { ...(options || {}), ...message, userID})
+    // console.log("request: ", request)
 
     // noinspection JSUnusedLocalSymbols
     this.getClient().getResponseFromAgents(
         request, {},
         (_err: grpcWeb.Error,
-         _response: InteractionResponse) => {})
+         _response: InteractionResponse) => {
+          // console.log("echo", _response)
+          message.id = _response.asTextResponse().responseID
+        })
   }
 
   // noinspection JSUnusedGlobalSymbols
