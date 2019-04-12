@@ -137,11 +137,6 @@ class WoZDialogue
       speaker: this.props.params.userID,
       text
     })
-    this.setState((prev) => {
-      const d = prev.dialogue
-      d.append({speaker: this.props.params.userID, text})
-      return {dialogue: d}
-    })
   }
 
   public render(): React.ReactNode {
@@ -192,6 +187,7 @@ class WoZDialogue
 
     this.props.connection.subscribe({
       onResponse: (response => {
+        console.log("response: ", response)
         const reply = response.asTextResponse()
         this.append({speaker: reply.userID, text: reply.text, time: reply.time})
       }),
