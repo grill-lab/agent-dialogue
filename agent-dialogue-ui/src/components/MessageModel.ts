@@ -1,23 +1,31 @@
 import {PartialBy} from "../common/util"
+import * as uuid from "uuid"
 
 export interface IMessage {
+  id: string
   text: string
   time: Date
-  speaker?: string
+  userID?: string
 }
 
-export type IMessageArgument = PartialBy<IMessage, "time">
+export type IMessageArgument = PartialBy<IMessage, "time" | "id">
 
 export class Message implements IMessage {
   constructor(model: IMessageArgument) {
-    Object.assign(this, {...model, time: model.time || new Date()})
+    Object.assign(this, {
+      time: new Date(),
+      id: uuid.v4(),
+      ...model,
+    })
   }
 
+  // noinspection JSUnusedGlobalSymbols
+  public readonly id!: string
   // noinspection JSUnusedGlobalSymbols
   public readonly text!: string
   // noinspection JSUnusedGlobalSymbols
   public readonly time!: Date
   // noinspection JSUnusedGlobalSymbols
-  public readonly speaker?: string
+  public readonly userID?: string
 }
 

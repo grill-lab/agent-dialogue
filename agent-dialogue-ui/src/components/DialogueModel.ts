@@ -15,7 +15,11 @@ export class Dialogue implements IDialogue {
 
   // noinspection JSUnusedGlobalSymbols
   public append = (message: IMessageArgument) => {
-    this.messages.push(new Message(message))
+    this.appendMessage(new Message(message))
+  }
+
+  public appendMessage = (message: Message) => {
+    this.messages.push(message)
   }
 }
 
@@ -25,11 +29,11 @@ export const THEM = "them"
 // noinspection SpellCheckingInspection
 export const sampleDialogue = () => new Dialogue({messages: [
     new Message({text: "Begin"}),
-    new Message({speaker: "them", text: "Hello"}),
-    new Message({speaker: US, text: "How are you"}),
-    new Message({speaker: THEM, text: "I'm well"}),
+    new Message({userID: "them", text: "Hello"}),
+    new Message({userID: US, text: "How are you"}),
+    new Message({userID: THEM, text: "I'm well"}),
     new Message({text: "More chat"}),
-    new Message({speaker: US,
+    new Message({userID: US,
       text: "Your bones don't break, mine do. That's clear. Your cells "
             + "react to bacteria and viruses differently than mine. "
             + "You don't get sick, I do. That's also clear. But for some "
@@ -37,7 +41,7 @@ export const sampleDialogue = () => new Dialogue({messages: [
             + "swallow it too fast, we choke. We get some in our lungs, "
             + "we drown. However unreal it may seem, we are connected, "
             + "you and I. We're on the same curve, just on opposite ends."}),
-    new Message({speaker: THEM,
+    new Message({userID: THEM,
       text: "You think water moves fast? You should see ice. It moves like "
             + "it has a mind. Like it knows it killed the world once and "
             + "got a taste for murder. After the avalanche, it took us a "
@@ -47,14 +51,14 @@ export const sampleDialogue = () => new Dialogue({messages: [
             + "that I'm breaking now. We said we'd say it was the snow "
             + "that killed the other two, but it wasn't. Nature is lethal "
             + "but it doesn't hold a candle to man.\n"}),
-    new Message({speaker: US,
+    new Message({userID: US,
       text: "Look, just because I don't be givin' no man a foot massage "
             + "don't make it right for Marsellus to throw Antwone into a "
             + "glass motherfuckin' house, fuckin' up the way the nigger "
             + "talks. Motherfucker do that shit to me, he better paralyze "
             + "my ass, 'cause I'll kill the motherfucker, know what I'm "
             + "sayin'?\n"}),
-    new Message({speaker: US,
+    new Message({userID: US,
       text: "Your bones don't break, mine do. That's clear. Your cells "
             + "react to bacteria and viruses differently than mine. "
             + "You don't get sick, I do. That's also clear. But for some "
@@ -62,7 +66,7 @@ export const sampleDialogue = () => new Dialogue({messages: [
             + "swallow it too fast, we choke. We get some in our lungs, "
             + "we drown. However unreal it may seem, we are connected, "
             + "you and I. We're on the same curve, just on opposite ends."}),
-    new Message({speaker: THEM,
+    new Message({userID: THEM,
       text: "You think water moves fast? You should see ice. It moves like "
             + "it has a mind. Like it knows it killed the world once and "
             + "got a taste for murder. After the avalanche, it took us a "
@@ -72,7 +76,7 @@ export const sampleDialogue = () => new Dialogue({messages: [
             + "that I'm breaking now. We said we'd say it was the snow "
             + "that killed the other two, but it wasn't. Nature is lethal "
             + "but it doesn't hold a candle to man.\n"}),
-    new Message({speaker: US,
+    new Message({userID: US,
       text: "Look, just because I don't be givin' no man a foot massage "
             + "don't make it right for Marsellus to throw Antwone into a "
             + "glass motherfuckin' house, fuckin' up the way the nigger "
