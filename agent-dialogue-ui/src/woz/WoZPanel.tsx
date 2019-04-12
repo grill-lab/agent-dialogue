@@ -4,7 +4,7 @@ import {StringMap} from "../App"
 import {ADConnection} from "../common/ADConnection"
 import {ChatComponent} from "../components/ChatTranscript"
 import {Dialogue} from "../components/DialogueModel"
-import {IMessage, IMessageArgument, Message} from "../components/MessageModel"
+import {Message} from "../components/MessageModel"
 
 interface IWozPanelState {
   connection?: ADConnection
