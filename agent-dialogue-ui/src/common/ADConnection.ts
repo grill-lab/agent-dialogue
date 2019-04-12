@@ -1,4 +1,5 @@
 import {Struct} from "google-protobuf/google/protobuf/struct_pb"
+import {Timestamp} from "google-protobuf/google/protobuf/timestamp_pb"
 import * as grpcWeb from "grpc-web"
 import {AgentDialogueClient} from "../generated/service_grpc_web_pb"
 import {
@@ -31,7 +32,7 @@ export interface IInputInteractionArguments {
 
 export interface IRequestArguments extends IInputInteractionArguments {
   chosenAgentList?: string[]
-  clientID?: proto.edu.gla.kail.ad.ClientId
+  clientID?: ClientId
   conversationID?: string
   userID: string
 }
@@ -88,7 +89,7 @@ proto.edu.gla.kail.ad.InteractionResponse.prototype.asTextResponse =
     text: this.getInteractionList()[0].getText(),
     time: new Date(this.getTime().getSeconds() * 1000
                    + this.getTime().getNanos() / 1e+6),
-    userID: this.getUserId()
+    userID: this.getUserId(),
   }
 }
 
@@ -113,6 +114,7 @@ export class ADConnection {
     return input
   }
 
+  // noinspection SpellCheckingInspection
   private _makeInteractionRequest = (args: IRequestArguments)
       : InteractionRequest => {
     const input = this._makeInputInteraction(args)
@@ -121,6 +123,13 @@ export class ADConnection {
     request.setClientId(args.clientID || ClientId.WEB_SIMULATOR)
     request.setInteraction(input)
     request.setUserId(args.userID)
+
+    const time = new Date()
+    const timestamp = new Timestamp()
+    timestamp.setSeconds(Math.floor(time.getTime() / 1000))
+    timestamp.setNanos((Math.floor(time.getTime()) % 1000) * 1e+6)
+    request.setTime((timestamp as any)) // fuck Typescript,
+    // fuck JavaScript, fuck half-assed grpc-web, and fuck spell-checking
     request.setChosenAgentsList(args.chosenAgentList || ["WizardOfOz"])
     if (args.conversationID !== undefined) {
       request.setAgentRequestParameters(Struct.fromJavaScript({
@@ -186,9 +195,13 @@ export class ADConnection {
   // noinspection JSUnusedGlobalSymbols
   public send = (args: IRequestArguments) => {
     const request = this._makeInteractionRequest(args)
+    console.log("request: ", request)
 
+    // noinspection JSUnusedLocalSymbols
     this.getClient().getResponseFromAgents(
-        request, {})
+        request, {},
+        (_err: grpcWeb.Error,
+         _response: InteractionResponse) => {})
   }
 
   // noinspection JSUnusedGlobalSymbols
