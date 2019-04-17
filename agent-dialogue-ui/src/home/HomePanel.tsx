@@ -1,7 +1,7 @@
 import React from "react"
 import {Form} from "semantic-ui-react"
 import {Grid} from "semantic-ui-react"
-import {ChatComponent} from "../components/ChatTranscript"
+import {ChatComponent} from "../components/ChatComponent"
 import {IDialogue, sampleDialogue, US} from "../components/DialogueModel"
 import {Message} from "../components/MessageModel"
 import css from "../woz/WoZPanel.module.css"

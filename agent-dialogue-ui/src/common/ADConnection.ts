@@ -1,3 +1,4 @@
+/* tslint:disable:max-classes-per-file */
 import {Struct} from "google-protobuf/google/protobuf/struct_pb"
 import {Timestamp} from "google-protobuf/google/protobuf/timestamp_pb"
 import * as grpcWeb from "grpc-web"
@@ -64,18 +65,18 @@ class ConcreteSubscription implements IConcreteSubscription, ISubscription {
     Object.assign(this, args)
   }
 
-  readonly client!: ADConnection
-  readonly call!: grpcWeb.ClientReadableStream<InteractionResponse>
-  readonly request!: ISubscribeArguments
+  public readonly client!: ADConnection
+  public readonly call!: grpcWeb.ClientReadableStream<InteractionResponse>
+  public readonly request!: ISubscribeArguments
 
   // noinspection JSUnusedGlobalSymbols
-  invalidate = () => {
+  public invalidate = () => {
     this.call.cancel()
     this.client.remove(this)
   }
 }
 
-export interface ADTextResponse {
+export interface IADTextResponse {
   responseID: string
   text: string
   userID: string
@@ -83,14 +84,15 @@ export interface ADTextResponse {
 }
 
 declare module "../generated/service_pb" {
+  // tslint:disable-next-line:interface-name
   interface InteractionResponse {
-    asTextResponse(): ADTextResponse
+    asTextResponse(): IADTextResponse
   }
 }
 
 // noinspection JSUnusedGlobalSymbols
 proto.edu.gla.kail.ad.InteractionResponse.prototype.asTextResponse =
-    function(): ADTextResponse {
+    function(): IADTextResponse {
   return {
     responseID: this.getResponseId(),
     text: this.getInteractionList()[0].getText(),
@@ -101,6 +103,21 @@ proto.edu.gla.kail.ad.InteractionResponse.prototype.asTextResponse =
 }
 
 export class ADConnection {
+
+  // noinspection JSUnusedGlobalSymbols
+  public get hostURL(): string {
+    return this._hostURL
+  }
+
+  // noinspection JSUnusedGlobalSymbols
+  public set hostURL(url: string) {
+    if (url === this._hostURL) { return }
+    this._subscriptions.forEach((sub) => {sub.call.cancel()})
+    this._hostURL = url
+    this._client = undefined
+    this._subscriptions = this._subscriptions.map(
+        (sub) => this._subscribe(sub.request))
+  }
 
   constructor(host: string) {
     this._hostURL = host
@@ -113,6 +130,7 @@ export class ADConnection {
 
   private _makeInputInteraction = (args: IInputInteractionArguments)
       : InputInteraction => {
+    // tslint:disable-next-line:new-parens
     const input = new proto.edu.gla.kail.ad.InputInteraction as InputInteraction
     // InputInteraction()
     input.setText(args.text || "")
@@ -126,6 +144,7 @@ export class ADConnection {
       : InteractionRequest => {
     const input = this._makeInputInteraction(args)
 
+    // tslint:disable-next-line:new-parens
     const request = new proto.edu.gla.kail.ad.InteractionRequest as InteractionRequest
     request.setClientId(args.clientID || ClientId.WEB_SIMULATOR)
     request.setInteraction(input)
@@ -171,12 +190,6 @@ export class ADConnection {
     return new ConcreteSubscription({request: args, call, client: this})
   }
 
-  remove = (sub: ConcreteSubscription) => {
-    const index = this._subscriptions.indexOf(sub)
-    if (index < 0) { return }
-    this._subscriptions.splice(index, 1)
-  }
-
   private getClient = (): AgentDialogueClient => {
     if (this._client !== undefined) { return this._client }
     // noinspection SpellCheckingInspection
@@ -184,19 +197,10 @@ export class ADConnection {
         this._hostURL, null, {suppressCorsPreflight : false})
   }
 
-  // noinspection JSUnusedGlobalSymbols
-  public get hostURL(): string {
-    return this._hostURL
-  }
-
-  // noinspection JSUnusedGlobalSymbols
-  public set hostURL(url: string) {
-    if (url === this._hostURL) { return }
-    this._subscriptions.forEach((sub) => {sub.call.cancel()})
-    this._hostURL = url
-    this._client = undefined
-    this._subscriptions = this._subscriptions.map(
-        (sub) => { return this._subscribe(sub.request) })
+  public remove = (sub: ConcreteSubscription) => {
+    const index = this._subscriptions.indexOf(sub)
+    if (index < 0) { return }
+    this._subscriptions.splice(index, 1)
   }
 
   // noinspection JSUnusedGlobalSymbols
