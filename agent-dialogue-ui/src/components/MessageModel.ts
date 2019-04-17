@@ -1,5 +1,5 @@
-import {PartialBy} from "../common/util"
 import * as uuid from "uuid"
+import {PartialBy} from "../common/util"
 
 export interface IMessage {
   id: string
@@ -13,8 +13,8 @@ export type IMessageArgument = PartialBy<IMessage, "time" | "id">
 export class Message implements IMessage {
   constructor(model: IMessageArgument) {
     Object.assign(this, {
-      time: new Date(),
       id: uuid.v4(),
+      time: new Date(),
       ...model,
     })
   }

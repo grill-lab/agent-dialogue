@@ -6,7 +6,8 @@ import css from "./App.module.css"
 import logo from "./resources/img/Agent_logo.png"
 import {WoZPanel} from "./woz/WoZPanel"
 
-export type StringMap = {[index: string]: string}
+// tslint:disable-next-line:interface-name
+export interface StringMap {[index: string]: string}
 
 interface IAppState {
   readonly params: StringMap
@@ -17,10 +18,10 @@ class App extends Component<{}, IAppState> {
   constructor(props: {}) {
     super(props)
 
-    let params: StringMap = {
+    const params: StringMap = {
       conversationID: "test",
-      userID: "test",
       url: "http://localhost:8080",
+      userID: "test",
     }
     new URL(window.location.href)
         .searchParams.forEach((value, key) => {
@@ -28,8 +29,10 @@ class App extends Component<{}, IAppState> {
     })
 
     this.state = {
-      params
+      params,
     }
+
+    console.log(params)
   }
 
   public render() {
@@ -60,9 +63,9 @@ class App extends Component<{}, IAppState> {
 
         <Tab className={css.mainTab}
              menu={{
+               attached: true,
                color: "orange",
                inverted: true,
-               attached: true,
                tabular: false }}
              panes={panes} />
 
