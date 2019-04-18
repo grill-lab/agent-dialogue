@@ -1,7 +1,7 @@
 import * as React from "react"
+import css from "./ChatComponent.module.css"
 import {ChatInput, IChatInputProperties} from "./ChatInput"
 import {ChatTranscript, IChatTranscriptProperties} from "./ChatTranscript"
-import css from "./ChatComponent.module.css"
 
 type IChatComponentProperties = IChatTranscriptProperties & IChatInputProperties
 
