@@ -1,5 +1,6 @@
+/* tslint:disable:max-classes-per-file */
 import * as React from "react"
-import {Input, InputProps, Form} from "semantic-ui-react"
+import {Form, Input, InputProps} from "semantic-ui-react"
 import {isKeyPressed} from "../common/util"
 
 export interface IControlledComponent<Value> {
@@ -51,7 +52,7 @@ export const ControlledFormInput
   />
 }
 
-export interface IValueInputProperties extends InputProps{
+export interface IValueInputProperties extends InputProps {
   onEnter: (text: string) => void
 }
 

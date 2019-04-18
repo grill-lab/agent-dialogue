@@ -30,14 +30,17 @@
   display: inline-block;
 }
 
+/*noinspection CssUnusedSymbol*/
 .ourRow {
   text-align: right;
 }
 
+/*noinspection CssUnusedSymbol*/
 .theirRow {
   text-align: left;
 }
 
+/*noinspection CssUnusedSymbol*/
 .systemRow {
   text-align: center;
   display: flex;
@@ -46,16 +49,19 @@
   align-items: center;
 }
 
+/*noinspection CssUnusedSymbol*/
 .ourCell {
   text-align: left;
   background-color: var(--message-frame);
 }
 
+/*noinspection CssUnusedSymbol*/
 .theirCell {
   text-align: left;
   background-color: #888888;
 }
 
+/*noinspection CssUnusedSymbol*/
 .systemCell {
   text-align: center;
   color: #888888;
@@ -63,6 +69,7 @@
   flex: 0 0 auto;
 }
 
+/*noinspection CssUnusedSymbol,CssUnusedSymbol*/
 .systemRow:before,
 .systemRow:after {
   background-color: #aaaaaa;
