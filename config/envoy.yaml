@@ -14,6 +14,7 @@ static_resources:
         config:
           codec_type: auto
           stat_prefix: ingress_http
+          stream_idle_timeout: 0s
           access_log:
             - name: envoy.file_access_log
               config:
