@@ -18,11 +18,11 @@ class App extends Component<{}, IAppState> {
   constructor(props: {}) {
     super(props)
 
-    const params: StringMap = {
-      conversationID: "test",
-      url: "http://localhost:8080",
-      userID: "test",
-    }
+    const params: StringMap = {}
+    //   conversationID: "test",
+    //   url: "http://localhost:8080",
+    //   userID: "test",
+    // }
     new URL(window.location.href)
         .searchParams.forEach((value, key) => {
       params[key] = value
