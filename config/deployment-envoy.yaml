@@ -26,7 +26,7 @@ spec:
       containers:
       # [START envoy]
       - name: esp
-        image: gcr.io/agent-dialogue/envoy:v1
+        image: gcr.io/agent-dialogue/envoy:v4
         ports:
           - containerPort: 8080
       # [END envoy]
