@@ -162,36 +162,7 @@ class WoZDialogue
     if (message.text.trim().length === 0) { return }
 
     this.setState((prev) => {
-      const d = prev.dialogue
-
-      // if the message with this ID exists, do not add it
-      if (undefined !== d.messages.find(
-          (existingMessage) => (existingMessage.id === message.id))) {
-        return {dialogue: d}
-      }
-
-      const time = message.time
-      if (d.messages.length !== 0) {
-        const durationBetweenDatesInSec = 300
-        const lastMessageTime = d.messages[d.messages.length - 1].time
-        if (lastMessageTime.getTime()
-            < (time.getTime() - durationBetweenDatesInSec * 1000)) {
-          const options = {
-            day: "numeric",
-            hour: "numeric",
-            minute: "numeric",
-            month: "numeric",
-            second: "numeric",
-            year: "numeric",
-          }
-          d.append({
-            text: new Intl.DateTimeFormat(undefined, options).format(time)})
-        }
-      }
-
-      d.appendMessage(message)
-
-      return {dialogue: d}
+      return {dialogue: prev.dialogue.appending(message, 300)}
     })
   }
 
