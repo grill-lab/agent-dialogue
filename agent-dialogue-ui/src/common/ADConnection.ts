@@ -176,15 +176,15 @@ export class ADConnection {
     call.on("data", args.onResponse)
 
     call.on("error", args.onError || ((error: grpcWeb.Error) => {
-      console.error(error)
+      console.error("gRPC subscription error:", error)
     }))
 
     call.on("status", args.onStatus || ((status: grpcWeb.Status) => {
-      console.debug(status)
+      console.error("gRPC subscription status:", status)
     }))
 
     call.on("end", args.onEnd || (() => {
-      console.debug("stream closed connection")
+      console.error("gRPC subscription stream closed connection")
     }))
 
     return new ConcreteSubscription({request: args, call, client: this})
