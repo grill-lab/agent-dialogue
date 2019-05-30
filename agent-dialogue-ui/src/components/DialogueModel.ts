@@ -33,7 +33,7 @@ export class Dialogue implements IDialogue {
       }
     }
     return new Dialogue({
-      messages: Object.assign([], this.messages, messages),
+      messages: this.messages.concat(messages),
     })
   }
 }

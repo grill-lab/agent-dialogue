@@ -8,6 +8,8 @@ export interface IMessage {
   userID?: string
 }
 
+export const ourUserID = "us"
+
 export type IMessageArgument = PartialBy<IMessage, "time" | "id">
 
 export class Message implements IMessage {
@@ -44,4 +46,3 @@ export class Message implements IMessage {
   // noinspection JSUnusedGlobalSymbols
   public readonly userID?: string
 }
-
