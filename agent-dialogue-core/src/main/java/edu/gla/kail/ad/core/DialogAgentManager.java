@@ -58,9 +58,6 @@ public class DialogAgentManager {
     // Time of no response from agent, after which there is timeout on getting response from agent.
     private Integer _agentCallTimeoutSeconds = 50;
 
-    // Needed for streaming clients
-    private StreamObserver<Client.InteractionResponse> _responseObserver;
-
     /**
      * Create a unique session ID generated with startSession() method.
      */
@@ -68,17 +65,10 @@ public class DialogAgentManager {
         startSession();
     }
 
-    public String get_sessionId() {
+    public String getSessionId() {
         return _sessionId;
     }
 
-    public void set_responseObserver(StreamObserver<Client.InteractionResponse> responseObserver) {
-        _responseObserver = responseObserver;
-    }
-
-    public StreamObserver<Client.InteractionResponse> get_responseObserver(){
-        return _responseObserver;
-    }
     /**
      * Create a unique sessionId.
      */
@@ -88,10 +78,10 @@ public class DialogAgentManager {
     }
 
     /**
-     * Called before the end of the session to store and configuration of the DialogAgentManager
+     * End a session
      */
     public void endSession() {
-        _responseObserver.onCompleted();
+
     }
 
     /**
@@ -171,7 +161,7 @@ public class DialogAgentManager {
      * Take a request from the service and create a streaming setup.
      *
      */
-    public void listResponse(InteractionRequest interactionRequest) throws Exception {
+    public void listResponse(InteractionRequest interactionRequest, StreamObserver<Client.InteractionResponse> responseObserver) throws Exception {
         if (checkNotNull(_agents, "Agents are not set up! Use the method" +
                 " setUpAgents() first.").isEmpty()) {
             throw new IllegalArgumentException("The list of agents is empty!");
@@ -181,7 +171,7 @@ public class DialogAgentManager {
                 .collect(Collectors.toList());
 
         for (AgentInterface agent : agents) {
-            agent.streamingResponseFromAgent(interactionRequest, _responseObserver);
+            agent.streamingResponseFromAgent(interactionRequest, responseObserver);
         }
     }
 
