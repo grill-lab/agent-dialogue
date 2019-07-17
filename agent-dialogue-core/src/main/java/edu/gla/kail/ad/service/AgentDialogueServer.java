@@ -162,7 +162,7 @@ public class AgentDialogueServer {
                 response = dialogAgentManager.getResponse(interactionRequest);
                 interactionResponse = InteractionResponse.newBuilder()
                         .setResponseId(response.getResponseId())
-                        .setSessionId(dialogAgentManager.get_sessionId())
+                        .setSessionId(dialogAgentManager.getSessionId())
                         .setTime(timestamp)
                         .setClientId(response.getClientId())
                         .setUserId(interactionRequest.getUserId())
@@ -195,24 +195,23 @@ public class AgentDialogueServer {
         @Override
         public void listResponses(InteractionRequest interactionRequest,
                                   StreamObserver<InteractionResponse> responseObserver) {
-            logger.info("Processing request:" + interactionRequest.toString());
-            checkNotNull(interactionRequest.getUserId(), "The InteractionRequest that have " +
-                    "been sent doesn't have userID!");
-            DialogAgentManager dialogAgentManager;
             try {
-                dialogAgentManager = DialogAgentManagerSingleton
-                        .getDialogAgentManager(interactionRequest.getUserId());
-            } catch (Exception exception) {
-                exception.printStackTrace();
-                dialogAgentManager = null;
-            }
-            checkNotNull(dialogAgentManager, "The initialization of the DialogAgentManager " +
-                    "failed!");
-            dialogAgentManager.set_responseObserver(responseObserver);
+                logger.info("Processing request:" + interactionRequest.toString());
+                checkNotNull(interactionRequest.getUserId(), "The InteractionRequest that have " +
+                        "been sent doesn't have userID!");
+                DialogAgentManager dialogAgentManager;
+                try {
+                    dialogAgentManager = DialogAgentManagerSingleton
+                            .getDialogAgentManager(interactionRequest.getUserId());
+                } catch (Exception exception) {
+                    exception.printStackTrace();
+                    dialogAgentManager = null;
+                }
+                checkNotNull(dialogAgentManager, "The initialization of the DialogAgentManager " +
+                        "failed!");
 
 
-            try {
-                dialogAgentManager.listResponse(interactionRequest);
+                dialogAgentManager.listResponse(interactionRequest, responseObserver);
             } catch (Exception exception) {
                 logger.warn("Error processing request :" + exception.getMessage() + " " + exception.getMessage());
                 responseObserver.onError(exception);

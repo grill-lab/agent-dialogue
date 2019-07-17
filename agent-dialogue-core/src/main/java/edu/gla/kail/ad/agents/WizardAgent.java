@@ -149,71 +149,10 @@ public class WizardAgent implements AgentInterface {
     // Wait for a response after the current time (filter out past messages).
     Query query = conversationCollection;
     logger.debug("Waiting on listener: " + query.toString());
-    ListenerRegistration registration = query.addSnapshotListener(new EventListener<QuerySnapshot>() {
-      @Override
-      public void onEvent(@Nullable QuerySnapshot snapshots, @Nullable FirestoreException e) {
-        if (e != null) {
-          logger.error("Listen failed: " + e);
-          return;
-        }
-        if (snapshots != null && !snapshots.isEmpty()) {
-          List<DocumentChange> documentChanges = snapshots.getDocumentChanges();
-          logger.debug("Num document changes:" + documentChanges.size());
-          for (DocumentChange change : documentChanges) {
-            ResponseLog response;
-            Map<String, Object> changeData = change.getDocument().getData();
+    WizardChatResponseListener wizardChatResponseListener = new WizardChatResponseListener(observer);
 
-            // NOTE: This is replaying events from the DB for streaming.  It should copy the correct values from the
-            // change data to the response to mimic the original response correctly.
-
-            // TODO: Factor this out into its own method.
-            Object responseIdString = changeData.get("response_id");
-            String responseId = null;
-            if (responseIdString != null) {
-              responseId = (String) responseIdString;
-            }
-            response = buildResponse(responseId, changeData);
-
-            // Information about the original change.
-            String userId = null;
-            Object userString = changeData.get("user_id");
-            if (userString != null) {
-              userId = (String) userString;
-            } else {
-              userId = "undefined";
-            }
-
-            Object timestampString = changeData.get("timestamp");
-            Timestamp timestamp = null;
-            try {
-              Date dateTime = (Date) timestampString;
-              timestamp = Timestamps.fromMillis(dateTime.getTime());
-            } catch (Exception e1) {
-              e1.printStackTrace();
-            }
-            Client.InteractionResponse interactionResponse;
-            try {
-              interactionResponse = Client.InteractionResponse.newBuilder()
-                      .setResponseId(responseId)
-                      .setSessionId("blah")
-                      .setTime(timestamp)
-                      .setClientId(clientId)
-                      .setUserId(userId)
-                      .setMessageStatus(Client.InteractionResponse.ClientMessageStatus.SUCCESSFUL)
-                      .addAllInteraction(response.getActionList().stream()
-                              .map(action -> action.getInteraction())
-                              .collect(Collectors.toList()))
-                      .build();
-              logger.debug("Sending response: " + interactionResponse.getResponseId());
-              observer.onNext(interactionResponse);
-            } catch (Exception exception) {
-              logger.warn("Error processing request :" + exception.getMessage() + " " + exception.getMessage());
-              observer.onError(exception);
-            }
-          }
-        }
-      }
-    });
+    ListenerRegistration registration;
+    registration = query.addSnapshotListener(wizardChatResponseListener);
   }
 
 
@@ -309,7 +248,7 @@ public class WizardAgent implements AgentInterface {
    * @param data
    * @return
    */
-  private ResponseLog buildResponse(String responseId, Map<String, Object> data) {
+  protected static ResponseLog buildResponse(String responseId, Map<String, Object> data) {
     Timestamp timestamp = Timestamp.newBuilder()
             .setSeconds(Instant.now()
                     .getEpochSecond())
