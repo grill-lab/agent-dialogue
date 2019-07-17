@@ -150,9 +150,9 @@ public class WizardAgent implements AgentInterface {
     Query query = conversationCollection;
     logger.debug("Waiting on listener: " + query.toString());
     WizardChatResponseListener wizardChatResponseListener = new WizardChatResponseListener(observer);
-
     ListenerRegistration registration;
     registration = query.addSnapshotListener(wizardChatResponseListener);
+    wizardChatResponseListener.setRegistration(registration);
   }
 
 
