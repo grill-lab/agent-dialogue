@@ -70,6 +70,7 @@ public class AgentDialogueServer {
         logger.info("Starting server");
 
         _server.start();
+        logger.info("Started server.");
         Runtime.getRuntime().addShutdownHook(new Thread() {
             // In case the JVM is being shut down
             @Override
