@@ -1,12 +1,12 @@
 package edu.gla.kail.ad.core;
 
 import edu.gla.kail.ad.core.Log.Turn;
-import org.joda.time.DateTime;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.time.ZonedDateTime;
 
 /**
  * Manage turns and store them in the output stream.
@@ -26,20 +26,17 @@ public final class LogTurnManagerSingleton {
      *
      * @return LogTurnManagerSingleton - An instance of the class itself.
      */
-    public static synchronized LogTurnManagerSingleton getLogTurnManagerSingleton() {
+    public static synchronized LogTurnManagerSingleton getLogTurnManagerSingleton() throws IOException {
         if (_instance == null) {
             _instance = new LogTurnManagerSingleton();
             // Directory to the folder with logs.
             _logDailyTurnsPath = PropertiesSingleton.getCoreConfig().getLogStoragePath() +
-                    "/DailyTurns/" + DateTime.now().toLocalDate().toString() + "/";
+                    "/DailyTurns/" + ZonedDateTime.now().toLocalDate().toString() + "/";
             directoryExistsOrCreate(_logDailyTurnsPath);
-            _currentDailyTurnPath = _logDailyTurnsPath + DateTime.now().toLocalDateTime()
+            _currentDailyTurnPath = _logDailyTurnsPath + ZonedDateTime.now().toLocalDateTime()
                     .toString();
-            try {
-                _outputStream = new FileOutputStream(_currentDailyTurnPath);
-            } catch (IOException exception) {
-                exception.getMessage();
-            }
+            _outputStream = new FileOutputStream(_currentDailyTurnPath);
+
         }
         return _instance;
     }
@@ -47,10 +44,13 @@ public final class LogTurnManagerSingleton {
     /**
      * Validate whether the directory exists and if not, then create it.
      */
-    private static void directoryExistsOrCreate(String path) {
+    private static void directoryExistsOrCreate(String path) throws IOException {
         File directory = new File(path);
         if (!directory.exists()) {
             directory.mkdirs();
+        }
+        if (!directory.exists()) {
+            throw new IOException("Unable to create directory." + path);
         }
     }
 

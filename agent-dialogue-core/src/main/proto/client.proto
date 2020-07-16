@@ -82,4 +82,14 @@ message OutputInteraction {
     string audio_bytes = 2; // The audio bytes that are being sent as the response by the Agent.
     repeated string action = 3; // The requested interaction (e.g. "click on a result").
     InteractionType type = 4;
+    repeated Result result = 5; // To allow search results and similar output
+}
+
+message Result {
+    string id = 1;
+    float score = 2;
+    int32 rank = 3;
+    string title = 4;
+    string short_description = 5;
+    string full_text = 6;
 }
