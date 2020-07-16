@@ -14,8 +14,8 @@ import edu.gla.kail.ad.core.Log.ResponseLogOrBuilder;
 import edu.gla.kail.ad.core.Log.Turn;
 import edu.gla.kail.ad.core.Log.TurnOrBuilder;
 import io.grpc.stub.StreamObserver;
-import io.reactivex.Observable;
-import io.reactivex.schedulers.Schedulers;
+import io.reactivex.rxjava3.core.Observable;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 
 import java.io.IOException;
 import java.time.Instant;
@@ -61,7 +61,7 @@ public class DialogAgentManager {
     /**
      * Create a unique session ID generated with startSession() method.
      */
-    public DialogAgentManager() {
+    public DialogAgentManager() throws IOException {
         startSession();
     }
 
@@ -72,7 +72,7 @@ public class DialogAgentManager {
     /**
      * Create a unique sessionId.
      */
-    private void startSession() {
+    private void startSession() throws IOException {
         _sessionId = generateRandomID();
         _logTurnManagerSingleton = LogTurnManagerSingleton.getLogTurnManagerSingleton();
     }

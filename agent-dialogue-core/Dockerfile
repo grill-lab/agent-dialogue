@@ -8,6 +8,7 @@ WORKDIR /code
 
 ADD . /code
 
+RUN ["mvn", "clean"]
 RUN ["mvn", "install"]
 
 EXPOSE 8070

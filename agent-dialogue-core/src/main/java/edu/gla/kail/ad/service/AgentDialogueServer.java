@@ -1,7 +1,12 @@
 package edu.gla.kail.ad.service;
 
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
 import com.google.protobuf.Timestamp;
+import com.google.protobuf.util.JsonFormat;
 import edu.gla.kail.ad.Client.InteractionRequest;
 import edu.gla.kail.ad.Client.InteractionResponse;
 import edu.gla.kail.ad.Client.InteractionResponse.ClientMessageStatus;
@@ -137,8 +142,15 @@ public class AgentDialogueServer {
         @Override
         public void getResponseFromAgents(InteractionRequest interactionRequest,
                                           StreamObserver<InteractionResponse> responseObserver) {
-            logger.info("Processing request:" + interactionRequest.toString());
+            try {
+                String jsonString = JsonFormat.printer()
+                        .preservingProtoFieldNames()
+                        .print(interactionRequest);
 
+                logger.info("Processing request:" + jsonString);
+            } catch (Exception e) {
+                throw new IllegalArgumentException("Invalid protobuffer request!");
+            }
             checkNotNull(interactionRequest.getUserId(), "The InteractionRequest that have " +
                     "been sent doesn't have userID!");
             DialogAgentManager dialogAgentManager;
@@ -197,7 +209,11 @@ public class AgentDialogueServer {
         public void listResponses(InteractionRequest interactionRequest,
                                   StreamObserver<InteractionResponse> responseObserver) {
             try {
-                logger.info("Processing request:" + interactionRequest.toString());
+                String jsonString = JsonFormat.printer()
+                        .preservingProtoFieldNames()
+                        .print(interactionRequest);
+
+                logger.info("Processing request:" + jsonString);
                 checkNotNull(interactionRequest.getUserId(), "The InteractionRequest that have " +
                         "been sent doesn't have userID!");
                 DialogAgentManager dialogAgentManager;
