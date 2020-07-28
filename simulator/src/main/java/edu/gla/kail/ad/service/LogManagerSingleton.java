@@ -14,7 +14,6 @@ import edu.gla.kail.ad.PropertiesSingleton;
 import edu.gla.kail.ad.eval.Ratings.Rating;
 import edu.gla.kail.ad.eval.Ratings.Rating.Builder;
 import edu.gla.kail.ad.eval.Ratings.RatingOrBuilder;
-import org.joda.time.DateTime;
 
 import javax.annotation.Nullable;
 import java.io.File;
@@ -24,6 +23,7 @@ import java.io.OutputStream;
 import java.net.URL;
 import java.nio.file.Paths;
 import java.time.Instant;
+import java.time.ZonedDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -68,23 +68,16 @@ public class LogManagerSingleton {
                     .get(PropertiesSingleton.getSimulatorConfig().getLogStoragePath() +
                             "/interactions_logs/").toString();
             directoryExistsOrCreate(logInteractionsPath);
-            logInteractionsPath += "/" + DateTime.now().toString();
-            try {
-                _interactionsOutputStream = new FileOutputStream(logInteractionsPath);
-            } catch (IOException exception) {
-                exception.getMessage();
-            }
+            logInteractionsPath += "/" + ZonedDateTime.now().toLocalDate().toString();
+             _interactionsOutputStream = new FileOutputStream(logInteractionsPath);
 
             String logRatingsPath = Paths
                     .get(PropertiesSingleton.getSimulatorConfig().getLogStoragePath() +
                             "/ratings_logs/").toString();
             directoryExistsOrCreate(logRatingsPath);
-            logRatingsPath += "/" + DateTime.now().toString();
-            try {
-                _ratingsOutputStream = new FileOutputStream(logRatingsPath);
-            } catch (IOException exception) {
-                exception.getMessage();
-            }
+            logRatingsPath += "/" + ZonedDateTime.now().toLocalDate().toString();
+
+            _ratingsOutputStream = new FileOutputStream(logRatingsPath);
         }
         return _instance;
     }
@@ -96,10 +89,13 @@ public class LogManagerSingleton {
     /**
      * Validate whether the directory exists and if not, then create it.
      */
-    private static void directoryExistsOrCreate(String path) {
+    private static void directoryExistsOrCreate(String path) throws IOException {
         File directory = new File(path);
         if (!directory.exists()) {
             directory.mkdirs();
+        }
+        if (!directory.exists()) {
+            throw new IOException("Unable to create directory." + path);
         }
     }
 
@@ -225,7 +221,7 @@ public class LogManagerSingleton {
      *
      * @throws IOException - Thrown when... TODO
      */
-    public void saveAndExit() throws IOException {
+    public void saveAndExit() throws Exception {
         // TODO(Adam): Handle the exception.
         _interactionsOutputStream.close();
         _instance = null;
