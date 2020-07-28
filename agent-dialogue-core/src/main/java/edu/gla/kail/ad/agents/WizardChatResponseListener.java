@@ -64,9 +64,10 @@ public class WizardChatResponseListener implements EventListener<QuerySnapshot> 
         Object timestampString = changeData.get("timestamp");
         Timestamp timestamp = null;
         try {
-          Date dateTime = (Date) timestampString;
-          timestamp = Timestamps.fromMillis(dateTime.getTime());
+          com.google.cloud.Timestamp cloudTimestamp = (com.google.cloud.Timestamp) timestampString;
+          timestamp = Timestamps.fromNanos(cloudTimestamp.getNanos());
         } catch (Exception e1) {
+          logger.error("Unable to get timestamp for object. " + timestampString.toString());
           e1.printStackTrace();
         }
         Client.InteractionResponse interactionResponse;

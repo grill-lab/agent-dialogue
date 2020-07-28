@@ -62,6 +62,7 @@ public class AdCoreClientServlet extends HttpServlet {
     /**
      * Handle POST request.
      */
+    @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         SimulatorConfiguration.SimulatorConfig config = PropertiesSingleton.getSimulatorConfig();
         addCORS(request, response);
@@ -89,6 +90,7 @@ public class AdCoreClientServlet extends HttpServlet {
     /**
      * Handle GET request.
      */
+    @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response)
             throws IOException {
         doPost(request, response);
