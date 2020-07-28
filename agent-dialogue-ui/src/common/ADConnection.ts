@@ -2,30 +2,14 @@
 import {Struct} from "google-protobuf/google/protobuf/struct_pb"
 import {Timestamp} from "google-protobuf/google/protobuf/timestamp_pb"
 import * as grpcWeb from "grpc-web"
-import {IMessage} from "../components/MessageModel"
-import {AgentDialogueClient} from "../generated/service_grpc_web_pb"
-import {
-  InputInteraction,
-  InteractionRequest,
-  InteractionResponse,
-} from "../generated/service_pb"
 import {Omit} from "./util"
-
-enum InteractionType {
-  // noinspection JSUnusedGlobalSymbols SpellCheckingInspection
-  NOTSET = proto.edu.gla.kail.ad.InteractionType.NOTSET,
-  TEXT = proto.edu.gla.kail.ad.InteractionType.TEXT,
-  AUDIO = proto.edu.gla.kail.ad.InteractionType.AUDIO,
-  ACTION = proto.edu.gla.kail.ad.InteractionType.ACTION,
-}
-
-enum ClientId {
-  // noinspection JSUnusedGlobalSymbols SpellCheckingInspection
-  NONSET = proto.edu.gla.kail.ad.ClientId.NONSET,
-  EXTERNAL_APPLICATION = proto.edu.gla.kail.ad.ClientId.EXTERNAL_APPLICATION,
-  LOG_REPLAYER = proto.edu.gla.kail.ad.ClientId.LOG_REPLAYER,
-  WEB_SIMULATOR = proto.edu.gla.kail.ad.ClientId.WEB_SIMULATOR,
-}
+import {IMessage} from "../components/MessageModel"
+import {
+  ClientId, InputInteraction, InteractionRequest,
+  InteractionResponse,
+  InteractionType,
+} from "../generated/client_pb"
+import {AgentDialogueClient} from "../generated/ServiceServiceClientPb"
 
 export interface IInputInteractionArguments {
   languageCode?: string
@@ -76,14 +60,14 @@ class ConcreteSubscription implements IConcreteSubscription, ISubscription {
   }
 }
 
-export interface IADTextResponse {
+interface IADTextResponse {
   responseID: string
   text: string
   userID: string
   time: Date
 }
 
-declare module "../generated/service_pb" {
+declare module "../generated/client_pb" {
   // tslint:disable-next-line:interface-name
   interface InteractionResponse {
     asTextResponse(): IADTextResponse
@@ -131,8 +115,7 @@ export class ADConnection {
   private _makeInputInteraction = (args: IInputInteractionArguments)
       : InputInteraction => {
     // tslint:disable-next-line:new-parens
-    const input = new proto.edu.gla.kail.ad.InputInteraction as InputInteraction
-    // InputInteraction()
+    const input = new InputInteraction()
     input.setText(args.text || "")
     input.setLanguageCode(args.languageCode || "en-US")
     input.setType(args.type || InteractionType.TEXT)
@@ -145,7 +128,7 @@ export class ADConnection {
     const input = this._makeInputInteraction(args)
 
     // tslint:disable-next-line:new-parens
-    const request = new proto.edu.gla.kail.ad.InteractionRequest as InteractionRequest
+    const request = new InteractionRequest()
     request.setClientId(args.clientID || ClientId.WEB_SIMULATOR)
     request.setInteraction(input)
     request.setUserId(args.userID)
@@ -176,15 +159,17 @@ export class ADConnection {
     call.on("data", args.onResponse)
 
     call.on("error", args.onError || ((error: grpcWeb.Error) => {
-      console.error("gRPC subscription error:", error)
+      console.error(error)
     }))
 
     call.on("status", args.onStatus || ((status: grpcWeb.Status) => {
-      console.error("gRPC subscription status:", status)
+      // tslint:disable-next-line:no-console
+      console.debug(status)
     }))
 
     call.on("end", args.onEnd || (() => {
-      console.error("gRPC subscription stream closed connection")
+      // tslint:disable-next-line:no-console
+      console.debug("stream closed connection")
     }))
 
     return new ConcreteSubscription({request: args, call, client: this})
@@ -194,8 +179,9 @@ export class ADConnection {
     if (this._client !== undefined) { return this._client }
     // noinspection SpellCheckingInspection
     return this._client = new AgentDialogueClient(
-        this._hostURL, null, {suppressCorsPreflight : false})
+        this._hostURL, null)
   }
+
 
   public remove = (sub: ConcreteSubscription) => {
     const index = this._subscriptions.indexOf(sub)
@@ -207,6 +193,7 @@ export class ADConnection {
   public send = (message: IMessage, options?: ISendOptions) => {
     const userID = message.userID
     if (userID === undefined) { return }
+
     const request = this._makeInteractionRequest(
         { ...(options || {}), ...message, userID})
     // console.log("request: ", request)

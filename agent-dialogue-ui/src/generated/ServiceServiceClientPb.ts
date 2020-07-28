@@ -7,18 +7,15 @@
 // GENERATED CODE -- DO NOT EDIT!
 
 
+/* eslint-disable */
+// @ts-nocheck
+
+
 import * as grpcWeb from 'grpc-web';
-import {
-  InputInteraction,
-  InteractionRequest,
-  InteractionResponse,
-  OutputInteraction,
-  UserID,
-  ListValue,
-  Struct,
-  FieldsEntry,
-  Timestamp,
-  Value} from './service_pb';
+
+import * as client_pb from './client_pb';
+
+import {UserID} from './service_pb';
 
 export class AgentDialogueClient {
   client_: grpcWeb.AbstractClientBase;
@@ -27,9 +24,10 @@ export class AgentDialogueClient {
   options_: null | { [index: string]: string; };
 
   constructor (hostname: string,
-               credentials: null | { [index: string]: string; },
-               options: null | { [index: string]: string; }) {
+               credentials?: null | { [index: string]: string; },
+               options?: null | { [index: string]: string; }) {
     if (!options) options = {};
+    if (!credentials) credentials = {};
     options['format'] = 'text';
 
     this.client_ = new grpcWeb.GrpcWebClientBase(options);
@@ -39,43 +37,59 @@ export class AgentDialogueClient {
   }
 
   methodInfoGetResponseFromAgents = new grpcWeb.AbstractClientBase.MethodInfo(
-    InteractionResponse,
-    (request: InteractionRequest) => {
+    client_pb.InteractionResponse,
+    (request: client_pb.InteractionRequest) => {
       return request.serializeBinary();
     },
-    InteractionResponse.deserializeBinary
+    client_pb.InteractionResponse.deserializeBinary
   );
 
   getResponseFromAgents(
-    request: InteractionRequest,
-    metadata: grpcWeb.Metadata,
+    request: client_pb.InteractionRequest,
+    metadata: grpcWeb.Metadata | null): Promise<client_pb.InteractionResponse>;
+
+  getResponseFromAgents(
+    request: client_pb.InteractionRequest,
+    metadata: grpcWeb.Metadata | null,
     callback: (err: grpcWeb.Error,
-               response: InteractionResponse) => void) {
-    return this.client_.rpcCall(
-      this.hostname_ +
-        '/edu.gla.kail.ad.service.AgentDialogue/GetResponseFromAgents',
-      request,
-      metadata,
-      this.methodInfoGetResponseFromAgents,
-      callback);
+               response: client_pb.InteractionResponse) => void): grpcWeb.ClientReadableStream<client_pb.InteractionResponse>;
+
+  getResponseFromAgents(
+    request: client_pb.InteractionRequest,
+    metadata: grpcWeb.Metadata | null,
+    callback?: (err: grpcWeb.Error,
+               response: client_pb.InteractionResponse) => void) {
+    if (callback !== undefined) {
+      return this.client_.rpcCall(
+        new URL('/edu.gla.kail.ad.service.AgentDialogue/GetResponseFromAgents', this.hostname_).toString(),
+        request,
+        metadata || {},
+        this.methodInfoGetResponseFromAgents,
+        callback);
+    }
+    return this.client_.unaryCall(
+    this.hostname_ +
+      '/edu.gla.kail.ad.service.AgentDialogue/GetResponseFromAgents',
+    request,
+    metadata || {},
+    this.methodInfoGetResponseFromAgents);
   }
 
   methodInfoListResponses = new grpcWeb.AbstractClientBase.MethodInfo(
-    InteractionResponse,
-    (request: InteractionRequest) => {
+    client_pb.InteractionResponse,
+    (request: client_pb.InteractionRequest) => {
       return request.serializeBinary();
     },
-    InteractionResponse.deserializeBinary
+    client_pb.InteractionResponse.deserializeBinary
   );
 
   listResponses(
-    request: InteractionRequest,
-    metadata: grpcWeb.Metadata) {
+    request: client_pb.InteractionRequest,
+    metadata?: grpcWeb.Metadata) {
     return this.client_.serverStreaming(
-      this.hostname_ +
-        '/edu.gla.kail.ad.service.AgentDialogue/ListResponses',
+      new URL('/edu.gla.kail.ad.service.AgentDialogue/ListResponses', this.hostname_).toString(),
       request,
-      metadata,
+      metadata || {},
       this.methodInfoListResponses);
   }
 
@@ -89,16 +103,33 @@ export class AgentDialogueClient {
 
   endSession(
     request: UserID,
-    metadata: grpcWeb.Metadata,
+    metadata: grpcWeb.Metadata | null): Promise<UserID>;
+
+  endSession(
+    request: UserID,
+    metadata: grpcWeb.Metadata | null,
     callback: (err: grpcWeb.Error,
+               response: UserID) => void): grpcWeb.ClientReadableStream<UserID>;
+
+  endSession(
+    request: UserID,
+    metadata: grpcWeb.Metadata | null,
+    callback?: (err: grpcWeb.Error,
                response: UserID) => void) {
-    return this.client_.rpcCall(
-      this.hostname_ +
-        '/edu.gla.kail.ad.service.AgentDialogue/EndSession',
-      request,
-      metadata,
-      this.methodInfoEndSession,
-      callback);
+    if (callback !== undefined) {
+      return this.client_.rpcCall(
+        new URL('/edu.gla.kail.ad.service.AgentDialogue/EndSession', this.hostname_).toString(),
+        request,
+        metadata || {},
+        this.methodInfoEndSession,
+        callback);
+    }
+    return this.client_.unaryCall(
+    this.hostname_ +
+      '/edu.gla.kail.ad.service.AgentDialogue/EndSession',
+    request,
+    metadata || {},
+    this.methodInfoEndSession);
   }
 
 }

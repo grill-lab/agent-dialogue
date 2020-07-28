@@ -8,10 +8,6 @@ type IChatComponentProperties = IChatTranscriptProperties & IChatInputProperties
 export class ChatComponent
     extends React.Component<IChatComponentProperties, {}> {
 
-  constructor(props: IChatComponentProperties) {
-    super(props)
-  }
-
   public render(): React.ReactNode {
     // noinspection JSUnusedLocalSymbols
     const {onEnter, ...transcriptProps} = this.props
