@@ -6,9 +6,9 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="agent-dialogue-core" />
-        <module name="log-replayer" />
         <module name="simulator" />
+        <module name="log-replayer" />
+        <module name="agent-dialogue-core" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
@@ -18,7 +18,7 @@
     </bytecodeTargetLevel>
   </component>
   <component name="CopyrightManager" default="" />
-  <component name="Encoding" addBOMForNewFiles="with NO BOM">
+  <component name="Encoding">
     <file url="file://$PROJECT_DIR$/agent-dialogue-core" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/log-replayer" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/simulator" charset="UTF-8" />
@@ -32,9 +32,6 @@
       <inspection_tool class="TsLint" enabled="true" level="WARNING" enabled_by_default="true" />
     </profile>
     <version value="1.0" />
-  </component>
-  <component name="JavaScriptLibraryMappings">
-    <excludedPredefinedLibrary name="agent-dialogue/agent-dialogue-ui/node_modules" />
   </component>
   <component name="JavaScriptSettings">
     <option name="languageLevel" value="JSX" />
@@ -86,6 +83,14 @@
         <serverdata>
           <mappings>
             <mapping local="$PROJECT_DIR$/agent-dialogue-ui" web="/" />
+            <mapping local="$PROJECT_DIR$" web="/" />
+          </mappings>
+        </serverdata>
+      </paths>
+      <paths name="woz @ nld">
+        <serverdata>
+          <mappings>
+            <mapping local="$PROJECT_DIR$/agent-dialogue-core" web="/" />
             <mapping local="$PROJECT_DIR$" web="/" />
           </mappings>
         </serverdata>

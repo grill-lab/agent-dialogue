@@ -18,3 +18,4 @@
 /simulator/node_modules/
 /simulator/Logs/
 agent-dialogue-ui/dist
+*.iws
