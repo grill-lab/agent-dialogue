@@ -5,41 +5,39 @@ metadata:
 spec:
   ports:
   - port: 80
-    targetPort: 8080
+    targetPort: 10000
     protocol: TCP
     name: http
   selector:
     app: esp-core
   type: LoadBalancer
 ---
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: esp-core
 spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: esp-core-custom
   replicas: 1
   template:
     metadata:
       labels:
         app: esp-core
+        app.kubernetes.io/name: esp-core-custom
     spec:
       containers:
       # [START envoy]
       - name: esp
-        image: gcr.io/agent-dialogue/envoy:v4
+        image: envoy:latest
+        imagePullPolicy: Never
         ports:
-          - containerPort: 8080
+          - containerPort: 10000
       # [END envoy]
       - name: core
-        image: gcr.io/agent-dialogue/agent-dialogue-core:v4
+        image: grpc_server:latest
+        imagePullPolicy: Never
         ports:
           - containerPort: 8070
-        volumeMounts:
-        - mountPath: /mnt/fileserver
-          name: logs
-      volumes:
-        - name: logs
-          persistentVolumeClaim:
-            claimName: logs-disk-claim
-            readOnly: false
 

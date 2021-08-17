@@ -31,6 +31,7 @@ import java.util.concurrent.TimeoutException;
 import java.util.stream.Collectors;
 
 import static com.google.common.base.Preconditions.checkNotNull;
+import java.io.FileInputStream;
 
 /**
  * This is a Wizard-of-Oz agent created for experiments. It allows multiple users to chat
@@ -75,8 +76,8 @@ public class WizardAgent implements AgentInterface {
    * @throws Exception
    */
   private void initAgent() throws Exception {
-    URL configFileURL = new URL(_agent.getConfigurationFileURL());
-    GoogleCredentials credentials = GoogleCredentials.fromStream(configFileURL.openStream());
+    //URL configFileURL = new URL(_agent.getConfigurationFileURL());
+    GoogleCredentials credentials = GoogleCredentials.fromStream(new FileInputStream(_agent.getConfigurationFileURL()));
     checkNotNull(credentials, "Credentials used to initialise FireStore are null.");
 
     FirebaseOptions options = new FirebaseOptions.Builder()
