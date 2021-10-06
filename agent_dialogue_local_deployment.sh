@@ -21,7 +21,7 @@ cd agent-dialogue-core
 #mvn install
 
 # Build the gRCP server image
-docker build -t grpc_server:latest  .
+docker build -t grpc-server:latest  .
 
 # Apply the K8s deplyment file  
 cd ..

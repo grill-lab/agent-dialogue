@@ -156,6 +156,7 @@ export type PartialBy<T, K extends keyof T> = Omit<T, K> & Partial<Pick<T, K>>
 
 // Method used to check if a string path points to an image
 export const isStringImagePath = (image_path: string): boolean => {
+  image_path = image_path.toLowerCase();
   if ((image_path.startsWith('http://') || image_path.startsWith('https://'))
   && (image_path.endsWith('.png') || image_path.endsWith('.jpg') || image_path.endsWith('.jpeg')))
     return true;
