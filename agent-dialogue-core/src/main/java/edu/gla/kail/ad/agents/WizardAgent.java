@@ -309,12 +309,14 @@ public class WizardAgent implements AgentInterface {
             ().toString());
     data.put("timestamp", com.google.cloud.Timestamp.now());
     data.put("logged_search_queries", interactionRequest.getInteraction().getLoggedSearchQueriesList());
+    data.put("logged_search_queries_timestamp", interactionRequest.getInteraction().getLoggedSearchQueriesTimestampList());
     data.put("logged_page_ids", interactionRequest.getInteraction().getLoggedPageIdsList());
     data.put("logged_paragraph_ids", interactionRequest.getInteraction().getLoggedParagraphIdsList());
     data.put("logged_paragraph_texts", interactionRequest.getInteraction().getLoggedParagraphTextsList());
     data.put("logged_page_origins", interactionRequest.getInteraction().getLoggedPageOriginsList());
     data.put("logged_page_titles", interactionRequest.getInteraction().getLoggedPageTitlesList());
     data.put("logged_section_titles", interactionRequest.getInteraction().getLoggedSectionTitlesList());
+    data.put("logged_paragraph_timestamp", interactionRequest.getInteraction().getLoggedParagraphTimestampList());
     chatReference.set(data);
     return chatReference;
   }
